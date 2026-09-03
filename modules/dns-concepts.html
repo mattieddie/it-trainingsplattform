@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html" class="active">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html" class="active">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -36,24 +37,24 @@
       <div class="info-content">
         DNS ist im Grunde das Telefonbuch des Internets: Menschen merken
         sich Namen (google.com), Computer brauchen aber Nummern
-        (IP-Adressen). DNS uebersetzt zwischen den beiden.
+        (IP-Adressen). DNS übersetzt zwischen den beiden.
       </div>
     </details>
   </h1>
   <p class="page-subtitle">
-    Nach dem Deployment auf GitHub Pages hast du eine echte, oeffentlich
-    erreichbare Domain. Dieses Modul erklaert die wichtigsten DNS-Konzepte
-    dahinter und generiert dir Beispiel-Eintraege fuer deine eigene Domain.
+    Nach dem Deployment auf GitHub Pages hast du eine echte, öffentlich
+    erreichbare Domain. Dieses Modul erklärt die wichtigsten DNS-Konzepte
+    dahinter und generiert dir Beispiel-Einträge für deine eigene Domain.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Quiz erfolgreich geloest.
+    <strong>Modul abgeschlossen!</strong> Quiz erfolgreich gelöst.
   </div>
 
   <div class="card">
     <h3 class="mt-0">A-Record</h3>
     <p>
-      Ein <strong>A-Record</strong> (Address Record) uebersetzt einen
+      Ein <strong>A-Record</strong> (Address Record) übersetzt einen
       Hostnamen direkt in eine <strong>IPv4-Adresse</strong>. Er wird meist
       auf der "nackten" Domain (Apex, z.B. <code>beispiel.ch</code>)
       verwendet, weil man dort keinen CNAME setzen darf.
@@ -66,7 +67,7 @@
     <p>
       Ein <strong>CNAME</strong> (Canonical Name) verweist nicht auf eine
       IP-Adresse, sondern auf einen <strong>anderen Hostnamen</strong>. GitHub
-      Pages nutzt das typischerweise fuer Subdomains:
+      Pages nutzt das typischerweise für Subdomains:
     </p>
     <pre>www.beispiel.ch.    3600    IN    CNAME   dein-username.github.io.</pre>
     <p class="text-muted">
@@ -81,30 +82,30 @@
       Die <strong>TTL</strong> gibt in Sekunden an, wie lange ein
       DNS-Resolver eine Antwort <strong>cachen</strong> darf, bevor er sie
       erneut beim autoritativen Server abfragt. Eine TTL von
-      <code>3600</code> bedeutet: bis zu 1 Stunde lang koennen Resolver
+      <code>3600</code> bedeutet: bis zu 1 Stunde lang können Resolver
       weltweit noch die alte Antwort ausliefern, selbst wenn du den Eintrag
-      laengst geaendert hast.
+      längst geändert hast.
     </p>
   </div>
 
   <div class="card">
     <h3 class="mt-0">Propagation</h3>
     <p>
-      Wenn du einen DNS-Eintrag aenderst, wissen das nicht sofort alle
+      Wenn du einen DNS-Eintrag änderst, wissen das nicht sofort alle
       DNS-Server und Resolver weltweit. Jeder Resolver, der den alten Wert
       bereits gecacht hat, liefert ihn weiter aus, bis dessen TTL
-      abgelaufen ist. Dieser schrittweise Uebergang heisst
+      abgelaufen ist. Dieser schrittweise Übergang heisst
       <strong>Propagation</strong> und kann - je nach TTL und Cache-Verhalten
       der beteiligten Resolver - von Minuten bis zu 24-48 Stunden dauern.
-      Tipp: Vor einer geplanten Domain-Aenderung die TTL vorab absenken.
+      Tipp: Vor einer geplanten Domain-Änderung die TTL vorab absenken.
     </p>
   </div>
 
   <div class="card">
-    <h3 class="mt-0">🛠️ Konfigurator: Beispiel-Eintraege fuer deine Domain</h3>
+    <h3 class="mt-0">🛠️ Konfigurator: Beispiel-Einträge für deine Domain</h3>
     <p class="text-muted">
       Trag hier deine echten Werte ein, sobald die Seite auf GitHub Pages
-      laeuft. Alles wird nur lokal in deinem Browser gespeichert.
+      läuft. Alles wird nur lokal in deinem Browser gespeichert.
     </p>
     <div class="field-row">
       <div class="field">

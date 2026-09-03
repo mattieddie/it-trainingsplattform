@@ -172,6 +172,73 @@ footer.site-footer {
   margin-top: 20px;
 }
 
+.track-section {
+  margin-top: 36px;
+}
+
+.track-section:first-of-type {
+  margin-top: 28px;
+}
+
+.track-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.track-number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(79, 140, 255, 0.15);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.track-header > div {
+  flex-grow: 1;
+}
+
+.track-title {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+}
+
+.track-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.track-progress {
+  flex-shrink: 0;
+  align-self: center;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .track-header {
+    flex-wrap: wrap;
+  }
+  .track-progress {
+    margin-left: 48px;
+  }
+}
+
 .module-card {
   background: var(--bg-card);
   border: 1px solid var(--border);

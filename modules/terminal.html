@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html" class="active">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -42,12 +43,12 @@
     </details>
   </h1>
   <p class="page-subtitle">
-    Ein simuliertes Terminal &ndash; es wird nichts echtes ausgefuehrt. Tippe
-    den passenden Befehl fuer die gestellte Aufgabe ein und druecke Enter.
+    Ein simuliertes Terminal &ndash; es wird nichts echtes ausgeführt. Tippe
+    den passenden Befehl für die gestellte Aufgabe ein und drücke Enter.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Du hast alle Terminal-Aufgaben geloest.
+    <strong>Modul abgeschlossen!</strong> Du hast alle Terminal-Aufgaben gelöst.
   </div>
 
   <div class="card">
@@ -71,7 +72,7 @@
           </select>
         </div>
       </div>
-      <span id="score-pill" class="score-pill">Geloest: 0 / 16 Aufgaben</span>
+      <span id="score-pill" class="score-pill">Gelöst: 0 / 16 Aufgaben</span>
     </div>
 
     <hr class="sep" />
@@ -86,15 +87,15 @@
 
     <div class="flex gap-8 flex-wrap" style="margin-top:10px; align-items:center;">
       <span id="prompt-prefix" class="mono text-muted">C:\Users\azubi&gt;</span>
-      <input type="text" id="cmd-input" class="mono" style="flex:1; min-width:180px;" autocomplete="off" spellcheck="false" placeholder="Befehl eintippen und Enter druecken..." />
-      <button id="run-btn" class="btn primary small">Ausfuehren</button>
+      <input type="text" id="cmd-input" class="mono" style="flex:1; min-width:180px;" autocomplete="off" spellcheck="false" placeholder="Befehl eintippen und Enter drücken..." />
+      <button id="run-btn" class="btn primary small">Ausführen</button>
     </div>
 
     <div id="hint-box" class="alert warning hidden" style="margin-top:14px;"></div>
     <div id="feedback" class="feedback-box hidden"></div>
 
     <div class="btn-row">
-      <button id="next-btn" class="btn ghost">Naechste Aufgabe</button>
+      <button id="next-btn" class="btn ghost">Nächste Aufgabe</button>
     </div>
   </div>
 </main>

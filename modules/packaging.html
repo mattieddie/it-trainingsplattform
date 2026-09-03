@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Software-Paketierung &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html" class="active">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    📦 Software-Paketierung (MSI/MST/EXE, Repackaging)
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Bevor eine Firma eine Anwendung an hunderte PCs verteilt (z.B. per
+        Intune/SCCM), muss sie "paketiert" werden: in ein Format, das sich
+        unbeaufsichtigt (silent), nachvollziehbar und rückgängig machbar
+        installieren lässt - meistens eine MSI.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Wie eine MSI-Datei innen aufgebaut ist, wie Transforms (MST) sie
+    anpassen, wie man Installationen per CMD automatisiert - und wie
+    Repackaging (am Beispiel RayPack) funktioniert, wenn kein sauberer
+    Installer existiert.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      MSI: Aufbau einer Windows-Installer-Datei
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Eine MSI ist keine einfache ZIP-Datei - sie ist buchstäblich eine
+          kleine Datenbank (mit Tabellen wie in Excel), verpackt zusammen
+          mit den eigentlichen Programmdateien in einem einzigen Container.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Eine <code>.msi</code>-Datei ist ein sogenanntes <strong>Compound
+      File</strong> (OLE-Speicher) und enthält zwei grundverschiedene
+      Bereiche:
+    </p>
+
+    <svg viewBox="0 0 600 220" style="width:100%; max-width:600px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="580" height="200" rx="12" fill="#10151f" stroke="#2a3448" stroke-width="2"/>
+      <text x="26" y="34" fill="#9aa5b8" font-size="13" font-family="Consolas, monospace">app.msi (Compound File)</text>
+
+      <rect x="30" y="46" width="260" height="150" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="160" y="68" fill="#e6e9f0" font-size="14" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Datenbank (Tabellen)</text>
+      <text x="46" y="90" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Property</text>
+      <text x="46" y="108" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Directory</text>
+      <text x="46" y="126" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Component</text>
+      <text x="46" y="144" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">File</text>
+      <text x="46" y="162" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Feature</text>
+      <text x="46" y="180" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">InstallExecuteSequence</text>
+
+      <rect x="310" y="46" width="260" height="150" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="440" y="68" fill="#e6e9f0" font-size="14" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Dateistreams (CAB)</text>
+      <text x="326" y="94" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Die eigentlichen</text>
+      <text x="326" y="112" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Programmdateien</text>
+      <text x="326" y="130" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">(komprimiert, als</text>
+      <text x="326" y="148" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Binärstrom im</text>
+      <text x="326" y="166" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Media-/Cabinet-</text>
+      <text x="326" y="184" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Stream abgelegt)</text>
+    </svg>
+
+    <table style="width:100%; border-collapse: collapse; margin-top:8px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Tabelle</th><th>Zweck</th>
+      </tr>
+      <tr><td class="mono">Property</td><td>Variablen der Installation (z.B. <code>INSTALLDIR</code>)</td></tr>
+      <tr><td class="mono">Directory</td><td>Ordnerstruktur (Zielverzeichnis-Baum)</td></tr>
+      <tr><td class="mono">Component</td><td>Atomare Installations-/Deinstallationseinheit</td></tr>
+      <tr><td class="mono">File</td><td>Einzelne Dateien, jeweils einer Component zugeordnet</td></tr>
+      <tr><td class="mono">Feature</td><td>Optionale Installationsbausteine (z.B. "Hilfedateien")</td></tr>
+      <tr><td class="mono">Registry</td><td>Registry-Einträge, die gesetzt werden sollen</td></tr>
+      <tr><td class="mono">InstallExecuteSequence</td><td>Reihenfolge der Aktionen bei der (stillen) Installation</td></tr>
+      <tr><td class="mono">CustomAction</td><td>Zusätzliche eigene Logik (z.B. ein Skript/eine DLL-Funktion)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Transforms (.mst): Anpassungen ohne die MSI zu ändern
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell dir die Basis-MSI als Kuchenrezept vor, das nie angefasst
+          wird. Ein Transform ist ein Notizzettel mit Änderungen ("mehr
+          Zucker, keine Nüsse") - erst beim Backen (Installieren) werden
+          beide zusammen angewendet.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ein Transform beschreibt Unterschiede zu einer Basis-MSI (z.B.
+      individueller Installationspfad, deaktiviertes Feature, zusätzlicher
+      Registry-Wert) - ohne die Original-MSI zu verändern. So kann eine
+      Firma dieselbe MSI für verschiedene Abteilungen leicht unterschiedlich
+      ausrollen.
+    </p>
+
+    <svg viewBox="0 0 560 130" style="width:100%; max-width:560px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="35" width="140" height="60" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="80" y="70" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">app.msi</text>
+
+      <text x="175" y="60" fill="#9aa5b8" font-size="20" text-anchor="middle">+</text>
+
+      <rect x="200" y="35" width="140" height="60" rx="8" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="270" y="70" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">custom.mst</text>
+
+      <text x="365" y="60" fill="#9aa5b8" font-size="20" text-anchor="middle">=</text>
+
+      <rect x="390" y="20" width="160" height="90" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="470" y="55" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Angepasste</text>
+      <text x="470" y="73" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Installation</text>
+      <text x="470" y="93" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">(MSI bleibt Original)</text>
+    </svg>
+
+    <p class="text-muted" style="margin-bottom:4px;">Beispiel mit mehreren Transforms (Reihenfolge zählt bei Konflikten):</p>
+    <pre>msiexec /i app.msi TRANSFORMS=basis.mst;abteilung-vertrieb.mst /qn /norestart /l*v install.log</pre>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Stille Installation per CMD automatisieren</h3>
+    <p>MSI-Pakete sind standardisiert - EXE-Installer hängen vom verwendeten Erstellungswerkzeug ab:</p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Installer-Typ</th><th>Silent-Beispiel</th>
+      </tr>
+      <tr><td>MSI (immer gleich)</td><td class="mono">msiexec /i app.msi /qn /norestart</td></tr>
+      <tr><td>InstallShield-EXE</td><td class="mono">setup.exe /s /v"/qn"</td></tr>
+      <tr><td>NSIS-EXE</td><td class="mono">setup.exe /S</td></tr>
+      <tr><td>Inno Setup-EXE</td><td class="mono">setup.exe /VERYSILENT /NORESTART</td></tr>
+      <tr><td>WiX-Bundle-EXE (kapselt MSI)</td><td class="mono">setup.exe /quiet /norestart</td></tr>
+    </table>
+    <p class="text-muted">
+      Unbekannter Installer? Erst <code>setup.exe /?</code> bzw.
+      <code>/help</code> probieren, dann typische Parameter der bekannten
+      Engines durchtesten (oft an Dateieigenschaften oder enthaltenen
+      Texten/Strings erkennbar) - notfalls mit Verbose-Logging beobachten,
+      was der Installer tatsächlich tut.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Repackaging: wenn es keinen sauberen Installer gibt
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Manche Software liefert nur einen klickbunten Assistenten ohne
+          jede Dokumentation. Repackaging macht ein Vorher-Nachher-Foto vom
+          System und baut aus dem Unterschied eine ganz normale, silent-
+          fähige MSI.
+        </div>
+      </details>
+    </h3>
+    <p>
+      <strong>Grundprinzip:</strong> Auf einer sauberen Referenzmaschine wird
+      ein Snapshot des Systemzustands erstellt, die Anwendung normal
+      installiert, danach ein zweiter Snapshot erstellt. Aus der Differenz
+      (neue/geänderte Dateien und Registry-Einträge) entsteht eine neue,
+      native MSI - unabhängig vom Format des Original-Installers.
+    </p>
+
+    <h4>RayPack-Workflow (stellvertretend für Repackaging-Tools)</h4>
+    <svg viewBox="0 0 620 260" style="width:100%; max-width:620px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="160" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="90" y="34" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Referenz-PC:</text>
+      <text x="90" y="52" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Snapshot "vorher"</text>
+
+      <text x="200" y="42" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
+
+      <rect x="220" y="10" width="160" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="300" y="34" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Anwendung normal</text>
+      <text x="300" y="52" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">installieren</text>
+
+      <text x="410" y="42" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
+
+      <rect x="430" y="10" width="160" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="510" y="34" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Snapshot "nachher"</text>
+      <text x="510" y="52" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">+ Differenzanalyse</text>
+
+      <text x="510" y="90" fill="#9aa5b8" font-size="18" text-anchor="middle">↓</text>
+
+      <rect x="360" y="100" width="220" height="55" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="470" y="124" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">.rcp - Rohes</text>
+      <text x="470" y="142" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Erfassungsprojekt</text>
+
+      <text x="470" y="175" fill="#9aa5b8" font-size="18" text-anchor="middle">↓</text>
+      <text x="500" y="172" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">bereinigen/anpassen</text>
+
+      <rect x="360" y="185" width="220" height="55" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="470" y="209" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">.rpp - Editierbares</text>
+      <text x="470" y="227" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Repackaging-Projekt</text>
+
+      <text x="330" y="220" fill="#9aa5b8" font-size="18" text-anchor="middle">←</text>
+      <text x="130" y="215" fill="#e6e9f0" font-size="12" font-family="Consolas, monospace">kompilieren zu</text>
+      <rect x="10" y="185" width="160" height="55" rx="8" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="90" y="209" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">fertige</text>
+      <text x="90" y="227" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">app.msi</text>
+    </svg>
+
+    <p>
+      RayPack unterscheidet bewusst zwischen dem <strong>rohen
+      Erfassungsprojekt (.rcp)</strong> - dem unbearbeiteten Ergebnis des
+      Snapshot-Vergleichs - und dem daraus abgeleiteten <strong>editierbaren
+      Repackaging-Projekt (.rpp)</strong>, in dem überflüssige/system-
+      spezifische Einträge bereinigt und Anpassungen vorgenommen werden,
+      bevor daraus die fertige, auslieferbare MSI kompiliert wird. So bleiben
+      die Rohdaten der Aufzeichnung erhalten, während am eigentlichen Paket
+      frei gefeilt werden kann.
+    </p>
+    <p class="text-muted">
+      Vergleichbare Werkzeuge im selben Marktsegment: PACE Suite,
+      AdminStudio Repackager, InstallShield. Wichtige Grenze: Repackaging
+      erfasst nur sichtbare System-Änderungen - komplexe Logik (z.B.
+      Treiber, Dienste mit Sonderkonfiguration) muss oft manuell nachgebildet
+      werden.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/packaging.js"></script>
+</body>
+</html>

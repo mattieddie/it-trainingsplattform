@@ -1,14 +1,14 @@
 /*
  * dns-concepts.js - Modul 5: DNS & Domain-Konzepte
- * Statischer Erklaerteil + ein kleiner Konfigurator, der anhand von
- * Benutzername/Repo/eigener Domain Beispiel-DNS-Eintraege fuer GitHub
+ * Statischer Erklärteil + ein kleiner Konfigurator, der anhand von
+ * Benutzername/Repo/eigener Domain Beispiel-DNS-Einträge für GitHub
  * Pages generiert. Die Werte werden nur lokal (localStorage) gespeichert.
  */
 
 const MODULE_ID = "dnsconcepts";
 const DNS_CONFIG_KEY = "netsec-trainer-dns-config-v1";
 
-// Offizielle GitHub-Pages-IPs fuer A-Records auf die Apex-Domain.
+// Offizielle GitHub-Pages-IPs für A-Records auf die Apex-Domain.
 const GITHUB_PAGES_IPS = [
   "185.199.108.153",
   "185.199.109.153",
@@ -37,7 +37,7 @@ const QUIZ = [
       "Was gibt die TTL (Time to Live) eines DNS-Eintrags an?",
     options: [
       "Wie lange ein Resolver den Eintrag cachen darf, bevor er neu abgefragt wird",
-      "Wie viele Server einen Eintrag gleichzeitig speichern duerfen",
+      "Wie viele Server einen Eintrag gleichzeitig speichern dürfen",
       "Die maximale Anzahl DNS-Anfragen pro Sekunde",
     ],
     correctIndex: 0,
@@ -45,11 +45,11 @@ const QUIZ = [
   {
     difficulty: "medium",
     question:
-      "Warum kann eine DNS-Aenderung nach dem Speichern noch eine Weile 'alt' erscheinen (Propagation)?",
+      "Warum kann eine DNS-Änderung nach dem Speichern noch eine Weile 'alt' erscheinen (Propagation)?",
     options: [
-      "Weil DNS-Server weltweit Aenderungen sofort erzwingen muessen",
-      "Weil verschiedene Resolver/Caches den alten Wert bis zum Ablauf seiner TTL weiter ausliefern koennen",
-      "Weil Browser DNS-Eintraege nie cachen",
+      "Weil DNS-Server weltweit Änderungen sofort erzwingen müssen",
+      "Weil verschiedene Resolver/Caches den alten Wert bis zum Ablauf seiner TTL weiter ausliefern können",
+      "Weil Browser DNS-Einträge nie cachen",
     ],
     correctIndex: 1,
   },
@@ -67,11 +67,11 @@ const QUIZ = [
   {
     difficulty: "hard",
     question:
-      "Eine Firma senkt die TTL eines Eintrags von 86400 (24h) auf 300 (5 Min) - und zwar einen Tag BEVOR sie den zugehoerigen Server wechselt. Warum dieses Vorgehen?",
+      "Eine Firma senkt die TTL eines Eintrags von 86400 (24h) auf 300 (5 Min) - und zwar einen Tag BEVOR sie den zugehörigen Server wechselt. Warum dieses Vorgehen?",
     options: [
-      "Damit die alte, hohe TTL vorher regulaer ablaeuft und Resolver nach dem eigentlichen Wechsel den neuen Wert viel schneller abfragen",
+      "Damit die alte, hohe TTL vorher regulär abläuft und Resolver nach dem eigentlichen Wechsel den neuen Wert viel schneller abfragen",
       "Eine niedrige TTL macht die Webseite schneller",
-      "Das ist notwendig, damit der DNS-Server ueberhaupt Aenderungen akzeptiert",
+      "Das ist notwendig, damit der DNS-Server überhaupt Änderungen akzeptiert",
     ],
     correctIndex: 0,
   },
@@ -80,7 +80,7 @@ const QUIZ = [
     question:
       "Was unterscheidet die DNS-Fehlerantwort \"NXDOMAIN\" von \"SERVFAIL\"?",
     options: [
-      "NXDOMAIN heisst, der Name existiert nachweislich nicht; SERVFAIL heisst, der DNS-Server selbst hat ein Problem (z.B. nicht erreichbar/ueberlastet) - der Name koennte trotzdem existieren",
+      "NXDOMAIN heisst, der Name existiert nachweislich nicht; SERVFAIL heisst, der DNS-Server selbst hat ein Problem (z.B. nicht erreichbar/überlastet) - der Name könnte trotzdem existieren",
       "Beide bedeuten exakt dasselbe, nur unterschiedliche Formulierung",
       "NXDOMAIN betrifft nur IPv6, SERVFAIL nur IPv4",
     ],
@@ -219,7 +219,7 @@ function checkQuiz() {
   fb.innerHTML = `<strong>${correctCount} / ${QUIZ.length} richtig.</strong> ${
     allCorrect
       ? "Sehr gut, die DNS-Grundlagen sitzen!"
-      : "Schau dir die markierten Antworten oben nochmal an und wiederhole bei Bedarf den Erklaerteil."
+      : "Schau dir die markierten Antworten oben nochmal an und wiederhole bei Bedarf den Erklärteil."
   }`;
 
   if (allCorrect) {

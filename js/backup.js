@@ -38,16 +38,16 @@ function generateEasyTask() {
 function generateMediumTask() {
   const interval = choice([4, 6, 8, 12, 24]);
   let requirement = choice([2, 4, 6, 8, 12, 24]);
-  // Bewusst manchmal gleich, manchmal unterschiedlich lassen (auch "gerade noch erfuellt" ist lehrreich).
+  // Bewusst manchmal gleich, manchmal unterschiedlich lassen (auch "gerade noch erfüllt" ist lehrreich).
   const compliant = interval <= requirement;
   return {
     difficulty: "medium",
-    prompt: `Aktuell wird alle ${interval} Stunden gesichert. Die Geschaeftsanforderung verlangt einen RPO von hoechstens ${requirement} Stunden.`,
+    prompt: `Aktuell wird alle ${interval} Stunden gesichert. Die Geschäftsanforderung verlangt einen RPO von höchstens ${requirement} Stunden.`,
     question:
-      "Erfuellt das aktuelle Intervall die Anforderung, und wie viele Stunden darf das Intervall maximal betragen, um sie einzuhalten?",
+      "Erfüllt das aktuelle Intervall die Anforderung, und wie viele Stunden darf das Intervall maximal betragen, um sie einzuhalten?",
     fields: [
-      { id: "compliant", label: "Anforderung erfuellt?", type: "select", answer: compliant ? "ja" : "nein" },
-      { id: "maxInterval", label: "Maximal zulaessiges Intervall (Stunden)", answer: requirement },
+      { id: "compliant", label: "Anforderung erfüllt?", type: "select", answer: compliant ? "ja" : "nein" },
+      { id: "maxInterval", label: "Maximal zulässiges Intervall (Stunden)", answer: requirement },
     ],
   };
 }
@@ -73,10 +73,10 @@ function generateHardTask() {
       )} Uhr. Die Wiederherstellung dauert ab Ausfallzeitpunkt ${restoreDurationHours} Stunden. ` +
       `Vorgabe: RPO &le; ${rpoTarget}h, RTO &le; ${rtoTarget}h.`,
     question:
-      "Wie viele Stunden Daten gehen im schlimmsten Fall verloren, um wie viel Uhr sind die Daten spaetestens wiederhergestellt, und werden beide Vorgaben (RPO und RTO) eingehalten?",
+      "Wie viele Stunden Daten gehen im schlimmsten Fall verloren, um wie viel Uhr sind die Daten spätestens wiederhergestellt, und werden beide Vorgaben (RPO und RTO) eingehalten?",
     fields: [
       { id: "dataloss", label: "Datenverlust (Stunden)", answer: gapHours },
-      { id: "recoveryTime", label: "Daten wieder verfuegbar um (HH:MM)", answer: formatClock(recoveryTotal) },
+      { id: "recoveryTime", label: "Daten wieder verfügbar um (HH:MM)", answer: formatClock(recoveryTotal) },
       { id: "compliant", label: "Beide Vorgaben eingehalten?", type: "select", answer: compliant ? "ja" : "nein" },
     ],
   };
@@ -98,7 +98,7 @@ function renderTaskFields(task) {
       wrapper.innerHTML = `
         <label for="field-${field.id}">${field.label}</label>
         <select id="field-${field.id}">
-          <option value="">-- waehlen --</option>
+          <option value="">-- wählen --</option>
           <option value="ja">Ja</option>
           <option value="nein">Nein</option>
         </select>
@@ -205,8 +205,8 @@ const QUIZ = [
     question: "Was verlangt die 3-2-1-Backup-Regel?",
     options: [
       "3 Kopien der Daten, auf 2 verschiedenen Medientypen, davon 1 Kopie ausserhalb des Standorts (offsite)",
-      "3 verschiedene Administratoren muessen jedes Backup freigeben",
-      "Backups muessen 3-mal taeglich auf 2 Servern in 1 Rechenzentrum laufen",
+      "3 verschiedene Administratoren müssen jedes Backup freigeben",
+      "Backups müssen 3-mal täglich auf 2 Servern in 1 Rechenzentrum laufen",
     ],
     correctIndex: 0,
     explanation:
@@ -217,26 +217,26 @@ const QUIZ = [
     question: "Was ist der Unterschied zwischen RPO und RTO?",
     options: [
       "RPO = maximal tolerierbarer Datenverlust (Zeitspanne); RTO = maximal tolerierbare Ausfallzeit bis zur Wiederherstellung",
-      "RPO = wie schnell wiederhergestellt wird; RTO = wie viele Daten verloren gehen duerfen",
-      "Beide beschreiben exakt dasselbe, nur unterschiedliche Abkuerzungen",
+      "RPO = wie schnell wiederhergestellt wird; RTO = wie viele Daten verloren gehen dürfen",
+      "Beide beschreiben exakt dasselbe, nur unterschiedliche Abkürzungen",
     ],
     correctIndex: 0,
     explanation:
-      "RPO (Recovery Point Objective) beantwortet 'wie viel Datenverlust ist akzeptabel?' - bestimmt durch die Backup-Frequenz. RTO (Recovery Time Objective) beantwortet 'wie lange darf der Ausfall dauern, bis alles wieder laeuft?' - bestimmt durch die Restore-Geschwindigkeit.",
+      "RPO (Recovery Point Objective) beantwortet 'wie viel Datenverlust ist akzeptabel?' - bestimmt durch die Backup-Frequenz. RTO (Recovery Time Objective) beantwortet 'wie lange darf der Ausfall dauern, bis alles wieder läuft?' - bestimmt durch die Restore-Geschwindigkeit.",
   },
   {
     difficulty: "medium",
     question:
-      "Original auf dem Fileserver + taeglich ein Backup auf einer staendig angeschlossenen externen Festplatte im selben Serverraum. Sonst nichts. Erfuellt das die 3-2-1-Regel?",
+      "Original auf dem Fileserver + täglich ein Backup auf einer ständig angeschlossenen externen Festplatte im selben Serverraum. Sonst nichts. Erfüllt das die 3-2-1-Regel?",
     options: ["Ja", "Nein"],
     correctIndex: 1,
     explanation:
-      "Nein - es gibt nur 2 Kopien (Original + 1 Backup) und keine davon liegt offsite. Ausserdem ist die Festplatte staendig angeschlossen, was sie zusaetzlich anfaellig fuer Ransomware macht, die sich im Netzwerk ausbreitet.",
+      "Nein - es gibt nur 2 Kopien (Original + 1 Backup) und keine davon liegt offsite. Ausserdem ist die Festplatte ständig angeschlossen, was sie zusätzlich anfällig für Ransomware macht, die sich im Netzwerk ausbreitet.",
   },
   {
     difficulty: "medium",
     question:
-      "Original auf dem Fileserver, Kopie auf einem NAS im selben Raum, Kopie auf einem Band, das woechentlich in einen externen Tresor gebracht wird. Erfuellt das die 3-2-1-Regel?",
+      "Original auf dem Fileserver, Kopie auf einem NAS im selben Raum, Kopie auf einem Band, das wöchentlich in einen externen Tresor gebracht wird. Erfüllt das die 3-2-1-Regel?",
     options: ["Ja", "Nein"],
     correctIndex: 0,
     explanation:
@@ -245,28 +245,28 @@ const QUIZ = [
   {
     difficulty: "hard",
     question:
-      "Ransomware verschluesselt am Montag um 14 Uhr sowohl den Fileserver als auch das direkt im Netzwerk erreichbare NAS-Backup. Es existiert zusaetzlich ein woechentliches Band-Backup vom letzten Sonntag, das nach der Sicherung physisch getrennt und im Tresor eingelagert wurde (offline/air-gapped). Welche Kopie ist zur Wiederherstellung sicher nutzbar?",
+      "Ransomware verschlüsselt am Montag um 14 Uhr sowohl den Fileserver als auch das direkt im Netzwerk erreichbare NAS-Backup. Es existiert zusätzlich ein wöchentliches Band-Backup vom letzten Sonntag, das nach der Sicherung physisch getrennt und im Tresor eingelagert wurde (offline/air-gapped). Welche Kopie ist zur Wiederherstellung sicher nutzbar?",
     options: [
-      "Das Band-Backup, weil es physisch/logisch getrennt (air-gapped) und daher fuer die Ransomware nicht erreichbar war",
-      "Das NAS-Backup, weil es die aktuelleren Daten enthaelt",
+      "Das Band-Backup, weil es physisch/logisch getrennt (air-gapped) und daher für die Ransomware nicht erreichbar war",
+      "Das NAS-Backup, weil es die aktuelleren Daten enthält",
       "Beide Kopien sind gleich sicher nutzbar",
     ],
     correctIndex: 0,
     explanation:
-      "Vernetzt erreichbare Backups (wie das NAS hier) koennen von derselben Ransomware-Welle mitverschluesselt werden. Eine offline/air-gapped Kopie (oder unveraenderlicher/immutabler Speicher) ist der entscheidende Schutz, weil die Schadsoftware sie schlicht nicht erreichen kann - auch wenn die Daten dadurch etwas aelter sind.",
+      "Vernetzt erreichbare Backups (wie das NAS hier) können von derselben Ransomware-Welle mitverschlüsselt werden. Eine offline/air-gapped Kopie (oder unveränderlicher/immutabler Speicher) ist der entscheidende Schutz, weil die Schadsoftware sie schlicht nicht erreichen kann - auch wenn die Daten dadurch etwas älter sind.",
   },
   {
     difficulty: "hard",
     question:
-      "Nach einer Vollsicherung laufen taegliche Zusatzsicherungen. Ein Restore soll moeglichst wenige einzelne Sicherungen benoetigen (schneller Restore), auch wenn dafuer mehr Speicherplatz pro Sicherung noetig ist. Welcher Sicherungstyp passt dazu am besten?",
+      "Nach einer Vollsicherung laufen tägliche Zusatzsicherungen. Ein Restore soll möglichst wenige einzelne Sicherungen benötigen (schneller Restore), auch wenn dafür mehr Speicherplatz pro Sicherung nötig ist. Welcher Sicherungstyp passt dazu am besten?",
     options: [
-      "Differenzielle Sicherung (jede Sicherung enthaelt alle Aenderungen seit der letzten Vollsicherung - Restore braucht nur Vollsicherung + die letzte differenzielle Sicherung)",
-      "Inkrementelle Sicherung (jede Sicherung enthaelt nur Aenderungen seit der letzten Sicherung - Restore braucht Vollsicherung + ALLE inkrementellen Sicherungen in Reihenfolge)",
-      "Beide Typen benoetigen beim Restore immer gleich viele Sicherungen",
+      "Differenzielle Sicherung (jede Sicherung enthält alle Änderungen seit der letzten Vollsicherung - Restore braucht nur Vollsicherung + die letzte differenzielle Sicherung)",
+      "Inkrementelle Sicherung (jede Sicherung enthält nur Änderungen seit der letzten Sicherung - Restore braucht Vollsicherung + ALLE inkrementellen Sicherungen in Reihenfolge)",
+      "Beide Typen benötigen beim Restore immer gleich viele Sicherungen",
     ],
     correctIndex: 0,
     explanation:
-      "Differenzielle Sicherungen wachsen zwar taeglich (jede enthaelt alle Aenderungen seit der Vollsicherung), machen den Restore aber einfach und schnell: nur Vollsicherung + letzte differenzielle Sicherung. Inkrementelle Sicherungen sind platzsparender, brauchen beim Restore aber die Vollsicherung plus JEDE einzelne inkrementelle Sicherung in der richtigen Reihenfolge.",
+      "Differenzielle Sicherungen wachsen zwar täglich (jede enthält alle Änderungen seit der Vollsicherung), machen den Restore aber einfach und schnell: nur Vollsicherung + letzte differenzielle Sicherung. Inkrementelle Sicherungen sind platzsparender, brauchen beim Restore aber die Vollsicherung plus JEDE einzelne inkrementelle Sicherung in der richtigen Reihenfolge.",
   },
 ];
 
@@ -358,8 +358,8 @@ function updateChecklist(state) {
   const quizItem = document.getElementById("check-quiz");
   quizItem.classList.toggle("status-done", Boolean(state.quizDone));
   quizItem.textContent = state.quizDone
-    ? "✅ 3-2-1/Ransomware-Quiz vollstaendig richtig geloest"
-    : "⬜ 3-2-1/Ransomware-Quiz vollstaendig richtig loesen";
+    ? "✅ 3-2-1/Ransomware-Quiz vollständig richtig gelöst"
+    : "⬜ 3-2-1/Ransomware-Quiz vollständig richtig lösen";
 }
 
 document.addEventListener("DOMContentLoaded", () => {

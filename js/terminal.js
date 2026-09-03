@@ -1,7 +1,7 @@
 /*
  * terminal.js - Modul 6: CMD & PowerShell Terminal-Trainer
- * Simuliertes Terminal: es wird NICHTS echtes ausgefuehrt. Eingetippte
- * Befehle werden nur gegen Muster (RegExp) geprueft; bei Treffer wird ein
+ * Simuliertes Terminal: es wird NICHTS echtes ausgeführt. Eingetippte
+ * Befehle werden nur gegen Muster (RegExp) geprüft; bei Treffer wird ein
  * fest hinterlegter, realistisch wirkender Beispiel-Output angezeigt.
  */
 
@@ -23,23 +23,23 @@ Ethernet-Adapter LAN-Verbindung:
    IPv4-Adresse. . . . . . . . . . . : 192.168.1.45
    Subnetzmaske. . . . . . . . . . . : 255.255.255.0
    Standardgateway . . . . . . . . . : 192.168.1.1`,
-    hint: "Der klassische CMD-Befehl fuer die Netzwerkkonfiguration lautet schlicht \"ipconfig\".",
-    explanation: "\"ipconfig\" zeigt die IP-Konfiguration aller Netzwerkadapter. Mit \"/all\" gibt es zusaetzlich MAC-Adresse, DHCP- und DNS-Server aus.",
+    hint: "Der klassische CMD-Befehl für die Netzwerkkonfiguration lautet schlicht \"ipconfig\".",
+    explanation: "\"ipconfig\" zeigt die IP-Konfiguration aller Netzwerkadapter. Mit \"/all\" gibt es zusätzlich MAC-Adresse, DHCP- und DNS-Server aus.",
   },
   {
     id: "ping",
     shell: "cmd",
     difficulty: "easy",
-    task: "Pruefe per CMD, ob der Host 8.8.8.8 erreichbar ist.",
+    task: "Prüfe per CMD, ob der Host 8.8.8.8 erreichbar ist.",
     accept: [/^ping\s+8\.8\.8\.8(\s+-n\s*\d+)?$/i],
     output:
-`Ping wird ausgefuehrt fuer 8.8.8.8 mit 32 Bytes Daten:
+`Ping wird ausgeführt für 8.8.8.8 mit 32 Bytes Daten:
 Antwort von 8.8.8.8: Bytes=32 Zeit=14ms TTL=115
 Antwort von 8.8.8.8: Bytes=32 Zeit=13ms TTL=115
 
-Ping-Statistik fuer 8.8.8.8:
+Ping-Statistik für 8.8.8.8:
     Pakete: Gesendet = 2, Empfangen = 2, Verloren = 0 (0% Verlust)`,
-    hint: "Erreichbarkeit prueft man mit \"ping\" gefolgt von der Zieladresse.",
+    hint: "Erreichbarkeit prüft man mit \"ping\" gefolgt von der Zieladresse.",
     explanation: "\"ping\" sendet ICMP-Echo-Requests an die angegebene Adresse und misst, ob und wie schnell geantwortet wird.",
   },
   {
@@ -55,7 +55,7 @@ System Idle Process              Services              0        8 K
 svchost.exe                      Services            812    9.876 K
 explorer.exe                     Console            2140   64.320 K
 notepad.exe                      Console            5544   11.204 K`,
-    hint: "In der CMD heisst der Befehl fuer die Prozessliste \"tasklist\".",
+    hint: "In der CMD heisst der Befehl für die Prozessliste \"tasklist\".",
     explanation: "\"tasklist\" listet alle laufenden Prozesse mit PID und Speicherverbrauch auf - das CMD-Pendant zum Task-Manager.",
   },
   {
@@ -65,15 +65,15 @@ notepad.exe                      Console            5544   11.204 K`,
     task: "Liste den Inhalt des aktuellen Verzeichnisses per CMD auf.",
     accept: [/^dir$/i],
     output:
-`Datentraeger in Laufwerk C: ist Windows
+`Datenträger in Laufwerk C: ist Windows
  Verzeichnis von C:\\Users\\azubi
 
 03.09.2026  09:12    <DIR>          Desktop
 03.09.2026  09:12    <DIR>          Dokumente
 03.09.2026  08:47             1'024 notizen.txt
                1 Datei(en),      1'024 Bytes`,
-    hint: "Der klassische CMD-Befehl fuer eine Verzeichnisliste ist \"dir\".",
-    explanation: "\"dir\" zeigt Dateien und Unterordner des aktuellen Verzeichnisses inkl. Datum und Groesse.",
+    hint: "Der klassische CMD-Befehl für eine Verzeichnisliste ist \"dir\".",
+    explanation: "\"dir\" zeigt Dateien und Unterordner des aktuellen Verzeichnisses inkl. Datum und Grösse.",
   },
   {
     id: "get-process",
@@ -87,8 +87,8 @@ notepad.exe                      Console            5544   11.204 K`,
     412      22    41200      68900       4.20   2140  explorer
     180      14    18500      22100       0.55   5544  notepad
     650      35    62000      88400      12.10    812  svchost`,
-    hint: "Das PowerShell-Cmdlet fuer die Prozessliste heisst \"Get-Process\".",
-    explanation: "\"Get-Process\" liefert (im Gegensatz zu tasklist) ein strukturiertes .NET-Objekt pro Prozess - dadurch laesst es sich leicht filtern und weiterverarbeiten, z.B. mit \"| Where-Object\".",
+    hint: "Das PowerShell-Cmdlet für die Prozessliste heisst \"Get-Process\".",
+    explanation: "\"Get-Process\" liefert (im Gegensatz zu tasklist) ein strukturiertes .NET-Objekt pro Prozess - dadurch lässt es sich leicht filtern und weiterverarbeiten, z.B. mit \"| Where-Object\".",
   },
   {
     id: "get-service",
@@ -102,7 +102,7 @@ notepad.exe                      Console            5544   11.204 K`,
 Running  Spooler            Druckwarteschlange
 Running  W32Time            Windows-Zeitgeber
 Stopped  Fax                Fax`,
-    hint: "Das PowerShell-Cmdlet fuer Dienste heisst \"Get-Service\".",
+    hint: "Das PowerShell-Cmdlet für Dienste heisst \"Get-Service\".",
     explanation: "\"Get-Service\" zeigt alle registrierten Windows-Dienste mit ihrem aktuellen Status (Running/Stopped).",
   },
   {
@@ -113,7 +113,7 @@ Stopped  Fax                Fax`,
     accept: [/^tracert\s+google\.com$/i],
     output:
 `Routenverfolgung zu google.com [142.250.185.78]
-ueber maximal 30 Abschnitte:
+über maximal 30 Abschnitte:
 
   1     1 ms     1 ms     1 ms  192.168.1.1
   2     8 ms     7 ms     8 ms  10.10.0.1
@@ -121,8 +121,8 @@ ueber maximal 30 Abschnitte:
   4    15 ms    14 ms    15 ms  142.250.185.78
 
 Ablaufverfolgung beendet.`,
-    hint: "Der CMD-Befehl fuer die Routenverfolgung heisst \"tracert\" (traceroute).",
-    explanation: "\"tracert\" zeigt jede Zwischenstation (Router-Hop) auf dem Weg zum Ziel inkl. Latenz - hilfreich, um zu sehen, wo genau eine Verbindung ins Stocken geraet.",
+    hint: "Der CMD-Befehl für die Routenverfolgung heisst \"tracert\" (traceroute).",
+    explanation: "\"tracert\" zeigt jede Zwischenstation (Router-Hop) auf dem Weg zum Ziel inkl. Latenz - hilfreich, um zu sehen, wo genau eine Verbindung ins Stocken gerät.",
   },
   {
     id: "netstat",
@@ -137,14 +137,14 @@ Ablaufverfolgung beendet.`,
   TCP    0.0.0.0:135           0.0.0.0:0             ABHOEREN
   TCP    192.168.1.45:52344    142.250.185.78:443    HERGESTELLT
   TCP    0.0.0.0:445           0.0.0.0:0             ABHOEREN`,
-    hint: "Fuer Netzwerkverbindungen/Ports in der CMD: \"netstat\" (am besten mit \"-an\" fuer numerische Ausgabe aller Verbindungen).",
-    explanation: "\"netstat -an\" zeigt alle TCP/UDP-Verbindungen und lauschenden Ports numerisch an - nuetzlich, um offene Ports oder verdaechtige Verbindungen zu finden.",
+    hint: "Für Netzwerkverbindungen/Ports in der CMD: \"netstat\" (am besten mit \"-an\" für numerische Ausgabe aller Verbindungen).",
+    explanation: "\"netstat -an\" zeigt alle TCP/UDP-Verbindungen und lauschenden Ports numerisch an - nützlich, um offene Ports oder verdächtige Verbindungen zu finden.",
   },
   {
     id: "nslookup",
     shell: "cmd",
     difficulty: "medium",
-    task: "Loese den Hostnamen google.com per CMD in eine IP-Adresse auf.",
+    task: "Löse den Hostnamen google.com per CMD in eine IP-Adresse auf.",
     accept: [/^nslookup\s+google\.com$/i],
     output:
 `Server:  dns-intern.firma.local
@@ -153,8 +153,8 @@ Address:  10.0.0.1
 Nicht autorisierte Antwort:
 Name:    google.com
 Address: 142.250.185.78`,
-    hint: "DNS-Aufloesung in der CMD: \"nslookup\" gefolgt vom Hostnamen.",
-    explanation: "\"nslookup\" fragt einen DNS-Server direkt ab und zeigt, welche IP-Adresse fuer einen Namen zurueckgegeben wird.",
+    hint: "DNS-Auflösung in der CMD: \"nslookup\" gefolgt vom Hostnamen.",
+    explanation: "\"nslookup\" fragt einen DNS-Server direkt ab und zeigt, welche IP-Adresse für einen Namen zurückgegeben wird.",
   },
   {
     id: "test-netconnection",
@@ -169,7 +169,7 @@ TcpTestSucceeded       : True
 PingSucceeded          : True
 PingReplyDetails (RTT) : 14 ms`,
     hint: "Das modernere PowerShell-Pendant zu ping heisst \"Test-NetConnection\" (oder \"Test-Connection\").",
-    explanation: "\"Test-NetConnection\" liefert - anders als ping - strukturierte Zusatzinfos wie TCP-Testergebnis und Route, was es fuer Skripte deutlich praktischer macht.",
+    explanation: "\"Test-NetConnection\" liefert - anders als ping - strukturierte Zusatzinfos wie TCP-Testergebnis und Route, was es für Skripte deutlich praktischer macht.",
   },
   {
     id: "get-netipconfiguration",
@@ -195,7 +195,7 @@ DNSServer             : 10.0.0.1`,
 `WARNUNG: Warte auf Dienst 'Print Spooler (Spooler)', um den Status "Gestoppt" zu erreichen...
 Dienst "Spooler" wurde erfolgreich neu gestartet.`,
     hint: "Dienste startet man mit PowerShell per \"Restart-Service <Dienstname>\" neu.",
-    explanation: "\"Restart-Service\" stoppt und startet einen Windows-Dienst - klassischer Fix bei haengenden Diensten wie dem Druckerspooler.",
+    explanation: "\"Restart-Service\" stoppt und startet einen Windows-Dienst - klassischer Fix bei hängenden Diensten wie dem Druckerspooler.",
   },
   {
     id: "systeminfo",
@@ -209,8 +209,8 @@ Betriebssystemname:        Microsoft Windows 11 Enterprise
 Systemtyp:                 x64-basierter PC
 Installierte Hotfixes:     [15]: KB5034123, KB5031354, ...
 Gesamter phys. Speicher:   16'384 MB`,
-    hint: "Ausfuehrliche Systeminfos liefert in der CMD der Befehl \"systeminfo\" (ohne Parameter).",
-    explanation: "\"systeminfo\" fasst OS-Version, Hardware, Domaenenzugehoerigkeit und installierte Patches in einer Uebersicht zusammen - nuetzlich fuer Inventarisierung und Patch-Kontrolle.",
+    hint: "Ausführliche Systeminfos liefert in der CMD der Befehl \"systeminfo\" (ohne Parameter).",
+    explanation: "\"systeminfo\" fasst OS-Version, Hardware, Domänenzugehörigkeit und installierte Patches in einer Übersicht zusammen - nützlich für Inventarisierung und Patch-Kontrolle.",
   },
   {
     id: "taskkill",
@@ -221,13 +221,13 @@ Gesamter phys. Speicher:   16'384 MB`,
     output:
 `ERFOLGREICH: Der Prozess "notepad.exe" mit PID 5544 wurde beendet.`,
     hint: "Prozesse beendet man in der CMD mit \"taskkill /IM <prozessname> /F\" (F = erzwingen).",
-    explanation: "\"taskkill /IM notepad.exe /F\" beendet den Prozess anhand seines Namens (Image Name) zwangsweise (\"/F\") - Alternative: \"/PID <nummer>\" fuer einen bestimmten Prozess.",
+    explanation: "\"taskkill /IM notepad.exe /F\" beendet den Prozess anhand seines Namens (Image Name) zwangsweise (\"/F\") - Alternative: \"/PID <nummer>\" für einen bestimmten Prozess.",
   },
   {
     id: "get-eventlog",
     shell: "powershell",
     difficulty: "hard",
-    task: "Zeige die 10 neuesten Eintraege aus dem System-Ereignisprotokoll mit PowerShell an.",
+    task: "Zeige die 10 neuesten Einträge aus dem System-Ereignisprotokoll mit PowerShell an.",
     accept: [/^get-eventlog\s+-logname\s+system\s+-newest\s+10$/i, /^get-winevent\s+-logname\s+system\s+-maxevents\s+10$/i],
     output:
 `Index Time          EntryType  Source          Message
@@ -236,20 +236,20 @@ Gesamter phys. Speicher:   16'384 MB`,
 41821 08:59:47       Warning      Kernel-Power     Das System ist aus dem Standbymodus erwacht.
 41820 08:47:15       Information  Service Control  Der Dienst "W32Time" wurde gestartet.`,
     hint: "Ereignisprotokolle liest man mit \"Get-EventLog -LogName System -Newest 10\" (oder dem neueren \"Get-WinEvent\").",
-    explanation: "\"Get-EventLog\" (klassisch) bzw. \"Get-WinEvent\" (moderner, schneller) lesen Windows-Ereignisprotokolle aus - essenziell fuer Fehlersuche und Sicherheitsanalyse.",
+    explanation: "\"Get-EventLog\" (klassisch) bzw. \"Get-WinEvent\" (moderner, schneller) lesen Windows-Ereignisprotokolle aus - essenziell für Fehlersuche und Sicherheitsanalyse.",
   },
   {
     id: "set-executionpolicy",
     shell: "powershell",
     difficulty: "hard",
-    task: "Setze die PowerShell-Ausfuehrungsrichtlinie (Execution Policy) fuer den aktuellen Benutzer auf \"RemoteSigned\".",
+    task: "Setze die PowerShell-Ausführungsrichtlinie (Execution Policy) für den aktuellen Benutzer auf \"RemoteSigned\".",
     accept: [/^set-executionpolicy\s+(-scope\s+currentuser\s+)?remotesigned(\s+-scope\s+currentuser)?$/i],
     output:
-`Ausfuehrungsrichtlinie geaendert.
-Die Ausfuehrungsrichtlinie hilft, Sie vor Skripts zu schuetzen, denen Sie nicht vertrauen.
-Moechten Sie die Ausfuehrungsrichtlinie aendern? [J] Ja  [N] Nein: J`,
+`Ausführungsrichtlinie geändert.
+Die Ausführungsrichtlinie hilft, Sie vor Skripts zu schützen, denen Sie nicht vertrauen.
+Möchten Sie die Ausführungsrichtlinie ändern? [J] Ja  [N] Nein: J`,
     hint: "Der Befehl lautet \"Set-ExecutionPolicy RemoteSigned\" (optional mit \"-Scope CurrentUser\").",
-    explanation: "\"RemoteSigned\" erlaubt lokal erstellte Skripte ohne Signatur, verlangt aber eine gueltige digitale Signatur fuer aus dem Internet heruntergeladene Skripte - ein gaengiger Mittelweg zwischen \"Restricted\" und \"Unrestricted\".",
+    explanation: "\"RemoteSigned\" erlaubt lokal erstellte Skripte ohne Signatur, verlangt aber eine gültige digitale Signatur für aus dem Internet heruntergeladene Skripte - ein gängiger Mittelweg zwischen \"Restricted\" und \"Unrestricted\".",
   },
 ];
 
@@ -329,7 +329,7 @@ function renderChallenge() {
 
   if (!currentChallenge) {
     document.getElementById("task-text").textContent =
-      "Keine Aufgaben fuer diese Filterkombination gefunden - waehle andere Filter.";
+      "Keine Aufgaben für diese Filterkombination gefunden - wähle andere Filter.";
     document.getElementById("cmd-input").disabled = true;
     renderTerminal();
     return;
@@ -384,7 +384,7 @@ function submitCommand() {
     wrongAttempts++;
     terminalLines.push({
       type: "error",
-      text: "Befehl nicht erkannt oder fuer diese Aufgabe nicht zutreffend.",
+      text: "Befehl nicht erkannt oder für diese Aufgabe nicht zutreffend.",
     });
     renderTerminal();
     input.value = "";
@@ -416,7 +416,7 @@ function updateScorePill() {
   const solved = loadSolvedSet();
   document.getElementById(
     "score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${CHALLENGES.length} Aufgaben`;
+  ).textContent = `Gelöst: ${solved.length} / ${CHALLENGES.length} Aufgaben`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html" class="active">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html" class="active">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -36,13 +37,13 @@
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Rechenaufgaben-Ziel erreicht und Quiz vollstaendig richtig geloest.
+    <strong>Modul abgeschlossen!</strong> Rechenaufgaben-Ziel erreicht und Quiz vollständig richtig gelöst.
   </div>
 
   <div class="card">
     <h3 class="mt-0">Checkliste</h3>
     <div id="check-tasks" class="checklist-item">⬜ RPO/RTO-Rechenaufgaben: 0 / 8 richtig</div>
-    <div id="check-quiz" class="checklist-item">⬜ 3-2-1/Ransomware-Quiz vollstaendig richtig loesen</div>
+    <div id="check-quiz" class="checklist-item">⬜ 3-2-1/Ransomware-Quiz vollständig richtig lösen</div>
   </div>
 
   <div class="card">
@@ -51,9 +52,9 @@
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
-          Merkregel: wuerden ALLE deine Kopien beim selben Ereignis
-          (Feuer, Diebstahl, Ransomware im Netzwerk) gleichzeitig zerstoert
-          werden koennen? Wenn ja, ist die 3-2-1-Regel noch nicht erfuellt.
+          Merkregel: würden ALLE deine Kopien beim selben Ereignis
+          (Feuer, Diebstahl, Ransomware im Netzwerk) gleichzeitig zerstört
+          werden können? Wenn ja, ist die 3-2-1-Regel noch nicht erfüllt.
         </div>
       </details>
     </h3>
@@ -80,11 +81,11 @@
     <h3 class="mt-0">Backup-Typen im Vergleich</h3>
     <table style="width:100%; border-collapse: collapse;">
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
-        <th style="padding:4px 0;">Typ</th><th>Backup-Groesse</th><th>Restore-Aufwand</th>
+        <th style="padding:4px 0;">Typ</th><th>Backup-Grösse</th><th>Restore-Aufwand</th>
       </tr>
-      <tr><td><strong>Vollsicherung</strong></td><td>Immer alles (gross)</td><td>Nur diese eine Sicherung noetig</td></tr>
-      <tr><td><strong>Differenziell</strong></td><td>Alle Aenderungen seit letzter Vollsicherung (waechst taeglich)</td><td>Vollsicherung + letzte differenzielle Sicherung</td></tr>
-      <tr><td><strong>Inkrementell</strong></td><td>Nur Aenderungen seit letzter Sicherung (klein)</td><td>Vollsicherung + ALLE inkrementellen Sicherungen in Reihenfolge</td></tr>
+      <tr><td><strong>Vollsicherung</strong></td><td>Immer alles (gross)</td><td>Nur diese eine Sicherung nötig</td></tr>
+      <tr><td><strong>Differenziell</strong></td><td>Alle Änderungen seit letzter Vollsicherung (wächst täglich)</td><td>Vollsicherung + letzte differenzielle Sicherung</td></tr>
+      <tr><td><strong>Inkrementell</strong></td><td>Nur Änderungen seit letzter Sicherung (klein)</td><td>Vollsicherung + ALLE inkrementellen Sicherungen in Reihenfolge</td></tr>
     </table>
   </div>
 
@@ -94,7 +95,7 @@
       <li><strong>RPO (Recovery Point Objective)</strong>: wie viel Datenverlust (in Zeit gemessen) ist maximal akzeptabel? Wird durch die Backup-Frequenz bestimmt.</li>
       <li><strong>RTO (Recovery Time Objective)</strong>: wie lange darf die Wiederherstellung nach einem Ausfall maximal dauern? Wird durch die Restore-Geschwindigkeit bestimmt.</li>
     </ul>
-    <p class="text-muted">Faustregel GFS-Rotation (Grandfather-Father-Son): taegliche Sicherungen kurz aufbewahren, woechentliche laenger, monatliche am laengsten - so bleibt der Speicherbedarf ueberschaubar, waehrend trotzdem lange zurueckliegende Wiederherstellungspunkte verfuegbar bleiben.</p>
+    <p class="text-muted">Faustregel GFS-Rotation (Grandfather-Father-Son): tägliche Sicherungen kurz aufbewahren, wöchentliche länger, monatliche am längsten - so bleibt der Speicherbedarf überschaubar, während trotzdem lange zurückliegende Wiederherstellungspunkte verfügbar bleiben.</p>
   </div>
 
   <div class="card">
@@ -121,7 +122,7 @@
     <div id="task-fields"></div>
 
     <div class="btn-row">
-      <button id="check-task-btn" class="btn primary">Pruefen</button>
+      <button id="check-task-btn" class="btn primary">Prüfen</button>
       <button id="new-task-btn" class="btn ghost">Neue Aufgabe</button>
     </div>
 

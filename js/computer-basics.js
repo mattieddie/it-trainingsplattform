@@ -15,20 +15,20 @@ const QUIZ = [
     options: ["Prozessor (CPU)", "Arbeitsspeicher (RAM)", "Mainboard", "Netzteil"],
     correctIndex: 0,
     explanation:
-      "Die CPU (Central Processing Unit) verarbeitet Daten und steuert die Ablaeufe im System - daher der Vergleich mit dem \"Gehirn\".",
+      "Die CPU (Central Processing Unit) verarbeitet Daten und steuert die Abläufe im System - daher der Vergleich mit dem \"Gehirn\".",
   },
   {
     topic: "🖥️ Hardware (Computeraufbau)",
     difficulty: "easy",
     question: "Welche Eigenschaft hat der Arbeitsspeicher (RAM)?",
     options: [
-      "Er ist fluechtig - sein Inhalt geht beim Ausschalten verloren, dient dem schnellen Zwischenspeichern aktuell genutzter Daten",
+      "Er ist flüchtig - sein Inhalt geht beim Ausschalten verloren, dient dem schnellen Zwischenspeichern aktuell genutzter Daten",
       "Er speichert Daten dauerhaft, auch ohne Strom",
       "Er ist langsamer als eine Festplatte, aber dauerhaft",
     ],
     correctIndex: 0,
     explanation:
-      "RAM ist fluechtiger Speicher: extrem schnell im Zugriff, aber der Inhalt ist weg, sobald der Strom fehlt. Fuer dauerhafte Speicherung braucht es HDD/SSD.",
+      "RAM ist flüchtiger Speicher: extrem schnell im Zugriff, aber der Inhalt ist weg, sobald der Strom fehlt. Für dauerhafte Speicherung braucht es HDD/SSD.",
   },
   {
     topic: "🖥️ Hardware (Computeraufbau)",
@@ -37,7 +37,7 @@ const QUIZ = [
     options: [
       "HDD speichert Daten mechanisch/magnetisch auf rotierenden Scheiben; SSD speichert elektronisch (Flash-Speicher) ohne bewegliche Teile und ist dadurch deutlich schneller",
       "Beide funktionieren technisch identisch, nur die Bauform unterscheidet sich",
-      "SSD ist die aeltere, HDD die neuere Technologie",
+      "SSD ist die ältere, HDD die neuere Technologie",
     ],
     correctIndex: 0,
     explanation:
@@ -47,7 +47,7 @@ const QUIZ = [
     topic: "🖥️ Hardware (Computeraufbau)",
     difficulty: "medium",
     question: "Welche Komponente verbindet CPU, RAM, Grafikkarte und weitere Teile physisch miteinander?",
-    options: ["Mainboard", "Netzteil", "Kuehler", "Gehaeuse"],
+    options: ["Mainboard", "Netzteil", "Kühler", "Gehäuse"],
     correctIndex: 0,
     explanation:
       "Das Mainboard (Hauptplatine) ist die zentrale Verbindungsplatine, auf der bzw. an der alle wichtigen Komponenten stecken oder angeschlossen sind.",
@@ -56,15 +56,15 @@ const QUIZ = [
     topic: "🖥️ Hardware (Computeraufbau)",
     difficulty: "hard",
     question:
-      "Warum profitiert Windows bei typischen Office-Arbeiten (viele Programme/Fenster gleichzeitig offen) oft staerker von mehr RAM als von einer schnelleren CPU?",
+      "Warum profitiert Windows bei typischen Office-Arbeiten (viele Programme/Fenster gleichzeitig offen) oft stärker von mehr RAM als von einer schnelleren CPU?",
     options: [
-      "Bei vielen gleichzeitig geoeffneten Programmen wird vor allem Arbeitsspeicher gebraucht, um deren Daten vorzuhalten - ist der RAM knapp, muss ausgelagert werden, was alles verlangsamt, egal wie schnell die CPU ist",
+      "Bei vielen gleichzeitig geöffneten Programmen wird vor allem Arbeitsspeicher gebraucht, um deren Daten vorzuhalten - ist der RAM knapp, muss ausgelagert werden, was alles verlangsamt, egal wie schnell die CPU ist",
       "Die CPU wird bei Office-Programmen technisch gar nicht genutzt",
       "RAM ist immer wichtiger als die CPU, in jedem denkbaren Szenario",
     ],
     correctIndex: 0,
     explanation:
-      "Reicht der RAM nicht aus, muss Windows Daten auf die (viel langsamere) Festplatte auslagern (Swapping) - das bremst spuerbar, unabhaengig davon, wie schnell die CPU eigentlich waere. Bei vielen gleichzeitig offenen Programmen ist deshalb oft der RAM der Flaschenhals.",
+      "Reicht der RAM nicht aus, muss Windows Daten auf die (viel langsamere) Festplatte auslagern (Swapping) - das bremst spürbar, unabhängig davon, wie schnell die CPU eigentlich wäre. Bei vielen gleichzeitig offenen Programmen ist deshalb oft der RAM der Flaschenhals.",
   },
 
   // ---- Benutzer vs. System ----
@@ -74,19 +74,19 @@ const QUIZ = [
     question:
       "Was ist der Unterschied zwischen \"Computerkonfiguration\" und \"Benutzerkonfiguration\" bei Windows-Einstellungen?",
     options: [
-      "Computerkonfiguration gilt fuer ALLE Benutzer an diesem einen PC; Benutzerkonfiguration gilt fuer EINEN bestimmten Benutzer, egal an welchem PC er sich anmeldet",
+      "Computerkonfiguration gilt für ALLE Benutzer an diesem einen PC; Benutzerkonfiguration gilt für EINEN bestimmten Benutzer, egal an welchem PC er sich anmeldet",
       "Beide bedeuten exakt dasselbe",
-      "Computerkonfiguration gilt nur fuer den Administrator, Benutzerkonfiguration fuer alle anderen",
+      "Computerkonfiguration gilt nur für den Administrator, Benutzerkonfiguration für alle anderen",
     ],
     correctIndex: 0,
     explanation:
-      "Computereinstellungen sind an das Geraet gebunden (wirken fuer jeden, der sich dort anmeldet). Benutzereinstellungen sind an die Person gebunden (folgen ihr auf jedes Geraet, an dem sie sich anmeldet).",
+      "Computereinstellungen sind an das Gerät gebunden (wirken für jeden, der sich dort anmeldet). Benutzereinstellungen sind an die Person gebunden (folgen ihr auf jedes Gerät, an dem sie sich anmeldet).",
   },
   {
     topic: "👤 Benutzer- vs. Systemebene",
     difficulty: "medium",
     question:
-      "In welchem Registry-Hauptzweig (Hive) findet man systemweite Einstellungen, die fuer alle Benutzer eines PCs gelten?",
+      "In welchem Registry-Hauptzweig (Hive) findet man systemweite Einstellungen, die für alle Benutzer eines PCs gelten?",
     options: [
       "HKEY_LOCAL_MACHINE (HKLM)",
       "HKEY_CURRENT_USER (HKCU)",
@@ -94,21 +94,21 @@ const QUIZ = [
     ],
     correctIndex: 0,
     explanation:
-      "HKLM enthaelt systemweite Einstellungen (gelten fuer alle Benutzer). HKCU enthaelt dagegen nur das Profil des aktuell angemeldeten Benutzers.",
+      "HKLM enthält systemweite Einstellungen (gelten für alle Benutzer). HKCU enthält dagegen nur das Profil des aktuell angemeldeten Benutzers.",
   },
   {
     topic: "👤 Benutzer- vs. Systemebene",
     difficulty: "hard",
     question:
-      "Ein Programm wurde \"nur fuer mich\" (per-user) installiert, waehrend ein Administrator angemeldet war. Ein anderer Standardbenutzer auf demselben PC findet das Programm nicht. Warum?",
+      "Ein Programm wurde \"nur für mich\" (per-user) installiert, während ein Administrator angemeldet war. Ein anderer Standardbenutzer auf demselben PC findet das Programm nicht. Warum?",
     options: [
-      "Eine per-user-Installation legt Verknuepfungen/Konfiguration nur im individuellen Benutzerprofil des installierenden Kontos ab - andere Benutzerkonten auf demselben PC sehen das Programm daher nicht",
+      "Eine per-user-Installation legt Verknüpfungen/Konfiguration nur im individuellen Benutzerprofil des installierenden Kontos ab - andere Benutzerkonten auf demselben PC sehen das Programm daher nicht",
       "Das Programm wurde technisch gar nicht richtig installiert",
-      "Standardbenutzer koennen grundsaetzlich keine Programme sehen, die je installiert wurden",
+      "Standardbenutzer können grundsätzlich keine Programme sehen, die je installiert wurden",
     ],
     correctIndex: 0,
     explanation:
-      "Bei einer per-user-Installation landen Eintraege (Startmenue, Registry-Teile) nur im Profil des installierenden Benutzers. Eine per-machine-Installation (\"fuer alle Benutzer\") legt sie stattdessen im gemeinsamen All-Users-Bereich ab, den jeder Benutzer sieht.",
+      "Bei einer per-user-Installation landen Einträge (Startmenü, Registry-Teile) nur im Profil des installierenden Benutzers. Eine per-machine-Installation (\"für alle Benutzer\") legt sie stattdessen im gemeinsamen All-Users-Bereich ab, den jeder Benutzer sieht.",
   },
 
   // ---- Berechtigungen ----
@@ -117,40 +117,40 @@ const QUIZ = [
     difficulty: "easy",
     question: "Was regeln NTFS-Dateiberechtigungen?",
     options: [
-      "Ob ein Benutzer oder eine Gruppe eine Datei/einen Ordner lesen, schreiben, aendern oder ausfuehren darf",
-      "Wie schnell eine Datei geoeffnet wird",
+      "Ob ein Benutzer oder eine Gruppe eine Datei/einen Ordner lesen, schreiben, ändern oder ausführen darf",
+      "Wie schnell eine Datei geöffnet wird",
       "Auf welchem Laufwerk eine Datei physisch gespeichert wird",
     ],
     correctIndex: 0,
     explanation:
-      "NTFS-Berechtigungen legen pro Benutzer/Gruppe fest, welche Aktionen (Lesen, Schreiben, Aendern, Ausfuehren, Vollzugriff) auf einer Datei oder einem Ordner erlaubt sind.",
+      "NTFS-Berechtigungen legen pro Benutzer/Gruppe fest, welche Aktionen (Lesen, Schreiben, Ändern, Ausführen, Vollzugriff) auf einer Datei oder einem Ordner erlaubt sind.",
   },
   {
     topic: "🔐 Berechtigungen (NTFS)",
     difficulty: "medium",
     question:
-      "Ein Standardbenutzer soll eine Datei lesen, aber nicht loeschen oder aendern koennen. Welche NTFS-Berechtigung passt dafuer?",
+      "Ein Standardbenutzer soll eine Datei lesen, aber nicht löschen oder ändern können. Welche NTFS-Berechtigung passt dafür?",
     options: [
-      "Nur \"Lesen\" (bzw. \"Lesen & Ausfuehren\") - kein \"Schreiben\", \"Aendern\" oder \"Vollzugriff\"",
-      "Vollzugriff, da man sonst nichts oeffnen kann",
+      "Nur \"Lesen\" (bzw. \"Lesen & Ausführen\") - kein \"Schreiben\", \"Ändern\" oder \"Vollzugriff\"",
+      "Vollzugriff, da man sonst nichts öffnen kann",
       "Keine Berechtigung vergeben, dann kann er die Datei trotzdem lesen",
     ],
     correctIndex: 0,
     explanation:
-      "\"Lesen\" (bzw. \"Lesen & Ausfuehren\") erlaubt das Oeffnen/Anzeigen, verhindert aber Aendern, Ueberschreiben oder Loeschen der Datei.",
+      "\"Lesen\" (bzw. \"Lesen & Ausführen\") erlaubt das Öffnen/Anzeigen, verhindert aber Ändern, Überschreiben oder Löschen der Datei.",
   },
   {
     topic: "🔐 Berechtigungen (NTFS)",
     difficulty: "hard",
     question: "Wozu dient die Benutzerkontensteuerung (User Account Control, UAC)?",
     options: [
-      "Sie zwingt selbst Administratoren, kritische/systemveraendernde Aktionen extra zu bestaetigen (\"als Administrator ausfuehren\") - das verhindert unbemerkte, weitreichende Systemaenderungen",
-      "Sie verschluesselt automatisch alle Benutzerdateien",
+      "Sie zwingt selbst Administratoren, kritische/systemverändernde Aktionen extra zu bestätigen (\"als Administrator ausführen\") - das verhindert unbemerkte, weitreichende Systemänderungen",
+      "Sie verschlüsselt automatisch alle Benutzerdateien",
       "Sie ersetzt NTFS-Berechtigungen komplett",
     ],
     correctIndex: 0,
     explanation:
-      "UAC ist eine zusaetzliche Sicherheitsebene: selbst mit Administratorrechten muss man kritische Aktionen aktiv bestaetigen - das schuetzt vor unbemerkter Schadsoftware-Ausfuehrung oder versehentlichen Systemaenderungen.",
+      "UAC ist eine zusätzliche Sicherheitsebene: selbst mit Administratorrechten muss man kritische Aktionen aktiv bestätigen - das schützt vor unbemerkter Schadsoftware-Ausführung oder versehentlichen Systemänderungen.",
   },
 
   // ---- Registry ----
@@ -159,8 +159,8 @@ const QUIZ = [
     difficulty: "easy",
     question: "Was ist die Windows-Registry?",
     options: [
-      "Eine zentrale, hierarchisch aufgebaute Konfigurationsdatenbank fuer System-, Treiber-, Programm- und Benutzereinstellungen",
-      "Ein Ordner fuer temporaere Dateien",
+      "Eine zentrale, hierarchisch aufgebaute Konfigurationsdatenbank für System-, Treiber-, Programm- und Benutzereinstellungen",
+      "Ein Ordner für temporäre Dateien",
       "Ein Antivirenprogramm von Microsoft",
     ],
     correctIndex: 0,
@@ -171,7 +171,7 @@ const QUIZ = [
     topic: "🗄️ Windows-Registry",
     difficulty: "medium",
     question:
-      "Welche zwei Registry-Hives sind am wichtigsten fuer die Unterscheidung System- vs. Benutzereinstellung?",
+      "Welche zwei Registry-Hives sind am wichtigsten für die Unterscheidung System- vs. Benutzereinstellung?",
     options: [
       "HKEY_LOCAL_MACHINE (systemweit) und HKEY_CURRENT_USER (benutzerspezifisch)",
       "HKEY_CLASSES_ROOT und HKEY_USERS",
@@ -179,58 +179,58 @@ const QUIZ = [
     ],
     correctIndex: 0,
     explanation:
-      "HKLM enthaelt systemweite Einstellungen, HKCU nur die des aktuell angemeldeten Benutzers - die zentrale Unterscheidung im Alltag.",
+      "HKLM enthält systemweite Einstellungen, HKCU nur die des aktuell angemeldeten Benutzers - die zentrale Unterscheidung im Alltag.",
   },
   {
     topic: "🗄️ Windows-Registry",
     difficulty: "hard",
     question:
-      "Warum sollte man vor groesseren Registry-Aenderungen (z.B. per Skript auf vielen Rechnern) unbedingt eine Sicherung erstellen?",
+      "Warum sollte man vor grösseren Registry-Änderungen (z.B. per Skript auf vielen Rechnern) unbedingt eine Sicherung erstellen?",
     options: [
-      "Die Registry ist sehr maechtig/zentral - fehlerhafte Aenderungen koennen das System unbrauchbar machen; eine Sicherung erlaubt schnelles Zuruecksetzen auf einen funktionierenden Zustand",
-      "Eine Sicherung ist nur aus rechtlichen Gruenden vorgeschrieben, technisch unnoetig",
-      "Die Registry sichert sich automatisch bei jeder Aenderung selbst ab",
+      "Die Registry ist sehr mächtig/zentral - fehlerhafte Änderungen können das System unbrauchbar machen; eine Sicherung erlaubt schnelles Zurücksetzen auf einen funktionierenden Zustand",
+      "Eine Sicherung ist nur aus rechtlichen Gründen vorgeschrieben, technisch unnötig",
+      "Die Registry sichert sich automatisch bei jeder Änderung selbst ab",
     ],
     correctIndex: 0,
     explanation:
-      "Ein einziger falscher Registry-Eintrag kann dazu fuehren, dass Windows nicht mehr startet oder Programme abstuerzen. Eine vorherige Sicherung (Backup) macht Fehler risikolos rueckgaengig.",
+      "Ein einziger falscher Registry-Eintrag kann dazu führen, dass Windows nicht mehr startet oder Programme abstürzen. Eine vorherige Sicherung (Backup) macht Fehler risikolos rückgängig.",
   },
 
   // ---- Dateitypen ----
   {
     topic: "📄 Dateitypen",
     difficulty: "easy",
-    question: "Welche Dateiendung kennzeichnet eine direkt ausfuehrbare Datei?",
+    question: "Welche Dateiendung kennzeichnet eine direkt ausführbare Datei?",
     options: [".exe", ".txt", ".cfg"],
     correctIndex: 0,
-    explanation: "\".exe\" (executable) fuehrt beim Doppelklick direkt Programmcode aus.",
+    explanation: "\".exe\" (executable) führt beim Doppelklick direkt Programmcode aus.",
   },
   {
     topic: "📄 Dateitypen",
     difficulty: "medium",
     question: "Was ist der Unterschied zwischen einer .exe- und einer .msi-Datei?",
     options: [
-      ".exe fuehrt Code direkt aus; .msi ist ein Installationspaket, das kontrolliert ueber den Windows-Installer-Dienst verarbeitet wird (inkl. Protokollierung/Rollback)",
+      ".exe führt Code direkt aus; .msi ist ein Installationspaket, das kontrolliert über den Windows-Installer-Dienst verarbeitet wird (inkl. Protokollierung/Rollback)",
       "Beide sind technisch komplett identisch, nur unterschiedliche Dateiendung",
       ".msi kann nur Textdateien enthalten, .exe nur Programme",
     ],
     correctIndex: 0,
     explanation:
-      "Der Windows-Installer-Dienst, der .msi-Pakete verarbeitet, protokolliert Installationsschritte und kann sie bei einem Fehler zurueckrollen - das macht Installationen zuverlaessiger als ein einfaches .exe.",
+      "Der Windows-Installer-Dienst, der .msi-Pakete verarbeitet, protokolliert Installationsschritte und kann sie bei einem Fehler zurückrollen - das macht Installationen zuverlässiger als ein einfaches .exe.",
   },
   {
     topic: "📄 Dateitypen",
     difficulty: "hard",
     question:
-      "Wozu dient eine .dll-Datei, und warum benoetigen viele Programme mehrere davon?",
+      "Wozu dient eine .dll-Datei, und warum benötigen viele Programme mehrere davon?",
     options: [
-      "Eine DLL (Dynamic Link Library) enthaelt wiederverwendbaren Programmcode/Funktionen, den mehrere Programme gemeinsam nutzen koennen, statt ihn jeweils selbst mitzubringen",
-      "DLL-Dateien sind nur fuer Bilder und Grafiken gedacht",
+      "Eine DLL (Dynamic Link Library) enthält wiederverwendbaren Programmcode/Funktionen, den mehrere Programme gemeinsam nutzen können, statt ihn jeweils selbst mitzubringen",
+      "DLL-Dateien sind nur für Bilder und Grafiken gedacht",
       "Jedes Programm braucht genau eine einzige DLL, mehr ist ein Fehler",
     ],
     correctIndex: 0,
     explanation:
-      "DLLs buendeln Funktionen (z.B. fuer Netzwerk, Grafik, Textverarbeitung), die mehrere Programme gemeinsam nutzen - das spart Speicher und erleichtert Updates (eine DLL aktualisieren reicht fuer alle nutzenden Programme).",
+      "DLLs bündeln Funktionen (z.B. für Netzwerk, Grafik, Textverarbeitung), die mehrere Programme gemeinsam nutzen - das spart Speicher und erleichtert Updates (eine DLL aktualisieren reicht für alle nutzenden Programme).",
   },
 ];
 

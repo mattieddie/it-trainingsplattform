@@ -1,8 +1,8 @@
 /*
  * scripting.js - Modul 11: Skripting-Grundlagen (Batch &amp; PowerShell)
  * Kein echter Interpreter: kurze Skripte werden angezeigt, die Aufgabe ist,
- * die tatsaechliche Ausgabe aus mehreren Optionen vorherzusagen - inkl.
- * gaengiger Stolperfallen (Off-by-one, Batch-Verzoegerungsproblem).
+ * die tatsächliche Ausgabe aus mehreren Optionen vorherzusagen - inkl.
+ * gängiger Stolperfallen (Off-by-one, Batch-Verzögerungsproblem).
  */
 
 const MODULE_ID = "scripting";
@@ -24,7 +24,7 @@ const CHALLENGES = [
     code: `@echo off\nset NAME=Welt\necho Hallo %NAME%`,
     options: ["Hallo Welt", "Hallo %NAME%", "Fehler: NAME nicht definiert", "(keine Ausgabe)"],
     correctIndex: 0,
-    explanation: "%NAME% wird vor der Ausfuehrung von echo durch den gesetzten Wert \"Welt\" ersetzt.",
+    explanation: "%NAME% wird vor der Ausführung von echo durch den gesetzten Wert \"Welt\" ersetzt.",
   },
   {
     id: "ps-foreach",
@@ -47,7 +47,7 @@ const CHALLENGES = [
     code: `$n = 7\nif ($n % 2 -eq 0) { Write-Host "Gerade" } else { Write-Host "Ungerade" }`,
     options: ["Ungerade", "Gerade", "7", "Fehler"],
     correctIndex: 0,
-    explanation: "7 % 2 ergibt 1 (Rest), also ist die Bedingung ($n % 2 -eq 0) falsch, und der else-Zweig (\"Ungerade\") wird ausgefuehrt.",
+    explanation: "7 % 2 ergibt 1 (Rest), also ist die Bedingung ($n % 2 -eq 0) falsch, und der else-Zweig (\"Ungerade\") wird ausgeführt.",
   },
   {
     id: "batch-for",
@@ -61,7 +61,7 @@ const CHALLENGES = [
       "Fehler",
     ],
     correctIndex: 0,
-    explanation: "Die for-Schleife durchlaeuft die Liste (1 2 3) und fuehrt \"echo Wert: %%i\" fuer jeden Wert einzeln aus.",
+    explanation: "Die for-Schleife durchläuft die Liste (1 2 3) und führt \"echo Wert: %%i\" für jeden Wert einzeln aus.",
   },
   {
     id: "ps-array-loop",
@@ -75,7 +75,7 @@ const CHALLENGES = [
       "Fehler: Index ausserhalb des Bereichs",
     ],
     correctIndex: 0,
-    explanation: "$arr.Length ist 3, die Schleife laeuft fuer $i = 0, 1, 2 - also genau ueber alle drei Indizes des Arrays.",
+    explanation: "$arr.Length ist 3, die Schleife läuft für $i = 0, 1, 2 - also genau über alle drei Indizes des Arrays.",
   },
   {
     id: "batch-if-gtr",
@@ -120,7 +120,7 @@ const CHALLENGES = [
     code: `$nums = 1..10\n$even = $nums | Where-Object { $_ % 2 -eq 0 }\nWrite-Host $even.Count`,
     options: ["5", "10", "2 4 6 8 10", "0"],
     correctIndex: 0,
-    explanation: "Where-Object filtert auf gerade Zahlen: 2,4,6,8,10 - das sind 5 Stueck, .Count gibt diese Anzahl aus.",
+    explanation: "Where-Object filtert auf gerade Zahlen: 2,4,6,8,10 - das sind 5 Stück, .Count gibt diese Anzahl aus.",
   },
   {
     id: "batch-delayed-expansion-trap",
@@ -129,12 +129,12 @@ const CHALLENGES = [
     code: `@echo off\nset /a count=0\nfor %%i in (1 2 3 4) do (\n  set /a count+=1\n)\necho %count%`,
     options: [
       "0 - klassische Batch-Falle: %count% wird beim Parsen des geklammerten Blocks einmalig durch den Wert VOR der Schleife ersetzt",
-      "4 - die Schleife zaehlt korrekt hoch",
-      "1 - nur der letzte Durchlauf zaehlt",
+      "4 - die Schleife zählt korrekt hoch",
+      "1 - nur der letzte Durchlauf zählt",
       "Fehler: count ist nicht definiert",
     ],
     correctIndex: 0,
-    explanation: "In Batch werden Variablen in einem geklammerten Block (hier die for-Schleife) beim Parsen einmalig ersetzt - %count% wird also durch den Wert zu Beginn (0) ersetzt, nicht den Endwert. Um den tatsaechlichen Endwert zu bekommen, braucht es \"setlocal enabledelayedexpansion\" und \"!count!\" statt \"%count%\".",
+    explanation: "In Batch werden Variablen in einem geklammerten Block (hier die for-Schleife) beim Parsen einmalig ersetzt - %count% wird also durch den Wert zu Beginn (0) ersetzt, nicht den Endwert. Um den tatsächlichen Endwert zu bekommen, braucht es \"setlocal enabledelayedexpansion\" und \"!count!\" statt \"%count%\".",
   },
 ];
 
@@ -182,7 +182,7 @@ function renderChallenge() {
 
   if (!currentChallenge) {
     document.getElementById("code-block").textContent =
-      "Keine Aufgaben fuer diese Filterkombination gefunden.";
+      "Keine Aufgaben für diese Filterkombination gefunden.";
     document.getElementById("options-list").innerHTML = "";
     document.getElementById("check-btn").disabled = true;
     return;
@@ -260,7 +260,7 @@ function updateScorePill() {
   const solved = loadSolvedSet();
   document.getElementById(
     "score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${CHALLENGES.length} Skripte`;
+  ).textContent = `Gelöst: ${solved.length} / ${CHALLENGES.length} Skripte`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

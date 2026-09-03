@@ -1,7 +1,7 @@
 /*
  * subnetting.js - Modul 1: Subnetting-Trainer
- * Generiert zufaellige IP/CIDR-Aufgaben und prueft Netzadresse, Broadcast,
- * Anzahl nutzbarer Hosts und das naechste Subnetz.
+ * Generiert zufällige IP/CIDR-Aufgaben und prüft Netzadresse, Broadcast,
+ * Anzahl nutzbarer Hosts und das nächste Subnetz.
  */
 
 const MODULE_ID = "subnetting";
@@ -62,7 +62,7 @@ function randomOctet(excludeReserved) {
 }
 
 function generateRandomIpForCidr(cidr) {
-  // Erster Oktett bewusst aus einem "normalen" Bereich, um Sonderfaelle
+  // Erster Oktett bewusst aus einem "normalen" Bereich, um Sonderfälle
   // (0.x, 127.x, 224+ Multicast) zu vermeiden.
   const first = randInt(1, 223);
   const second = randInt(0, 255);
@@ -172,16 +172,16 @@ function checkAnswers() {
   fb.classList.remove("hidden");
   if (allCorrect) {
     fb.className = "feedback-box correct";
-    fb.innerHTML = `<strong>Richtig!</strong> Alle vier Werte stimmen fuer ${currentTask.ip}/${currentTask.cidr}.`;
+    fb.innerHTML = `<strong>Richtig!</strong> Alle vier Werte stimmen für ${currentTask.ip}/${currentTask.cidr}.`;
   } else {
     fb.className = "feedback-box incorrect";
     fb.innerHTML = `
-      <strong>Nicht ganz richtig.</strong> Die korrekten Werte fuer ${currentTask.ip}/${currentTask.cidr}:
+      <strong>Nicht ganz richtig.</strong> Die korrekten Werte für ${currentTask.ip}/${currentTask.cidr}:
       <ul style="margin:8px 0 0; padding-left:20px;">
         <li>Netzadresse: <span class="mono">${correct.network}</span></li>
         <li>Broadcast-Adresse: <span class="mono">${correct.broadcast}</span></li>
         <li>Nutzbare Hosts: <span class="mono">${correct.hosts}</span></li>
-        <li>Naechstes Subnetz: <span class="mono">${correct.nextSubnet}</span></li>
+        <li>Nächstes Subnetz: <span class="mono">${correct.nextSubnet}</span></li>
       </ul>
     `;
   }

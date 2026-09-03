@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html" class="active">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -34,7 +35,7 @@
     <details class="info-toggle">
       <summary>i</summary>
       <div class="info-content">
-        Active Directory ist wie ein zentrales Adressbuch + Regelwerk fuer
+        Active Directory ist wie ein zentrales Adressbuch + Regelwerk für
         ein ganzes Firmennetzwerk: es weiss, wer (Benutzer), was (Computer),
         wo (Organisationseinheiten) ist, und welche Regeln (Gruppenrichtlinien)
         wo gelten.
@@ -48,21 +49,21 @@
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Quiz und alle Tickets geloest.
+    <strong>Modul abgeschlossen!</strong> Quiz und alle Tickets gelöst.
   </div>
 
   <div class="card">
     <h3 class="mt-0">Checkliste</h3>
-    <div id="check-quiz" class="checklist-item">⬜ GPO-Vorhersage-Quiz vollstaendig richtig loesen</div>
-    <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets loesen</div>
+    <div id="check-quiz" class="checklist-item">⬜ GPO-Vorhersage-Quiz vollständig richtig lösen</div>
+    <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets lösen</div>
   </div>
 
   <div class="card">
     <h3 class="mt-0">AD-Objekte auf einen Blick</h3>
     <ul>
-      <li><strong>Benutzer/Computer-Objekte</strong>: repraesentieren Personen bzw. Geraete in der Domaene, jeweils mit eigener eindeutiger SID.</li>
-      <li><strong>Organisationseinheiten (OUs)</strong>: Container zur Strukturierung (z.B. nach Abteilung/Standort) - wichtigster Ankerpunkt fuer Gruppenrichtlinien und delegierte Verwaltung.</li>
-      <li><strong>Sicherheitsgruppen</strong>: fassen Objekte fuer Berechtigungen zusammen (z.B. Dateifreigaben, GPO-Filterung). <strong>Verteilergruppen</strong> hingegen sind nur fuer E-Mail-Verteilerlisten gedacht und tragen keine Berechtigungen.</li>
+      <li><strong>Benutzer/Computer-Objekte</strong>: repräsentieren Personen bzw. Geräte in der Domäne, jeweils mit eigener eindeutiger SID.</li>
+      <li><strong>Organisationseinheiten (OUs)</strong>: Container zur Strukturierung (z.B. nach Abteilung/Standort) - wichtigster Ankerpunkt für Gruppenrichtlinien und delegierte Verwaltung.</li>
+      <li><strong>Sicherheitsgruppen</strong>: fassen Objekte für Berechtigungen zusammen (z.B. Dateifreigaben, GPO-Filterung). <strong>Verteilergruppen</strong> hingegen sind nur für E-Mail-Verteilerlisten gedacht und tragen keine Berechtigungen.</li>
     </ul>
   </div>
 
@@ -71,11 +72,11 @@
     <p>
       Gruppenrichtlinien (GPOs) werden in der Reihenfolge
       <strong>L</strong>ocal → <strong>S</strong>ite → <strong>D</strong>omain → <strong>O</strong>U
-      verarbeitet, wobei spaeter verarbeitete Einstellungen frueher verarbeitete ueberschreiben
-      (die naechstgelegene OU "gewinnt" bei Konflikten). Zwei Sonderregeln durchbrechen das:
+      verarbeitet, wobei später verarbeitete Einstellungen früher verarbeitete überschreiben
+      (die nächstgelegene OU "gewinnt" bei Konflikten). Zwei Sonderregeln durchbrechen das:
     </p>
     <ul>
-      <li><strong>Vererbung blockieren (Block Inheritance)</strong>: eine OU kann die Vererbung von GPOs aus hoeher liegenden Ebenen unterbinden.</li>
+      <li><strong>Vererbung blockieren (Block Inheritance)</strong>: eine OU kann die Vererbung von GPOs aus höher liegenden Ebenen unterbinden.</li>
       <li><strong>Erzwungen (Enforced)</strong>: ein GPO kann so gesetzt werden, dass es sich IMMER durchsetzt - auch gegen "Block Inheritance" weiter unten im Baum.</li>
     </ul>
     <p class="text-muted">Wichtig: Vererbung wirkt nur top-down entlang der eigenen Astlinie - ein GPO an einer OU wirkt nie auf einen komplett anderen Zweig des Baums.</p>
@@ -96,7 +97,7 @@
   <div class="card">
     <h3 class="mt-0">🎫 Troubleshooting-Tickets</h3>
     <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-      <span id="ticket-score-pill" class="score-pill">Geloest: 0 / 5 Tickets</span>
+      <span id="ticket-score-pill" class="score-pill">Gelöst: 0 / 5 Tickets</span>
     </div>
 
     <div class="ticket" style="margin-top:16px;">
@@ -116,8 +117,8 @@
     <div id="ticket-options-list" class="option-list"></div>
 
     <div class="btn-row">
-      <button id="ticket-check-btn" class="btn primary">Antwort pruefen</button>
-      <button id="ticket-next-btn" class="btn ghost">Naechstes Ticket</button>
+      <button id="ticket-check-btn" class="btn primary">Antwort prüfen</button>
+      <button id="ticket-next-btn" class="btn ghost">Nächstes Ticket</button>
     </div>
 
     <div id="ticket-feedback" class="feedback-box hidden"></div>

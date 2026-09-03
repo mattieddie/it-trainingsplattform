@@ -1,15 +1,62 @@
 /*
- * progress.js - gemeinsames Fortschrittssystem fuer alle Module.
+ * progress.js - gemeinsames Fortschrittssystem für alle Module.
  * Speichert ausschliesslich lokal im Browser (localStorage). Es gibt
- * keinen Server, kein Login, keine Uebertragung von Daten irgendwohin.
+ * keinen Server, kein Login, keine Übertragung von Daten irgendwohin.
  */
 
 const PROGRESS_STORAGE_KEY = "netsec-trainer-progress-v1";
 
+/**
+ * Baukästen (Lernpfad-Blöcke), in der Reihenfolge, in der ein Einsteiger
+ * sie sinnvollerweise durcharbeiten würde - vom Fundament bis zum Betrieb.
+ */
+const TRACKS = [
+  {
+    id: "grundlagen",
+    title: "IT-Grundlagen",
+    icon: "\u{1F9F1}",
+    description:
+      "Das Handwerkszeug: wie ein Computer aufgebaut ist und wie man ihn per Kommandozeile/Skript steuert.",
+  },
+  {
+    id: "netzwerk",
+    title: "Netzwerk-Grundlagen",
+    icon: "\u{1F310}",
+    description: "Wie Geräte sich finden und miteinander sprechen - Adressierung und Namensauflösung.",
+  },
+  {
+    id: "identitaet",
+    title: "Verzeichnisdienste & Identität",
+    icon: "\u{1F4C1}",
+    description:
+      "Benutzer, Geräte und Rechte zentral verwalten - erst On-Premises (Active Directory), dann in der Cloud.",
+  },
+  {
+    id: "paketierung",
+    title: "Softwareverteilung & Paketierung",
+    icon: "\u{1F4E6}",
+    description: "Wie Anwendungen für die Massen-Verteilung vorbereitet werden - MSI, Transforms und Repackaging.",
+  },
+  {
+    id: "security",
+    title: "IT-Security",
+    icon: "\u{1F512}",
+    description: "Angriffsflächen erkennen und absichern - Netzwerkgrenzen, Anwendungen und E-Mail.",
+  },
+  {
+    id: "betrieb",
+    title: "Betrieb & Notfallvorsorge",
+    icon: "\u{1F6E0}\u{FE0F}",
+    description: "Alles läuft - aber was, wenn nicht? Vorsorge für den Ernstfall.",
+  },
+];
+
 /** Reihenfolge und Metadaten der Module, zentral an einer Stelle gepflegt. */
 const MODULES = [
+  // ---- Baukasten: IT-Grundlagen ----
   {
     id: "computerbasics",
+    track: "grundlagen",
     title: "Computer- & Windows-Grundlagen",
     icon: "\u{1F9E9}",
     description:
@@ -17,55 +64,57 @@ const MODULES = [
     href: "modules/computer-basics.html",
   },
   {
-    id: "subnetting",
-    title: "Subnetting-Trainer",
-    icon: "\u{1F522}",
-    description:
-      "Berechne Netzadresse, Broadcast, nutzbare Hosts und das naechste Subnetz zu zufaellig generierten IP/CIDR-Aufgaben.",
-    href: "modules/subnetting.html",
-  },
-  {
-    id: "dhcpdns",
-    title: "DHCP/DNS-Troubleshooting",
-    icon: "\u{1F4E8}",
-    description:
-      "Helpdesk-Tickets mit simulierten Tool-Ausgaben (ipconfig, nslookup, ping). Finde die Ursache und die Loesung.",
-    href: "modules/dhcp-dns.html",
-  },
-  {
-    id: "firewall",
-    title: "Firewall-Regel-Puzzle",
-    icon: "\u{1F6E1}️",
-    description:
-      "Bringe Firewall-Regeln in die richtige Reihenfolge, damit das geforderte Verhalten entsteht. Erste passende Regel gewinnt.",
-    href: "modules/firewall.html",
-  },
-  {
-    id: "sqli",
-    title: "SQL-Injection-Simulation",
-    icon: "\u{1F9EA}",
-    description:
-      "Rein clientseitige Lernsimulation: warum ein naiver Login anfaellig ist und wie parametrisierte Queries schuetzen.",
-    href: "modules/sqli.html",
-  },
-  {
-    id: "dnsconcepts",
-    title: "DNS & Domain-Konzepte",
-    icon: "\u{1F310}",
-    description:
-      "A/CNAME-Records, TTL und Propagation erklaert - inkl. Platzhaltern fuer die eigene GitHub-Pages-Domain.",
-    href: "modules/dns-concepts.html",
-  },
-  {
     id: "terminal",
+    track: "grundlagen",
     title: "CMD & PowerShell Terminal-Trainer",
     icon: "\u{1F4BB}",
     description:
-      "Simuliertes Terminal: loese Aufgaben, indem du den richtigen CMD- oder PowerShell-Befehl eintippst.",
+      "Simuliertes Terminal: löse Aufgaben, indem du den richtigen CMD- oder PowerShell-Befehl eintippst.",
     href: "modules/terminal.html",
   },
   {
+    id: "scripting",
+    track: "grundlagen",
+    title: "Skripting-Grundlagen",
+    icon: "\u{1F4DC}",
+    description:
+      "Batch- und PowerShell-Skripte lesen und die tatsächliche Ausgabe vorhersagen - inkl. klassischer Stolperfallen.",
+    href: "modules/scripting.html",
+  },
+
+  // ---- Baukasten: Netzwerk-Grundlagen ----
+  {
+    id: "subnetting",
+    track: "netzwerk",
+    title: "Subnetting-Trainer",
+    icon: "\u{1F522}",
+    description:
+      "Berechne Netzadresse, Broadcast, nutzbare Hosts und das nächste Subnetz zu zufällig generierten IP/CIDR-Aufgaben.",
+    href: "modules/subnetting.html",
+  },
+  {
+    id: "dnsconcepts",
+    track: "netzwerk",
+    title: "DNS & Domain-Konzepte",
+    icon: "\u{1F310}",
+    description:
+      "A/CNAME-Records, TTL und Propagation erklärt - inkl. Platzhaltern für die eigene GitHub-Pages-Domain.",
+    href: "modules/dns-concepts.html",
+  },
+  {
+    id: "dhcpdns",
+    track: "netzwerk",
+    title: "DHCP/DNS-Troubleshooting",
+    icon: "\u{1F4E8}",
+    description:
+      "Helpdesk-Tickets mit simulierten Tool-Ausgaben (ipconfig, nslookup, ping). Finde die Ursache und die Lösung.",
+    href: "modules/dhcp-dns.html",
+  },
+
+  // ---- Baukasten: Verzeichnisdienste & Identität ----
+  {
     id: "activedirectory",
+    track: "identitaet",
     title: "Active Directory",
     icon: "\u{1F4C1}",
     description:
@@ -74,43 +123,72 @@ const MODULES = [
   },
   {
     id: "intuneentra",
+    track: "identitaet",
     title: "Intune / Entra ID / Hybrid",
     icon: "\u{2601}\u{FE0F}",
     description:
-      "Join-Typen, Conditional Access und Intune-Compliance verstehen - inkl. Troubleshooting-Tickets aus der Cloud-Welt.",
+      "Join-Typen, Conditional Access, Gerätemanagement und Intune-Compliance - inkl. Troubleshooting-Tickets aus der Cloud-Welt.",
     href: "modules/intune-entra.html",
   },
   {
-    id: "backup",
-    title: "Backup & Recovery",
-    icon: "\u{1F4BE}",
+    id: "cloudbasics",
+    track: "identitaet",
+    title: "Cloud-Grundlagen",
+    icon: "\u{1F329}\u{FE0F}",
     description:
-      "3-2-1-Regel, RPO/RTO-Rechenaufgaben und Ransomware-Szenarien: welche Backup-Kopie ueberlebt einen Angriff?",
-    href: "modules/backup.html",
+      "RBAC-Rollenwahl nach Least Privilege und M365-Lizenzierung - Azure/M365-Grundlagen für den Alltag.",
+    href: "modules/cloud-basics.html",
+  },
+
+  // ---- Baukasten: Softwareverteilung & Paketierung ----
+  {
+    id: "packaging",
+    track: "paketierung",
+    title: "Software-Paketierung",
+    icon: "\u{1F4E6}",
+    description:
+      "MSI-Aufbau (Tabellen, Dateistreams), Transforms (MST), stille Installation per CMD und Repackaging (RayPack: RCP/RPP).",
+    href: "modules/packaging.html",
+  },
+
+  // ---- Baukasten: IT-Security ----
+  {
+    id: "firewall",
+    track: "security",
+    title: "Firewall-Regel-Puzzle",
+    icon: "\u{1F6E1}️",
+    description:
+      "Bringe Firewall-Regeln in die richtige Reihenfolge, damit das geforderte Verhalten entsteht. Erste passende Regel gewinnt.",
+    href: "modules/firewall.html",
+  },
+  {
+    id: "sqli",
+    track: "security",
+    title: "SQL-Injection-Simulation",
+    icon: "\u{1F9EA}",
+    description:
+      "Rein clientseitige Lernsimulation: warum ein naiver Login anfällig ist und wie parametrisierte Queries schützen.",
+    href: "modules/sqli.html",
   },
   {
     id: "emailsecurity",
+    track: "security",
     title: "E-Mail-Sicherheit",
     icon: "\u{1F4E7}",
     description:
       "SPF, DKIM und DMARC verstehen - inkl. Spoofing- und Zustellungs-Szenarien mit steigendem Schwierigkeitsgrad.",
     href: "modules/email-security.html",
   },
+
+  // ---- Baukasten: Betrieb & Notfallvorsorge ----
   {
-    id: "scripting",
-    title: "Skripting-Grundlagen",
-    icon: "\u{1F4DC}",
+    id: "backup",
+    track: "betrieb",
+    title: "Backup & Recovery",
+    icon: "\u{1F4BE}",
     description:
-      "Batch- und PowerShell-Skripte lesen und die tatsaechliche Ausgabe vorhersagen - inkl. klassischer Stolperfallen.",
-    href: "modules/scripting.html",
-  },
-  {
-    id: "cloudbasics",
-    title: "Cloud-Grundlagen",
-    icon: "\u{1F329}\u{FE0F}",
-    description:
-      "RBAC-Rollenwahl nach Least Privilege und M365-Lizenzierung - Azure/M365-Grundlagen fuer den Alltag.",
-    href: "modules/cloud-basics.html",
+      "3-2-1-Regel, RPO/RTO-Rechenaufgaben und Ransomware-Szenarien: welche Backup-Kopie überlebt einen Angriff?",
+    href: "modules/backup.html",
   },
 ];
 
@@ -136,7 +214,7 @@ function saveProgress(progress) {
 /**
  * Aktualisiert den Fortschritt eines Moduls.
  * status: "progress" | "done"
- * extra: beliebige zusaetzliche Daten (z.B. Score), werden gemerged.
+ * extra: beliebige zusätzliche Daten (z.B. Score), werden gemerged.
  */
 function setModuleStatus(moduleId, status, extra) {
   const progress = loadProgress();
@@ -156,7 +234,26 @@ function resetAllProgress() {
   localStorage.removeItem(PROGRESS_STORAGE_KEY);
 }
 
-/** Rendert die Modul-Uebersicht + Fortschrittsbalken in ein Container-Element. */
+function moduleCardHtml(mod, progress) {
+  const status = progress[mod.id] ? progress[mod.id].status : "none";
+  const statusMeta = {
+    none: { label: "Nicht begonnen", cls: "status-none" },
+    progress: { label: "In Bearbeitung", cls: "status-progress" },
+    done: { label: "Abgeschlossen", cls: "status-done" },
+  }[status];
+
+  return `
+    <div class="module-card">
+      <div class="icon">${mod.icon}</div>
+      <h3>${mod.title}</h3>
+      <span class="badge ${statusMeta.cls}">${statusMeta.label}</span>
+      <p>${mod.description}</p>
+      <a class="btn primary cta" href="${mod.href}">Modul öffnen</a>
+    </div>
+  `;
+}
+
+/** Rendert die nach Baukästen gruppierte Modul-Übersicht + Gesamtfortschrittsbalken. */
 function renderModuleOverview(containerEl, progressBarEl, progressLabelEl) {
   const progress = loadProgress();
   const total = MODULES.length;
@@ -175,24 +272,34 @@ function renderModuleOverview(containerEl, progressBarEl, progressLabelEl) {
   if (!containerEl) return;
   containerEl.innerHTML = "";
 
-  MODULES.forEach((mod) => {
-    const status = progress[mod.id] ? progress[mod.id].status : "none";
-    const statusMeta = {
-      none: { label: "Nicht begonnen", cls: "status-none" },
-      progress: { label: "In Bearbeitung", cls: "status-progress" },
-      done: { label: "Abgeschlossen", cls: "status-done" },
-    }[status];
+  TRACKS.forEach((track, trackIdx) => {
+    const trackModules = MODULES.filter((m) => m.track === track.id);
+    if (trackModules.length === 0) return;
 
-    const card = document.createElement("div");
-    card.className = "module-card";
-    card.innerHTML = `
-      <div class="icon">${mod.icon}</div>
-      <h3>${mod.title}</h3>
-      <span class="badge ${statusMeta.cls}">${statusMeta.label}</span>
-      <p>${mod.description}</p>
-      <a class="btn primary cta" href="${mod.href}">Modul oeffnen</a>
+    const trackDone = trackModules.filter(
+      (m) => progress[m.id] && progress[m.id].status === "done"
+    ).length;
+
+    const section = document.createElement("section");
+    section.className = "track-section";
+    section.innerHTML = `
+      <div class="track-header">
+        <span class="track-number">${trackIdx + 1}</span>
+        <div>
+          <h2 class="track-title">${track.icon} ${track.title}</h2>
+          <p class="track-description">${track.description}</p>
+        </div>
+        <span class="track-progress">${trackDone} / ${trackModules.length}</span>
+      </div>
+      <div class="module-grid"></div>
     `;
-    containerEl.appendChild(card);
+
+    const grid = section.querySelector(".module-grid");
+    trackModules.forEach((mod) => {
+      grid.insertAdjacentHTML("beforeend", moduleCardHtml(mod, progress));
+    });
+
+    containerEl.appendChild(section);
   });
 }
 

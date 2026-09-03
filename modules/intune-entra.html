@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html" class="active">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -34,56 +35,56 @@
     <details class="info-toggle">
       <summary>i</summary>
       <div class="info-content">
-        Entra ID (fruehere "Azure AD") ist quasi das Active Directory fuer
-        die Cloud: es verwaltet Benutzer und Geraete nicht mehr aus einem
-        Serverraum, sondern ueber das Internet. Intune ist das Werkzeug
-        dazu, um Geraete (Laptops, Handys) aus der Cloud zu verwalten.
+        Entra ID (frühere "Azure AD") ist quasi das Active Directory für
+        die Cloud: es verwaltet Benutzer und Geräte nicht mehr aus einem
+        Serverraum, sondern über das Internet. Intune ist das Werkzeug
+        dazu, um Geräte (Laptops, Handys) aus der Cloud zu verwalten.
       </div>
     </details>
   </h1>
   <p class="page-subtitle">
     Join-Typen, Entra Connect und Conditional Access verstehen &ndash; danach
-    ein Szenario-Quiz und Troubleshooting-Tickets aus der Cloud-Identitaets-Welt.
+    ein Szenario-Quiz und Troubleshooting-Tickets aus der Cloud-Identitäts-Welt.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Beide Quiz und alle Tickets geloest.
+    <strong>Modul abgeschlossen!</strong> Beide Quiz und alle Tickets gelöst.
   </div>
 
   <div class="card">
     <h3 class="mt-0">Checkliste</h3>
-    <div id="check-quiz" class="checklist-item">⬜ Conditional-Access-Quiz vollstaendig richtig loesen</div>
-    <div id="check-device-quiz" class="checklist-item">⬜ Geraetemanagement-Quiz vollstaendig richtig loesen</div>
-    <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets loesen</div>
+    <div id="check-quiz" class="checklist-item">⬜ Conditional-Access-Quiz vollständig richtig lösen</div>
+    <div id="check-device-quiz" class="checklist-item">⬜ Gerätemanagement-Quiz vollständig richtig lösen</div>
+    <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets lösen</div>
   </div>
 
   <div class="card">
-    <h3 class="mt-0">Geraete-Join-Typen im Vergleich</h3>
+    <h3 class="mt-0">Geräte-Join-Typen im Vergleich</h3>
     <table style="width:100%; border-collapse: collapse;">
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
-        <th style="padding:4px 0;">Typ</th><th>Eigentuemer</th><th>Typischer Einsatz</th>
+        <th style="padding:4px 0;">Typ</th><th>Eigentümer</th><th>Typischer Einsatz</th>
       </tr>
-      <tr><td><strong>Entra Joined</strong></td><td>Firma</td><td>Reine Cloud-Umgebung, kein lokales AD noetig</td></tr>
-      <tr><td><strong>Hybrid Entra Joined</strong></td><td>Firma</td><td>On-Premises-AD vorhanden, zusaetzlich mit Entra ID verbunden (Uebergangsphase/Koexistenz)</td></tr>
-      <tr><td><strong>Entra Registered</strong></td><td>Privat (BYOD)</td><td>Persoenliches Geraet, nur fuer SSO/Zugriff registriert, keine volle Geraeteverwaltung</td></tr>
+      <tr><td><strong>Entra Joined</strong></td><td>Firma</td><td>Reine Cloud-Umgebung, kein lokales AD nötig</td></tr>
+      <tr><td><strong>Hybrid Entra Joined</strong></td><td>Firma</td><td>On-Premises-AD vorhanden, zusätzlich mit Entra ID verbunden (Übergangsphase/Koexistenz)</td></tr>
+      <tr><td><strong>Entra Registered</strong></td><td>Privat (BYOD)</td><td>Persönliches Gerät, nur für SSO/Zugriff registriert, keine volle Geräteverwaltung</td></tr>
     </table>
   </div>
 
   <div class="card">
     <h3 class="mt-0">Entra Connect: Synchronisierungsmethoden</h3>
     <ul>
-      <li><strong>Password Hash Sync (PHS)</strong>: Passwort-Hashes werden periodisch (Standard: alle 2 Minuten) ins Entra ID synchronisiert - einfachste Methode, faellt bei On-Prem-Ausfall nicht aus.</li>
-      <li><strong>Pass-Through Authentication (PTA)</strong>: Anmeldungen werden in Echtzeit gegen das On-Premises-AD geprueft, Passwort-Hash verlaesst nie die Firma.</li>
-      <li><strong>Federation (z.B. ADFS)</strong>: Authentifizierung laeuft komplett ueber einen eigenen On-Premises-Dienst - am komplexesten, aber maximale Kontrolle.</li>
+      <li><strong>Password Hash Sync (PHS)</strong>: Passwort-Hashes werden periodisch (Standard: alle 2 Minuten) ins Entra ID synchronisiert - einfachste Methode, fällt bei On-Prem-Ausfall nicht aus.</li>
+      <li><strong>Pass-Through Authentication (PTA)</strong>: Anmeldungen werden in Echtzeit gegen das On-Premises-AD geprüft, Passwort-Hash verlässt nie die Firma.</li>
+      <li><strong>Federation (z.B. ADFS)</strong>: Authentifizierung läuft komplett über einen eigenen On-Premises-Dienst - am komplexesten, aber maximale Kontrolle.</li>
     </ul>
   </div>
 
   <div class="card">
     <h3 class="mt-0">Intune: Compliance vs. Konfiguration</h3>
     <ul>
-      <li><strong>Compliance-Richtlinien</strong>: pruefen den Geraetezustand (z.B. Verschluesselung aktiv, OS-Version aktuell) - das Ergebnis ("konform"/"nicht konform") kann Conditional Access als Bedingung nutzen.</li>
-      <li><strong>Konfigurationsprofile</strong>: setzen aktiv Einstellungen auf dem Geraet (WLAN-Profile, Passwortrichtlinien, Zertifikate).</li>
-      <li><strong>App-Schutzrichtlinien (MAM)</strong>: schuetzen Firmendaten in Apps, auch auf nicht vollstaendig verwalteten (z.B. privaten) Geraeten.</li>
+      <li><strong>Compliance-Richtlinien</strong>: prüfen den Gerätezustand (z.B. Verschlüsselung aktiv, OS-Version aktuell) - das Ergebnis ("konform"/"nicht konform") kann Conditional Access als Bedingung nutzen.</li>
+      <li><strong>Konfigurationsprofile</strong>: setzen aktiv Einstellungen auf dem Gerät (WLAN-Profile, Passwortrichtlinien, Zertifikate).</li>
+      <li><strong>App-Schutzrichtlinien (MAM)</strong>: schützen Firmendaten in Apps, auch auf nicht vollständig verwalteten (z.B. privaten) Geräten.</li>
     </ul>
   </div>
 
@@ -92,8 +93,8 @@
     <div class="alert info">
       <strong>Wichtiger Unterschied zum Firewall-Modul:</strong> Bei Firewall-Regeln gewinnt die
       erste passende Regel. Bei Conditional Access wirken hingegen <strong>alle zutreffenden
-      Richtlinien gleichzeitig</strong> - ihre Grant Controls werden UND-verknuepft, und eine
-      zutreffende "Blockieren"-Richtlinie ueberstimmt immer alles andere.
+      Richtlinien gleichzeitig</strong> - ihre Grant Controls werden UND-verknüpft, und eine
+      zutreffende "Blockieren"-Richtlinie überstimmt immer alles andere.
     </div>
     <p class="text-muted">Alle Fragen unten beziehen sich auf diese drei Richtlinien:</p>
     <pre id="ca-policies-table" class="terminal-output"></pre>
@@ -106,10 +107,10 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">📱 Geraetemanagement-Quiz</h3>
+    <h3 class="mt-0">📱 Gerätemanagement-Quiz</h3>
     <p class="text-muted">
       Autopilot, Wipe vs. Retire, MDM vs. MAM (BYOD) und der richtige Umgang
-      mit nicht-konformen Geraeten - von leicht bis schwer.
+      mit nicht-konformen Geräten - von leicht bis schwer.
     </p>
     <div id="device-quiz-container"></div>
     <div class="btn-row">
@@ -121,7 +122,7 @@
   <div class="card">
     <h3 class="mt-0">🎫 Troubleshooting-Tickets</h3>
     <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-      <span id="ticket-score-pill" class="score-pill">Geloest: 0 / 5 Tickets</span>
+      <span id="ticket-score-pill" class="score-pill">Gelöst: 0 / 5 Tickets</span>
     </div>
 
     <div class="ticket" style="margin-top:16px;">
@@ -141,8 +142,8 @@
     <div id="ticket-options-list" class="option-list"></div>
 
     <div class="btn-row">
-      <button id="ticket-check-btn" class="btn primary">Antwort pruefen</button>
-      <button id="ticket-next-btn" class="btn ghost">Naechstes Ticket</button>
+      <button id="ticket-check-btn" class="btn primary">Antwort prüfen</button>
+      <button id="ticket-next-btn" class="btn ghost">Nächstes Ticket</button>
     </div>
 
     <div id="ticket-feedback" class="feedback-box hidden"></div>

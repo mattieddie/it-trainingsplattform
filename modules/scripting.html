@@ -11,20 +11,21 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html" class="active">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html" class="active">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
@@ -36,16 +37,16 @@
       <div class="info-content">
         Ein Skript ist einfach eine Liste von Befehlen, die der Computer
         nacheinander abarbeitet - wie ein Kochrezept. Variablen ($x, %x%)
-        sind dabei "Merkzettel" fuer Werte, die sich waehrend des Ablaufs
-        aendern koennen.
+        sind dabei "Merkzettel" für Werte, die sich während des Ablaufs
+        ändern können.
       </div>
     </details>
   </h1>
   <p class="page-subtitle">
     Anders als im Terminal-Modul geht es hier nicht darum, Befehle zu
     tippen, sondern kurze Skripte zu <strong>lesen</strong> und
-    vorherzusagen, was sie tatsaechlich ausgeben. Es wird nichts echtes
-    ausgefuehrt.
+    vorherzusagen, was sie tatsächlich ausgeben. Es wird nichts echtes
+    ausgeführt.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
@@ -73,7 +74,7 @@
           </select>
         </div>
       </div>
-      <span id="score-pill" class="score-pill">Geloest: 0 / 12 Skripte</span>
+      <span id="score-pill" class="score-pill">Gelöst: 0 / 12 Skripte</span>
     </div>
 
     <hr class="sep" />
@@ -89,8 +90,8 @@
     <div id="options-list" class="option-list"></div>
 
     <div class="btn-row">
-      <button id="check-btn" class="btn primary">Antwort pruefen</button>
-      <button id="next-btn" class="btn ghost">Naechstes Skript</button>
+      <button id="check-btn" class="btn primary">Antwort prüfen</button>
+      <button id="next-btn" class="btn ghost">Nächstes Skript</button>
     </div>
 
     <div id="challenge-feedback" class="feedback-box hidden"></div>

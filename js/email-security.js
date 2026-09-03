@@ -1,6 +1,6 @@
 /*
  * email-security.js - Modul 10: E-Mail-Sicherheit (SPF/DKIM/DMARC)
- * Konzept-Erklaerung + ein schwierigkeitsgestuftes Quiz zu DNS-Record-
+ * Konzept-Erklärung + ein schwierigkeitsgestuftes Quiz zu DNS-Record-
  * Interpretation und Spoofing-/Zustellungs-Szenarien. Alle Records und
  * Szenarien sind erfundene Beispiele, keine echten Abfragen.
  */
@@ -11,11 +11,24 @@ const QUIZ = [
   {
     difficulty: "easy",
     question:
+      "Warum konnte E-Mail-Absenderfälschung (Spoofing) historisch so einfach funktionieren?",
+    options: [
+      "Weil SMTP ursprünglich ohne Absenderprüfung entworfen wurde - der sichtbare From-Header lässt sich frei setzen, wie eine handschriftliche Absenderzeile auf einem Papierumschlag",
+      "Weil E-Mail-Server grundsätzlich keine Verschlüsselung unterstützen",
+      "Weil Spoofing erst seit wenigen Jahren technisch überhaupt möglich ist",
+    ],
+    correctIndex: 0,
+    explanation:
+      "SMTP stammt aus einer Zeit, in der gegenseitiges Vertrauen zwischen wenigen Servern selbstverständlich war. SPF, DKIM und DMARC wurden alle erst später nachgerüstet, um genau diese fehlende Absenderprüfung zu schliessen.",
+  },
+  {
+    difficulty: "easy",
+    question:
       "Ein SPF-Eintrag lautet: v=spf1 include:_spf.google.com ~all. Was bedeutet der Qualifier \"~all\" am Ende?",
     options: [
-      "SoftFail: nicht gelistete Server werden als verdaechtig markiert, die Mail wird aber meist trotzdem zugestellt (oft mit Spam-Kennzeichnung)",
+      "SoftFail: nicht gelistete Server werden als verdächtig markiert, die Mail wird aber meist trotzdem zugestellt (oft mit Spam-Kennzeichnung)",
       "HardFail: nicht gelistete Server werden strikt abgelehnt",
-      "Alle Server sind automatisch erlaubt, unabhaengig von der Liste",
+      "Alle Server sind automatisch erlaubt, unabhängig von der Liste",
     ],
     correctIndex: 0,
     explanation:
@@ -23,20 +36,20 @@ const QUIZ = [
   },
   {
     difficulty: "easy",
-    question: "Was pruefen SPF, DKIM und DMARC im Kern gemeinsam?",
+    question: "Was prüfen SPF, DKIM und DMARC im Kern gemeinsam?",
     options: [
-      "Ob eine E-Mail tatsaechlich von einem autorisierten Server der angegebenen Absenderdomain stammt und unterwegs nicht veraendert wurde",
-      "Ob der Empfaenger die Mail gelesen hat",
+      "Ob eine E-Mail tatsächlich von einem autorisierten Server der angegebenen Absenderdomain stammt und unterwegs nicht verändert wurde",
+      "Ob der Empfänger die Mail gelesen hat",
       "Ob der E-Mail-Anhang virenfrei ist",
     ],
     correctIndex: 0,
     explanation:
-      "Alle drei Mechanismen drehen sich um Absender-Authentizitaet: SPF prueft die sendende IP, DKIM prueft eine kryptografische Signatur, DMARC verknuepft beides mit einer Richtlinie, was bei Fehlschlag passieren soll.",
+      "Alle drei Mechanismen drehen sich um Absender-Authentizität: SPF prüft die sendende IP, DKIM prüft eine kryptografische Signatur, DMARC verknüpft beides mit einer Richtlinie, was bei Fehlschlag passieren soll.",
   },
   {
     difficulty: "medium",
     question:
-      "Wo wird der oeffentliche Schluessel fuer die DKIM-Pruefung veroeffentlicht?",
+      "Wo wird der öffentliche Schlüssel für die DKIM-Prüfung veröffentlicht?",
     options: [
       "Als TXT-Record unter selector._domainkey.domain.tld",
       "Im Header jeder einzelnen E-Mail",
@@ -44,58 +57,71 @@ const QUIZ = [
     ],
     correctIndex: 0,
     explanation:
-      "Der DKIM-Selector (ein beliebiger Name, z.B. \"mail\") plus \"._domainkey.\" plus die Domain ergeben den DNS-Namen, unter dem der oeffentliche Schluessel als TXT-Record liegt - der empfangende Server holt ihn sich dort, um die Signatur zu pruefen.",
+      "Der DKIM-Selector (ein beliebiger Name, z.B. \"mail\") plus \"._domainkey.\" plus die Domain ergeben den DNS-Namen, unter dem der öffentliche Schlüssel als TXT-Record liegt - der empfangende Server holt ihn sich dort, um die Signatur zu prüfen.",
   },
   {
     difficulty: "medium",
     question:
-      "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@firma.ch - was passiert mit Mails, die die DMARC-Pruefung nicht bestehen?",
+      "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@firma.ch - was passiert mit Mails, die die DMARC-Prüfung nicht bestehen?",
     options: [
-      "Sie werden in Quarantaene verschoben (typischerweise der Spam-Ordner), und ein Bericht geht an die angegebene Adresse",
-      "Sie werden automatisch geloescht, ohne Benachrichtigung",
+      "Sie werden in Quarantäne verschoben (typischerweise der Spam-Ordner), und ein Bericht geht an die angegebene Adresse",
+      "Sie werden automatisch gelöscht, ohne Benachrichtigung",
       "Sie werden trotzdem normal zugestellt, nur langsamer",
     ],
     correctIndex: 0,
     explanation:
-      "\"p=quarantine\" ist eine von drei DMARC-Richtlinien (p=none nur beobachten, p=quarantine in Verdacht/Spam verschieben, p=reject komplett ablehnen). \"rua\" gibt die Adresse fuer aggregierte aggregierte Berichte an.",
+      "\"p=quarantine\" ist eine von drei DMARC-Richtlinien (p=none nur beobachten, p=quarantine in Verdacht/Spam verschieben, p=reject komplett ablehnen). \"rua\" gibt die Adresse für aggregierte aggregierte Berichte an.",
   },
   {
     difficulty: "medium",
     question: "Warum sollte eine Domain nur EINEN einzigen SPF-TXT-Record haben?",
     options: [
-      "Weil bei mehreren SPF-Eintraegen das Pruefergebnis laut Standard undefiniert ist - mehrere Versanddienste muessen ueber \"include:\" in einem einzigen Eintrag kombiniert werden",
+      "Weil bei mehreren SPF-Einträgen das Prüfergebnis laut Standard undefiniert ist - mehrere Versanddienste müssen über \"include:\" in einem einzigen Eintrag kombiniert werden",
       "Weil DNS technisch nur einen TXT-Record pro Domain erlaubt",
-      "Weil zwei SPF-Eintraege automatisch beide Server-Listen kombiniert erlauben",
+      "Weil zwei SPF-Einträge automatisch beide Server-Listen kombiniert erlauben",
     ],
     correctIndex: 0,
     explanation:
-      "Mehrere SPF-Records fuer dieselbe Domain fuehren zu einem undefinierten/fehlerhaften Ergebnis. Nutzt eine Firma mehrere Versanddienste (z.B. Google Workspace + ein Newsletter-Tool), muessen diese ueber mehrere \"include:\"-Mechanismen in EINEM Eintrag zusammengefasst werden.",
+      "Mehrere SPF-Records für dieselbe Domain führen zu einem undefinierten/fehlerhaften Ergebnis. Nutzt eine Firma mehrere Versanddienste (z.B. Google Workspace + ein Newsletter-Tool), müssen diese über mehrere \"include:\"-Mechanismen in EINEM Eintrag zusammengefasst werden.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein Angreifer faelscht die Absenderadresse info@firma.ch und versendet Phishing-Mails ueber einen eigenen Server. SPF fuer firma.ch ist korrekt auf die echten Mailserver gesetzt (-all). DKIM ist nicht konfiguriert. DMARC steht auf p=reject mit strikter SPF-Alignment. Wird die Phishing-Mail zugestellt?",
+      "Ein Angreifer fälscht die Absenderadresse info@firma.ch und versendet Phishing-Mails über einen eigenen Server. SPF für firma.ch ist korrekt auf die echten Mailserver gesetzt (-all). DKIM ist nicht konfiguriert. DMARC steht auf p=reject mit strikter SPF-Alignment. Wird die Phishing-Mail zugestellt?",
     options: [
-      "Nein - SPF schlaegt fehl (der fremde Server ist nicht autorisiert), und DMARC mit p=reject lehnt die Mail deshalb ab, unabhaengig vom fehlenden DKIM",
+      "Nein - SPF schlägt fehl (der fremde Server ist nicht autorisiert), und DMARC mit p=reject lehnt die Mail deshalb ab, unabhängig vom fehlenden DKIM",
       "Ja, weil DKIM nicht konfiguriert ist, greift DMARC gar nicht",
-      "Ja, SPF wird nur bei ausgehenden, nicht bei eingehenden Mails geprueft",
+      "Ja, SPF wird nur bei ausgehenden, nicht bei eingehenden Mails geprüft",
     ],
     correctIndex: 0,
     explanation:
-      "SPF prueft, ob die sendende Server-IP fuer die Absenderdomain autorisiert ist - der Angreifer-Server ist es nicht, SPF schlaegt also fehl. Da DMARC auf p=reject mit strikter SPF-Alignment steht und mindestens ein Mechanismus (hier keiner) bestehen muss, wird die Mail abgelehnt.",
+      "SPF prüft, ob die sendende Server-IP für die Absenderdomain autorisiert ist - der Angreifer-Server ist es nicht, SPF schlägt also fehl. Da DMARC auf p=reject mit strikter SPF-Alignment steht und mindestens ein Mechanismus (hier keiner) bestehen muss, wird die Mail abgelehnt.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein legitimer Newsletter-Dienst versendet im Auftrag von firma.ch, ist aber NICHT in der SPF-Liste von firma.ch eingetragen. Er signiert die Mails aber korrekt per DKIM mit einem Schluessel von firma.ch. DMARC von firma.ch verlangt (Standardverhalten): mindestens SPF ODER DKIM muss im Alignment bestehen. Kommt die Mail durch?",
+      "Ein legitimer Newsletter-Dienst versendet im Auftrag von firma.ch, ist aber NICHT in der SPF-Liste von firma.ch eingetragen. Er signiert die Mails aber korrekt per DKIM mit einem Schlüssel von firma.ch. DMARC von firma.ch verlangt (Standardverhalten): mindestens SPF ODER DKIM muss im Alignment bestehen. Kommt die Mail durch?",
     options: [
       "Ja - DKIM besteht und ist ausreichend, DMARC verlangt normalerweise nur einen der beiden Mechanismen erfolgreich",
-      "Nein, es muessen immer BEIDE Mechanismen (SPF und DKIM) gleichzeitig bestehen",
+      "Nein, es müssen immer BEIDE Mechanismen (SPF und DKIM) gleichzeitig bestehen",
       "Nein, ohne SPF-Eintrag wird die Mail immer automatisch geblockt",
     ],
     correctIndex: 0,
     explanation:
-      "DMARC verlangt im Standardfall, dass MINDESTENS EINER der beiden Mechanismen (SPF oder DKIM) besteht UND mit der sichtbaren Absenderdomain uebereinstimmt (Alignment). Da DKIM hier korrekt validiert, reicht das aus - selbst wenn SPF fehlschlaegt.",
+      "DMARC verlangt im Standardfall, dass MINDESTENS EINER der beiden Mechanismen (SPF oder DKIM) besteht UND mit der sichtbaren Absenderdomain übereinstimmt (Alignment). Da DKIM hier korrekt validiert, reicht das aus - selbst wenn SPF fehlschlägt.",
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Ein Angreifer registriert eine eigene Domain böse-domain.example und konfiguriert dort SPF und DKIM technisch einwandfrei. Er versendet eine Mail, bei der die SPF-/DKIM-geprüfte Domain böse-domain.example lautet, der sichtbare From-Header aber chef@firma.ch zeigt. firma.ch hat DMARC korrekt konfiguriert. Was passiert?",
+    options: [
+      "DMARC schlägt trotz gültiger SPF/DKIM-Prüfung fehl, weil die geprüfte Domain (böse-domain.example) nicht mit der sichtbaren Absenderdomain (firma.ch) übereinstimmt (Alignment-Fehler)",
+      "Die Mail wird zugestellt, da SPF und DKIM beide technisch bestehen",
+      "DMARC prüft nur den sichtbaren From-Header, SPF/DKIM sind dabei irrelevant",
+    ],
+    correctIndex: 0,
+    explanation:
+      "SPF und DKIM bestätigen für sich genommen nur eine technische Domain (Envelope-From bzw. das d=-Tag) - nicht den sichtbaren From-Header. Genau deshalb prüft DMARC zusätzlich das Alignment: die geprüfte Domain muss zur sichtbaren Absenderdomain passen. Ohne diese Zusatzprüfung könnte jeder Angreifer mit einer eigenen, sauber konfigurierten Domain trotzdem einen falschen sichtbaren Absender vortäuschen.",
   },
   {
     difficulty: "hard",
@@ -104,11 +130,11 @@ const QUIZ = [
     options: [
       "Auch die eigenen legitimen Mails aus dem ERP-System werden abgelehnt/nicht zugestellt, weil sie DMARC nicht bestehen",
       "Das ERP-System wird automatisch von DMARC ausgenommen",
-      "Es passiert nichts, DMARC gilt nur fuer Mails von aussen an die Firma",
+      "Es passiert nichts, DMARC gilt nur für Mails von aussen an die Firma",
     ],
     correctIndex: 0,
     explanation:
-      "DMARC unterscheidet nicht zwischen 'boesartig' und 'einfach falsch konfiguriert' - jede Mail, die SPF/DKIM-Alignment nicht besteht, wird gemaess Richtlinie behandelt. Deshalb empfiehlt sich ein schrittweises Vorgehen: erst p=none (nur Berichte sammeln, nichts blocken), dann p=quarantine, erst zuletzt p=reject, sobald alle legitimen Quellen sauber eingebunden sind.",
+      "DMARC unterscheidet nicht zwischen 'bösartig' und 'einfach falsch konfiguriert' - jede Mail, die SPF/DKIM-Alignment nicht besteht, wird gemäss Richtlinie behandelt. Deshalb empfiehlt sich ein schrittweises Vorgehen: erst p=none (nur Berichte sammeln, nichts blocken), dann p=quarantine, erst zuletzt p=reject, sobald alle legitimen Quellen sauber eingebunden sind.",
   },
 ];
 

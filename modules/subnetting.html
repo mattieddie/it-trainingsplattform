@@ -11,35 +11,36 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html" class="active">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html" class="active">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
 <main class="container">
   <h1 class="page-title">🔢 Subnetting-Trainer</h1>
   <p class="page-subtitle">
-    Berechne zu einer zufaelligen IP-Adresse mit CIDR-Notation die
+    Berechne zu einer zufälligen IP-Adresse mit CIDR-Notation die
     Netzadresse, die Broadcast-Adresse, die Anzahl nutzbarer Hosts und die
-    Netzadresse des naechsten Subnetzes gleicher Groesse.
+    Netzadresse des nächsten Subnetzes gleicher Grösse.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
     <strong>Modul abgeschlossen!</strong>
-    Du hast genug Aufgaben richtig geloest. Du kannst trotzdem beliebig
-    weiteruebern.
+    Du hast genug Aufgaben richtig gelöst. Du kannst trotzdem beliebig
+    weiterüben.
   </div>
 
   <div class="card">
@@ -78,13 +79,13 @@
         <input type="number" id="input-hosts" class="task-input" placeholder="z.B. 254" />
       </div>
       <div class="field">
-        <label for="input-nextSubnet">Naechstes Subnetz</label>
+        <label for="input-nextSubnet">Nächstes Subnetz</label>
         <input type="text" id="input-nextSubnet" class="task-input" placeholder="z.B. 192.168.2.0" />
       </div>
     </div>
 
     <div class="btn-row">
-      <button id="check-btn" class="btn primary">Pruefen</button>
+      <button id="check-btn" class="btn primary">Prüfen</button>
       <button id="new-task-btn" class="btn ghost">Neue Aufgabe</button>
     </div>
 
@@ -93,14 +94,14 @@
 
   <div class="card">
     <h3 class="mt-0">
-      Kurz erklaert
+      Kurz erklärt
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
           Eine IP-Adresse mit CIDR (z.B. /24) teilt sich in zwei Teile: einen
-          Netz-Teil (identisch fuer alle Geraete im selben Subnetz) und
-          einen Host-Teil (unterscheidet die Geraete darin). Die Maske
-          markiert, wie viele Bits von links zum Netz-Teil gehoeren.
+          Netz-Teil (identisch für alle Geräte im selben Subnetz) und
+          einen Host-Teil (unterscheidet die Geräte darin). Die Maske
+          markiert, wie viele Bits von links zum Netz-Teil gehören.
         </div>
       </details>
     </h3>
@@ -116,7 +117,7 @@
       <li><strong>Netzadresse</strong>: IP-Adresse UND (bitweise) mit der Subnetzmaske.</li>
       <li><strong>Broadcast-Adresse</strong>: Netzadresse ODER mit der invertierten Maske (Wildcard).</li>
       <li><strong>Nutzbare Hosts</strong>: 2^(32&minus;CIDR) &minus; 2 (Netz- und Broadcast-Adresse abgezogen). Bei /31 und /32 gibt es keine "klassischen" nutzbaren Hosts.</li>
-      <li><strong>Naechstes Subnetz</strong>: Netzadresse + Groesse des Subnetzes (2^(32&minus;CIDR)).</li>
+      <li><strong>Nächstes Subnetz</strong>: Netzadresse + Grösse des Subnetzes (2^(32&minus;CIDR)).</li>
     </ul>
   </div>
 </main>

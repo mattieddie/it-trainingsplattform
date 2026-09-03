@@ -11,33 +11,83 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="backup.html">Backup &amp; Recovery</a>
-    <a href="email-security.html" class="active">E-Mail-Sicherheit</a>
-    <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html" class="active">E-Mail-Sicherheit</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
 <main class="container">
   <h1 class="page-title">📧 E-Mail-Sicherheit (SPF/DKIM/DMARC)</h1>
   <p class="page-subtitle">
-    Wie E-Mail-Server pruefen, ob eine Mail wirklich von der angegebenen
+    Wie E-Mail-Server prüfen, ob eine Mail wirklich von der angegebenen
     Absenderdomain stammt &ndash; und warum Spoofing/Phishing trotzdem oft
     funktioniert, wenn diese Mechanismen fehlen oder falsch konfiguriert sind.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Quiz vollstaendig richtig geloest.
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Warum E-Mail-Spoofing überhaupt möglich ist
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Vergleich: Auf einen Papierbrief kann jeder als Absender
+          schreiben, was er will - die Post prüft den Absender nicht. Bei
+          klassischem SMTP (dem E-Mail-Protokoll) ist es historisch genauso:
+          der sichtbare "Von"-Header ist reine Behauptung, niemand prüft ihn
+          automatisch.
+        </div>
+      </details>
+    </h3>
+    <p>
+      E-Mail (SMTP) wurde in den 1980ern entworfen, als Vertrauen zwischen
+      wenigen Universitäts-Servern selbstverständlich war. Der sichtbare
+      Absender (<code>From:</code>-Header) lässt sich bis heute technisch
+      frei setzen - wie eine handschriftliche Absenderzeile auf einem
+      Umschlag. SPF, DKIM und DMARC wurden alle NACHTRÄGLICH ergänzt, um
+      genau diese Lücke zu schliessen.
+    </p>
+
+    <svg viewBox="0 0 520 140" style="width:100%; max-width:520px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="220" height="120" rx="10" fill="#1b2333" stroke="#ff5c6c" stroke-width="2"/>
+      <text x="120" y="34" fill="#ff5c6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Ohne SPF/DKIM/DMARC</text>
+      <text x="24" y="58" fill="#e6e9f0" font-size="11" font-family="Consolas, monospace">Von: chef@firma.ch</text>
+      <text x="24" y="76" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">(frei erfunden vom</text>
+      <text x="24" y="92" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">Angreifer-Server)</text>
+      <text x="24" y="114" fill="#e6e9f0" font-size="11" font-family="Consolas, monospace">→ wird zugestellt</text>
+
+      <rect x="290" y="10" width="220" height="120" rx="10" fill="#1b2333" stroke="#3ecf6c" stroke-width="2"/>
+      <text x="400" y="34" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Mit SPF/DKIM/DMARC</text>
+      <text x="304" y="58" fill="#e6e9f0" font-size="11" font-family="Consolas, monospace">Von: chef@firma.ch</text>
+      <text x="304" y="76" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">(gleicher Fake-</text>
+      <text x="304" y="92" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">Versuch)</text>
+      <text x="304" y="114" fill="#e6e9f0" font-size="11" font-family="Consolas, monospace">→ SPF/DKIM/DMARC fail</text>
+      <text x="304" y="128" fill="#e6e9f0" font-size="11" font-family="Consolas, monospace">→ blockiert/Spam</text>
+    </svg>
+
+    <p class="text-muted">
+      Wichtige Feinheit: SPF prüft nicht den sichtbaren
+      <code>From:</code>-Header, sondern den technischen
+      "Umschlag-Absender" (<em>Envelope-From</em>/Return-Path) - das ist
+      der eigentliche Grund, warum DMARC zusätzlich eine
+      <strong>Alignment</strong>-Prüfung braucht (siehe unten).
+    </p>
   </div>
 
   <div class="card">
@@ -49,10 +99,10 @@
       <text x="177" y="55" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">sendet Mail</text>
 
       <rect x="215" y="10" width="130" height="50" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
-      <text x="280" y="40" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">SPF pruefen</text>
+      <text x="280" y="40" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">SPF prüfen</text>
 
       <rect x="215" y="70" width="130" height="50" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
-      <text x="280" y="100" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">DKIM pruefen</text>
+      <text x="280" y="100" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">DKIM prüfen</text>
 
       <line x1="345" y1="35" x2="410" y2="60" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow)"/>
       <line x1="345" y1="95" x2="410" y2="65" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow)"/>
@@ -73,48 +123,192 @@
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
-          SPF ist wie eine Gaesteliste am Eingang: nur Server, die auf der
-          Liste der Domain stehen, duerfen im Namen dieser Domain Mails
+          SPF ist wie eine Gästeliste am Eingang: nur Server, die auf der
+          Liste der Domain stehen, dürfen im Namen dieser Domain Mails
           verschicken. Ein fremder Server auf keiner Liste wird als
-          verdaechtig eingestuft.
+          verdächtig eingestuft.
         </div>
       </details>
     </h3>
-    <p>Ein TXT-Record, der auflistet, welche Server im Namen einer Domain E-Mails versenden duerfen:</p>
+    <p>Ein TXT-Record, der auflistet, welche Server im Namen einer Domain E-Mails versenden dürfen:</p>
     <pre>firma.ch.   TXT   "v=spf1 include:_spf.google.com -all"</pre>
     <table style="width:100%; border-collapse: collapse; margin-top:8px;">
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
         <th style="padding:4px 0;">Qualifier</th><th>Bedeutung</th>
       </tr>
       <tr><td class="mono">-all</td><td>HardFail - nicht gelistete Server strikt ablehnen</td></tr>
-      <tr><td class="mono">~all</td><td>SoftFail - nicht gelistete Server verdaechtigen, meist trotzdem zustellen</td></tr>
+      <tr><td class="mono">~all</td><td>SoftFail - nicht gelistete Server verdächtigen, meist trotzdem zustellen</td></tr>
       <tr><td class="mono">+all</td><td>Alles erlauben (in der Praxis unsicher, macht SPF wirkungslos)</td></tr>
     </table>
+
+    <p style="margin-top:14px;"><strong>Beispiel-Ablauf einer SPF-Prüfung:</strong></p>
+    <ol>
+      <li>Ein Server mit der IP <code class="mono">142.250.185.10</code> verbindet sich und behauptet, im Auftrag von <code class="mono">firma.ch</code> zu senden.</li>
+      <li>Der empfangende Server fragt den SPF-TXT-Record von <code class="mono">firma.ch</code> ab: <code class="mono">v=spf1 include:_spf.google.com -all</code></li>
+      <li><code class="mono">include:_spf.google.com</code> listet u.a. genau diese IP als autorisiert - SPF <strong>besteht</strong>.</li>
+      <li>Käme dieselbe Mail von einer fremden IP (z.B. einem gehackten Heimrouter), wäre sie in keiner Liste enthalten - SPF <strong>schlägt fehl</strong>, und wegen <code class="mono">-all</code> wird sie abgelehnt.</li>
+    </ol>
   </div>
 
   <div class="card">
     <h3 class="mt-0">DKIM (DomainKeys Identified Mail)</h3>
     <p>
-      Jede ausgehende Mail wird kryptografisch signiert. Der oeffentliche
-      Schluessel zur Pruefung liegt als TXT-Record in der DNS-Zone:
+      Jede ausgehende Mail wird kryptografisch signiert. Der öffentliche
+      Schlüssel zur Prüfung liegt als TXT-Record in der DNS-Zone:
     </p>
     <pre>mail._domainkey.firma.ch.   TXT   "v=DKIM1; k=rsa; p=MIGfMA0GCSq..."</pre>
-    <p class="text-muted">Aendert sich auch nur ein Byte der Mail unterwegs, schlaegt die Signaturpruefung fehl.</p>
+
+    <svg viewBox="0 0 560 150" style="width:100%; max-width:560px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="160" height="60" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="90" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Sender signiert</text>
+      <text x="90" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mit PRIVATEM Schlüssel</text>
+
+      <line x1="170" y1="40" x2="230" y2="40" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+      <rect x="230" y="10" width="160" height="60" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="310" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Mail + DKIM-</text>
+      <text x="310" y="53" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Signature-Header</text>
+
+      <line x1="390" y1="40" x2="450" y2="40" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+      <rect x="450" y="10" width="100" height="60" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="500" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Empfänger</text>
+      <text x="500" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">prüft Signatur</text>
+
+      <line x1="500" y1="70" x2="500" y2="105" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
+      <text x="410" y="98" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">holt OEFFENTLICHEN Schlüssel per DNS</text>
+
+      <rect x="380" y="110" width="170" height="35" rx="6" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="465" y="132" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mail._domainkey.firma.ch</text>
+
+      <defs>
+        <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <p class="text-muted">
+      Ändert sich auch nur ein Byte der Mail unterwegs, passt die
+      Signatur nicht mehr zum neu berechneten Wert - die Prüfung schlägt
+      fehl. Der <strong>private</strong> Schlüssel bleibt geheim beim
+      Sender, nur der <strong>öffentliche</strong> Schlüssel liegt (für
+      jeden abrufbar) im DNS.
+    </p>
+
+    <p style="margin-top:10px;"><strong>Beispiel eines DKIM-Signature-Headers (gekürzt):</strong></p>
+    <pre>DKIM-Signature: v=1; a=rsa-sha256; d=firma.ch; s=mail;
+  h=from:to:subject:date; bh=base64HashDesInhalts=;
+  b=base64SignaturDesGesamtenHeaders=</pre>
+    <p class="text-muted">
+      <code class="mono">d=</code> nennt die signierende Domain,
+      <code class="mono">s=</code> den Selector (zusammen ergibt das den
+      DNS-Namen für den öffentlichen Schlüssel), <code class="mono">bh=</code>
+      den Hash des Mail-Inhalts und <code class="mono">b=</code> die
+      eigentliche Signatur.
+    </p>
   </div>
 
   <div class="card">
     <h3 class="mt-0">DMARC (Domain-based Message Authentication)</h3>
-    <p>Verknuepft SPF und DKIM mit einer Richtlinie, was bei einem Fehlschlag passieren soll:</p>
+    <p>Verknüpft SPF und DKIM mit einer Richtlinie, was bei einem Fehlschlag passieren soll:</p>
     <pre>_dmarc.firma.ch.   TXT   "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@firma.ch"</pre>
     <ul>
       <li><code>p=none</code> - nur beobachten/Berichte sammeln, nichts blocken (empfohlener erster Schritt)</li>
-      <li><code>p=quarantine</code> - verdaechtige Mails in Quarantaene/Spam verschieben</li>
-      <li><code>p=reject</code> - verdaechtige Mails komplett ablehnen</li>
+      <li><code>p=quarantine</code> - verdächtige Mails in Quarantäne/Spam verschieben</li>
+      <li><code>p=reject</code> - verdächtige Mails komplett ablehnen</li>
     </ul>
     <p class="text-muted">
       DMARC verlangt im Standardfall, dass MINDESTENS EINER der beiden
       Mechanismen (SPF oder DKIM) besteht UND mit der sichtbaren
-      Absenderdomain uebereinstimmt ("Alignment").
+      Absenderdomain übereinstimmt ("Alignment").
+    </p>
+
+    <h4>Alignment: der Grund, warum DMARC überhaupt nötig ist</h4>
+    <p>
+      SPF prüft nur den technischen Envelope-From (Return-Path), DKIM prüft
+      nur die im <code class="mono">d=</code>-Tag signierte Domain - <strong>keiner
+      von beiden prüft automatisch den sichtbaren <code>From:</code>-Header</strong>,
+      den der Nutzer im Postfach sieht! Ein Angreifer könnte SPF für seine
+      EIGENE Domain sauber konfigurieren und trotzdem im sichtbaren
+      From-Header <code class="mono">chef@firma.ch</code> eintragen. DMARC
+      schliesst genau diese Lücke: es verlangt zusätzlich, dass die
+      SPF- bzw. DKIM-geprüfte Domain mit der sichtbaren Absenderdomain
+      übereinstimmt ("Alignment").
+    </p>
+
+    <svg viewBox="0 0 560 160" style="width:100%; max-width:560px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="24" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Sichtbar im Postfach:</text>
+      <rect x="10" y="34" width="220" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="120" y="59" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">From: chef@firma.ch</text>
+
+      <text x="10" y="100" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">SPF/DKIM-geprüfte Domain:</text>
+      <rect x="10" y="110" width="220" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="120" y="135" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">böse-domain.example</text>
+
+      <text x="270" y="90" fill="#ff5c6c" font-size="26" text-anchor="middle">≠</text>
+      <rect x="320" y="60" width="230" height="60" rx="8" fill="#1b2333" stroke="#ff5c6c" stroke-width="2"/>
+      <text x="435" y="85" fill="#ff5c6c" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Alignment-Fehler</text>
+      <text x="435" y="103" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">DMARC schlägt fehl,</text>
+      <text x="435" y="116" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">obwohl SPF für sich allein bestehen würde</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Kompletter Beispiel-Ablauf: eine Mail von firma.ch</h3>
+    <p>
+      Angenommen, <code class="mono">firma.ch</code> hat folgende drei
+      DNS-Einträge gesetzt:
+    </p>
+    <pre>firma.ch.               TXT  "v=spf1 include:_spf.google.com -all"
+mail._domainkey.firma.ch. TXT "v=DKIM1; k=rsa; p=MIGfMA0GCSq..."
+_dmarc.firma.ch.        TXT  "v=DMARC1; p=quarantine; aspf=r; adkim=r"</pre>
+    <p class="text-muted">
+      (<code class="mono">aspf=r</code>/<code class="mono">adkim=r</code> = "relaxed"
+      Alignment, der übliche Standardmodus: Subdomains werden noch als
+      passend akzeptiert, z.B. <code class="mono">mail.firma.ch</code> zu
+      <code class="mono">firma.ch</code>.)
+    </p>
+
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Szenario</th><th>SPF</th><th>DKIM</th><th>Alignment</th><th>DMARC-Ergebnis</th>
+      </tr>
+      <tr>
+        <td>Normaler Versand über Google Workspace</td>
+        <td class="mono" style="color:var(--success);">bestanden</td>
+        <td class="mono" style="color:var(--success);">bestanden</td>
+        <td class="mono" style="color:var(--success);">ok</td>
+        <td class="mono" style="color:var(--success);">zugestellt</td>
+      </tr>
+      <tr>
+        <td>Weiterleitung über Fremdserver (SPF bricht oft, DKIM bleibt gültig)</td>
+        <td class="mono" style="color:var(--danger);">fehlgeschlagen</td>
+        <td class="mono" style="color:var(--success);">bestanden</td>
+        <td class="mono" style="color:var(--success);">ok (über DKIM)</td>
+        <td class="mono" style="color:var(--success);">zugestellt</td>
+      </tr>
+      <tr>
+        <td>Phishing von fremder Domain, From-Header gefälscht</td>
+        <td class="mono" style="color:var(--danger);">fehlgeschlagen</td>
+        <td class="mono" style="color:var(--danger);">fehlt</td>
+        <td class="mono" style="color:var(--danger);">-</td>
+        <td class="mono" style="color:var(--danger);">Quarantäne</td>
+      </tr>
+      <tr>
+        <td>Marketing-Tool: SPF-Eintrag vergessen, aber korrekt per DKIM signiert</td>
+        <td class="mono" style="color:var(--danger);">fehlgeschlagen</td>
+        <td class="mono" style="color:var(--success);">bestanden</td>
+        <td class="mono" style="color:var(--success);">ok (über DKIM)</td>
+        <td class="mono" style="color:var(--success);">zugestellt</td>
+      </tr>
+    </table>
+    <p class="text-muted" style="margin-top:8px;">
+      Kernaussage: DMARC ist bereits erfüllt, sobald EINER der beiden
+      Mechanismen besteht UND im Alignment passt - deshalb bleibt eine
+      Weiterleitung oder ein korrekt eingebundener Drittanbieter meist
+      unproblematisch, während ein kompletter Fälschungsversuch (beides
+      schlägt fehl) zuverlässig auffliegt.
     </p>
   </div>
 

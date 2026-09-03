@@ -2,11 +2,11 @@
  * sqli.js - Modul 4: SQL-Injection-Simulation (rein clientseitig, sandboxed)
  *
  * WICHTIG: Es gibt hier keine echte Datenbank und keine echte SQL-Engine.
- * Alles laeuft gegen ein hartcodiertes JS-Array (FAKE_USERS). Der "Query-
+ * Alles läuft gegen ein hartcodiertes JS-Array (FAKE_USERS). Der "Query-
  * String" wird nur zur Veranschaulichung als Text zusammengebaut. Ob ein
  * Login "erfolgreich" ist, wird durch simple Mustererkennung (RegEx) auf
- * genau diesem Text entschieden - es wird nichts geparst oder ausgefuehrt.
- * Ziel ist rein didaktisch: zeigen, WARUM String-Verkettung gefaehrlich ist.
+ * genau diesem Text entschieden - es wird nichts geparst oder ausgeführt.
+ * Ziel ist rein didaktisch: zeigen, WARUM String-Verkettung gefährlich ist.
  */
 
 const MODULE_ID = "sqli";
@@ -43,7 +43,7 @@ const CHALLENGES = [
     validate: (username, password) =>
       TAUTOLOGY_PATTERN.test(username) || TAUTOLOGY_PATTERN.test(password),
     explanation:
-      "Eine Tautologie wie ' OR '1'='1 macht die WHERE-Klausel immer wahr - dadurch liefert die (simulierte) Abfrage einen Treffer, unabhaengig vom echten Passwort.",
+      "Eine Tautologie wie ' OR '1'='1 macht die WHERE-Klausel immer wahr - dadurch liefert die (simulierte) Abfrage einen Treffer, unabhängig vom echten Passwort.",
   },
   {
     id: "admin-comment",
@@ -51,7 +51,7 @@ const CHALLENGES = [
     type: "login",
     title: "Melde dich gezielt als \"admin\" an - per Kommentar-Injection",
     instructions:
-      "Diesmal ohne Tautologie: nutze eine Kommentar-Injection (-- oder #) direkt nach dem Benutzernamen \"admin\", um die Passwort-Pruefung auszukommentieren.",
+      "Diesmal ohne Tautologie: nutze eine Kommentar-Injection (-- oder #) direkt nach dem Benutzernamen \"admin\", um die Passwort-Prüfung auszukommentieren.",
     validate: (username, password) =>
       /^admin\s*'/i.test(username) &&
       COMMENT_AFTER_QUOTE_PATTERN.test(username) &&
@@ -63,12 +63,12 @@ const CHALLENGES = [
     id: "union-leak",
     difficulty: "hard",
     type: "search",
-    title: "UNION-basierte Injection: Nutzerliste ueber die Produktsuche leaken",
+    title: "UNION-basierte Injection: Nutzerliste über die Produktsuche leaken",
     instructions:
       "Das Produktsuchfeld unten durchsucht normalerweise nur Produktnamen. Nutze eine UNION SELECT-Injection, um (simuliert) alle Benutzernamen aus der users-Tabelle mit auszugeben.",
     validate: (input) => /union\s+select/i.test(input),
     explanation:
-      "UNION SELECT haengt an das Ergebnis der eigentlichen Abfrage die Ergebnisse einer ZWEITEN, selbst gewaehlten Abfrage an - z.B. eine, die Benutzernamen aus einer ganz anderen Tabelle liest. So lassen sich ueber ein harmlos wirkendes Suchfeld ploetzlich Daten aus anderen Tabellen abgreifen.",
+      "UNION SELECT hängt an das Ergebnis der eigentlichen Abfrage die Ergebnisse einer ZWEITEN, selbst gewählten Abfrage an - z.B. eine, die Benutzernamen aus einer ganz anderen Tabelle liest. So lassen sich über ein harmlos wirkendes Suchfeld plötzlich Daten aus anderen Tabellen abgreifen.",
   },
 ];
 
@@ -137,7 +137,7 @@ function updateChallengeScorePill() {
   const solved = loadSolvedChallenges();
   document.getElementById(
     "challenge-score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${CHALLENGES.length} Herausforderungen`;
+  ).textContent = `Gelöst: ${solved.length} / ${CHALLENGES.length} Herausforderungen`;
 }
 
 function markChallengeSolved(id) {
@@ -175,7 +175,7 @@ function handleChallengeLoginSubmit() {
   } else {
     fb.className = "feedback-box incorrect";
     fb.innerHTML =
-      "<strong>Noch nicht.</strong> Das erfuellt die Aufgabe noch nicht - lies dir die Anweisung nochmal genau durch.";
+      "<strong>Noch nicht.</strong> Das erfüllt die Aufgabe noch nicht - lies dir die Anweisung nochmal genau durch.";
   }
 }
 
@@ -227,8 +227,8 @@ function evaluateNaiveLogin(username, password) {
       success: true,
       bypass: true,
       reason: hasTautology
-        ? "Die eingeschleuste Bedingung ('1'='1) ist immer wahr - die WHERE-Klausel liefert dadurch alle Zeilen zurueck, unabhaengig vom echten Passwort."
-        : "Der Kommentar-Marker (--/#) kommentiert den Rest der Query aus, inklusive der Passwort-Pruefung - dadurch reicht ein bekannter Benutzername ohne korrektes Passwort.",
+        ? "Die eingeschleuste Bedingung ('1'='1) ist immer wahr - die WHERE-Klausel liefert dadurch alle Zeilen zurück, unabhängig vom echten Passwort."
+        : "Der Kommentar-Marker (--/#) kommentiert den Rest der Query aus, inklusive der Passwort-Prüfung - dadurch reicht ein bekannter Benutzername ohne korrektes Passwort.",
       matchedUser: FAKE_USERS[0].username + " (erste Zeile der Tabelle, simuliert)",
     };
   }
@@ -242,7 +242,7 @@ function evaluateNaiveLogin(username, password) {
     success: Boolean(match),
     bypass: false,
     reason: match
-      ? "Benutzername und Passwort stimmen exakt mit einem Eintrag ueberein."
+      ? "Benutzername und Passwort stimmen exakt mit einem Eintrag überein."
       : "Kein Eintrag in der (simulierten) Nutzerliste passt.",
     matchedUser: match ? match.username : null,
   };
@@ -256,7 +256,7 @@ function buildParameterizedQueryText() {
 
 function evaluateParameterizedLogin(username, password) {
   // Bei parametrisierten Queries werden Werte NIE in den Query-Text
-  // eingemischt. Sie werden als reine Daten uebergeben - Sonderzeichen
+  // eingemischt. Sie werden als reine Daten übergeben - Sonderzeichen
   // wie ' oder -- haben dadurch keinerlei Einfluss auf die Struktur der
   // Abfrage. Wir simulieren das durch einen reinen Werte-Vergleich.
   const match = FAKE_USERS.find(
@@ -312,8 +312,8 @@ function updateChecklist(state) {
   document
     .getElementById("check-naive")
     .textContent = state.triedNaiveBypass
-    ? "✅ Injection im unsicheren Formular ausgeloest"
-    : "⬜ Injection im unsicheren Formular ausloesen";
+    ? "✅ Injection im unsicheren Formular ausgelöst"
+    : "⬜ Injection im unsicheren Formular auslösen";
 
   document
     .getElementById("check-secure")
@@ -326,8 +326,8 @@ function updateChecklist(state) {
   const challengesDone = solvedChallenges >= CHALLENGES.length;
   document.getElementById("check-challenges").classList.toggle("status-done", challengesDone);
   document.getElementById("check-challenges").textContent = challengesDone
-    ? "✅ Alle Herausforderungen (leicht/mittel/schwer) geloest"
-    : `⬜ Alle Herausforderungen loesen (${solvedChallenges} / ${CHALLENGES.length})`;
+    ? "✅ Alle Herausforderungen (leicht/mittel/schwer) gelöst"
+    : `⬜ Alle Herausforderungen lösen (${solvedChallenges} / ${CHALLENGES.length})`;
 }
 
 /* ---------------- Event-Wiring ---------------- */
@@ -394,7 +394,7 @@ function handleSecureSubmit() {
       `<strong>Login fehlgeschlagen.</strong> Die Eingabe wurde als reiner String verglichen` +
         (looksLikeInjectionAttempt
           ? " - die Injection-Syntax hat keinerlei Sonderbedeutung und wurde einfach als (falsches) Passwort behandelt."
-          : " und stimmt mit keinem Eintrag ueberein."),
+          : " und stimmt mit keinem Eintrag überein."),
       false
     );
   }

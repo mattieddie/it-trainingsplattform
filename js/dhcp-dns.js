@@ -1,7 +1,7 @@
 /*
  * dhcp-dns.js - Modul 2: DHCP/DNS-Troubleshooting-Szenarien
  * Alle Tool-Ausgaben (ipconfig, nslookup, ping, ...) sind fest hinterlegte
- * Text-Fixtures. Es wird nichts echtes ausgefuehrt oder abgefragt.
+ * Text-Fixtures. Es wird nichts echtes ausgeführt oder abgefragt.
  */
 
 const MODULE_ID = "dhcpdns";
@@ -12,11 +12,11 @@ const SCENARIOS = [
     difficulty: "easy",
     title: "Ticket #1042 - Kein Netzwerkzugriff",
     symptom:
-      "Ein Nutzer meldet: 'Mein PC hat seit heute Morgen keine Internetverbindung mehr. Andere Kollegen im gleichen Buero haben keine Probleme.'",
+      "Ein Nutzer meldet: 'Mein PC hat seit heute Morgen keine Internetverbindung mehr. Andere Kollegen im gleichen Büro haben keine Probleme.'",
     tools: [
       {
         id: "ipconfig",
-        label: "ipconfig /all ausfuehren",
+        label: "ipconfig /all ausführen",
         output:
 `Ethernet-Adapter LAN-Verbindung:
 
@@ -31,17 +31,17 @@ const SCENARIOS = [
       },
       {
         id: "kabeltest",
-        label: "Kabel-/Link-Status pruefen",
+        label: "Kabel-/Link-Status prüfen",
         output:
 `Netzwerkadapter-Status: Verbunden (Link up)
-Uebertragungsrate: 1 Gbps
+Übertragungsrate: 1 Gbps
 Kabel: kein Fehler erkannt`,
       },
     ],
     question:
       "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Der DHCP-Server ist nicht erreichbar oder der Adresspool ist erschoepft",
+      "Der DHCP-Server ist nicht erreichbar oder der Adresspool ist erschöpft",
       "Der DNS-Server des Nutzers ist falsch konfiguriert",
       "Eine Firewall-Regel blockiert Port 443",
       "Die Netzwerkkarte des PCs ist defekt",
@@ -59,21 +59,21 @@ Kabel: kein Fehler erkannt`,
     tools: [
       {
         id: "ping-ip",
-        label: "ping 10.0.5.20 ausfuehren",
+        label: "ping 10.0.5.20 ausführen",
         output:
-`Ping wird ausgefuehrt fuer 10.0.5.20 mit 32 Bytes Daten:
+`Ping wird ausgeführt für 10.0.5.20 mit 32 Bytes Daten:
 Antwort von 10.0.5.20: Bytes=32 Zeit=1ms TTL=64
 Antwort von 10.0.5.20: Bytes=32 Zeit=1ms TTL=64
 
-Ping-Statistik fuer 10.0.5.20:
+Ping-Statistik für 10.0.5.20:
     Pakete: Gesendet = 2, Empfangen = 2, Verloren = 0 (0% Verlust)`,
       },
       {
         id: "ping-name",
-        label: "ping www.firma-intern.local ausfuehren",
+        label: "ping www.firma-intern.local ausführen",
         output:
 `Ping-Anforderung konnte Host "www.firma-intern.local" nicht finden.
-Ueberpruefen Sie den Namen, und wiederholen Sie den Vorgang.`,
+Überprüfen Sie den Namen, und wiederholen Sie den Vorgang.`,
       },
       {
         id: "nslookup",
@@ -94,14 +94,14 @@ Address:  10.0.0.1
     ],
     correctIndex: 0,
     explanation:
-      "Ping per IP funktioniert - die grundlegende Netzwerkverbindung (Layer 3) steht also. Nur die Namensaufloesung schlaegt fehl, und nslookup zeigt 'Server failed'. Das zeigt klar auf ein Problem mit dem DNS-Server bzw. dessen Erreichbarkeit/Konfiguration.",
+      "Ping per IP funktioniert - die grundlegende Netzwerkverbindung (Layer 3) steht also. Nur die Namensauflösung schlägt fehl, und nslookup zeigt 'Server failed'. Das zeigt klar auf ein Problem mit dem DNS-Server bzw. dessen Erreichbarkeit/Konfiguration.",
   },
   {
     id: "wrong-dns-result",
     difficulty: "medium",
     title: "Ticket #1061 - Falsche Webseite wird angezeigt",
     symptom:
-      "Ein Nutzer ruft intranet.firma.local auf und landet auf einer voellig fremden Seite. Andere Dienste funktionieren normal.",
+      "Ein Nutzer ruft intranet.firma.local auf und landet auf einer völlig fremden Seite. Andere Dienste funktionieren normal.",
     tools: [
       {
         id: "nslookup",
@@ -124,20 +124,20 @@ Address: 203.0.113.77`,
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
       "Der Client nutzt einen falschen/fremden DNS-Server statt des internen Firmen-DNS",
-      "Der interne Webserver ist abgestuerzt",
+      "Der interne Webserver ist abgestürzt",
       "Die Subnetzmaske des Clients ist falsch",
       "Der DHCP-Server vergibt doppelte IP-Adressen",
     ],
     correctIndex: 0,
     explanation:
-      "Der Client fragt einen externen DNS-Server (203.0.113.53) statt des internen Firmen-DNS (10.0.0.1) und bekommt dadurch fuer den internen Namen eine falsche, oeffentliche IP-Adresse zurueck. Loesung: korrekten internen DNS-Server (meist per DHCP) zuweisen.",
+      "Der Client fragt einen externen DNS-Server (203.0.113.53) statt des internen Firmen-DNS (10.0.0.1) und bekommt dadurch für den internen Namen eine falsche, öffentliche IP-Adresse zurück. Lösung: korrekten internen DNS-Server (meist per DHCP) zuweisen.",
   },
   {
     id: "duplicate-ip",
     difficulty: "medium",
     title: "Ticket #1073 - Verbindung bricht immer wieder ab",
     symptom:
-      "Ein Nutzer meldet sporadische Verbindungsabbrueche. Windows zeigt gelegentlich eine Meldung zu einem Adresskonflikt an.",
+      "Ein Nutzer meldet sporadische Verbindungsabbrüche. Windows zeigt gelegentlich eine Meldung zu einem Adresskonflikt an.",
     tools: [
       {
         id: "popup",
@@ -145,11 +145,11 @@ Address: 203.0.113.77`,
         output:
 `Es besteht ein Adresskonflikt mit einem anderen System im Netzwerk.
 Windows hat die IP-Adresse 10.0.5.44 deaktiviert, da diese bereits von
-einem anderen Geraet (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
+einem anderen Gerät (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
       },
       {
         id: "arp",
-        label: "arp -a ausfuehren",
+        label: "arp -a ausführen",
         output:
 `Schnittstelle: 10.0.5.44 --- 0xb
   Internetadresse      Physikal. Adresse     Typ
@@ -166,7 +166,7 @@ einem anderen Geraet (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
     ],
     correctIndex: 0,
     explanation:
-      "Windows meldet explizit einen Adresskonflikt: Zwei Geraete im Netz nutzen dieselbe IP-Adresse 10.0.5.44. Das passiert z.B. bei statisch vergebenen IPs, die sich mit dem DHCP-Pool ueberschneiden.",
+      "Windows meldet explizit einen Adresskonflikt: Zwei Geräte im Netz nutzen dieselbe IP-Adresse 10.0.5.44. Das passiert z.B. bei statisch vergebenen IPs, die sich mit dem DHCP-Pool überschneiden.",
   },
   {
     id: "wrong-gateway",
@@ -177,7 +177,7 @@ einem anderen Geraet (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
     tools: [
       {
         id: "ipconfig",
-        label: "ipconfig ausfuehren",
+        label: "ipconfig ausführen",
         output:
 `Ethernet-Adapter LAN-Verbindung:
    IPv4-Adresse. . . . . . . . . . . : 192.168.1.50
@@ -186,9 +186,9 @@ einem anderen Geraet (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
       },
       {
         id: "ping-gw",
-        label: "ping 192.168.2.1 (Gateway) ausfuehren",
+        label: "ping 192.168.2.1 (Gateway) ausführen",
         output:
-`Ping wird ausgefuehrt fuer 192.168.2.1 mit 32 Bytes Daten:
+`Ping wird ausgeführt für 192.168.2.1 mit 32 Bytes Daten:
 Zielhost nicht erreichbar.
 Zielhost nicht erreichbar.`,
       },
@@ -202,7 +202,7 @@ Zielhost nicht erreichbar.`,
     ],
     correctIndex: 0,
     explanation:
-      "Die Client-IP 192.168.1.50/24 liegt im Netz 192.168.1.0/24, das eingetragene Gateway 192.168.2.1 aber im Netz 192.168.2.0/24. Damit ist das Gateway aus Client-Sicht nicht erreichbar - lokale Kommunikation im eigenen Subnetz funktioniert trotzdem, das Internet (ueber das Gateway) aber nicht.",
+      "Die Client-IP 192.168.1.50/24 liegt im Netz 192.168.1.0/24, das eingetragene Gateway 192.168.2.1 aber im Netz 192.168.2.0/24. Damit ist das Gateway aus Client-Sicht nicht erreichbar - lokale Kommunikation im eigenen Subnetz funktioniert trotzdem, das Internet (über das Gateway) aber nicht.",
   },
   {
     id: "stale-dns-cache",
@@ -219,13 +219,13 @@ Zielhost nicht erreichbar.`,
 ----------------------------------------
     Eintragsname. . . . . : www.beispiel-firma.ch
     Eintragstyp . . . . . : 1
-    Gueltigkeitsdauer. . : 3218
-    Datensatzlaenge . . . : 4
+    Gültigkeitsdauer. . : 3218
+    Datensatzlänge . . . : 4
     A (Host)-Datensatz . : 198.51.100.10   (alte IP)`,
       },
       {
         id: "nslookup",
-        label: "nslookup www.beispiel-firma.ch 1.1.1.1 (oeffentlicher DNS)",
+        label: "nslookup www.beispiel-firma.ch 1.1.1.1 (öffentlicher DNS)",
         output:
 `Server:  one.one.one.one
 Address:  1.1.1.1
@@ -236,21 +236,21 @@ Address: 203.0.113.200   (neue IP)`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Der lokale DNS-Cache enthaelt noch den alten Eintrag, dessen TTL noch nicht abgelaufen ist",
+      "Der lokale DNS-Cache enthält noch den alten Eintrag, dessen TTL noch nicht abgelaufen ist",
       "Der neue Server ist nicht erreichbar",
       "Der Nutzer hat die falsche URL eingegeben",
       "Ein Adresskonflikt verhindert den Zugriff auf den neuen Server",
     ],
     correctIndex: 0,
     explanation:
-      "Ein oeffentlicher DNS-Server liefert bereits die neue IP, der lokale Cache des Clients aber noch die alte - erkennbar an der TTL (Gueltigkeitsdauer), die noch nicht abgelaufen ist. Loesung: Cache leeren (ipconfig /flushdns) oder auf Ablauf der TTL warten.",
+      "Ein öffentlicher DNS-Server liefert bereits die neue IP, der lokale Cache des Clients aber noch die alte - erkennbar an der TTL (Gültigkeitsdauer), die noch nicht abgelaufen ist. Lösung: Cache leeren (ipconfig /flushdns) oder auf Ablauf der TTL warten.",
   },
   {
     id: "rogue-dhcp",
     difficulty: "hard",
-    title: "Ticket #1104 - Uneinheitliche Probleme im Grossraumbuero",
+    title: "Ticket #1104 - Uneinheitliche Probleme im Grossraumbüro",
     symptom:
-      "Im Grossraumbuero melden mehrere Nutzer unterschiedliche Probleme: Manche haben Internet, andere nicht; manche erreichen interne Server nicht, andere schon. Die Probleme traten auf, nachdem ein neuer Mitarbeiter seinen privaten WLAN-Router mitgebracht und per Kabel ans Netz angeschlossen hat.",
+      "Im Grossraumbüro melden mehrere Nutzer unterschiedliche Probleme: Manche haben Internet, andere nicht; manche erreichen interne Server nicht, andere schon. Die Probleme traten auf, nachdem ein neuer Mitarbeiter seinen privaten WLAN-Router mitgebracht und per Kabel ans Netz angeschlossen hat.",
     tools: [
       {
         id: "ipconfig-a",
@@ -276,15 +276,15 @@ Address: 203.0.113.200   (neue IP)`,
       },
       {
         id: "switch-stats",
-        label: "Switch-Portstatistik pruefen",
+        label: "Switch-Portstatistik prüfen",
         output:
-`Port 03 (Client-Anschluesse): normaler Traffic
-Port 14 (neu angeschlossenes Geraet): stark erhoehter DHCP-Broadcast-Traffic
+`Port 03 (Client-Anschlüsse): normaler Traffic
+Port 14 (neu angeschlossenes Gerät): stark erhöhter DHCP-Broadcast-Traffic
         (DHCPOFFER-Pakete von unbekanntem Absender 192.168.50.254)`,
       },
       {
         id: "asset-list",
-        label: "Geraeteliste: wem gehoert 192.168.50.10?",
+        label: "Geräteliste: wem gehört 192.168.50.10?",
         output:
 `Inventar-Datenbank:
 192.168.50.10  -> offizieller DHCP-/DNS-Server (Server-Raum, dokumentiert)
@@ -294,25 +294,25 @@ Port 14 (neu angeschlossenes Geraet): stark erhoehter DHCP-Broadcast-Traffic
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
       "Ein nicht autorisierter (Rogue) DHCP-Server im Netz vergibt an einen Teil der Clients fehlerhafte Konfigurationen",
-      "Der offizielle DHCP-Server 192.168.50.10 ist ueberlastet und antwortet nur noch teilweise",
+      "Der offizielle DHCP-Server 192.168.50.10 ist überlastet und antwortet nur noch teilweise",
       "Es liegt bei allen betroffenen Clients derselbe IP-Adresskonflikt vor",
       "Die Switch-Ports sind falsch auf verschiedene VLANs aufgeteilt",
       "Der DNS-Server 10.0.0.1 ist ausgefallen",
     ],
     correctIndex: 0,
     explanation:
-      "Der mitgebrachte private Router beantwortet DHCP-Anfragen mit als eigener (nicht autorisierter) DHCP-Server unter 192.168.50.254 - inklusive falschem DNS-Server. Je nachdem, ob ein Client die Antwort des echten Servers (.10) oder des Rogue-Geraets (.254) zuerst erhaelt (DHCP-Race), bekommt er eine funktionierende oder eine fehlerhafte Konfiguration. Das erklaert die uneinheitlichen, scheinbar zufaelligen Probleme. Loesung: Rogue-Geraet vom Netz trennen, ggf. DHCP-Snooping auf dem Switch aktivieren.",
+      "Der mitgebrachte private Router beantwortet DHCP-Anfragen mit als eigener (nicht autorisierter) DHCP-Server unter 192.168.50.254 - inklusive falschem DNS-Server. Je nachdem, ob ein Client die Antwort des echten Servers (.10) oder des Rogue-Geräts (.254) zuerst erhält (DHCP-Race), bekommt er eine funktionierende oder eine fehlerhafte Konfiguration. Das erklärt die uneinheitlichen, scheinbar zufälligen Probleme. Lösung: Rogue-Gerät vom Netz trennen, ggf. DHCP-Snooping auf dem Switch aktivieren.",
   },
   {
     id: "split-horizon-dns",
     difficulty: "hard",
-    title: "Ticket #1117 - Intranet nur im Buero erreichbar",
+    title: "Ticket #1117 - Intranet nur im Büro erreichbar",
     symptom:
-      "Ein Mitarbeiter im Homeoffice (VPN aktuell nicht verbunden) kann intranet.firma.ch nicht oeffnen. Im Buero funktioniert derselbe Link fuer alle Kollegen einwandfrei.",
+      "Ein Mitarbeiter im Homeoffice (VPN aktuell nicht verbunden) kann intranet.firma.ch nicht öffnen. Im Büro funktioniert derselbe Link für alle Kollegen einwandfrei.",
     tools: [
       {
         id: "nslookup-office",
-        label: "nslookup intranet.firma.ch (Kollege im Buero)",
+        label: "nslookup intranet.firma.ch (Kollege im Büro)",
         output:
 `Server:  dns-intern.firma.ch
 Address:  10.0.0.1
@@ -333,13 +333,13 @@ Address:  192.0.2.53
         id: "ping-home",
         label: "ping 10.0.5.20 (Homeoffice, ohne VPN)",
         output:
-`Ping wird ausgefuehrt fuer 10.0.5.20 mit 32 Bytes Daten:
+`Ping wird ausgeführt für 10.0.5.20 mit 32 Bytes Daten:
 Zielhost nicht erreichbar.
 Zielhost nicht erreichbar.`,
       },
       {
         id: "vpn-status",
-        label: "VPN-Client-Status pruefen",
+        label: "VPN-Client-Status prüfen",
         output:
 `VPN-Status: Getrennt
 Letzte Verbindung: gestern, 18:42 Uhr`,
@@ -347,7 +347,7 @@ Letzte Verbindung: gestern, 18:42 Uhr`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Der interne Name existiert nur in der internen (Split-Horizon-)DNS-Zone; ohne VPN wird der oeffentliche DNS-Server befragt, der die Zone nicht kennt",
+      "Der interne Name existiert nur in der internen (Split-Horizon-)DNS-Zone; ohne VPN wird der öffentliche DNS-Server befragt, der die Zone nicht kennt",
       "Der Mitarbeiter hat sein VPN-Passwort vergessen",
       "Der interne Webserver 10.0.5.20 ist ausgefallen",
       "Der Heimrouter blockiert ausgehende Verbindungen auf Port 443",
@@ -355,7 +355,7 @@ Letzte Verbindung: gestern, 18:42 Uhr`,
     ],
     correctIndex: 0,
     explanation:
-      "Bei Split-Horizon- (bzw. Split-View-)DNS existieren fuer denselben Namen zwei getrennte Zonen: intern wird die private IP 10.0.5.20 geliefert, extern/oeffentlich ist der Name gar nicht bekannt (Non-existent domain). Ohne aktive VPN-Verbindung befragt der Homeoffice-Client den DNS-Server des Heim-Providers statt des internen DNS-Servers - und selbst mit der IP waere 10.0.5.20 von aussen ohnehin nicht direkt erreichbar (privates Netz). Loesung: VPN verbinden, bevor interne Ressourcen genutzt werden.",
+      "Bei Split-Horizon- (bzw. Split-View-)DNS existieren für denselben Namen zwei getrennte Zonen: intern wird die private IP 10.0.5.20 geliefert, extern/öffentlich ist der Name gar nicht bekannt (Non-existent domain). Ohne aktive VPN-Verbindung befragt der Homeoffice-Client den DNS-Server des Heim-Providers statt des internen DNS-Servers - und selbst mit der IP wäre 10.0.5.20 von aussen ohnehin nicht direkt erreichbar (privates Netz). Lösung: VPN verbinden, bevor interne Ressourcen genutzt werden.",
   },
   {
     id: "missing-dhcp-relay",
@@ -393,7 +393,7 @@ Letzte Verbindung: gestern, 18:42 Uhr`,
         id: "ping-dhcp",
         label: "Ping vom neuen Router zu 10.0.1.5 (DHCP-Server)",
         output:
-`Ping wird ausgefuehrt fuer 10.0.1.5 mit 32 Bytes Daten:
+`Ping wird ausgeführt für 10.0.1.5 mit 32 Bytes Daten:
 Antwort von 10.0.1.5: Bytes=32 Zeit=8ms TTL=62
 Antwort von 10.0.1.5: Bytes=32 Zeit=9ms TTL=62`,
       },
@@ -408,12 +408,12 @@ Antwort von 10.0.1.5: Bytes=32 Zeit=9ms TTL=62`,
     ],
     correctIndex: 0,
     explanation:
-      "DHCP-Anfragen sind lokale Broadcasts und werden von Routern standardmaessig NICHT in andere Subnetze weitergeleitet. Ein DHCP-Relay-Agent (IP-Helper-Adresse) leitet sie als Unicast an einen zentralen DHCP-Server weiter. Der Konfigurationsvergleich zeigt: Genau diese Zeile fehlt nach dem Router-Tausch. Da der Router den DHCP-Server aber grundsaetzlich per Ping erreichen kann (Routing ist also in Ordnung), liegt das Problem konkret an der fehlenden Relay-Weiterleitung fuer DHCP-Broadcasts - nicht an Erreichbarkeit, Pool oder DNS.",
+      "DHCP-Anfragen sind lokale Broadcasts und werden von Routern standardmässig NICHT in andere Subnetze weitergeleitet. Ein DHCP-Relay-Agent (IP-Helper-Adresse) leitet sie als Unicast an einen zentralen DHCP-Server weiter. Der Konfigurationsvergleich zeigt: Genau diese Zeile fehlt nach dem Router-Tausch. Da der Router den DHCP-Server aber grundsätzlich per Ping erreichen kann (Routing ist also in Ordnung), liegt das Problem konkret an der fehlenden Relay-Weiterleitung für DHCP-Broadcasts - nicht an Erreichbarkeit, Pool oder DNS.",
   },
   {
     id: "flaky-secondary-dns",
     difficulty: "hard",
-    title: "Ticket #1136 - Namensaufloesung funktioniert nur manchmal",
+    title: "Ticket #1136 - Namensauflösung funktioniert nur manchmal",
     symptom:
       "Ein Nutzer meldet, dass interne Anwendungen (z.B. intranet.firma.local) mal erreichbar sind und mal nicht - ohne erkennbares Muster. Ein Neustart des PCs hilft nur kurzzeitig.",
     tools: [
@@ -446,7 +446,7 @@ Address:  8.8.8.8
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Als sekundaerer DNS-Server ist ein oeffentlicher DNS-Dienst eingetragen, der die interne Zone nicht kennt - wird er statt des internen Servers befragt, schlaegt die Aufloesung fehl",
+      "Als sekundärer DNS-Server ist ein öffentlicher DNS-Dienst eingetragen, der die interne Zone nicht kennt - wird er statt des internen Servers befragt, schlägt die Auflösung fehl",
       "Der DHCP-Server vergibt gelegentlich doppelte IP-Adressen",
       "Der interne DNS-Server 10.0.0.1 ist dauerhaft ausgefallen",
       "Die Netzwerkkarte des Clients hat einen Wackelkontakt",
@@ -454,7 +454,7 @@ Address:  8.8.8.8
     ],
     correctIndex: 0,
     explanation:
-      "Windows befragt konfigurierte DNS-Server nicht immer nur streng der Reihe nach - bei Verzoegerungen oder Lastverteilung kann auch der sekundaere Server (hier: der oeffentliche 8.8.8.8) drankommen. Ein oeffentlicher DNS-Server kennt interne/private Zonen wie firma.local grundsaetzlich nicht und liefert einen Fehler zurueck. Das erklaert das 'mal geht's, mal nicht'-Verhalten. Loesung: als sekundaeren DNS-Server einen weiteren internen DNS-Server eintragen, keinen oeffentlichen.",
+      "Windows befragt konfigurierte DNS-Server nicht immer nur streng der Reihe nach - bei Verzögerungen oder Lastverteilung kann auch der sekundäre Server (hier: der öffentliche 8.8.8.8) drankommen. Ein öffentlicher DNS-Server kennt interne/private Zonen wie firma.local grundsätzlich nicht und liefert einen Fehler zurück. Das erklärt das 'mal geht's, mal nicht'-Verhalten. Lösung: als sekundären DNS-Server einen weiteren internen DNS-Server eintragen, keinen öffentlichen.",
   },
 ];
 
@@ -599,7 +599,7 @@ function updateScorePill() {
   const solved = loadSolvedSet();
   document.getElementById(
     "score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${SCENARIOS.length} Szenarien`;
+  ).textContent = `Gelöst: ${solved.length} / ${SCENARIOS.length} Szenarien`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

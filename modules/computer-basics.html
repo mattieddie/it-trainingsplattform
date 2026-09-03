@@ -11,7 +11,7 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="../index.html">Uebersicht</a>
+    <a href="../index.html">Übersicht</a>
     <a href="computer-basics.html" class="active">Computer-Grundlagen</a>
     <a href="subnetting.html">Subnetting</a>
     <a href="dhcp-dns.html">DHCP/DNS</a>
@@ -25,19 +25,20 @@
     <a href="email-security.html">E-Mail-Sicherheit</a>
     <a href="scripting.html">Skripting</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="packaging.html">Paketierung</a>
   </nav>
 </header>
 
 <main class="container">
   <h1 class="page-title">🧩 Computer- &amp; Windows-Grundlagen</h1>
   <p class="page-subtitle">
-    Das Startmodul: Wie ist ein Computer aufgebaut, und wie haengen
+    Das Startmodul: Wie ist ein Computer aufgebaut, und wie hängen
     Benutzer-/Systemebene, Berechtigungen, Registry und Dateitypen unter
-    Windows zusammen? Die Basis fuer alle weiteren Module.
+    Windows zusammen? Die Basis für alle weiteren Module.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Quiz vollstaendig richtig geloest.
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
   </div>
 
   <div class="card">
@@ -47,7 +48,7 @@
         <summary>i</summary>
         <div class="info-content">
           Stell dir den Computer wie eine kleine Werkstatt vor: die CPU ist
-          der Werker, der die Arbeit erledigt; RAM ist der Arbeitstisch fuer
+          der Werker, der die Arbeit erledigt; RAM ist der Arbeitstisch für
           Dinge, die er gerade braucht; die Festplatte/SSD ist das Regal, wo
           alles dauerhaft lagert, auch wenn die Werkstatt schliesst
           (Strom aus).
@@ -58,13 +59,13 @@
 
     <svg viewBox="0 0 600 380" style="width:100%; max-width:600px; display:block; margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="580" height="360" rx="14" fill="#10151f" stroke="#2a3448" stroke-width="2"/>
-      <text x="26" y="34" fill="#9aa5b8" font-size="13" font-family="Consolas, monospace">PC-Gehaeuse</text>
+      <text x="26" y="34" fill="#9aa5b8" font-size="13" font-family="Consolas, monospace">PC-Gehäuse</text>
 
       <rect x="30" y="46" width="350" height="300" rx="10" fill="#171e2e" stroke="#2a3448" stroke-width="2"/>
       <text x="46" y="70" fill="#e6e9f0" font-size="15" font-weight="700" font-family="Consolas, monospace">Mainboard</text>
 
       <rect x="110" y="86" width="100" height="46" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="160" y="113" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kuehler</text>
+      <text x="160" y="113" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kühler</text>
 
       <rect x="110" y="150" width="100" height="100" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
       <text x="160" y="205" fill="#e6e9f0" font-size="15" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">CPU</text>
@@ -87,11 +88,11 @@
     </svg>
 
     <ul style="margin-top:16px;">
-      <li><strong>Prozessor (CPU)</strong>: verarbeitet Daten und steuert Ablaeufe - das "Gehirn" des Computers.</li>
-      <li><strong>Arbeitsspeicher (RAM)</strong>: fluechtiges Gedaechtnis, speichert aktuell genutzte Daten fuer schnellen Zugriff.</li>
+      <li><strong>Prozessor (CPU)</strong>: verarbeitet Daten und steuert Abläufe - das "Gehirn" des Computers.</li>
+      <li><strong>Arbeitsspeicher (RAM)</strong>: flüchtiges Gedächtnis, speichert aktuell genutzte Daten für schnellen Zugriff.</li>
       <li><strong>Speicherlaufwerke</strong>: HDDs speichern magnetisch/mechanisch, moderne SSDs elektronisch (schneller, keine bewegten Teile).</li>
       <li><strong>Mainboard</strong>: verbindet CPU, RAM, Grafikkarte usw. physisch miteinander.</li>
-      <li><strong>Netzteil, Kuehlung, Grafikkarte</strong>: sorgen fuer Strom, Temperaturregulierung und Bildausgabe.</li>
+      <li><strong>Netzteil, Kühlung, Grafikkarte</strong>: sorgen für Strom, Temperaturregulierung und Bildausgabe.</li>
     </ul>
   </div>
 
@@ -101,7 +102,7 @@
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
-          Merkhilfe: "Computer" = geraetebezogen (gilt fuer jeden, der sich
+          Merkhilfe: "Computer" = gerätebezogen (gilt für jeden, der sich
           an DIESEM PC anmeldet). "Benutzer" = personenbezogen (folgt DIESER
           Person auf jeden PC, an dem sie sich anmeldet).
         </div>
@@ -115,8 +116,8 @@
       das Profil des angemeldeten Nutzers.
     </p>
     <p class="text-muted">
-      Auch bei Programminstallationen kann man waehlen: "nur fuer mich"
-      (per-user, landet nur im eigenen Profil) oder "fuer alle Benutzer"
+      Auch bei Programminstallationen kann man wählen: "nur für mich"
+      (per-user, landet nur im eigenen Profil) oder "für alle Benutzer"
       (per-machine, landet im gemeinsamen All-Users-Profil).
     </p>
   </div>
@@ -127,20 +128,20 @@
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
-          Stell dir NTFS-Berechtigungen wie ein Schluesselsystem vor: jede
-          Person bekommt nur die Schluessel (Lesen/Schreiben/Aendern), die
-          sie tatsaechlich braucht - nicht automatisch den Generalschluessel.
+          Stell dir NTFS-Berechtigungen wie ein Schlüsselsystem vor: jede
+          Person bekommt nur die Schlüssel (Lesen/Schreiben/Ändern), die
+          sie tatsächlich braucht - nicht automatisch den Generalschlüssel.
         </div>
       </details>
     </h3>
     <p>
       Der Zugriff auf Dateien, Ordner und Systemfunktionen wird durch
-      <strong>NTFS-Dateiberechtigungen</strong> kontrolliert: fuer jeden
+      <strong>NTFS-Dateiberechtigungen</strong> kontrolliert: für jeden
       Benutzer oder jede Gruppe wird festgelegt, ob Lesen, Schreiben,
-      Ausfuehren oder Aendern erlaubt ist. Standardmaessig haben normale
-      Benutzer eingeschraenkte Rechte, Administratoren duerfen mehr - muessen
+      Ausführen oder Ändern erlaubt ist. Standardmässig haben normale
+      Benutzer eingeschränkte Rechte, Administratoren dürfen mehr - müssen
       aber dank <strong>UAC (User Account Control)</strong> kritische
-      Aenderungen extra bestaetigen.
+      Änderungen extra bestätigen.
     </p>
   </div>
 
@@ -148,13 +149,13 @@
     <h3 class="mt-0">Windows-Registry</h3>
     <p>
       Die Registry ist die zentrale Konfigurationsdatenbank von Windows -
-      hierarchisch aufgebaut in fuenf Hauptbaeumen (Hives), darunter
+      hierarchisch aufgebaut in fünf Hauptbäumen (Hives), darunter
       <code>HKLM</code> (systemweit) und <code>HKCU</code>
       (benutzerspezifisch). Sie speichert Systemeinstellungen,
       Treiberinformationen, installierte Software und Benutzerprofile.
     </p>
     <p class="text-muted">
-      Vor groesseren Aenderungen (z.B. per Skript) empfiehlt sich immer eine
+      Vor grösseren Änderungen (z.B. per Skript) empfiehlt sich immer eine
       Sicherung - ein fehlerhafter Eintrag kann das System unbrauchbar
       machen.
     </p>
@@ -164,8 +165,8 @@
     <h3 class="mt-0">Dateisystem und Dateitypen</h3>
     <p>
       Windows nutzt meist <strong>NTFS</strong> als Dateisystem.
-      Dateiendungen zeigen den Typ: <code>.exe</code> (ausfuehrbar),
-      <code>.msi</code> (Installationspaket ueber den Windows-Installer),
+      Dateiendungen zeigen den Typ: <code>.exe</code> (ausführbar),
+      <code>.msi</code> (Installationspaket über den Windows-Installer),
       <code>.dll</code> (wiederverwendbare Bibliothek), <code>.ps1</code>
       (PowerShell-Skript), <code>.txt</code>/<code>.docx</code>
       (Dokumente), <code>.cfg</code> (Konfigurationsdatei), <code>.inf</code>

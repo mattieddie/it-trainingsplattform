@@ -2,13 +2,13 @@
  * active-directory.js - Modul 7: Active Directory
  * Zwei Teile:
  *  1) GPO-Vorhersage-Quiz: anhand einer festen OU/GPO-Struktur wird
- *     gefragt, welche Einstellung fuer ein Objekt in einer bestimmten OU
- *     tatsaechlich effektiv wird (Vererbung, Enforce, Block Inheritance).
+ *     gefragt, welche Einstellung für ein Objekt in einer bestimmten OU
+ *     tatsächlich effektiv wird (Vererbung, Enforce, Block Inheritance).
  *  2) Troubleshooting-Tickets: gleiche Mechanik wie im DHCP/DNS-Modul -
  *     Symptom, simulierte Tool-Ausgaben (dsa.msc/PowerShell/repadmin/
  *     Event-Log als Text-Fixtures), Multiple-Choice-Diagnose.
  * Alle Ausgaben sind hartcodierte Text-Fixtures, es wird nichts echtes
- * gegen ein AD ausgefuehrt.
+ * gegen ein AD ausgeführt.
  */
 
 const MODULE_ID = "activedirectory";
@@ -28,16 +28,16 @@ const GPO_QUIZ = [
   {
     difficulty: "easy",
     question:
-      "Derselbe Computer in \"IT-Abteilung\" - bekommt er die USB-Sperre aus dem GPO \"Hauptsitz-Sicherheit\" (verknuepft an der OU \"Hauptsitz\")?",
+      "Derselbe Computer in \"IT-Abteilung\" - bekommt er die USB-Sperre aus dem GPO \"Hauptsitz-Sicherheit\" (verknüpft an der OU \"Hauptsitz\")?",
     options: ["Ja", "Nein"],
     correctIndex: 0,
     explanation:
-      "Ja. \"IT-Abteilung\" liegt unterhalb von \"Hauptsitz\" - ein an \"Hauptsitz\" verknuepftes GPO gilt automatisch auch fuer alle untergeordneten OUs.",
+      "Ja. \"IT-Abteilung\" liegt unterhalb von \"Hauptsitz\" - ein an \"Hauptsitz\" verknüpftes GPO gilt automatisch auch für alle untergeordneten OUs.",
   },
   {
     difficulty: "medium",
     question:
-      "Ein Computer steht in der OU \"Filiale-Zuerich\" (unter \"Filialen\", welche die Vererbung blockiert). Bekommt er trotzdem den Firmenlogo-Hintergrund aus dem (nicht erzwungenen) Domain-GPO?",
+      "Ein Computer steht in der OU \"Filiale-Zürich\" (unter \"Filialen\", welche die Vererbung blockiert). Bekommt er trotzdem den Firmenlogo-Hintergrund aus dem (nicht erzwungenen) Domain-GPO?",
     options: ["Ja", "Nein"],
     correctIndex: 1,
     explanation:
@@ -46,7 +46,7 @@ const GPO_QUIZ = [
   {
     difficulty: "hard",
     question:
-      "Angenommen, das Domain-GPO \"Unternehmens-Standard\" wird jetzt zusaetzlich auf \"Erzwungen\" gesetzt. Bekommt der Computer in \"Filiale-Zuerich\" den Hintergrund jetzt?",
+      "Angenommen, das Domain-GPO \"Unternehmens-Standard\" wird jetzt zusätzlich auf \"Erzwungen\" gesetzt. Bekommt der Computer in \"Filiale-Zürich\" den Hintergrund jetzt?",
     options: ["Ja", "Nein"],
     correctIndex: 0,
     explanation:
@@ -55,11 +55,11 @@ const GPO_QUIZ = [
   {
     difficulty: "hard",
     question:
-      "Bekommt der Computer in \"Filiale-Zuerich\" die USB-Sperre aus \"Hauptsitz-Sicherheit\" (verknuepft an \"Hauptsitz\", erzwungen)?",
+      "Bekommt der Computer in \"Filiale-Zürich\" die USB-Sperre aus \"Hauptsitz-Sicherheit\" (verknüpft an \"Hauptsitz\", erzwungen)?",
     options: ["Ja", "Nein"],
     correctIndex: 1,
     explanation:
-      "Nein. \"Hauptsitz-Sicherheit\" ist nur an der OU \"Hauptsitz\" verknuepft. \"Filiale-Zuerich\" liegt in einem komplett anderen Teilbaum (unter \"Filialen\") - es besteht gar keine Eltern-Kind-Beziehung, daher spielt \"Erzwungen\" hier keine Rolle. Vererbung wirkt nur entlang der eigenen Astlinie nach unten.",
+      "Nein. \"Hauptsitz-Sicherheit\" ist nur an der OU \"Hauptsitz\" verknüpft. \"Filiale-Zürich\" liegt in einem komplett anderen Teilbaum (unter \"Filialen\") - es besteht gar keine Eltern-Kind-Beziehung, daher spielt \"Erzwungen\" hier keine Rolle. Vererbung wirkt nur entlang der eigenen Astlinie nach unten.",
   },
 ];
 
@@ -70,8 +70,8 @@ const OU_DIAGRAM =
   " │     → Desktop-Hintergrund: Firmenlogo\n" +
   " │\n" +
   " ├─ OU \"Filialen\"   🚫 Vererbung blockiert\n" +
-  " │    └─ OU \"Filiale-Zuerich\"\n" +
-  " │         └─ [GPO \"Filiale-Drucker\"] → Standarddrucker: HP-Zuerich\n" +
+  " │    └─ OU \"Filiale-Zürich\"\n" +
+  " │         └─ [GPO \"Filiale-Drucker\"] → Standarddrucker: HP-Zürich\n" +
   " │\n" +
   " └─ OU \"Hauptsitz\"\n" +
   "      ├─ [GPO \"Hauptsitz-Sicherheit\"] 🔒 ERZWUNGEN → USB-Speicher: gesperrt\n" +
@@ -99,7 +99,7 @@ BadLogonCount : 5`,
       },
       {
         id: "eventlog",
-        label: "Security-Eventlog auf dem Domain Controller pruefen",
+        label: "Security-Eventlog auf dem Domain Controller prüfen",
         output:
 `4625  Fehlgeschlagene Anmeldung - Konto: jdoe - Grund: Falsches Passwort
 4625  Fehlgeschlagene Anmeldung - Konto: jdoe - Grund: Falsches Passwort
@@ -110,24 +110,24 @@ BadLogonCount : 5`,
     question: "Was ist die Ursache und die passende Sofortmassnahme?",
     options: [
       "Die Account-Lockout-Richtlinie hat das Konto nach zu vielen Fehlversuchen gesperrt - mit Unlock-ADAccount entsperren, danach korrektes Passwort verwenden",
-      "Das Passwort des Kontos ist regulaer abgelaufen - ein neues Passwort muss gesetzt werden",
+      "Das Passwort des Kontos ist regulär abgelaufen - ein neues Passwort muss gesetzt werden",
       "Das Konto wurde vom Administrator absichtlich deaktiviert",
       "Ein Gruppenrichtlinien-Konflikt verhindert die Anmeldung",
     ],
     correctIndex: 0,
     explanation:
-      "LockedOut: True plus mehrere 4625-Ereignisse (falsches Passwort) gefolgt von 4740 (Kontosperrung) zeigen eindeutig eine automatische Sperrung durch die Account-Lockout-Richtlinie nach zu vielen Fehlversuchen. Mit \"Unlock-ADAccount jdoe\" (oder ueber dsa.msc) wird das Konto wieder freigegeben.",
+      "LockedOut: True plus mehrere 4625-Ereignisse (falsches Passwort) gefolgt von 4740 (Kontosperrung) zeigen eindeutig eine automatische Sperrung durch die Account-Lockout-Richtlinie nach zu vielen Fehlversuchen. Mit \"Unlock-ADAccount jdoe\" (oder über dsa.msc) wird das Konto wieder freigegeben.",
   },
   {
     id: "gpo-wrong-ou",
     difficulty: "medium",
     title: "Ticket #2014 - Gruppenrichtlinie wird nicht angewendet",
     symptom:
-      "Ein neues GPO fuer den Desktop-Hintergrund wurde an der OU \"Verkauf\" verknuepft. Auf dem PC \"PC-VK-05\" erscheint der Hintergrund aber nicht, auf anderen PCs im Verkauf schon.",
+      "Ein neues GPO für den Desktop-Hintergrund wurde an der OU \"Verkauf\" verknüpft. Auf dem PC \"PC-VK-05\" erscheint der Hintergrund aber nicht, auf anderen PCs im Verkauf schon.",
     tools: [
       {
         id: "gpresult",
-        label: "gpresult /r auf PC-VK-05 ausfuehren",
+        label: "gpresult /r auf PC-VK-05 ausführen",
         output:
 `Angewendete Gruppenrichtlinienobjekte
     Default Domain Policy
@@ -140,7 +140,7 @@ Die folgenden GPOs wurden nicht angewendet, da sie gefiltert wurden:
         label: "Get-ADComputer PC-VK-05 -Properties DistinguishedName",
         output:
 `Name                : PC-VK-05
-DistinguishedName   : CN=PC-VK-05,OU=Testgeraete,DC=firma,DC=local`,
+DistinguishedName   : CN=PC-VK-05,OU=Testgeräte,DC=firma,DC=local`,
       },
       {
         id: "get-adcomputer-other",
@@ -152,21 +152,21 @@ DistinguishedName   : CN=PC-VK-02,OU=Verkauf,DC=firma,DC=local`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Das Computer-Objekt PC-VK-05 befindet sich in der falschen OU (\"Testgeraete\" statt \"Verkauf\") und ist daher gar nicht im Geltungsbereich des GPOs",
-      "Der Domain Controller ist fuer PC-VK-05 nicht erreichbar",
+      "Das Computer-Objekt PC-VK-05 befindet sich in der falschen OU (\"Testgeräte\" statt \"Verkauf\") und ist daher gar nicht im Geltungsbereich des GPOs",
+      "Der Domain Controller ist für PC-VK-05 nicht erreichbar",
       "Das GPO wurde versehentlich deaktiviert",
       "PC-VK-05 hat eine veraltete Gruppenrichtlinien-Version zwischengespeichert",
     ],
     correctIndex: 0,
     explanation:
-      "Der DistinguishedName zeigt: PC-VK-05 liegt in OU=Testgeraete, nicht in OU=Verkauf, wo das GPO verknuepft ist. GPOs wirken nur auf Objekte innerhalb der OU (oder deren Unter-OUs), an die sie verknuepft sind - ein falsch einsortiertes Objekt bekommt sie schlicht nicht.",
+      "Der DistinguishedName zeigt: PC-VK-05 liegt in OU=Testgeräte, nicht in OU=Verkauf, wo das GPO verknüpft ist. GPOs wirken nur auf Objekte innerhalb der OU (oder deren Unter-OUs), an die sie verknüpft sind - ein falsch einsortiertes Objekt bekommt sie schlicht nicht.",
   },
   {
     id: "gpp-item-level-targeting",
     difficulty: "medium",
     title: "Ticket #2027 - Netzlaufwerk wird nicht verbunden",
     symptom:
-      "Ueber eine Gruppenrichtlinien-Preference soll allen Vertriebsmitarbeitern automatisch das Laufwerk Z: (Vertriebsordner) verbunden werden. Bei einem neuen Mitarbeiter erscheint Z: nicht, obwohl das GPO laut Bericht angewendet wird.",
+      "Über eine Gruppenrichtlinien-Preference soll allen Vertriebsmitarbeitern automatisch das Laufwerk Z: (Vertriebsordner) verbunden werden. Bei einem neuen Mitarbeiter erscheint Z: nicht, obwohl das GPO laut Bericht angewendet wird.",
     tools: [
       {
         id: "gpresult",
@@ -196,36 +196,36 @@ Zielgruppierung (Item-Level Targeting):
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Das GPO nutzt Item-Level Targeting auf die Gruppe \"GRP-Vertrieb-Innendienst\" - der Nutzer ist aber nur in \"Vertrieb-Aussendienst\" Mitglied, daher greift die Preference fuer ihn nicht",
+      "Das GPO nutzt Item-Level Targeting auf die Gruppe \"GRP-Vertrieb-Innendienst\" - der Nutzer ist aber nur in \"Vertrieb-Aussendienst\" Mitglied, daher greift die Preference für ihn nicht",
       "Der Fileserver \\\\fileserver\\vertrieb ist nicht erreichbar",
       "Das GPO wurde nicht korrekt repliziert",
-      "Die Gruppenrichtlinie ist fuer Preferences generell deaktiviert",
+      "Die Gruppenrichtlinie ist für Preferences generell deaktiviert",
     ],
     correctIndex: 0,
     explanation:
-      "\"gpresult\" zeigt, dass das GPO angewendet WIRD - das Problem liegt also in einer Preference-internen Filterung: Item-Level Targeting schraenkt die Laufwerksverbindung zusaetzlich auf Mitglieder von \"GRP-Vertrieb-Innendienst\" ein. Der Nutzer ist aber in der Gruppe \"Vertrieb-Aussendienst\" - eine andere Gruppe trotz aehnlichem Namen.",
+      "\"gpresult\" zeigt, dass das GPO angewendet WIRD - das Problem liegt also in einer Preference-internen Filterung: Item-Level Targeting schränkt die Laufwerksverbindung zusätzlich auf Mitglieder von \"GRP-Vertrieb-Innendienst\" ein. Der Nutzer ist aber in der Gruppe \"Vertrieb-Aussendienst\" - eine andere Gruppe trotz ähnlichem Namen.",
   },
   {
     id: "replication-time-skew",
     difficulty: "hard",
-    title: "Ticket #2041 - AD-Replikation zwischen Standorten schlaegt fehl",
+    title: "Ticket #2041 - AD-Replikation zwischen Standorten schlägt fehl",
     symptom:
-      "Neue Benutzerkonten, die auf DC1 (Hauptsitz) angelegt werden, tauchen auf DC2 (Zweigstelle) nicht auf. Zusaetzlich koennen sich manche Nutzer je nachdem, welcher DC sie bedient, nicht anmelden.",
+      "Neue Benutzerkonten, die auf DC1 (Hauptsitz) angelegt werden, tauchen auf DC2 (Zweigstelle) nicht auf. Zusätzlich können sich manche Nutzer je nachdem, welcher DC sie bedient, nicht anmelden.",
     tools: [
       {
         id: "repadmin",
-        label: "repadmin /replsummary ausfuehren",
+        label: "repadmin /replsummary ausführen",
         output:
-`Quelle DC   Groesste Verzoegerung   Fehler
+`Quelle DC   Grösste Verzögerung   Fehler
 DC1         > 26 Stunden            100 % (Fehlercode 1256)
-            "Der Remotename konnte nicht aufgeloest werden / Ziel nicht erreichbar"`,
+            "Der Remotename konnte nicht aufgelöst werden / Ziel nicht erreichbar"`,
       },
       {
         id: "eventlog-dc2",
-        label: "System-Eventlog auf DC2 pruefen",
+        label: "System-Eventlog auf DC2 prüfen",
         output:
-`Ereignis-ID 2108 (NTDS KCC): Die Zeitabweichung zwischen diesem Domaenencontroller
-und dem Partner-Domaenencontroller ist zu gross fuer eine sichere Kerberos-
+`Ereignis-ID 2108 (NTDS KCC): Die Zeitabweichung zwischen diesem Domänencontroller
+und dem Partner-Domänencontroller ist zu gross für eine sichere Kerberos-
 Authentifizierung.`,
       },
       {
@@ -238,25 +238,25 @@ DC2 Systemzeit: 2026-09-03 08:41:37   (Abweichung: ca. 32 Minuten)`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Die Systemzeit zwischen den Domain Controllern weicht zu stark voneinander ab (> 5 Minuten) - dadurch schlaegt Kerberos-Authentifizierung fehl und die Replikation stoppt",
+      "Die Systemzeit zwischen den Domain Controllern weicht zu stark voneinander ab (> 5 Minuten) - dadurch schlägt Kerberos-Authentifizierung fehl und die Replikation stoppt",
       "DC2 hat keine Netzwerkverbindung zu DC1",
       "Der Festplattenspeicher auf DC2 ist voll",
       "Es liegt ein doppelter FSMO-Rolleninhaber vor",
     ],
     correctIndex: 0,
     explanation:
-      "Kerberos toleriert standardmaessig nur eine Zeitabweichung von 5 Minuten zwischen den beteiligten Systemen. Die gemessene Abweichung von ca. 32 Minuten sowie das Event 2108 zeigen klar: eine fehlerhafte Zeitsynchronisation (z.B. defekter NTP/W32Time-Dienst auf DC2) verhindert sowohl Authentifizierung als auch Replikation. Loesung: korrekte Zeitquelle/NTP-Konfiguration wiederherstellen.",
+      "Kerberos toleriert standardmässig nur eine Zeitabweichung von 5 Minuten zwischen den beteiligten Systemen. Die gemessene Abweichung von ca. 32 Minuten sowie das Event 2108 zeigen klar: eine fehlerhafte Zeitsynchronisation (z.B. defekter NTP/W32Time-Dienst auf DC2) verhindert sowohl Authentifizierung als auch Replikation. Lösung: korrekte Zeitquelle/NTP-Konfiguration wiederherstellen.",
   },
   {
     id: "fsmo-rid-master",
     difficulty: "hard",
-    title: "Ticket #2058 - Keine neuen Benutzerkonten moeglich",
+    title: "Ticket #2058 - Keine neuen Benutzerkonten möglich",
     symptom:
-      "Administratoren koennen domainweit keine neuen Benutzer- oder Computerkonten mehr anlegen. Die Fehlermeldung erwaehnt, dass keine RID-Pools mehr zugewiesen werden koennen. Bestehende Konten funktionieren normal.",
+      "Administratoren können domainweit keine neuen Benutzer- oder Computerkonten mehr anlegen. Die Fehlermeldung erwähnt, dass keine RID-Pools mehr zugewiesen werden können. Bestehende Konten funktionieren normal.",
     tools: [
       {
         id: "netdom",
-        label: "netdom query fsmo ausfuehren",
+        label: "netdom query fsmo ausführen",
         output:
 `Schema Master               DC1.firma.local
 Domain Naming Master        DC1.firma.local
@@ -268,28 +268,28 @@ Infrastructure Master       DC2.firma.local`,
         id: "ping-dcalt",
         label: "ping DC-ALT.firma.local",
         output:
-`Ping wird ausgefuehrt fuer DC-ALT.firma.local...
+`Ping wird ausgeführt für DC-ALT.firma.local...
 Zielhost nicht erreichbar.
 Zielhost nicht erreichbar.`,
       },
       {
         id: "inventory",
-        label: "Geraeteinventar pruefen: DC-ALT",
+        label: "Geräteinventar prüfen: DC-ALT",
         output:
 `Status: Ausser Betrieb genommen (laut Inventar vor 2 Wochen abgeschaltet)
-Hinweis: FSMO-Rollen wurden vor der Ausserbetriebnahme NICHT uebertragen!`,
+Hinweis: FSMO-Rollen wurden vor der Ausserbetriebnahme NICHT übertragen!`,
       },
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Der RID-Master (eine FSMO-Rolle) wurde stillgelegt, ohne die Rolle vorher zu uebertragen - ohne erreichbaren RID-Master koennen keine neuen Objekt-SIDs mehr vergeben werden",
-      "Die Domaene hat die maximale Anzahl an Benutzerkonten erreicht",
+      "Der RID-Master (eine FSMO-Rolle) wurde stillgelegt, ohne die Rolle vorher zu übertragen - ohne erreichbaren RID-Master können keine neuen Objekt-SIDs mehr vergeben werden",
+      "Die Domäne hat die maximale Anzahl an Benutzerkonten erreicht",
       "Der Schema Master ist nicht erreichbar",
       "Es liegt ein Replikationskonflikt zwischen DC1 und DC2 vor",
     ],
     correctIndex: 0,
     explanation:
-      "Jede neue Sicherheits-ID (SID) fuer Benutzer/Computer benoetigt eine RID aus einem Pool, den nur der RID-Master (eine von fuenf FSMO-Rollen) vergeben kann. Da DC-ALT (der RID-Master) ausser Betrieb genommen wurde, ohne die Rolle zu uebertragen, ist kein RID-Master mehr erreichbar. Loesung: Rolle per \"Move-ADDirectoryServerOperationMasterRole\" auf einen aktiven DC uebertragen (oder bei Totalausfall per \"-Force\" uebernehmen/\"seizen\").",
+      "Jede neue Sicherheits-ID (SID) für Benutzer/Computer benötigt eine RID aus einem Pool, den nur der RID-Master (eine von fünf FSMO-Rollen) vergeben kann. Da DC-ALT (der RID-Master) ausser Betrieb genommen wurde, ohne die Rolle zu übertragen, ist kein RID-Master mehr erreichbar. Lösung: Rolle per \"Move-ADDirectoryServerOperationMasterRole\" auf einen aktiven DC übertragen (oder bei Totalausfall per \"-Force\" übernehmen/\"seizen\").",
   },
 ];
 
@@ -487,7 +487,7 @@ function updateTicketScorePill() {
   const solved = loadSolvedTickets();
   document.getElementById(
     "ticket-score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${TICKETS.length} Tickets`;
+  ).textContent = `Gelöst: ${solved.length} / ${TICKETS.length} Tickets`;
 }
 
 /* ---------------- Gemeinsamer Fortschritt ---------------- */
@@ -509,14 +509,14 @@ function updateChecklist(state) {
   const quizItem = document.getElementById("check-quiz");
   quizItem.classList.toggle("status-done", Boolean(state.quizDone));
   quizItem.textContent = state.quizDone
-    ? "✅ GPO-Vorhersage-Quiz vollstaendig richtig geloest"
-    : "⬜ GPO-Vorhersage-Quiz vollstaendig richtig loesen";
+    ? "✅ GPO-Vorhersage-Quiz vollständig richtig gelöst"
+    : "⬜ GPO-Vorhersage-Quiz vollständig richtig lösen";
 
   const ticketsItem = document.getElementById("check-tickets");
   ticketsItem.classList.toggle("status-done", Boolean(state.ticketsDone));
   ticketsItem.textContent = state.ticketsDone
-    ? "✅ Alle Troubleshooting-Tickets geloest"
-    : "⬜ Alle Troubleshooting-Tickets loesen";
+    ? "✅ Alle Troubleshooting-Tickets gelöst"
+    : "⬜ Alle Troubleshooting-Tickets lösen";
 }
 
 document.addEventListener("DOMContentLoaded", () => {

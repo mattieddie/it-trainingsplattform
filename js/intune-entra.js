@@ -3,12 +3,12 @@
  * Zwei Teile, gleiches Muster wie im Active-Directory-Modul:
  *  1) Conditional-Access-Szenario-Quiz: zeigt den zentralen Unterschied zu
  *     Firewall-Regeln - bei CA gewinnt NICHT die erste passende Regel,
- *     sondern ALLE zutreffenden Richtlinien wirken gemeinsam (UND-Ver-
- *     knuepfung ihrer Grant Controls), und ein "Blockieren" ueberstimmt
+ *     sondern ALLE zutreffenden Richtlinien wirken gemeinsam (UND-
+ *     Verknüpfung ihrer Grant Controls), und ein "Blockieren" überstimmt
  *     immer alle anderen Grants.
- *  2) Troubleshooting-Tickets (Geraete-Join, Compliance, Sync, Legacy Auth).
+ *  2) Troubleshooting-Tickets (Geräte-Join, Compliance, Sync, Legacy Auth).
  * Alle Ausgaben sind hartcodierte Text-Fixtures, es wird nichts echtes
- * gegen Microsoft Entra ID / Intune ausgefuehrt.
+ * gegen Microsoft Entra ID / Intune ausgeführt.
  */
 
 const MODULE_ID = "intuneentra";
@@ -21,7 +21,7 @@ const CA_POLICIES_TABLE =
   "  Grant:  MFA erforderlich\n\n" +
   "Richtlinie 2 \"Admin-Schutz\"\n" +
   "  Nutzer: Gruppe \"Admins\"   Bedingung: beliebig\n" +
-  "  Grant:  MFA UND konformes Geraet erforderlich\n\n" +
+  "  Grant:  MFA UND konformes Gerät erforderlich\n\n" +
   "Richtlinie 3 \"Geo-Block\"\n" +
   "  Nutzer: Alle          Bedingung: Anmeldung aus Hochrisiko-Land\n" +
   "  Grant:  Zugriff blockieren";
@@ -30,166 +30,166 @@ const CA_QUIZ = [
   {
     difficulty: "easy",
     question:
-      "Ein normaler Nutzer (kein Admin) meldet sich von zuhause (ausserhalb des Firmennetzwerks) an. Welche Anforderung(en) muss er erfuellen?",
+      "Ein normaler Nutzer (kein Admin) meldet sich von zuhause (ausserhalb des Firmennetzwerks) an. Welche Anforderung(en) muss er erfüllen?",
     options: [
       "MFA erforderlich",
-      "MFA UND konformes Geraet erforderlich",
+      "MFA UND konformes Gerät erforderlich",
       "Keine besonderen Anforderungen",
       "Zugriff wird blockiert",
     ],
     correctIndex: 0,
     explanation:
-      "Nur Richtlinie 1 greift (ausserhalb des Netzwerks, gilt fuer alle Nutzer) → MFA erforderlich. Richtlinie 2 greift nicht (keine Admin-Gruppe), Richtlinie 3 nicht (kein Hochrisiko-Land).",
+      "Nur Richtlinie 1 greift (ausserhalb des Netzwerks, gilt für alle Nutzer) → MFA erforderlich. Richtlinie 2 greift nicht (keine Admin-Gruppe), Richtlinie 3 nicht (kein Hochrisiko-Land).",
   },
   {
     difficulty: "medium",
     question:
-      "Ein Admin meldet sich aus dem Buero-Netzwerk an. Welche Anforderung(en) muss er erfuellen?",
+      "Ein Admin meldet sich aus dem Büro-Netzwerk an. Welche Anforderung(en) muss er erfüllen?",
     options: [
       "Keine besonderen Anforderungen",
       "Nur MFA erforderlich",
-      "MFA UND konformes Geraet erforderlich",
+      "MFA UND konformes Gerät erforderlich",
       "Zugriff wird blockiert",
     ],
     correctIndex: 2,
     explanation:
-      "Richtlinie 1 greift nicht (er ist im Firmennetz, die Bedingung 'ausserhalb' trifft nicht zu). Richtlinie 2 greift (Admin-Gruppe, Bedingung 'beliebig') → MFA UND konformes Geraet.",
+      "Richtlinie 1 greift nicht (er ist im Firmennetz, die Bedingung 'ausserhalb' trifft nicht zu). Richtlinie 2 greift (Admin-Gruppe, Bedingung 'beliebig') → MFA UND konformes Gerät.",
   },
   {
     difficulty: "hard",
     question:
       "Ein Admin meldet sich von zuhause an (ausserhalb des Netzwerks). Welche Anforderung(en) gelten in Summe?",
     options: [
-      "Nur MFA (die staerkere Anforderung aus Richtlinie 2 zaehlt nicht, da Richtlinie 1 zuerst greift)",
-      "MFA UND konformes Geraet - beide zutreffenden Richtlinien wirken gemeinsam",
-      "Nur konformes Geraet, MFA wird ignoriert",
+      "Nur MFA (die stärkere Anforderung aus Richtlinie 2 zählt nicht, da Richtlinie 1 zuerst greift)",
+      "MFA UND konformes Gerät - beide zutreffenden Richtlinien wirken gemeinsam",
+      "Nur konformes Gerät, MFA wird ignoriert",
       "Es gilt nur die zuletzt erstellte Richtlinie",
     ],
     correctIndex: 1,
     explanation:
-      "Anders als bei Firewall-Regeln gibt es bei Conditional Access KEIN 'erste Regel gewinnt'. Richtlinie 1 UND Richtlinie 2 treffen beide zu - ihre Grant Controls werden kumulativ mit UND verknuepft. Ergebnis: MFA UND konformes Geraet muessen erfuellt sein.",
+      "Anders als bei Firewall-Regeln gibt es bei Conditional Access KEIN 'erste Regel gewinnt'. Richtlinie 1 UND Richtlinie 2 treffen beide zu - ihre Grant Controls werden kumulativ mit UND verknüpft. Ergebnis: MFA UND konformes Gerät müssen erfüllt sein.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein beliebiger Nutzer versucht sich aus einem als Hochrisiko eingestuften Land anzumelden, erfuellt aber MFA und hat ein konformes Geraet. Wird der Zugriff gewaehrt?",
+      "Ein beliebiger Nutzer versucht sich aus einem als Hochrisiko eingestuften Land anzumelden, erfüllt aber MFA und hat ein konformes Gerät. Wird der Zugriff gewährt?",
     options: [
-      "Ja, da MFA und konformes Geraet erfuellt sind",
-      "Nein - eine zutreffende 'Blockieren'-Richtlinie ueberstimmt immer alle anderen (erfuellten) Grant-Anforderungen",
-      "Nur mit zusaetzlicher Admin-Freigabe",
-      "Ja, aber nur fuer eine begrenzte Sitzungsdauer",
+      "Ja, da MFA und konformes Gerät erfüllt sind",
+      "Nein - eine zutreffende 'Blockieren'-Richtlinie überstimmt immer alle anderen (erfüllten) Grant-Anforderungen",
+      "Nur mit zusätzlicher Admin-Freigabe",
+      "Ja, aber nur für eine begrenzte Sitzungsdauer",
     ],
     correctIndex: 1,
     explanation:
-      "Richtlinie 3 greift (Hochrisiko-Land) und deren Control ist 'Zugriff blockieren'. Eine zutreffende Block-Richtlinie gewinnt immer, unabhaengig davon, welche anderen (erfuellbaren) Anforderungen andere Richtlinien stellen.",
+      "Richtlinie 3 greift (Hochrisiko-Land) und deren Control ist 'Zugriff blockieren'. Eine zutreffende Block-Richtlinie gewinnt immer, unabhängig davon, welche anderen (erfüllbaren) Anforderungen andere Richtlinien stellen.",
   },
 ];
 
-/* ================= Teil 2: Geraetemanagement-Quiz ================= */
+/* ================= Teil 2: Gerätemanagement-Quiz ================= */
 
 const DEVICE_QUIZ = [
   {
     difficulty: "easy",
     question: "Was ist Windows Autopilot?",
     options: [
-      "Ein Dienst, der neue Geraete direkt ab Werk (out-of-box) automatisch mit Firmeneinstellungen provisioniert, ohne dass IT das Geraet vorher manuell einrichten muss",
-      "Eine Funktion, die Geraete automatisch neu startet, wenn Updates anstehen",
-      "Ein Tool, das defekte Geraete automatisch per Post an den Hersteller zurueckschickt",
+      "Ein Dienst, der neue Geräte direkt ab Werk (out-of-box) automatisch mit Firmeneinstellungen provisioniert, ohne dass IT das Gerät vorher manuell einrichten muss",
+      "Eine Funktion, die Geräte automatisch neu startet, wenn Updates anstehen",
+      "Ein Tool, das defekte Geräte automatisch per Post an den Hersteller zurückschickt",
     ],
     correctIndex: 0,
     explanation:
-      "Autopilot ermoeglicht \"Zero-Touch-Provisioning\": ein Nutzer packt ein neues Geraet aus, meldet sich mit dem Firmenkonto an, und Richtlinien/Apps/Einstellungen werden automatisch angewendet - IT muss das Geraet nie in der Hand gehabt haben.",
+      "Autopilot ermöglicht \"Zero-Touch-Provisioning\": ein Nutzer packt ein neues Gerät aus, meldet sich mit dem Firmenkonto an, und Richtlinien/Apps/Einstellungen werden automatisch angewendet - IT muss das Gerät nie in der Hand gehabt haben.",
   },
   {
     difficulty: "easy",
     question:
-      "Was ist der Unterschied zwischen \"Zuruecksetzen\" (Wipe) und \"Ausmustern\" (Retire) eines Geraets in Intune?",
+      "Was ist der Unterschied zwischen \"Zurücksetzen\" (Wipe) und \"Ausmustern\" (Retire) eines Geräts in Intune?",
     options: [
-      "Wipe loescht alle Daten und setzt das Geraet auf Werkseinstellungen zurueck; Retire entfernt nur die Firmenverwaltung/-daten (z.B. bei BYOD), persoenliche Daten bleiben erhalten",
+      "Wipe löscht alle Daten und setzt das Gerät auf Werkseinstellungen zurück; Retire entfernt nur die Firmenverwaltung/-daten (z.B. bei BYOD), persönliche Daten bleiben erhalten",
       "Beide Aktionen bedeuten exakt dasselbe, nur unterschiedliche Bezeichnung",
-      "Wipe entfernt nur die Verwaltung, Retire loescht saemtliche Daten inkl. privater Dateien",
+      "Wipe entfernt nur die Verwaltung, Retire löscht sämtliche Daten inkl. privater Dateien",
     ],
     correctIndex: 0,
     explanation:
-      "\"Wipe\" ist der drastischere Schritt (kompletter Reset, sinnvoll bei Verlust/Diebstahl eines Firmengeraets). \"Retire\" trennt ein Geraet sauber von der Verwaltung, ohne private Inhalte anzuruehren - typisch beim Ausscheiden eines Mitarbeiters mit eigenem (BYOD) Geraet.",
+      "\"Wipe\" ist der drastischere Schritt (kompletter Reset, sinnvoll bei Verlust/Diebstahl eines Firmengeräts). \"Retire\" trennt ein Gerät sauber von der Verwaltung, ohne private Inhalte anzurühren - typisch beim Ausscheiden eines Mitarbeiters mit eigenem (BYOD) Gerät.",
   },
   {
     difficulty: "medium",
     question:
-      "Welcher Autopilot-Modus passt fuer Geraete, die sich ein einzelner Nutzer mit eigenem Konto selbst einrichten soll (im Gegensatz zu einem Kiosk-Geraet ohne persoenliche Anmeldung)?",
+      "Welcher Autopilot-Modus passt für Geräte, die sich ein einzelner Nutzer mit eigenem Konto selbst einrichten soll (im Gegensatz zu einem Kiosk-Gerät ohne persönliche Anmeldung)?",
     options: [
-      "User-Driven Mode - der Nutzer meldet sich beim Setup mit seinem Konto an, das Geraet wird ihm zugeordnet",
-      "Self-Deploying Mode - komplett ohne jede Nutzeranmeldung, typisch fuer Kiosk-/Gemeinsam genutzte Geraete",
-      "Beide Modi funktionieren fuer diesen Zweck identisch",
+      "User-Driven Mode - der Nutzer meldet sich beim Setup mit seinem Konto an, das Gerät wird ihm zugeordnet",
+      "Self-Deploying Mode - komplett ohne jede Nutzeranmeldung, typisch für Kiosk-/Gemeinsam genutzte Geräte",
+      "Beide Modi funktionieren für diesen Zweck identisch",
     ],
     correctIndex: 0,
     explanation:
-      "User-Driven Mode bindet das Geraet an eine bestimmte Person (mit Anmeldung waehrend des Setups). Self-Deploying Mode ist fuer Geraete gedacht, die niemandem persoenlich zugeordnet sind (z.B. Empfangs-Kiosk, Besprechungsraum-Tablet).",
+      "User-Driven Mode bindet das Gerät an eine bestimmte Person (mit Anmeldung während des Setups). Self-Deploying Mode ist für Geräte gedacht, die niemandem persönlich zugeordnet sind (z.B. Empfangs-Kiosk, Besprechungsraum-Tablet).",
   },
   {
     difficulty: "medium",
     question:
-      "Ein Nutzer soll eine Pflicht-App (z.B. der Firmen-VPN-Client) automatisch auf seinem verwalteten Geraet installiert bekommen, ohne sie manuell aus dem Firmenportal laden zu muessen.",
+      "Ein Nutzer soll eine Pflicht-App (z.B. der Firmen-VPN-Client) automatisch auf seinem verwalteten Gerät installiert bekommen, ohne sie manuell aus dem Firmenportal laden zu müssen.",
     options: [
-      "Die App-Zuweisung auf \"Erforderlich\" (Required) statt \"Verfuegbar\" (Available) stellen",
-      "Die App als \"Verfuegbar\" (Available) zuweisen - das installiert automatisch bei allen Nutzern",
-      "Apps koennen in Intune generell nicht automatisch installiert werden",
+      "Die App-Zuweisung auf \"Erforderlich\" (Required) statt \"Verfügbar\" (Available) stellen",
+      "Die App als \"Verfügbar\" (Available) zuweisen - das installiert automatisch bei allen Nutzern",
+      "Apps können in Intune generell nicht automatisch installiert werden",
     ],
     correctIndex: 0,
     explanation:
-      "\"Erforderlich\" (Required) installiert die App automatisch im Hintergrund auf allen zugewiesenen Geraeten. \"Verfuegbar\" (Available) legt die App nur ins Firmenportal, von wo der Nutzer sie selbst installieren kann.",
+      "\"Erforderlich\" (Required) installiert die App automatisch im Hintergrund auf allen zugewiesenen Geräten. \"Verfügbar\" (Available) legt die App nur ins Firmenportal, von wo der Nutzer sie selbst installieren kann.",
   },
   {
     difficulty: "medium",
     question:
-      "Ein privates (BYOD) Smartphone soll Firmen-E-Mail per Outlook nutzen duerfen, die IT soll das Geraet aber NICHT vollstaendig verwalten oder komplett loeschen koennen.",
+      "Ein privates (BYOD) Smartphone soll Firmen-E-Mail per Outlook nutzen dürfen, die IT soll das Gerät aber NICHT vollständig verwalten oder komplett löschen können.",
     options: [
-      "App-Schutzrichtlinien (MAM / App Protection Policies) statt vollstaendiger Geraeteverwaltung (MDM) einsetzen - schuetzt nur die Firmendaten innerhalb der App",
-      "Das Geraet trotzdem vollstaendig per MDM registrieren, das ist bei BYOD kein Problem",
-      "Ohne volle Geraeteverwaltung ist der Zugriff auf Firmen-Mail technisch nicht moeglich",
+      "App-Schutzrichtlinien (MAM / App Protection Policies) statt vollständiger Geräteverwaltung (MDM) einsetzen - schützt nur die Firmendaten innerhalb der App",
+      "Das Gerät trotzdem vollständig per MDM registrieren, das ist bei BYOD kein Problem",
+      "Ohne volle Geräteverwaltung ist der Zugriff auf Firmen-Mail technisch nicht möglich",
     ],
     correctIndex: 0,
     explanation:
-      "App-Schutzrichtlinien (Mobile Application Management) schuetzen nur die Firmendaten innerhalb bestimmter Apps (z.B. Verhindern von Copy-Paste in private Apps, Anmeldezwang), ohne das gesamte Geraet zu verwalten - der uebliche Ansatz fuer private Geraete.",
+      "App-Schutzrichtlinien (Mobile Application Management) schützen nur die Firmendaten innerhalb bestimmter Apps (z.B. Verhindern von Copy-Paste in private Apps, Anmeldezwang), ohne das gesamte Gerät zu verwalten - der übliche Ansatz für private Geräte.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein Firmenlaptop wurde gestohlen. Welche Kombination sorgt dafuer, dass alle Firmendaten sofort remote geloescht werden UND das Geraet danach nicht mehr als Firmengeraet in der Verwaltung gefuehrt wird?",
+      "Ein Firmenlaptop wurde gestohlen. Welche Kombination sorgt dafür, dass alle Firmendaten sofort remote gelöscht werden UND das Gerät danach nicht mehr als Firmengerät in der Verwaltung geführt wird?",
     options: [
-      "Zuerst \"Zuruecksetzen\" (Wipe) zum Loeschen aller Daten, danach das Geraet aus der Verwaltung entfernen (Retire/Loeschen des Geraeteobjekts)",
-      "Nur \"Ausmustern\" (Retire) reicht aus, das loescht automatisch auch alle Daten",
-      "Ein einfacher Passwort-Reset des Nutzerkontos genuegt bereits",
+      "Zuerst \"Zurücksetzen\" (Wipe) zum Löschen aller Daten, danach das Gerät aus der Verwaltung entfernen (Retire/Löschen des Geräteobjekts)",
+      "Nur \"Ausmustern\" (Retire) reicht aus, das löscht automatisch auch alle Daten",
+      "Ein einfacher Passwort-Reset des Nutzerkontos genügt bereits",
     ],
     correctIndex: 0,
     explanation:
-      "Retire allein loescht keine Firmendaten (es trennt nur die Verwaltung) - bei einem gestohlenen Geraet ist das zu wenig. Ein vollstaendiger Wipe loescht die Daten; anschliessend wird das Geraeteobjekt aus der Verwaltung entfernt, damit es nicht faelschlich als aktives Firmengeraet gilt.",
+      "Retire allein löscht keine Firmendaten (es trennt nur die Verwaltung) - bei einem gestohlenen Gerät ist das zu wenig. Ein vollständiger Wipe löscht die Daten; anschliessend wird das Geräteobjekt aus der Verwaltung entfernt, damit es nicht fälschlich als aktives Firmengerät gilt.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein neu bestelltes Geraet soll beim allerersten Einschalten durch den Endnutzer zuhause automatisch der Firmenumgebung beitreten und alle Richtlinien/Apps erhalten - ganz ohne dass IT das Geraet vorher in der Hand hatte. Was ist dafuer zwingend noetig?",
+      "Ein neu bestelltes Gerät soll beim allerersten Einschalten durch den Endnutzer zuhause automatisch der Firmenumgebung beitreten und alle Richtlinien/Apps erhalten - ganz ohne dass IT das Gerät vorher in der Hand hatte. Was ist dafür zwingend nötig?",
     options: [
-      "Die Hardware-ID (Hardware Hash) des Geraets muss vorab (z.B. vom Haendler) bei Windows Autopilot registriert und mit dem Tenant verknuepft worden sein",
+      "Die Hardware-ID (Hardware Hash) des Geräts muss vorab (z.B. vom Händler) bei Windows Autopilot registriert und mit dem Tenant verknüpft worden sein",
       "Der Nutzer braucht lediglich einen Domain-Administrator-Account",
-      "Das ist ohne physischen Kontakt der IT mit dem Geraet technisch nicht moeglich",
+      "Das ist ohne physischen Kontakt der IT mit dem Gerät technisch nicht möglich",
     ],
     correctIndex: 0,
     explanation:
-      "Autopilot funktioniert nur, wenn die eindeutige Hardware-ID des Geraets vorher in Autopilot registriert wurde (oft direkt durch den Haendler/OEM). Erst dann erkennt der Dienst das Geraet beim ersten Start automatisch als Firmengeraet.",
+      "Autopilot funktioniert nur, wenn die eindeutige Hardware-ID des Geräts vorher in Autopilot registriert wurde (oft direkt durch den Händler/OEM). Erst dann erkennt der Dienst das Gerät beim ersten Start automatisch als Firmengerät.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein Geraet ist als \"nicht konform\" markiert (z.B. weil BitLocker fehlt), der Nutzer braucht aber dringend Zugriff auf eine kritische App. Was ist die sicherheitstechnisch richtige Vorgehensweise?",
+      "Ein Gerät ist als \"nicht konform\" markiert (z.B. weil BitLocker fehlt), der Nutzer braucht aber dringend Zugriff auf eine kritische App. Was ist die sicherheitstechnisch richtige Vorgehensweise?",
     options: [
       "Das konkrete Problem beheben (z.B. BitLocker aktivieren), statt die Compliance-Richtlinie pauschal zu deaktivieren oder aufzuweichen",
-      "Die Compliance-Richtlinie fuer alle Geraete vorübergehend deaktivieren, bis das Problem behoben ist",
-      "Dem Nutzer dauerhaft eine Ausnahme von allen Sicherheitsrichtlinien einraeumen",
+      "Die Compliance-Richtlinie für alle Geräte vorübergehend deaktivieren, bis das Problem behoben ist",
+      "Dem Nutzer dauerhaft eine Ausnahme von allen Sicherheitsrichtlinien einräumen",
     ],
     correctIndex: 0,
     explanation:
-      "Eine pauschale Deaktivierung oder Aufweichung der Richtlinie senkt den Schutz fuer ALLE Geraete, nicht nur das betroffene. Der richtige Weg ist, die konkrete Ursache der Nichtkonformitaet zu beheben - das stellt Sicherheit UND Zugriff wieder her.",
+      "Eine pauschale Deaktivierung oder Aufweichung der Richtlinie senkt den Schutz für ALLE Geräte, nicht nur das betroffene. Der richtige Weg ist, die konkrete Ursache der Nichtkonformität zu beheben - das stellt Sicherheit UND Zugriff wieder her.",
   },
 ];
 
@@ -201,11 +201,11 @@ const TICKETS = [
     difficulty: "easy",
     title: "Ticket #3001 - Neues Notebook erscheint nicht in Intune",
     symptom:
-      "Ein neues Firmen-Notebook wurde eingerichtet und an den Nutzer uebergeben. Im Intune-Portal taucht das Geraet aber nicht auf, Richtlinien werden nicht angewendet.",
+      "Ein neues Firmen-Notebook wurde eingerichtet und an den Nutzer übergeben. Im Intune-Portal taucht das Gerät aber nicht auf, Richtlinien werden nicht angewendet.",
     tools: [
       {
         id: "dsregcmd",
-        label: "dsregcmd /status auf dem Notebook ausfuehren",
+        label: "dsregcmd /status auf dem Notebook ausführen",
         output:
 `+----------------------------------------------------------------+
 | Device State                                                    |
@@ -217,28 +217,28 @@ const TICKETS = [
       },
       {
         id: "settings",
-        label: "Einstellungen > Konten > Zugriff für Arbeit oder Schule pruefen",
+        label: "Einstellungen > Konten > Zugriff für Arbeit oder Schule prüfen",
         output:
 `Keine verbundenen Konten vorhanden.`,
       },
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Das Geraet wurde nie erfolgreich mit Entra ID verbunden (weder Join noch Registrierung) - ohne diesen Schritt gibt es kein Intune-Onboarding",
-      "Der Intune-Dienst ist aktuell gestoert",
-      "Das Geraet hat keine Internetverbindung",
+      "Das Gerät wurde nie erfolgreich mit Entra ID verbunden (weder Join noch Registrierung) - ohne diesen Schritt gibt es kein Intune-Onboarding",
+      "Der Intune-Dienst ist aktuell gestört",
+      "Das Gerät hat keine Internetverbindung",
       "Die Intune-Lizenz des Nutzers ist abgelaufen",
     ],
     correctIndex: 0,
     explanation:
-      "\"dsregcmd /status\" zeigt bei allen Join-Arten \"NO\" - das Geraet ist ueberhaupt nicht mit Entra ID verbunden. Intune verwaltet nur Geraete, die zuvor per Entra-Join, Hybrid-Join oder -Registrierung mit Entra ID verbunden wurden. Loesung: Einrichtungsassistent (OOBE) mit Firmenkonto erneut durchlaufen bzw. \"Verbinden\" unter Zugriff fuer Arbeit oder Schule ausfuehren.",
+      "\"dsregcmd /status\" zeigt bei allen Join-Arten \"NO\" - das Gerät ist überhaupt nicht mit Entra ID verbunden. Intune verwaltet nur Geräte, die zuvor per Entra-Join, Hybrid-Join oder -Registrierung mit Entra ID verbunden wurden. Lösung: Einrichtungsassistent (OOBE) mit Firmenkonto erneut durchlaufen bzw. \"Verbinden\" unter Zugriff für Arbeit oder Schule ausführen.",
   },
   {
     id: "hybrid-join-scp",
     difficulty: "medium",
-    title: "Ticket #3015 - Hybrid Entra Join schlaegt fehl",
+    title: "Ticket #3015 - Hybrid Entra Join schlägt fehl",
     symptom:
-      "On-Premises-AD-Computer sollen automatisch auch als \"Hybrid Entra Joined\" erscheinen. Bei einem PC bleibt der Status jedoch dauerhaft nur domaenenverbunden.",
+      "On-Premises-AD-Computer sollen automatisch auch als \"Hybrid Entra Joined\" erscheinen. Bei einem PC bleibt der Status jedoch dauerhaft nur domänenverbunden.",
     tools: [
       {
         id: "dsregcmd",
@@ -250,10 +250,10 @@ const TICKETS = [
       },
       {
         id: "connect-sync",
-        label: "Entra Connect Sync-Status auf dem Sync-Server pruefen",
+        label: "Entra Connect Sync-Status auf dem Sync-Server prüfen",
         output:
 `Letzte Synchronisierung: vor 12 Minuten (erfolgreich)
-Letzter Geraete-Registrierungs-Lauf: Fehler
+Letzter Geräte-Registrierungs-Lauf: Fehler
   -> Service Connection Point (SCP) nicht gefunden oder zeigt auf falschen Tenant`,
       },
       {
@@ -267,30 +267,30 @@ Letzter Geraete-Registrierungs-Lauf: Fehler
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Das Service Connection Point (SCP) im On-Premises-AD ist fehlerhaft konfiguriert oder fehlt - dadurch findet das Geraet den richtigen Entra-ID-Tenant fuer den Hybrid-Join nicht",
+      "Das Service Connection Point (SCP) im On-Premises-AD ist fehlerhaft konfiguriert oder fehlt - dadurch findet das Gerät den richtigen Entra-ID-Tenant für den Hybrid-Join nicht",
       "Die allgemeine AD-Synchronisierung ist komplett ausgefallen",
-      "Das Geraet hat eine falsche Subnetzmaske",
+      "Das Gerät hat eine falsche Subnetzmaske",
       "Der Nutzer hat keine Intune-Lizenz zugewiesen",
     ],
     correctIndex: 0,
     explanation:
-      "Die normale Objekt-Synchronisierung laeuft (\"vor 12 Minuten erfolgreich\"), aber speziell die Geraete-Registrierung fuer Hybrid-Join scheitert - der Hinweis auf das fehlerhafte SCP bestaetigt das. Das SCP im AD sagt Windows-Clients, zu welchem Entra-ID-Tenant sie sich fuer den Hybrid-Join registrieren sollen. Ohne korrektes SCP bleibt der PC nur domaenenverbunden.",
+      "Die normale Objekt-Synchronisierung läuft (\"vor 12 Minuten erfolgreich\"), aber speziell die Geräte-Registrierung für Hybrid-Join scheitert - der Hinweis auf das fehlerhafte SCP bestätigt das. Das SCP im AD sagt Windows-Clients, zu welchem Entra-ID-Tenant sie sich für den Hybrid-Join registrieren sollen. Ohne korrektes SCP bleibt der PC nur domänenverbunden.",
   },
   {
     id: "compliance-bitlocker",
     difficulty: "medium",
-    title: "Ticket #3022 - Geraet als \"nicht konform\" markiert",
+    title: "Ticket #3022 - Gerät als \"nicht konform\" markiert",
     symptom:
-      "Ein Nutzer wird beim Zugriff auf eine Cloud-App blockiert, weil sein Geraet laut Conditional Access nicht konform sei. Er behauptet, alle Vorgaben zu erfuellen.",
+      "Ein Nutzer wird beim Zugriff auf eine Cloud-App blockiert, weil sein Gerät laut Conditional Access nicht konform sei. Er behauptet, alle Vorgaben zu erfüllen.",
     tools: [
       {
         id: "compliance-report",
-        label: "Intune Compliance-Bericht fuer das Geraet oeffnen",
+        label: "Intune Compliance-Bericht für das Gerät öffnen",
         output:
 `Gesamtstatus: Nicht konform
 
 Fehlgeschlagene Regeln:
-  - Laufwerksverschluesselung (BitLocker): Nicht aktiv
+  - Laufwerksverschlüsselung (BitLocker): Nicht aktiv
 Bestanden:
   - Passwort/PIN erforderlich: OK
   - Betriebssystem-Version: OK`,
@@ -298,34 +298,34 @@ Bestanden:
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Die Compliance-Richtlinie verlangt aktivierte Laufwerksverschluesselung (BitLocker), die auf diesem Geraet nicht aktiv ist",
-      "Der Nutzer hat kein gueltiges Passwort gesetzt",
-      "Das Geraet hat eine zu alte Betriebssystem-Version",
-      "Der Compliance-Dienst in Intune ist gestoert",
-      "Das Geraet ist nicht in Intune registriert",
+      "Die Compliance-Richtlinie verlangt aktivierte Laufwerksverschlüsselung (BitLocker), die auf diesem Gerät nicht aktiv ist",
+      "Der Nutzer hat kein gültiges Passwort gesetzt",
+      "Das Gerät hat eine zu alte Betriebssystem-Version",
+      "Der Compliance-Dienst in Intune ist gestört",
+      "Das Gerät ist nicht in Intune registriert",
     ],
     correctIndex: 0,
     explanation:
-      "Der Compliance-Bericht listet die BitLocker-Regel explizit als fehlgeschlagen, waehrend Passwort und OS-Version bestanden sind. Ohne aktivierte Laufwerksverschluesselung bleibt das Geraet nicht konform - und Conditional-Access-Richtlinien, die ein konformes Geraet verlangen, blockieren den Zugriff.",
+      "Der Compliance-Bericht listet die BitLocker-Regel explizit als fehlgeschlagen, während Passwort und OS-Version bestanden sind. Ohne aktivierte Laufwerksverschlüsselung bleibt das Gerät nicht konform - und Conditional-Access-Richtlinien, die ein konformes Gerät verlangen, blockieren den Zugriff.",
   },
   {
     id: "password-hash-sync-delay",
     difficulty: "hard",
-    title: "Ticket #3038 - Neues Passwort wirkt in der Cloud erst verzoegert",
+    title: "Ticket #3038 - Neues Passwort wirkt in der Cloud erst verzögert",
     symptom:
-      "Ein Nutzer aendert sein Passwort im On-Premises-AD. Lokale Anmeldung funktioniert sofort mit dem neuen Passwort, M365/Cloud-Dienste akzeptieren aber noch fuer einige Minuten das alte Passwort.",
+      "Ein Nutzer ändert sein Passwort im On-Premises-AD. Lokale Anmeldung funktioniert sofort mit dem neuen Passwort, M365/Cloud-Dienste akzeptieren aber noch für einige Minuten das alte Passwort.",
     tools: [
       {
         id: "connect-health",
-        label: "Entra Connect Sync-Health pruefen",
+        label: "Entra Connect Sync-Health prüfen",
         output:
 `Synchronisierungsmethode: Password Hash Sync (PHS)
 Sync-Intervall: alle 2 Minuten (Standard)
-Letzter Passwort-Sync-Zyklus: vor 90 Sekunden gestartet, laeuft noch`,
+Letzter Passwort-Sync-Zyklus: vor 90 Sekunden gestartet, läuft noch`,
       },
       {
         id: "signin-log",
-        label: "Entra ID Anmeldeprotokoll pruefen",
+        label: "Entra ID Anmeldeprotokoll prüfen",
         output:
 `09:14:02  Anmeldung fehlgeschlagen - Falsches Passwort (altes PW verwendet)
 09:15:47  Anmeldung erfolgreich - Passwort akzeptiert`,
@@ -333,25 +333,25 @@ Letzter Passwort-Sync-Zyklus: vor 90 Sekunden gestartet, laeuft noch`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Das ist kein Fehler, sondern die normale, kurze Verzoegerung von Password Hash Sync (typisch ca. 2 Minuten), bis das neue Passwort-Hash in Entra ID ankommt",
-      "Der Nutzer hat sein Passwort gar nicht wirklich geaendert",
+      "Das ist kein Fehler, sondern die normale, kurze Verzögerung von Password Hash Sync (typisch ca. 2 Minuten), bis das neue Passwort-Hash in Entra ID ankommt",
+      "Der Nutzer hat sein Passwort gar nicht wirklich geändert",
       "Entra Connect ist komplett ausgefallen",
       "Es liegt ein Konflikt durch doppelte Benutzerkonten vor",
     ],
     correctIndex: 0,
     explanation:
-      "Bei Password Hash Sync wird das Passwort-Hash typischerweise alle rund 2 Minuten synchronisiert (bei Bedarf sogar schneller ausgeloest). Die kurze Verzoegerung zwischen lokaler Aenderung und Cloud-Wirksamkeit ist normales, erwartetes Verhalten - kein Fehler.",
+      "Bei Password Hash Sync wird das Passwort-Hash typischerweise alle rund 2 Minuten synchronisiert (bei Bedarf sogar schneller ausgelöst). Die kurze Verzögerung zwischen lokaler Änderung und Cloud-Wirksamkeit ist normales, erwartetes Verhalten - kein Fehler.",
   },
   {
     id: "legacy-auth-bypass",
     difficulty: "hard",
     title: "Ticket #3044 - MFA-Pflicht wird trotz aktivierter Richtlinie umgangen",
     symptom:
-      "Obwohl eine Conditional-Access-Richtlinie \"MFA fuer alle Nutzer erforderlich\" aktiv ist, meldet sich ein Angreifer erfolgreich per IMAP-E-Mail-Client an einem kompromittierten Konto an - ganz ohne MFA-Aufforderung.",
+      "Obwohl eine Conditional-Access-Richtlinie \"MFA für alle Nutzer erforderlich\" aktiv ist, meldet sich ein Angreifer erfolgreich per IMAP-E-Mail-Client an einem kompromittierten Konto an - ganz ohne MFA-Aufforderung.",
     tools: [
       {
         id: "signin-log",
-        label: "Entra ID Anmeldeprotokoll (verdaechtige Anmeldung) pruefen",
+        label: "Entra ID Anmeldeprotokoll (verdächtige Anmeldung) prüfen",
         output:
 `Anmeldezeit:      02:14:11
 Client-App:       Andere Clients (Legacy Authentication - IMAP4)
@@ -360,7 +360,7 @@ Status:           Erfolgreich`,
       },
       {
         id: "ca-policy",
-        label: "Details der Richtlinie \"MFA fuer alle Nutzer\" pruefen",
+        label: "Details der Richtlinie \"MFA für alle Nutzer\" prüfen",
         output:
 `Cloud-Apps: Alle
 Client-Apps-Bedingung: Nicht konfiguriert (Legacy Authentication nicht explizit erfasst)
@@ -369,21 +369,21 @@ Grant: MFA erforderlich`,
     ],
     question: "Was ist die wahrscheinlichste Ursache?",
     options: [
-      "Legacy-Authentifizierungsprotokolle (wie IMAP) unterstuetzen kein modernes Auth/MFA und wurden von der Richtlinie nicht explizit erfasst - dadurch greift Conditional Access hier gar nicht",
-      "Das Nutzerkonto war von der Richtlinie ausdruecklich ausgenommen",
+      "Legacy-Authentifizierungsprotokolle (wie IMAP) unterstützen kein modernes Auth/MFA und wurden von der Richtlinie nicht explizit erfasst - dadurch greift Conditional Access hier gar nicht",
+      "Das Nutzerkonto war von der Richtlinie ausdrücklich ausgenommen",
       "Die Richtlinie war zum Zeitpunkt des Angriffs deaktiviert",
-      "MFA war fuer dieses Konto nie eingerichtet worden",
+      "MFA war für dieses Konto nie eingerichtet worden",
     ],
     correctIndex: 0,
     explanation:
-      "Das Anmeldeprotokoll zeigt \"Conditional Access: Nicht angewendet\" bei einer Anmeldung ueber Legacy Authentication (IMAP4). Legacy-Protokolle unterstuetzen kein modernes Authentifizierungsverfahren und damit auch keine MFA-Aufforderung - viele CA-Richtlinien erfassen sie nicht automatisch. Empfehlung: Legacy Authentication ueber eine eigene Richtlinie grundsaetzlich blockieren (Standardempfehlung von Microsoft).",
+      "Das Anmeldeprotokoll zeigt \"Conditional Access: Nicht angewendet\" bei einer Anmeldung über Legacy Authentication (IMAP4). Legacy-Protokolle unterstützen kein modernes Authentifizierungsverfahren und damit auch keine MFA-Aufforderung - viele CA-Richtlinien erfassen sie nicht automatisch. Empfehlung: Legacy Authentication über eine eigene Richtlinie grundsätzlich blockieren (Standardempfehlung von Microsoft).",
   },
 ];
 
 let currentTicket = null;
 let selectedOptionIndex = null;
 
-/* ---------------- Quiz-Logik (generisch fuer beide Quiz-Bloecke) ---------------- */
+/* ---------------- Quiz-Logik (generisch für beide Quiz-Blöcke) ---------------- */
 
 function renderQuizGeneric(quizArray, containerId, namePrefix) {
   const container = document.getElementById(containerId);
@@ -589,7 +589,7 @@ function updateTicketScorePill() {
   const solved = loadSolvedTickets();
   document.getElementById(
     "ticket-score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${TICKETS.length} Tickets`;
+  ).textContent = `Gelöst: ${solved.length} / ${TICKETS.length} Tickets`;
 }
 
 /* ---------------- Gemeinsamer Fortschritt ---------------- */
@@ -612,20 +612,20 @@ function updateChecklist(state) {
   const quizItem = document.getElementById("check-quiz");
   quizItem.classList.toggle("status-done", Boolean(state.quizDone));
   quizItem.textContent = state.quizDone
-    ? "✅ Conditional-Access-Quiz vollstaendig richtig geloest"
-    : "⬜ Conditional-Access-Quiz vollstaendig richtig loesen";
+    ? "✅ Conditional-Access-Quiz vollständig richtig gelöst"
+    : "⬜ Conditional-Access-Quiz vollständig richtig lösen";
 
   const deviceQuizItem = document.getElementById("check-device-quiz");
   deviceQuizItem.classList.toggle("status-done", Boolean(state.deviceQuizDone));
   deviceQuizItem.textContent = state.deviceQuizDone
-    ? "✅ Geraetemanagement-Quiz vollstaendig richtig geloest"
-    : "⬜ Geraetemanagement-Quiz vollstaendig richtig loesen";
+    ? "✅ Gerätemanagement-Quiz vollständig richtig gelöst"
+    : "⬜ Gerätemanagement-Quiz vollständig richtig lösen";
 
   const ticketsItem = document.getElementById("check-tickets");
   ticketsItem.classList.toggle("status-done", Boolean(state.ticketsDone));
   ticketsItem.textContent = state.ticketsDone
-    ? "✅ Alle Troubleshooting-Tickets geloest"
-    : "⬜ Alle Troubleshooting-Tickets loesen";
+    ? "✅ Alle Troubleshooting-Tickets gelöst"
+    : "⬜ Alle Troubleshooting-Tickets lösen";
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -1,6 +1,6 @@
 /*
  * cloud-basics.js - Modul 12: Cloud-Grundlagen (Azure/M365 RBAC & Lizenzierung)
- * Konzept-Erklaerung + ein schwierigkeitsgestuftes Quiz zu Rollenwahl
+ * Konzept-Erklärung + ein schwierigkeitsgestuftes Quiz zu Rollenwahl
  * (Least Privilege) und Lizenzierungs-Entscheidungen.
  */
 
@@ -10,7 +10,7 @@ const QUIZ = [
   {
     difficulty: "easy",
     question:
-      "Ein Mitarbeiter im Helpdesk soll Passwoerter fuer normale Nutzer zuruecksetzen koennen, aber sonst nichts verwalten duerfen. Welche Rolle passt am besten?",
+      "Ein Mitarbeiter im Helpdesk soll Passwörter für normale Nutzer zurücksetzen können, aber sonst nichts verwalten dürfen. Welche Rolle passt am besten?",
     options: [
       "Helpdesk Administrator",
       "Global Administrator",
@@ -19,24 +19,24 @@ const QUIZ = [
     ],
     correctIndex: 0,
     explanation:
-      "Helpdesk Administrator ist genau fuer diesen Zweck gedacht: Passwoerter fuer normale Nutzer zuruecksetzen, ohne weitreichendere Rechte. Global Administrator waere massiv ueberprivilegiert.",
+      "Helpdesk Administrator ist genau für diesen Zweck gedacht: Passwörter für normale Nutzer zurücksetzen, ohne weitreichendere Rechte. Global Administrator wäre massiv überprivilegiert.",
   },
   {
     difficulty: "easy",
     question: "Was besagt das Prinzip der minimalen Rechte (Least Privilege)?",
     options: [
-      "Nutzer und Admins sollten nur genau die Rechte bekommen, die sie fuer ihre konkrete Aufgabe wirklich brauchen - nicht mehr",
+      "Nutzer und Admins sollten nur genau die Rechte bekommen, die sie für ihre konkrete Aufgabe wirklich brauchen - nicht mehr",
       "Alle Admins sollten Global Administrator sein, damit sie flexibel bleiben",
       "Je mehr Rechte ein Konto hat, desto weniger Supportaufwand entsteht",
     ],
     correctIndex: 0,
     explanation:
-      "Least Privilege reduziert den moeglichen Schaden, falls ein Konto kompromittiert wird oder ein Fehler passiert - wer nur begrenzte Rechte hat, kann auch nur begrenzten Schaden anrichten.",
+      "Least Privilege reduziert den möglichen Schaden, falls ein Konto kompromittiert wird oder ein Fehler passiert - wer nur begrenzte Rechte hat, kann auch nur begrenzten Schaden anrichten.",
   },
   {
     difficulty: "medium",
     question:
-      "Eine IT-Fachkraft soll ausschliesslich Lizenzen zuweisen und entziehen koennen, sonst nichts.",
+      "Eine IT-Fachkraft soll ausschliesslich Lizenzen zuweisen und entziehen können, sonst nichts.",
     options: [
       "License Administrator",
       "Global Administrator",
@@ -45,7 +45,7 @@ const QUIZ = [
     ],
     correctIndex: 0,
     explanation:
-      "License Administrator ist eine eingeschraenkte Rolle speziell fuer die Lizenzverwaltung - kein Zugriff auf andere Verwaltungsbereiche.",
+      "License Administrator ist eine eingeschränkte Rolle speziell für die Lizenzverwaltung - kein Zugriff auf andere Verwaltungsbereiche.",
   },
   {
     difficulty: "medium",
@@ -55,65 +55,65 @@ const QUIZ = [
       "Eine Exchange-Online-Einzellizenz (Standalone), nicht ein volles M365-E3-Paket",
       "Microsoft 365 E5 (das umfangreichste Paket)",
       "Eine reine Teams-Lizenz",
-      "Gar keine Lizenz noetig, E-Mail ist immer kostenlos",
+      "Gar keine Lizenz nötig, E-Mail ist immer kostenlos",
     ],
     correctIndex: 0,
     explanation:
-      "Ein volles M365-E3-Paket fuer einen Nutzer zu kaufen, der nur E-Mail braucht, waere unnoetig teuer - eine passende Einzellizenz deckt den Bedarf genau ab.",
+      "Ein volles M365-E3-Paket für einen Nutzer zu kaufen, der nur E-Mail braucht, wäre unnötig teuer - eine passende Einzellizenz deckt den Bedarf genau ab.",
   },
   {
     difficulty: "medium",
     question:
-      "Eine neue Abteilung von 50 Nutzern soll automatisch beim Hinzufuegen zu einer Sicherheitsgruppe ihre M365-Lizenz bekommen, ohne dass ein Admin jedes Mal manuell zuweisen muss.",
+      "Eine neue Abteilung von 50 Nutzern soll automatisch beim Hinzufügen zu einer Sicherheitsgruppe ihre M365-Lizenz bekommen, ohne dass ein Admin jedes Mal manuell zuweisen muss.",
     options: [
       "Gruppenbasierte Lizenzierung (Group-based Licensing) einrichten",
       "Jedem der 50 Nutzer die Lizenz einzeln manuell zuweisen",
-      "Taeglich ein PowerShell-Skript von Hand ausfuehren",
-      "Lizenzen koennen ohnehin nicht automatisiert werden",
+      "Täglich ein PowerShell-Skript von Hand ausführen",
+      "Lizenzen können ohnehin nicht automatisiert werden",
     ],
     correctIndex: 0,
     explanation:
-      "Gruppenbasierte Lizenzierung weist eine Lizenz automatisch allen Mitgliedern einer Sicherheitsgruppe zu (und entzieht sie beim Austritt) - ideal fuer grosse, sich aendernde Gruppen.",
+      "Gruppenbasierte Lizenzierung weist eine Lizenz automatisch allen Mitgliedern einer Sicherheitsgruppe zu (und entzieht sie beim Austritt) - ideal für grosse, sich ändernde Gruppen.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein Nutzer braucht nur einmal jaehrlich fuer eine seltene Aufgabe Global-Administrator-Rechte. Was ist die sicherheitstechnisch bessere Alternative zu einer dauerhaften Zuweisung?",
+      "Ein Nutzer braucht nur einmal jährlich für eine seltene Aufgabe Global-Administrator-Rechte. Was ist die sicherheitstechnisch bessere Alternative zu einer dauerhaften Zuweisung?",
     options: [
-      "Privileged Identity Management (PIM) fuer zeitlich begrenzten, bei Bedarf aktivierten (Just-in-Time) Zugriff",
+      "Privileged Identity Management (PIM) für zeitlich begrenzten, bei Bedarf aktivierten (Just-in-Time) Zugriff",
       "Dauerhafte Zuweisung ist unproblematisch, solange das Passwort stark ist",
-      "Eine zweite, gleichwertige Admin-Person zusaetzlich anlegen",
+      "Eine zweite, gleichwertige Admin-Person zusätzlich anlegen",
       "Die Rolle einfach in einer unauffälligen Sicherheitsgruppe verstecken",
     ],
     correctIndex: 0,
     explanation:
-      "PIM erlaubt es, privilegierte Rollen nur bei Bedarf und zeitlich begrenzt zu aktivieren (oft mit zusaetzlicher Genehmigung/MFA) - dauerhaft zugewiesene hochprivilegierte Konten sind ein bevorzugtes Angriffsziel.",
+      "PIM erlaubt es, privilegierte Rollen nur bei Bedarf und zeitlich begrenzt zu aktivieren (oft mit zusätzlicher Genehmigung/MFA) - dauerhaft zugewiesene hochprivilegierte Konten sind ein bevorzugtes Angriffsziel.",
   },
   {
     difficulty: "hard",
     question:
-      "Ein Lizenzpaket wie Microsoft 365 E3 enthaelt mehrere einzelne Dienste (Exchange, Teams, SharePoint, ...). Wie nennt man diese Bestandteile, und kann man sie einzeln deaktivieren?",
+      "Ein Lizenzpaket wie Microsoft 365 E3 enthält mehrere einzelne Dienste (Exchange, Teams, SharePoint, ...). Wie nennt man diese Bestandteile, und kann man sie einzeln deaktivieren?",
     options: [
-      "Service Plans - einzelne Service Plans innerhalb einer Lizenz koennen deaktiviert werden, z.B. wenn ein Dienst durch eine andere Loesung ersetzt wird",
+      "Service Plans - einzelne Service Plans innerhalb einer Lizenz können deaktiviert werden, z.B. wenn ein Dienst durch eine andere Lösung ersetzt wird",
       "Sub-Lizenzen, die sich nur alle gemeinsam aktivieren oder deaktivieren lassen",
-      "Add-ons, die zwingend separat gekauft werden muessen",
+      "Add-ons, die zwingend separat gekauft werden müssen",
     ],
     correctIndex: 0,
     explanation:
-      "Eine M365-Lizenz besteht aus mehreren Service Plans. Admins koennen z.B. den SharePoint-Service-Plan deaktivieren, wenn eine Firma eine andere Dokumentenablage nutzt, ohne die ganze Lizenz zu aendern.",
+      "Eine M365-Lizenz besteht aus mehreren Service Plans. Admins können z.B. den SharePoint-Service-Plan deaktivieren, wenn eine Firma eine andere Dokumentenablage nutzt, ohne die ganze Lizenz zu ändern.",
   },
   {
     difficulty: "hard",
     question:
-      "Warum sollten selbst IT-Admins fuer ihre taegliche Arbeit (E-Mails lesen, normale Dokumente bearbeiten) NICHT mit ihrem Global-Administrator-Konto arbeiten?",
+      "Warum sollten selbst IT-Admins für ihre tägliche Arbeit (E-Mails lesen, normale Dokumente bearbeiten) NICHT mit ihrem Global-Administrator-Konto arbeiten?",
     options: [
-      "Ein kompromittiertes (z.B. durch Phishing) taeglich genutztes Konto mit Global-Admin-Rechten gefaehrdet sofort die gesamte Umgebung - Admins sollten ein separates Konto nur fuer administrative Aufgaben nutzen",
-      "Global-Administrator-Konten koennen technisch gar keine E-Mails empfangen",
+      "Ein kompromittiertes (z.B. durch Phishing) täglich genutztes Konto mit Global-Admin-Rechten gefährdet sofort die gesamte Umgebung - Admins sollten ein separates Konto nur für administrative Aufgaben nutzen",
+      "Global-Administrator-Konten können technisch gar keine E-Mails empfangen",
       "Es ist reine Konvention ohne echten Sicherheitsvorteil",
     ],
     correctIndex: 0,
     explanation:
-      "Das taeglich genutzte Konto (mit Mail, Browser, Dokumenten) ist das mit Abstand groesste Angriffsziel (Phishing, Malware). Ist es gleichzeitig Global Admin, fuehrt ein einziger erfolgreicher Angriff zur vollstaendigen Kompromittierung der Umgebung. Ein separates Admin-Konto nur fuer administrative Taetigkeiten reduziert dieses Risiko erheblich.",
+      "Das täglich genutzte Konto (mit Mail, Browser, Dokumenten) ist das mit Abstand grösste Angriffsziel (Phishing, Malware). Ist es gleichzeitig Global Admin, führt ein einziger erfolgreicher Angriff zur vollständigen Kompromittierung der Umgebung. Ein separates Admin-Konto nur für administrative Tätigkeiten reduziert dieses Risiko erheblich.",
   },
 ];
 

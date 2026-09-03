@@ -11,32 +11,33 @@
 <header class="page-header">
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
-    <a href="index.html" class="active">Uebersicht</a>
+    <a href="index.html" class="active">Übersicht</a>
     <a href="modules/computer-basics.html">Computer-Grundlagen</a>
-    <a href="modules/subnetting.html">Subnetting</a>
-    <a href="modules/dhcp-dns.html">DHCP/DNS</a>
-    <a href="modules/firewall.html">Firewall</a>
-    <a href="modules/sqli.html">SQL-Injection</a>
-    <a href="modules/dns-concepts.html">DNS-Konzepte</a>
     <a href="modules/terminal.html">CMD/PowerShell</a>
+    <a href="modules/scripting.html">Skripting</a>
+    <a href="modules/subnetting.html">Subnetting</a>
+    <a href="modules/dns-concepts.html">DNS-Konzepte</a>
+    <a href="modules/dhcp-dns.html">DHCP/DNS</a>
     <a href="modules/active-directory.html">Active Directory</a>
     <a href="modules/intune-entra.html">Intune/Entra ID</a>
-    <a href="modules/backup.html">Backup &amp; Recovery</a>
-    <a href="modules/email-security.html">E-Mail-Sicherheit</a>
-    <a href="modules/scripting.html">Skripting</a>
     <a href="modules/cloud-basics.html">Cloud-Grundlagen</a>
+    <a href="modules/packaging.html">Paketierung</a>
+    <a href="modules/firewall.html">Firewall</a>
+    <a href="modules/sqli.html">SQL-Injection</a>
+    <a href="modules/email-security.html">E-Mail-Sicherheit</a>
+    <a href="modules/backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
 
 <main class="container">
   <h1 class="page-title">Willkommen bei der IT-Trainingsplattform</h1>
   <p class="page-subtitle">
-    Eine interaktive Uebungsumgebung fuer IT-Grundlagen &ndash; von Hardware
-    und Windows ueber Netzwerke und Security bis Cloud.
-    Alles laeuft komplett in deinem Browser &ndash; es gibt keinen echten Server
+    Eine interaktive Übungsumgebung für IT-Grundlagen &ndash; von Hardware
+    und Windows über Netzwerke und Security bis Cloud.
+    Alles läuft komplett in deinem Browser &ndash; es gibt keinen echten Server
     und keine echte Datenbank im Hintergrund. Dein Fortschritt wird nur lokal
-    auf diesem Geraet gespeichert (<code>localStorage</code>), es ist kein
-    Login noetig.
+    auf diesem Gerät gespeichert (<code>localStorage</code>), es ist kein
+    Login nötig.
   </p>
 
   <div class="card">
@@ -48,18 +49,18 @@
       <span class="progress-label" id="overview-label">0 / 5 Module abgeschlossen</span>
     </div>
     <div class="btn-row">
-      <button class="btn small ghost" id="reset-btn">Fortschritt zuruecksetzen</button>
+      <button class="btn small ghost" id="reset-btn">Fortschritt zurücksetzen</button>
     </div>
   </div>
 
-  <div id="module-grid" class="module-grid"></div>
+  <div id="module-tracks"></div>
 
   <div class="alert info" style="margin-top:28px;">
     <strong>Hinweis</strong>
-    Diese Plattform ist eine reine Lernsimulation. Insbesondere Modul 4
-    (SQL-Injection) arbeitet ausschliesslich gegen eine im Browser
+    Diese Plattform ist eine reine Lernsimulation. Insbesondere das
+    SQL-Injection-Modul arbeitet ausschliesslich gegen eine im Browser
     hartcodierte Fake-Datenquelle &ndash; es gibt keine echte Datenbank,
-    keinen echten Server und keine echte Codeausfuehrung von Eingaben.
+    keinen echten Server und keine echte Codeausführung von Eingaben.
   </div>
 </main>
 
@@ -70,16 +71,16 @@
 <script src="js/progress.js"></script>
 <script>
   renderModuleOverview(
-    document.getElementById("module-grid"),
+    document.getElementById("module-tracks"),
     document.getElementById("overview-bar"),
     document.getElementById("overview-label")
   );
 
   document.getElementById("reset-btn").addEventListener("click", () => {
-    if (confirm("Gesamten lokalen Fortschritt wirklich zuruecksetzen?")) {
+    if (confirm("Gesamten lokalen Fortschritt wirklich zurücksetzen?")) {
       resetAllProgress();
       renderModuleOverview(
-        document.getElementById("module-grid"),
+        document.getElementById("module-tracks"),
         document.getElementById("overview-bar"),
         document.getElementById("overview-label")
       );

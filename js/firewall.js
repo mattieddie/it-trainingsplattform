@@ -4,7 +4,7 @@
  * Drei Aufgaben-Modi:
  *  - "reorder": eine feste Menge an Regeln ist vorgegeben, der Nutzer bringt
  *    sie nur in die richtige Reihenfolge.
- *  - "build": es gibt anfangs KEINE Regeln fuer EINE Firewall. Der Nutzer
+ *  - "build": es gibt anfangs KEINE Regeln für EINE Firewall. Der Nutzer
  *    muss die Regeln (Quelle/Ziel/Port/Aktion) selbst entwerfen UND in die
  *    richtige Reihenfolge bringen.
  *  - "topology": komplexe Umgebung mit MEHREREN Firewalls (Perimeter,
@@ -13,11 +13,11 @@
  *    separat. Ein Testpaket muss JEDE Firewall auf seinem Weg passieren -
  *    erst wenn alle beteiligten Firewalls es erlauben, kommt es an.
  *
- * In allen Faellen wird nicht gegen eine "einzig richtige" Loesung
- * geprueft, sondern indem simulierte Testpakete durch die aktuellen Regeln
- * laufen ("erste passende Regel gewinnt", pro Firewall unabhaengig
+ * In allen Fällen wird nicht gegen eine "einzig richtige" Lösung
+ * geprüft, sondern indem simulierte Testpakete durch die aktuellen Regeln
+ * laufen ("erste passende Regel gewinnt", pro Firewall unabhängig
  * ausgewertet) und das Ergebnis mit dem erwarteten Verhalten verglichen
- * wird. Das erlaubt mehrere gueltige Loesungen, solange das resultierende
+ * wird. Das erlaubt mehrere gültige Lösungen, solange das resultierende
  * Verhalten stimmt.
  */
 
@@ -30,7 +30,7 @@ const PUZZLES = [
     difficulty: "easy",
     title: "SSH nur vom Management-Netz",
     goal:
-      "SSH (Port 22) auf den Server 192.168.1.10 soll NUR vom Management-Netz 10.0.0.0/24 erlaubt sein, von ueberall sonst geblockt. HTTP (Port 80) soll auf diesem Server von ueberall erlaubt sein.",
+      "SSH (Port 22) auf den Server 192.168.1.10 soll NUR vom Management-Netz 10.0.0.0/24 erlaubt sein, von überall sonst geblockt. HTTP (Port 80) soll auf diesem Server von überall erlaubt sein.",
     rules: [
       { source: "any", destination: "192.168.1.10", port: "80", action: "Allow" },
       { source: "any", destination: "192.168.1.10", port: "22", action: "Deny" },
@@ -48,7 +48,7 @@ const PUZZLES = [
     difficulty: "medium",
     title: "Bekannter Angreifer im internen Netz",
     goal:
-      "Der Host 192.168.10.66 wurde als kompromittiert erkannt und muss vollstaendig blockiert werden - auch wenn er sich im sonst vertrauenswuerdigen Netz 192.168.10.0/24 befindet. Dieses Netz darf ansonsten per HTTPS (443) auf den Webserver 192.168.1.20 zugreifen. Alles andere ist zu blocken (Standard-Deny).",
+      "Der Host 192.168.10.66 wurde als kompromittiert erkannt und muss vollständig blockiert werden - auch wenn er sich im sonst vertrauenswürdigen Netz 192.168.10.0/24 befindet. Dieses Netz darf ansonsten per HTTPS (443) auf den Webserver 192.168.1.20 zugreifen. Alles andere ist zu blocken (Standard-Deny).",
     rules: [
       { source: "any", destination: "any", port: "any", action: "Deny" },
       { source: "192.168.10.0/24", destination: "192.168.1.20", port: "443", action: "Allow" },
@@ -67,7 +67,7 @@ const PUZZLES = [
     difficulty: "hard",
     title: "DMZ-Webserver mit Monitoring & Jump-Host",
     goal:
-      "DMZ-Webserver 10.10.10.5: HTTP (80) und HTTPS (443) sind von ueberall erlaubt. Das Monitoring-System 10.0.5.50 darf zusaetzlich per SNMP (Port 161) zugreifen. SSH (22) auf den Server ist nur vom Jump-Host 10.0.0.100 erlaubt. Alles andere ist zu blocken.",
+      "DMZ-Webserver 10.10.10.5: HTTP (80) und HTTPS (443) sind von überall erlaubt. Das Monitoring-System 10.0.5.50 darf zusätzlich per SNMP (Port 161) zugreifen. SSH (22) auf den Server ist nur vom Jump-Host 10.0.0.100 erlaubt. Alles andere ist zu blocken.",
     rules: [
       { source: "any", destination: "10.10.10.5", port: "443", action: "Allow" },
       { source: "any", destination: "any", port: "any", action: "Deny" },
@@ -90,11 +90,11 @@ const PUZZLES = [
     id: "puzzle-build-medium",
     mode: "build",
     difficulty: "medium",
-    title: "🛠️ Selbst konfigurieren: Kleines Buero-Netzwerk",
+    title: "🛠️ Selbst konfigurieren: Kleines Büro-Netzwerk",
     goal:
       "Es gibt noch keine einzige Regel - du musst sie komplett selbst anlegen (Quelle, Ziel, Port, Aktion) und richtig anordnen. Anforderungen:\n" +
-      "• Das interne Netz 192.168.20.0/24 darf uneingeschraenkt ins Internet (jedes Ziel, jeder Port).\n" +
-      "• Der Server 192.168.20.10 bietet auf Port 8080 einen Webdienst an, der von ueberall (auch aus dem Internet) erreichbar sein muss.\n" +
+      "• Das interne Netz 192.168.20.0/24 darf uneingeschränkt ins Internet (jedes Ziel, jeder Port).\n" +
+      "• Der Server 192.168.20.10 bietet auf Port 8080 einen Webdienst an, der von überall (auch aus dem Internet) erreichbar sein muss.\n" +
       "• SSH (Port 22) auf den Server 192.168.20.10 darf NUR vom Admin-PC 192.168.20.50 aus erfolgen - auch nicht von anderen internen Rechnern.\n" +
       "• Alles andere auf den Server ist zu blocken.",
     rules: [],
@@ -114,7 +114,7 @@ const PUZZLES = [
       { source: "any", destination: "192.168.20.10", port: "8080", action: "Allow" },
     ],
     sampleSolutionNote:
-      "Wichtig: Die beiden SSH-Regeln (Allow fuer den Admin-PC, danach Deny fuer alle anderen) muessen VOR der breiten 'internes Netz darf alles'-Regel stehen - sonst wuerden auch andere interne Rechner per SSH durchkommen.",
+      "Wichtig: Die beiden SSH-Regeln (Allow für den Admin-PC, danach Deny für alle anderen) müssen VOR der breiten 'internes Netz darf alles'-Regel stehen - sonst würden auch andere interne Rechner per SSH durchkommen.",
   },
   {
     id: "puzzle-build-hard",
@@ -125,20 +125,20 @@ const PUZZLES = [
       "Wieder komplett leer - alle Regeln selbst entwerfen. Anforderungen:\n" +
       "• Der Datenbankserver 10.0.30.5 ist besonders sensibel: NUR der Applikationsserver 10.0.20.5 darf ihn erreichen, und zwar ausschliesslich auf Port 5432 (PostgreSQL). Das gilt ausnahmslos - auch das VPN-Management darf hier nicht durch.\n" +
       "• Das VPN-Gateway 10.0.0.1 darf ansonsten auf alles zugreifen (Management-Zugriff).\n" +
-      "• Der Applikationsserver 10.0.20.5 nimmt auf Port 443 Verbindungen von ueberall entgegen.\n" +
-      "• Das interne Buero-Netz 10.0.10.0/24 darf den Applikationsserver zusaetzlich per SSH (22) verwalten.\n" +
+      "• Der Applikationsserver 10.0.20.5 nimmt auf Port 443 Verbindungen von überall entgegen.\n" +
+      "• Das interne Büro-Netz 10.0.10.0/24 darf den Applikationsserver zusätzlich per SSH (22) verwalten.\n" +
       "• Alles andere ist zu blocken.",
     rules: [],
     tests: [
       { desc: "App-Server via PostgreSQL zur DB", source: "10.0.20.5", destination: "10.0.30.5", port: 5432, expected: "Allow" },
       { desc: "App-Server auf falschem Port zur DB", source: "10.0.20.5", destination: "10.0.30.5", port: 5433, expected: "Deny" },
       { desc: "VPN-Gateway versucht Zugriff auf DB", source: "10.0.0.1", destination: "10.0.30.5", port: 5432, expected: "Deny" },
-      { desc: "Buero-Netz versucht Zugriff auf DB", source: "10.0.10.7", destination: "10.0.30.5", port: 5432, expected: "Deny" },
+      { desc: "Büro-Netz versucht Zugriff auf DB", source: "10.0.10.7", destination: "10.0.30.5", port: 5432, expected: "Deny" },
       { desc: "VPN-Gateway zum App-Server (beliebiger Port)", source: "10.0.0.1", destination: "10.0.20.5", port: 9999, expected: "Allow" },
       { desc: "Beliebiger Host via HTTPS zum App-Server", source: "8.8.8.8", destination: "10.0.20.5", port: 443, expected: "Allow" },
-      { desc: "Buero-Netz via SSH zum App-Server", source: "10.0.10.7", destination: "10.0.20.5", port: 22, expected: "Allow" },
+      { desc: "Büro-Netz via SSH zum App-Server", source: "10.0.10.7", destination: "10.0.20.5", port: 22, expected: "Allow" },
       { desc: "Externer Host via SSH zum App-Server", source: "8.8.8.8", destination: "10.0.20.5", port: 22, expected: "Deny" },
-      { desc: "Externer Host zu einem Buero-PC", source: "8.8.8.8", destination: "10.0.10.50", port: 80, expected: "Deny" },
+      { desc: "Externer Host zu einem Büro-PC", source: "8.8.8.8", destination: "10.0.10.50", port: 80, expected: "Deny" },
     ],
     sampleSolution: [
       { source: "10.0.20.5", destination: "10.0.30.5", port: "5432", action: "Allow" },
@@ -148,7 +148,7 @@ const PUZZLES = [
       { source: "10.0.10.0/24", destination: "10.0.20.5", port: "22", action: "Allow" },
     ],
     sampleSolutionNote:
-      "Entscheidend: die Deny-Regel fuer den Datenbankserver muss NACH der spezifischen App-Server-Erlaubnis, aber VOR der breiten VPN-Allow-Regel stehen. Sonst wuerde das VPN-Gateway die DB trotz 'ausnahmslos' erreichen koennen, weil seine Allow-alles-Regel zuerst greifen wuerde.",
+      "Entscheidend: die Deny-Regel für den Datenbankserver muss NACH der spezifischen App-Server-Erlaubnis, aber VOR der breiten VPN-Allow-Regel stehen. Sonst würde das VPN-Gateway die DB trotz 'ausnahmslos' erreichen können, weil seine Allow-alles-Regel zuerst greifen würde.",
   },
   {
     id: "puzzle-topo-dmz",
@@ -170,9 +170,9 @@ const PUZZLES = [
       "• Der DMZ-Webserver 172.16.0.10 ist aus dem Internet per HTTPS (443) erreichbar.\n" +
       "• Der DMZ-Mailserver 172.16.0.25 nimmt aus dem Internet SMTP (25) entgegen.\n" +
       "• NUR der interne Mail-Relay-Server 10.10.50.30 darf aus dem LAN auf den DMZ-Mailserver zugreifen (Port 25) - sonst darf niemand aus dem LAN in die DMZ.\n" +
-      "• Administratoren im Management-Netz 10.10.99.0/24 duerfen den DMZ-Webserver zusaetzlich per SSH (22) verwalten.\n" +
+      "• Administratoren im Management-Netz 10.10.99.0/24 dürfen den DMZ-Webserver zusätzlich per SSH (22) verwalten.\n" +
       "• Aus dem Internet darf NIEMAND direkt auf das LAN zugreifen.\n" +
-      "• Das LAN darf uneingeschraenkt ins Internet.",
+      "• Das LAN darf uneingeschränkt ins Internet.",
     firewalls: [
       { id: "perimeter", label: "Perimeter-Firewall (Internet ↔ DMZ)" },
       { id: "internal", label: "Interne Firewall (DMZ ↔ LAN)" },
@@ -203,7 +203,7 @@ const PUZZLES = [
       ],
     },
     sampleSolutionNote:
-      "Ein Paket muss auf seinem gesamten Weg von JEDER Firewall erlaubt werden. Wichtig auf der internen Firewall: die beiden spezifischen Allow-Ausnahmen (Mail-Relay, Admin-SSH) muessen VOR der Deny-Regel fuer 'Rest vom LAN in die DMZ' stehen, und diese Deny-Regel wiederum VOR der breiten 'LAN darf alles'-Regel - sonst wuerde Letztere versehentlich auch Zugriffe auf die DMZ erlauben.",
+      "Ein Paket muss auf seinem gesamten Weg von JEDER Firewall erlaubt werden. Wichtig auf der internen Firewall: die beiden spezifischen Allow-Ausnahmen (Mail-Relay, Admin-SSH) müssen VOR der Deny-Regel für 'Rest vom LAN in die DMZ' stehen, und diese Deny-Regel wiederum VOR der breiten 'LAN darf alles'-Regel - sonst würde Letztere versehentlich auch Zugriffe auf die DMZ erlauben.",
   },
   {
     id: "puzzle-topo-vpn",
@@ -223,9 +223,9 @@ const PUZZLES = [
     goal:
       "Zweigstelle B ist per Site-to-Site-VPN angebunden; der Tunnel terminiert direkt an der Perimeter-Firewall. Konfiguriere BEIDE Firewalls (Reiter wechseln!). Anforderungen:\n" +
       "• Der DMZ-Webserver 172.16.0.10 ist sowohl aus dem Internet als auch aus der VPN-Zweigstelle (10.50.0.0/16) per HTTPS (443) erreichbar.\n" +
-      "• Die VPN-Zweigstelle darf zusaetzlich auf den Datei-Server im Hauptsitz-LAN 10.10.60.5 per SMB (Port 445) zugreifen - sonst auf NICHTS im Hauptsitz-LAN.\n" +
-      "• Aus dem oeffentlichen Internet darf NIEMAND auf das Hauptsitz-LAN zugreifen - auch nicht auf den Datei-Server.\n" +
-      "• Das Hauptsitz-LAN darf uneingeschraenkt ins Internet UND auf die VPN-Zweigstelle zugreifen.\n" +
+      "• Die VPN-Zweigstelle darf zusätzlich auf den Datei-Server im Hauptsitz-LAN 10.10.60.5 per SMB (Port 445) zugreifen - sonst auf NICHTS im Hauptsitz-LAN.\n" +
+      "• Aus dem öffentlichen Internet darf NIEMAND auf das Hauptsitz-LAN zugreifen - auch nicht auf den Datei-Server.\n" +
+      "• Das Hauptsitz-LAN darf uneingeschränkt ins Internet UND auf die VPN-Zweigstelle zugreifen.\n" +
       "• Alles andere ist zu blocken.",
     firewalls: [
       { id: "perimeter", label: "Perimeter-Firewall (Internet/VPN ↔ DMZ)" },
@@ -256,7 +256,7 @@ const PUZZLES = [
       ],
     },
     sampleSolutionNote:
-      "Die SMB-Ausnahme fuer die VPN-Zweigstelle muss auf BEIDEN Firewalls stehen, da der Verkehr beide Hops durchqueren muss. Auf der internen Firewall muss diese Ausnahme VOR der Deny-Regel fuer 'Rest der Zweigstelle ins LAN' stehen, und diese wiederum VOR der breiten 'LAN darf alles'-Regel. Da der DMZ-Webserver direkt am Perimeter haengt, braucht die interne Firewall dafuer keine eigene Regel.",
+      "Die SMB-Ausnahme für die VPN-Zweigstelle muss auf BEIDEN Firewalls stehen, da der Verkehr beide Hops durchqueren muss. Auf der internen Firewall muss diese Ausnahme VOR der Deny-Regel für 'Rest der Zweigstelle ins LAN' stehen, und diese wiederum VOR der breiten 'LAN darf alles'-Regel. Da der DMZ-Webserver direkt am Perimeter hängt, braucht die interne Firewall dafür keine eigene Regel.",
   },
 ];
 
@@ -264,7 +264,7 @@ let currentPuzzle = null;
 let currentOrder = []; // Array von Rule-Objekten in aktueller Reihenfolge (aktive Firewall bei Topologie-Puzzles)
 let dragFromIndex = null;
 
-// Nur fuer mode "topology": Regeln pro Firewall-ID, plus welche Firewall gerade bearbeitet wird.
+// Nur für mode "topology": Regeln pro Firewall-ID, plus welche Firewall gerade bearbeitet wird.
 let topologyState = {};
 let activeFirewallId = null;
 
@@ -313,7 +313,7 @@ function simulatePacket(rules, packet) {
 }
 
 /** Ein Paket muss JEDE Firewall auf seinem Weg passieren - die erste, die es
- * ablehnt (oder gar keine Regel dafuer hat), stoppt es. */
+ * ablehnt (oder gar keine Regel dafür hat), stoppt es. */
 function simulateTopologyPacket(rulesByFirewall, path, packet) {
   for (const fwId of path) {
     const rules = rulesByFirewall[fwId] || [];
@@ -434,7 +434,7 @@ function renderSampleSolution() {
   if (mode === "build" && currentPuzzle.sampleSolution) {
     sampleBox.classList.remove("hidden");
     sampleBox.innerHTML = `
-      <summary>🔎 Musterloesung anzeigen (erst versuchen!)</summary>
+      <summary>🔎 Musterlösung anzeigen (erst versuchen!)</summary>
       ${renderSampleRuleTable(currentPuzzle.sampleSolution)}
       ${
         currentPuzzle.sampleSolutionNote
@@ -445,7 +445,7 @@ function renderSampleSolution() {
   } else if (mode === "topology" && currentPuzzle.sampleSolution) {
     sampleBox.classList.remove("hidden");
     sampleBox.innerHTML = `
-      <summary>🔎 Musterloesung anzeigen (erst versuchen!)</summary>
+      <summary>🔎 Musterlösung anzeigen (erst versuchen!)</summary>
       ${currentPuzzle.firewalls
         .map(
           (fw) => `
@@ -497,7 +497,7 @@ function renderRuleList() {
     empty.className = "text-muted";
     empty.style.padding = "10px 4px";
     empty.textContent =
-      "Noch keine Regeln - klicke auf \"Regel hinzufuegen\", um zu starten.";
+      "Noch keine Regeln - klicke auf \"Regel hinzufügen\", um zu starten.";
     list.appendChild(empty);
     return;
   }
@@ -545,7 +545,7 @@ function renderRuleList() {
       <div class="reorder-btns">
         <button class="btn small" data-move="up" title="Nach oben">↑</button>
         <button class="btn small" data-move="down" title="Nach unten">↓</button>
-        ${isEditable ? '<button class="btn small" data-move="delete" title="Regel loeschen">🗑</button>' : ""}
+        ${isEditable ? '<button class="btn small" data-move="delete" title="Regel löschen">🗑</button>' : ""}
       </div>
     `;
 
@@ -638,8 +638,8 @@ function runTests() {
   const summary = document.createElement("div");
   summary.className = "feedback-box " + (allPass ? "correct" : "incorrect");
   summary.innerHTML = allPass
-    ? "<strong>Alle Tests bestanden!</strong> Diese Regeln erzeugen das gewuenschte Verhalten."
-    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Ueberlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und passe Regeln bzw. Reihenfolge an${
+    ? "<strong>Alle Tests bestanden!</strong> Diese Regeln erzeugen das gewünschte Verhalten."
+    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Überlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und passe Regeln bzw. Reihenfolge an${
         isTopology ? " - denke daran, dass JEDE Firewall auf dem Weg zustimmen muss" : ""
       }.`;
   resultsEl.appendChild(summary);
@@ -668,7 +668,7 @@ function updateSolvedBadge() {
   const solved = loadSolvedSet();
   document.getElementById(
     "score-pill"
-  ).textContent = `Geloest: ${solved.length} / ${PUZZLES.length} Puzzles`;
+  ).textContent = `Gelöst: ${solved.length} / ${PUZZLES.length} Puzzles`;
 
   document.querySelectorAll(".puzzle-tab").forEach((btn) => {
     const pid = btn.dataset.puzzleId;
@@ -711,9 +711,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentOrder.length === 0) return;
     const label =
       currentPuzzle.mode === "topology"
-        ? `alle Regeln der aktuell ausgewaehlten Firewall`
+        ? `alle Regeln der aktuell ausgewählten Firewall`
         : "alle eigenen Regeln in diesem Puzzle";
-    if (confirm(`Wirklich ${label} loeschen?`)) {
+    if (confirm(`Wirklich ${label} löschen?`)) {
       currentOrder.length = 0;
       renderRuleList();
       document.getElementById("test-results").innerHTML = "";
