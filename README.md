@@ -19,9 +19,11 @@ gespeichert.
    Helpdesk-Tickets mit simulierten `ipconfig`/`nslookup`/`ping`-Ausgaben,
    Multiple-Choice-Diagnose mit Erklaerung.
 3. **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html))
-   Firewall-Regeln per Drag & Drop oder Pfeil-Buttons in die richtige
-   Reihenfolge bringen ("erste passende Regel gewinnt"), Validierung ueber
-   simulierte Testpakete.
+   Drei Aufgabentypen: bestehende Regeln umsortieren, Regeln komplett selbst
+   entwerfen, und Experten-Szenarien mit mehreren Firewalls/DMZ/VPN-Zweig-
+   stellen, bei denen jedes Testpaket alle Firewalls auf seinem Weg passieren
+   muss. Validierung ueber simulierte Testpakete ("erste passende Regel
+   gewinnt").
 4. **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html))
    Simuliertes Login-Formular gegen eine hartcodierte Fake-User-Liste:
    einmal unsicher (String-Verkettung), einmal sicher (parametrisiert).

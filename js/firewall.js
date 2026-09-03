@@ -1,18 +1,24 @@
 /*
  * firewall.js - Modul 3: Firewall-Regel-Puzzle
  *
- * Zwei Aufgaben-Modi:
+ * Drei Aufgaben-Modi:
  *  - "reorder": eine feste Menge an Regeln ist vorgegeben, der Nutzer bringt
  *    sie nur in die richtige Reihenfolge.
- *  - "build": es gibt anfangs KEINE Regeln. Der Nutzer muss die Regeln
- *    (Quelle/Ziel/Port/Aktion) selbst entwerfen UND in die richtige
- *    Reihenfolge bringen.
+ *  - "build": es gibt anfangs KEINE Regeln fuer EINE Firewall. Der Nutzer
+ *    muss die Regeln (Quelle/Ziel/Port/Aktion) selbst entwerfen UND in die
+ *    richtige Reihenfolge bringen.
+ *  - "topology": komplexe Umgebung mit MEHREREN Firewalls (Perimeter,
+ *    interne Firewall, ...) zwischen mehreren Netzsegmenten/Zonen (Internet,
+ *    VPN-Zweigstelle, DMZ, LAN). Der Nutzer konfiguriert jede Firewall
+ *    separat. Ein Testpaket muss JEDE Firewall auf seinem Weg passieren -
+ *    erst wenn alle beteiligten Firewalls es erlauben, kommt es an.
  *
- * In beiden Faellen wird nicht gegen eine "einzig richtige" Loesung
+ * In allen Faellen wird nicht gegen eine "einzig richtige" Loesung
  * geprueft, sondern indem simulierte Testpakete durch die aktuellen Regeln
- * laufen ("erste passende Regel gewinnt") und das Ergebnis mit dem
- * erwarteten Verhalten verglichen wird. Das erlaubt mehrere gueltige
- * Loesungen, solange das resultierende Verhalten stimmt.
+ * laufen ("erste passende Regel gewinnt", pro Firewall unabhaengig
+ * ausgewertet) und das Ergebnis mit dem erwarteten Verhalten verglichen
+ * wird. Das erlaubt mehrere gueltige Loesungen, solange das resultierende
+ * Verhalten stimmt.
  */
 
 const MODULE_ID = "firewall";
@@ -144,11 +150,123 @@ const PUZZLES = [
     sampleSolutionNote:
       "Entscheidend: die Deny-Regel fuer den Datenbankserver muss NACH der spezifischen App-Server-Erlaubnis, aber VOR der breiten VPN-Allow-Regel stehen. Sonst wuerde das VPN-Gateway die DB trotz 'ausnahmslos' erreichen koennen, weil seine Allow-alles-Regel zuerst greifen wuerde.",
   },
+  {
+    id: "puzzle-topo-dmz",
+    mode: "topology",
+    difficulty: "expert",
+    title: "🏢 Komplexe Umgebung: Zwei Firewalls mit DMZ",
+    topologyDiagram:
+      "Internet\n" +
+      "   │\n" +
+      "[ Perimeter-Firewall ]\n" +
+      "   │\n" +
+      " DMZ  (172.16.0.0/24)  -  Web: .10   Mail: .25\n" +
+      "   │\n" +
+      "[ Interne Firewall ]\n" +
+      "   │\n" +
+      " LAN  (10.10.0.0/16)  -  Mail-Relay: 10.10.50.30   Mgmt-Netz: 10.10.99.0/24",
+    goal:
+      "Klassische Architektur mit zwei Firewalls in Reihe: Internet ↔ [Perimeter-FW] ↔ DMZ ↔ [Interne-FW] ↔ LAN. Konfiguriere BEIDE Firewalls unten (Reiter wechseln!). Anforderungen:\n" +
+      "• Der DMZ-Webserver 172.16.0.10 ist aus dem Internet per HTTPS (443) erreichbar.\n" +
+      "• Der DMZ-Mailserver 172.16.0.25 nimmt aus dem Internet SMTP (25) entgegen.\n" +
+      "• NUR der interne Mail-Relay-Server 10.10.50.30 darf aus dem LAN auf den DMZ-Mailserver zugreifen (Port 25) - sonst darf niemand aus dem LAN in die DMZ.\n" +
+      "• Administratoren im Management-Netz 10.10.99.0/24 duerfen den DMZ-Webserver zusaetzlich per SSH (22) verwalten.\n" +
+      "• Aus dem Internet darf NIEMAND direkt auf das LAN zugreifen.\n" +
+      "• Das LAN darf uneingeschraenkt ins Internet.",
+    firewalls: [
+      { id: "perimeter", label: "Perimeter-Firewall (Internet ↔ DMZ)" },
+      { id: "internal", label: "Interne Firewall (DMZ ↔ LAN)" },
+    ],
+    tests: [
+      { desc: "Internet → DMZ-Webserver (HTTPS)", source: "8.8.8.8", destination: "172.16.0.10", port: 443, expected: "Allow", path: ["perimeter"] },
+      { desc: "Internet → DMZ-Mailserver (SMTP)", source: "8.8.8.8", destination: "172.16.0.25", port: 25, expected: "Allow", path: ["perimeter"] },
+      { desc: "Internet → DMZ-Webserver, falscher Port (SSH)", source: "8.8.8.8", destination: "172.16.0.10", port: 22, expected: "Deny", path: ["perimeter"] },
+      { desc: "Internet → LAN direkt", source: "8.8.8.8", destination: "10.10.5.7", port: 80, expected: "Deny", path: ["perimeter", "internal"] },
+      { desc: "Mail-Relay (LAN) → DMZ-Mailserver", source: "10.10.50.30", destination: "172.16.0.25", port: 25, expected: "Allow", path: ["internal"] },
+      { desc: "Normaler LAN-Host → DMZ-Mailserver", source: "10.10.5.7", destination: "172.16.0.25", port: 25, expected: "Deny", path: ["internal"] },
+      { desc: "Admin (Mgmt-Netz) → DMZ-Webserver (SSH)", source: "10.10.99.5", destination: "172.16.0.10", port: 22, expected: "Allow", path: ["internal"] },
+      { desc: "Normaler LAN-Host → DMZ-Webserver (SSH)", source: "10.10.5.7", destination: "172.16.0.10", port: 22, expected: "Deny", path: ["internal"] },
+      { desc: "LAN-Host → Internet (HTTPS)", source: "10.10.5.7", destination: "8.8.8.8", port: 443, expected: "Allow", path: ["internal", "perimeter"] },
+      { desc: "DMZ-Webserver → LAN-Host (unaufgefordert)", source: "172.16.0.10", destination: "10.10.5.7", port: 80, expected: "Deny", path: ["internal"] },
+    ],
+    sampleSolution: {
+      perimeter: [
+        { source: "any", destination: "172.16.0.10", port: "443", action: "Allow" },
+        { source: "any", destination: "172.16.0.25", port: "25", action: "Allow" },
+        { source: "10.10.0.0/16", destination: "any", port: "any", action: "Allow" },
+      ],
+      internal: [
+        { source: "10.10.50.30", destination: "172.16.0.25", port: "25", action: "Allow" },
+        { source: "10.10.99.0/24", destination: "172.16.0.10", port: "22", action: "Allow" },
+        { source: "10.10.0.0/16", destination: "172.16.0.0/24", port: "any", action: "Deny" },
+        { source: "10.10.0.0/16", destination: "any", port: "any", action: "Allow" },
+      ],
+    },
+    sampleSolutionNote:
+      "Ein Paket muss auf seinem gesamten Weg von JEDER Firewall erlaubt werden. Wichtig auf der internen Firewall: die beiden spezifischen Allow-Ausnahmen (Mail-Relay, Admin-SSH) muessen VOR der Deny-Regel fuer 'Rest vom LAN in die DMZ' stehen, und diese Deny-Regel wiederum VOR der breiten 'LAN darf alles'-Regel - sonst wuerde Letztere versehentlich auch Zugriffe auf die DMZ erlauben.",
+  },
+  {
+    id: "puzzle-topo-vpn",
+    mode: "topology",
+    difficulty: "expert",
+    title: "🌍 Komplexe Umgebung: VPN-Zweigstelle + DMZ + zwei Firewalls",
+    topologyDiagram:
+      "Internet          VPN-Zweigstelle (10.50.0.0/16)\n" +
+      "     \\                /   (Site-to-Site-Tunnel, terminiert an Perimeter-FW)\n" +
+      "      [   Perimeter-Firewall   ]\n" +
+      "                │\n" +
+      "     DMZ (172.16.0.0/24) - Web: .10\n" +
+      "                │\n" +
+      "      [   Interne Firewall     ]\n" +
+      "                │\n" +
+      "     Hauptsitz-LAN (10.10.0.0/16) - Datei-Server: 10.10.60.5",
+    goal:
+      "Zweigstelle B ist per Site-to-Site-VPN angebunden; der Tunnel terminiert direkt an der Perimeter-Firewall. Konfiguriere BEIDE Firewalls (Reiter wechseln!). Anforderungen:\n" +
+      "• Der DMZ-Webserver 172.16.0.10 ist sowohl aus dem Internet als auch aus der VPN-Zweigstelle (10.50.0.0/16) per HTTPS (443) erreichbar.\n" +
+      "• Die VPN-Zweigstelle darf zusaetzlich auf den Datei-Server im Hauptsitz-LAN 10.10.60.5 per SMB (Port 445) zugreifen - sonst auf NICHTS im Hauptsitz-LAN.\n" +
+      "• Aus dem oeffentlichen Internet darf NIEMAND auf das Hauptsitz-LAN zugreifen - auch nicht auf den Datei-Server.\n" +
+      "• Das Hauptsitz-LAN darf uneingeschraenkt ins Internet UND auf die VPN-Zweigstelle zugreifen.\n" +
+      "• Alles andere ist zu blocken.",
+    firewalls: [
+      { id: "perimeter", label: "Perimeter-Firewall (Internet/VPN ↔ DMZ)" },
+      { id: "internal", label: "Interne Firewall (DMZ ↔ Hauptsitz-LAN)" },
+    ],
+    tests: [
+      { desc: "Internet → DMZ-Webserver (HTTPS)", source: "8.8.8.8", destination: "172.16.0.10", port: 443, expected: "Allow", path: ["perimeter"] },
+      { desc: "VPN-Zweigstelle → DMZ-Webserver (HTTPS)", source: "10.50.5.10", destination: "172.16.0.10", port: 443, expected: "Allow", path: ["perimeter"] },
+      { desc: "Internet → DMZ-Webserver, falscher Port", source: "8.8.8.8", destination: "172.16.0.10", port: 8080, expected: "Deny", path: ["perimeter"] },
+      { desc: "VPN-Zweigstelle → Datei-Server (SMB)", source: "10.50.5.10", destination: "10.10.60.5", port: 445, expected: "Allow", path: ["perimeter", "internal"] },
+      { desc: "VPN-Zweigstelle → anderer LAN-Host (SMB)", source: "10.50.5.10", destination: "10.10.5.7", port: 445, expected: "Deny", path: ["perimeter", "internal"] },
+      { desc: "Internet → Datei-Server direkt", source: "8.8.8.8", destination: "10.10.60.5", port: 445, expected: "Deny", path: ["perimeter", "internal"] },
+      { desc: "Internet → beliebiger LAN-Host", source: "8.8.8.8", destination: "10.10.5.7", port: 80, expected: "Deny", path: ["perimeter", "internal"] },
+      { desc: "LAN-Host → Internet (HTTPS)", source: "10.10.5.7", destination: "8.8.8.8", port: 443, expected: "Allow", path: ["internal", "perimeter"] },
+      { desc: "LAN-Host → VPN-Zweigstelle (RDP)", source: "10.10.5.7", destination: "10.50.5.10", port: 3389, expected: "Allow", path: ["internal", "perimeter"] },
+      { desc: "DMZ-Webserver → LAN-Host (unaufgefordert)", source: "172.16.0.10", destination: "10.10.5.7", port: 80, expected: "Deny", path: ["internal"] },
+    ],
+    sampleSolution: {
+      perimeter: [
+        { source: "any", destination: "172.16.0.10", port: "443", action: "Allow" },
+        { source: "10.50.0.0/16", destination: "10.10.60.5", port: "445", action: "Allow" },
+        { source: "10.10.0.0/16", destination: "any", port: "any", action: "Allow" },
+      ],
+      internal: [
+        { source: "10.50.0.0/16", destination: "10.10.60.5", port: "445", action: "Allow" },
+        { source: "10.50.0.0/16", destination: "10.10.0.0/16", port: "any", action: "Deny" },
+        { source: "10.10.0.0/16", destination: "any", port: "any", action: "Allow" },
+      ],
+    },
+    sampleSolutionNote:
+      "Die SMB-Ausnahme fuer die VPN-Zweigstelle muss auf BEIDEN Firewalls stehen, da der Verkehr beide Hops durchqueren muss. Auf der internen Firewall muss diese Ausnahme VOR der Deny-Regel fuer 'Rest der Zweigstelle ins LAN' stehen, und diese wiederum VOR der breiten 'LAN darf alles'-Regel. Da der DMZ-Webserver direkt am Perimeter haengt, braucht die interne Firewall dafuer keine eigene Regel.",
+  },
 ];
 
 let currentPuzzle = null;
-let currentOrder = []; // Array von Rule-Objekten in aktueller Reihenfolge
+let currentOrder = []; // Array von Rule-Objekten in aktueller Reihenfolge (aktive Firewall bei Topologie-Puzzles)
 let dragFromIndex = null;
+
+// Nur fuer mode "topology": Regeln pro Firewall-ID, plus welche Firewall gerade bearbeitet wird.
+let topologyState = {};
+let activeFirewallId = null;
 
 /* ---------------- IP/CIDR-Matching (einfache Teilmenge) ---------------- */
 
@@ -194,6 +312,18 @@ function simulatePacket(rules, packet) {
   return "Deny"; // implizites Standard-Deny
 }
 
+/** Ein Paket muss JEDE Firewall auf seinem Weg passieren - die erste, die es
+ * ablehnt (oder gar keine Regel dafuer hat), stoppt es. */
+function simulateTopologyPacket(rulesByFirewall, path, packet) {
+  for (const fwId of path) {
+    const rules = rulesByFirewall[fwId] || [];
+    if (simulatePacket(rules, packet) !== "Allow") {
+      return "Deny";
+    }
+  }
+  return "Allow";
+}
+
 /* ---------------- Reihenfolge mischen ---------------- */
 
 function shuffle(arr) {
@@ -205,10 +335,6 @@ function shuffle(arr) {
   return a;
 }
 
-function cloneRules(rules) {
-  return rules.map((r) => ({ ...r }));
-}
-
 /* ---------------- Rendering ---------------- */
 
 function loadSolvedSet() {
@@ -217,12 +343,15 @@ function loadSolvedSet() {
   return stored && Array.isArray(stored.solved) ? stored.solved : [];
 }
 
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderPuzzle(puzzleId) {
   currentPuzzle = PUZZLES.find((p) => p.id === puzzleId) || PUZZLES[0];
-  currentOrder =
-    currentPuzzle.mode === "build"
-      ? []
-      : shuffle(currentPuzzle.rules);
+  const mode = currentPuzzle.mode;
 
   document.getElementById("puzzle-title").textContent = currentPuzzle.title;
   document.getElementById("puzzle-goal").innerHTML = escapeHtml(
@@ -231,39 +360,100 @@ function renderPuzzle(puzzleId) {
 
   const diffBadge = document.getElementById("puzzle-difficulty-badge");
   diffBadge.textContent =
-    { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[currentPuzzle.difficulty];
+    { easy: "Leicht", medium: "Mittel", hard: "Schwer", expert: "Experte" }[
+      currentPuzzle.difficulty
+    ];
   diffBadge.className = "badge difficulty-" + currentPuzzle.difficulty;
 
   const modeBadge = document.getElementById("puzzle-mode-badge");
-  const isBuild = currentPuzzle.mode === "build";
-  modeBadge.textContent = isBuild ? "Regeln selbst erstellen" : "Reihenfolge-Puzzle";
-  modeBadge.className = "badge " + (isBuild ? "status-progress" : "status-none");
+  const modeLabels = {
+    reorder: "Reihenfolge-Puzzle",
+    build: "Regeln selbst erstellen",
+    topology: "Mehrere Firewalls konfigurieren",
+  };
+  modeBadge.textContent = modeLabels[mode];
+  modeBadge.className = "badge " + (mode === "reorder" ? "status-none" : "status-progress");
 
-  document.getElementById("add-rule-btn").classList.toggle("hidden", !isBuild);
-  document.getElementById("clear-rules-btn").classList.toggle("hidden", !isBuild);
-  document.getElementById("shuffle-btn").classList.toggle("hidden", isBuild);
+  const diagramEl = document.getElementById("topology-diagram");
+  if (mode === "topology" && currentPuzzle.topologyDiagram) {
+    diagramEl.textContent = currentPuzzle.topologyDiagram;
+    diagramEl.classList.remove("hidden");
+  } else {
+    diagramEl.classList.add("hidden");
+  }
 
+  const subtabsEl = document.getElementById("firewall-subtabs");
+  subtabsEl.innerHTML = "";
+  if (mode === "topology") {
+    subtabsEl.classList.remove("hidden");
+    topologyState = {};
+    currentPuzzle.firewalls.forEach((fw) => {
+      topologyState[fw.id] = [];
+    });
+    activeFirewallId = currentPuzzle.firewalls[0].id;
+    renderFirewallSubtabs();
+    currentOrder = topologyState[activeFirewallId];
+  } else {
+    subtabsEl.classList.add("hidden");
+    currentOrder = mode === "build" ? [] : shuffle(currentPuzzle.rules);
+  }
+
+  const isEditable = mode === "build" || mode === "topology";
+  document.getElementById("add-rule-btn").classList.toggle("hidden", !isEditable);
+  document.getElementById("clear-rules-btn").classList.toggle("hidden", !isEditable);
+  document.getElementById("shuffle-btn").classList.toggle("hidden", isEditable);
+
+  renderSampleSolution();
+  renderRuleList();
+  document.getElementById("test-results").innerHTML = "";
+  updateSolvedBadge();
+}
+
+function renderFirewallSubtabs() {
+  const subtabsEl = document.getElementById("firewall-subtabs");
+  subtabsEl.innerHTML = "";
+  currentPuzzle.firewalls.forEach((fw) => {
+    const btn = document.createElement("button");
+    btn.className = "btn small" + (fw.id === activeFirewallId ? " active" : "");
+    const count = topologyState[fw.id] ? topologyState[fw.id].length : 0;
+    btn.textContent = `🧱 ${fw.label} (${count})`;
+    btn.addEventListener("click", () => {
+      activeFirewallId = fw.id;
+      currentOrder = topologyState[activeFirewallId];
+      renderFirewallSubtabs();
+      renderRuleList();
+    });
+    subtabsEl.appendChild(btn);
+  });
+}
+
+function renderSampleSolution() {
   const sampleBox = document.getElementById("sample-solution");
-  if (isBuild && currentPuzzle.sampleSolution) {
+  const mode = currentPuzzle.mode;
+
+  if (mode === "build" && currentPuzzle.sampleSolution) {
     sampleBox.classList.remove("hidden");
     sampleBox.innerHTML = `
       <summary>🔎 Musterloesung anzeigen (erst versuchen!)</summary>
-      <ul class="rule-list" style="margin-top:10px;">
-        ${currentPuzzle.sampleSolution
-          .map(
-            (r, i) => `<li class="rule-item" style="cursor:default;">
-              <div class="rule-index">${i + 1}</div>
-              <div><span class="rule-field-label">Quelle</span>${r.source}</div>
-              <div><span class="rule-field-label">Ziel</span>${r.destination}</div>
-              <div><span class="rule-field-label">Port</span>${r.port}</div>
-              <div><span class="rule-field-label">Aktion</span>
-                <span class="${r.action === "Allow" ? "action-allow" : "action-deny"}">${r.action}</span>
-              </div>
-              <div></div>
-            </li>`
-          )
-          .join("")}
-      </ul>
+      ${renderSampleRuleTable(currentPuzzle.sampleSolution)}
+      ${
+        currentPuzzle.sampleSolutionNote
+          ? `<p class="text-muted" style="margin-top:8px;">${currentPuzzle.sampleSolutionNote}</p>`
+          : ""
+      }
+    `;
+  } else if (mode === "topology" && currentPuzzle.sampleSolution) {
+    sampleBox.classList.remove("hidden");
+    sampleBox.innerHTML = `
+      <summary>🔎 Musterloesung anzeigen (erst versuchen!)</summary>
+      ${currentPuzzle.firewalls
+        .map(
+          (fw) => `
+        <p style="margin:10px 0 4px; font-weight:600;">${fw.label}</p>
+        ${renderSampleRuleTable(currentPuzzle.sampleSolution[fw.id] || [])}
+      `
+        )
+        .join("")}
       ${
         currentPuzzle.sampleSolutionNote
           ? `<p class="text-muted" style="margin-top:8px;">${currentPuzzle.sampleSolutionNote}</p>`
@@ -274,24 +464,35 @@ function renderPuzzle(puzzleId) {
     sampleBox.classList.add("hidden");
     sampleBox.innerHTML = "";
   }
-
-  renderRuleList();
-  document.getElementById("test-results").innerHTML = "";
-  updateSolvedBadge();
 }
 
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+function renderSampleRuleTable(rules) {
+  return `
+    <ul class="rule-list" style="margin-top:6px;">
+      ${rules
+        .map(
+          (r, i) => `<li class="rule-item" style="cursor:default;">
+            <div class="rule-index">${i + 1}</div>
+            <div><span class="rule-field-label">Quelle</span>${r.source}</div>
+            <div><span class="rule-field-label">Ziel</span>${r.destination}</div>
+            <div><span class="rule-field-label">Port</span>${r.port}</div>
+            <div><span class="rule-field-label">Aktion</span>
+              <span class="${r.action === "Allow" ? "action-allow" : "action-deny"}">${r.action}</span>
+            </div>
+            <div></div>
+          </li>`
+        )
+        .join("")}
+    </ul>
+  `;
 }
 
 function renderRuleList() {
   const list = document.getElementById("rule-list");
   list.innerHTML = "";
-  const isBuild = currentPuzzle.mode === "build";
+  const isEditable = currentPuzzle.mode === "build" || currentPuzzle.mode === "topology";
 
-  if (isBuild && currentOrder.length === 0) {
+  if (isEditable && currentOrder.length === 0) {
     const empty = document.createElement("li");
     empty.className = "text-muted";
     empty.style.padding = "10px 4px";
@@ -307,7 +508,7 @@ function renderRuleList() {
     li.draggable = true;
     li.dataset.index = String(idx);
 
-    const fieldsHtml = isBuild
+    const fieldsHtml = isEditable
       ? `
         <div>
           <span class="rule-field-label">Quelle</span>
@@ -344,7 +545,7 @@ function renderRuleList() {
       <div class="reorder-btns">
         <button class="btn small" data-move="up" title="Nach oben">↑</button>
         <button class="btn small" data-move="down" title="Nach unten">↓</button>
-        ${isBuild ? '<button class="btn small" data-move="delete" title="Regel loeschen">🗑</button>' : ""}
+        ${isEditable ? '<button class="btn small" data-move="delete" title="Regel loeschen">🗑</button>' : ""}
       </div>
     `;
 
@@ -371,7 +572,7 @@ function renderRuleList() {
       deleteBtn.addEventListener("click", () => deleteRule(idx));
     }
 
-    if (isBuild) {
+    if (isEditable) {
       li.querySelectorAll(".rule-field-input").forEach((input) => {
         const eventName = input.tagName === "SELECT" ? "change" : "input";
         input.addEventListener(eventName, () => {
@@ -394,26 +595,40 @@ function moveRule(fromIdx, toIdx) {
 function deleteRule(idx) {
   currentOrder.splice(idx, 1);
   renderRuleList();
+  if (currentPuzzle.mode === "topology") renderFirewallSubtabs();
 }
 
 function addRule() {
   currentOrder.push({ source: "any", destination: "any", port: "any", action: "Deny" });
   renderRuleList();
+  if (currentPuzzle.mode === "topology") renderFirewallSubtabs();
 }
 
 function runTests() {
   if (!currentPuzzle) return;
+  const isTopology = currentPuzzle.mode === "topology";
+
   const results = currentPuzzle.tests.map((test) => {
-    const actual = simulatePacket(currentOrder, test);
+    const actual = isTopology
+      ? simulateTopologyPacket(topologyState, test.path, test)
+      : simulatePacket(currentOrder, test);
     return { ...test, actual, pass: actual === test.expected };
   });
+
+  const pathLabel = (test) => {
+    if (!isTopology) return "";
+    const labels = test.path.map(
+      (fwId) => currentPuzzle.firewalls.find((f) => f.id === fwId)?.label || fwId
+    );
+    return ` [via ${labels.join(" → ")}]`;
+  };
 
   const resultsEl = document.getElementById("test-results");
   resultsEl.innerHTML = `<div class="test-result-list">${results
     .map(
       (r) => `
       <div class="test-result-item ${r.pass ? "pass" : "fail"}">
-        <span>${r.pass ? "✅" : "❌"} ${r.desc} (${r.source} → ${r.destination}:${r.port})</span>
+        <span>${r.pass ? "✅" : "❌"} ${r.desc} (${r.source} → ${r.destination}:${r.port})${pathLabel(r)}</span>
         <span>erwartet <strong>${r.expected}</strong>, erhalten <strong>${r.actual}</strong></span>
       </div>`
     )
@@ -424,7 +639,9 @@ function runTests() {
   summary.className = "feedback-box " + (allPass ? "correct" : "incorrect");
   summary.innerHTML = allPass
     ? "<strong>Alle Tests bestanden!</strong> Diese Regeln erzeugen das gewuenschte Verhalten."
-    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Ueberlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und passe Regeln bzw. Reihenfolge an.`;
+    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Ueberlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und passe Regeln bzw. Reihenfolge an${
+        isTopology ? " - denke daran, dass JEDE Firewall auf dem Weg zustimmen muss" : ""
+      }.`;
   resultsEl.appendChild(summary);
 
   if (allPass) {
@@ -492,10 +709,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("add-rule-btn").addEventListener("click", addRule);
   document.getElementById("clear-rules-btn").addEventListener("click", () => {
     if (currentOrder.length === 0) return;
-    if (confirm("Alle eigenen Regeln in diesem Puzzle loeschen?")) {
-      currentOrder = [];
+    const label =
+      currentPuzzle.mode === "topology"
+        ? `alle Regeln der aktuell ausgewaehlten Firewall`
+        : "alle eigenen Regeln in diesem Puzzle";
+    if (confirm(`Wirklich ${label} loeschen?`)) {
+      currentOrder.length = 0;
       renderRuleList();
       document.getElementById("test-results").innerHTML = "";
+      if (currentPuzzle.mode === "topology") renderFirewallSubtabs();
     }
   });
 });

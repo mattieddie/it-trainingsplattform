@@ -239,6 +239,7 @@ footer.site-footer {
 .badge.difficulty-easy { background: var(--success-bg); color: var(--success); }
 .badge.difficulty-medium { background: var(--warning-bg); color: var(--warning); }
 .badge.difficulty-hard { background: var(--danger-bg); color: var(--danger); }
+.badge.difficulty-expert { background: rgba(180, 130, 255, 0.15); color: #b482ff; }
 
 /* ---------- Progress bar ---------- */
 
@@ -657,7 +658,8 @@ hr.sep {
   color: var(--success);
 }
 
-.puzzle-tab.active {
+.puzzle-tab.active,
+#firewall-subtabs .btn.active {
   border-color: var(--primary);
   background: rgba(79, 140, 255, 0.15);
 }
