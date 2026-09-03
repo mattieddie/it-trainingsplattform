@@ -12,13 +12,20 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 17 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 18 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
 dort erscheint pro Baukasten ein Dropdown-Button, der beim Klick die
 zugehörigen Module auflistet (aktiver Baukasten und aktives Modul werden
 farblich hervorgehoben).
+
+Zusätzlich zeigt die Startseite unter **"Lernpfad"** eine Übersicht, welche
+Module fachlich aufeinander aufbauen - inkl. Verbindungen, die über
+Baukasten-Grenzen hinweg gehen (z.B. Active Directory setzt funktionierendes
+DHCP/DNS aus dem Netzwerk-Baukasten voraus). Jede Modul-Karte zeigt dazu
+passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
+`prereqs`-Feld pro Modul in `js/progress.js` gepflegt.
 
 **1. IT-Grundlagen** - das Handwerkszeug
 - **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen, Registry, Dateitypen.
@@ -42,9 +49,10 @@ farblich hervorgehoben).
 - **Software-Paketierung** ([modules/packaging.html](modules/packaging.html)) - MSI-Aufbau (Tabellen/Dateistreams), Transforms (MST), stille CMD-Installation, Repackaging-Workflow (RayPack: RCP/RPP).
 
 **5. IT-Security** - Angriffsflächen erkennen und absichern
+- **Verschlüsselung** ([modules/encryption.html](modules/encryption.html)) - symmetrisch/asymmetrisch/hybrid, Diffie-Hellman-Schlüsselaustausch, Hashing & Salt, inkl. zweier Live-Demos mit echtem SHA-256 (Web-Crypto-API im Browser).
 - **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html)) - Regeln umsortieren, selbst entwerfen, Multi-Firewall-Topologien (DMZ/VPN).
 - **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html)) - sandboxed, unsicher vs. parametrisiert, drei Herausforderungen.
-- **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Alignment-Konzept, kompletter Beispiel-Ablauf mit vier Szenarien.
+- **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Erklärung von `include:_spf.google.com`, interaktivem Schritt-für-Schritt-Vergleich ("welche Prüfung schaut welchen Mail-Teil an"), Alignment-Konzept und komplettem Beispiel-Ablauf mit vier Szenarien.
 
 **6. Betrieb & Notfallvorsorge**
 - **Backup & Recovery** ([modules/backup.html](modules/backup.html)) - 3-2-1-Regel (inkl. Diagramm), generierte RPO/RTO-Rechenaufgaben, Ransomware-Szenario-Quiz.
@@ -79,7 +87,8 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── packaging.js
 │   ├── network-devices.js
 │   ├── network-packets.js
-│   └── vpn-basics.js
+│   ├── vpn-basics.js
+│   └── encryption.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── network-packets.html
@@ -87,6 +96,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── vpn-basics.html
 │   ├── subnetting.html
 │   ├── dhcp-dns.html
+│   ├── encryption.html
 │   ├── firewall.html
 │   ├── sqli.html
 │   ├── dns-concepts.html

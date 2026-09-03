@@ -48,6 +48,7 @@
     <div class="nav-dropdown">
       <button type="button" class="nav-dropdown-toggle">IT-Security</button>
       <div class="nav-dropdown-menu">
+        <a href="modules/encryption.html">Verschlüsselung</a>
         <a href="modules/firewall.html">Firewall</a>
         <a href="modules/sqli.html">SQL-Injection</a>
         <a href="modules/email-security.html">E-Mail-Sicherheit</a>
@@ -86,6 +87,24 @@
     </div>
   </div>
 
+  <div class="card">
+    <h3 class="mt-0">
+      🗺️ Lernpfad: wie die Module aufeinander aufbauen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Die 6 Baukästen sind bereits in sinnvoller Lern-Reihenfolge
+          angeordnet. Manche Module setzen aber gezielt Wissen aus einem
+          ANDEREN, früheren Baukasten voraus - z.B. braucht Active
+          Directory funktionierendes DNS/DHCP aus dem Netzwerk-Baukasten.
+          Diese Verbindungen sind unten aufgelistet, ausserdem zeigt jede
+          Modul-Karte weiter unten einen "Baut auf"-Hinweis.
+        </div>
+      </details>
+    </h3>
+    <div id="learning-path"></div>
+  </div>
+
   <div id="module-tracks"></div>
 
   <div class="alert info" style="margin-top:28px;">
@@ -108,6 +127,7 @@
     document.getElementById("overview-bar"),
     document.getElementById("overview-label")
   );
+  renderLearningPath(document.getElementById("learning-path"));
 
   document.getElementById("reset-btn").addEventListener("click", () => {
     if (confirm("Gesamten lokalen Fortschritt wirklich zurücksetzen?")) {

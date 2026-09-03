@@ -48,6 +48,7 @@
     <div class="nav-dropdown">
       <button type="button" class="nav-dropdown-toggle active-group">IT-Security</button>
       <div class="nav-dropdown-menu">
+        <a href="encryption.html">Verschlüsselung</a>
         <a href="firewall.html">Firewall</a>
         <a href="sqli.html">SQL-Injection</a>
         <a href="email-security.html" class="active">E-Mail-Sicherheit</a>
@@ -181,6 +182,57 @@
       <li><code class="mono">include:_spf.google.com</code> listet u.a. genau diese IP als autorisiert - SPF <strong>besteht</strong>.</li>
       <li>Käme dieselbe Mail von einer fremden IP (z.B. einem gehackten Heimrouter), wäre sie in keiner Liste enthalten - SPF <strong>schlägt fehl</strong>, und wegen <code class="mono">-all</code> wird sie abgelehnt.</li>
     </ol>
+
+    <h4>
+      Was ist <code class="mono">_spf.google.com</code> genau?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie eine Unter-Gästeliste, auf die die Haupt-Gästeliste verweist:
+          statt selbst alle Google-Server einzeln aufzuzählen, verweist
+          firma.ch einfach auf Googles EIGENE, von Google gepflegte Liste.
+          Ändert Google seine Server, ändert sich automatisch auch die
+          Liste, auf die firma.ch verweist - ohne dass firma.ch etwas tun
+          muss.
+        </div>
+      </details>
+    </h4>
+    <p>
+      <code class="mono">_spf.google.com</code> ist selbst ein ganz normaler
+      DNS-TXT-Record - allerdings einer, den <strong>Google</strong> selbst
+      betreibt und pflegt (nicht firma.ch). Er listet alle IP-Bereiche
+      auf, von denen Google-Workspace-/Gmail-Server E-Mails versenden
+      dürfen. Der Mechanismus <code class="mono">include:</code> bedeutet
+      wörtlich "schau zusätzlich in diesem anderen SPF-Record nach, wer
+      noch erlaubt ist":
+    </p>
+    <pre>_spf.google.com.   TXT   "v=spf1 include:_netblocks.google.com
+                              include:_netblocks2.google.com
+                              include:_netblocks3.google.com ~all"</pre>
+    <p class="text-muted">
+      (Vereinfacht/gekürzt - Google verschachtelt hier sogar mehrere
+      eigene Include-Records ineinander, da die Anzahl der IP-Bereiche
+      nicht in einen einzigen TXT-Record passt.)
+    </p>
+    <p>
+      Der entscheidende Vorteil: <strong>firma.ch muss die konkreten
+      IP-Adressen von Google nie selbst kennen oder pflegen.</strong> Fügt
+      Google neue Mailserver hinzu oder tauscht IP-Bereiche aus, aktualisiert
+      Google einfach seinen eigenen <code class="mono">_spf.google.com</code>-Record
+      - die Prüfung bei firma.ch bezieht sich ja nur per
+      <code class="mono">include:</code> darauf und bekommt die Änderung
+      automatisch mit.
+    </p>
+    <p class="text-muted">
+      <strong>Wichtige Stolperfalle:</strong> Der SPF-Standard erlaubt pro
+      Prüfung maximal <strong>10 DNS-Lookups</strong> (für jedes
+      <code class="mono">include:</code>, <code class="mono">a</code>,
+      <code class="mono">mx</code>, etc.). Wer zu viele Drittanbieter
+      (Google + Newsletter-Tool + CRM + ...) über verschachtelte Includes
+      einbindet, überschreitet dieses Limit leicht - die SPF-Prüfung
+      schlägt dann mit einem <code class="mono">permerror</code> fehl,
+      selbst wenn die Konfiguration inhaltlich korrekt aussieht.
+    </p>
   </div>
 
   <div class="card">
@@ -285,6 +337,47 @@
       <text x="435" y="103" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">DMARC schlägt fehl,</text>
       <text x="435" y="116" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">obwohl SPF für sich allein bestehen würde</text>
     </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🧩 Interaktiv: welche Prüfung schaut sich welchen Teil der Mail an?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          SPF, DKIM und DMARC klingen oft wie drei Varianten derselben
+          Prüfung - schauen aber tatsächlich auf drei unterschiedliche
+          Teile derselben E-Mail. Klick dich durch die drei Schritte und
+          beobachte, welcher Teil der Beispiel-Mail unten jeweils
+          hervorgehoben wird.
+        </div>
+      </details>
+    </h3>
+    <div class="mail-mockup" id="mail-mockup">
+      <div class="mail-part" data-part="envelope">
+        <span class="mail-part-label">Envelope-From / Return-Path (SMTP-Ebene, für Nutzer unsichtbar)</span>
+        <div class="mail-part-value mono">MAIL FROM: &lt;bounce.mailer@mail.google.com&gt;</div>
+      </div>
+      <div class="mail-part" data-part="from">
+        <span class="mail-part-label">From: (sichtbarer Absender im Postfach)</span>
+        <div class="mail-part-value mono">From: "Chef" &lt;chef@firma.ch&gt;</div>
+      </div>
+      <div class="mail-part" data-part="dkim">
+        <span class="mail-part-label">DKIM-Signature-Header</span>
+        <div class="mail-part-value mono">DKIM-Signature: v=1; a=rsa-sha256; d=firma.ch; s=mail; h=from:subject:date; bh=xR2k...=; b=MIIB...=</div>
+      </div>
+      <div class="mail-part" data-part="body">
+        <span class="mail-part-label">Body (Nachrichtentext)</span>
+        <div class="mail-part-value mono">Hallo Team, bitte prüft die Rechnung im Anhang bis Freitag.</div>
+      </div>
+    </div>
+
+    <div class="btn-row" id="mail-step-buttons">
+      <button type="button" class="btn small ghost step-btn" data-step="0">1. SPF</button>
+      <button type="button" class="btn small ghost step-btn" data-step="1">2. DKIM</button>
+      <button type="button" class="btn small ghost step-btn" data-step="2">3. DMARC</button>
+    </div>
+    <div class="feedback-box" id="mail-step-explanation"></div>
   </div>
 
   <div class="card">

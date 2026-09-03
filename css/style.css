@@ -377,6 +377,87 @@ footer.site-footer {
   align-self: flex-start;
 }
 
+.module-card .prereq-line {
+  flex-grow: 0;
+  font-size: 0.8rem;
+  margin-top: -4px;
+}
+
+/* ---------- Lernpfad ---------- */
+
+.path-chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.path-chip {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.path-arrow {
+  color: var(--text-muted);
+}
+
+.path-edge-list {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.path-edge-list strong {
+  color: var(--text);
+}
+
+/* ---------- Mail-Mockup (interaktives SPF/DKIM/DMARC-Beispiel) ---------- */
+
+.mail-mockup {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  padding: 4px;
+  margin: 12px 0;
+}
+
+.mail-part {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  margin: 2px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mail-part-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.mail-part-value {
+  font-size: 0.88rem;
+  word-break: break-all;
+}
+
+.mail-part.highlight {
+  border-color: var(--primary);
+  background: rgba(79, 140, 255, 0.12);
+}
+
+.step-btn.active {
+  border-color: var(--primary);
+  background: rgba(79, 140, 255, 0.12);
+  color: var(--text);
+}
+
 /* ---------- Badges ---------- */
 
 .badge {

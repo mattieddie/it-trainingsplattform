@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verschlüsselung &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="encryption.html" class="active">Verschlüsselung</a>
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    🔑 Verschlüsselung
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Verschlüsselung sorgt dafür, dass nur Berechtigte Daten lesen können
+        (Vertraulichkeit). Hashing ist etwas anderes: es prüft, ob Daten
+        unverändert sind, oder erlaubt einen Vergleich, ohne das Original
+        preiszugeben (z.B. bei Passwörtern) - ein Hash lässt sich nicht
+        wieder in die Ausgangsdaten zurückverwandeln.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Symmetrisch, asymmetrisch und hybrid verschlüsseln, sicherer
+    Schlüsselaustausch nach Diffie-Hellman, sowie Hashing und Salt -
+    mit Beispielen, Grafiken und zwei echten Live-Demos (SHA-256 läuft
+    direkt in deinem Browser, es wird nichts übertragen).
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Warum überhaupt verschlüsseln?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Unverschlüsselte Daten im Netzwerk sind wie eine Postkarte: jeder,
+          der sie unterwegs in die Hand bekommt, kann sie einfach lesen.
+          Verschlüsselte Daten sind wie ein versiegelter Brief in einem
+          blickdichten Umschlag - der Inhalt ist erst nach dem "Öffnen"
+          (Entschlüsseln) mit dem passenden Schlüssel lesbar.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Verschlüsselung wandelt lesbaren <strong>Klartext</strong> mithilfe
+      eines <strong>Schlüssels</strong> in unlesbaren
+      <strong>Geheimtext (Ciphertext)</strong> um. Nur wer den richtigen
+      Schlüssel besitzt, kann den Vorgang umkehren. Es gibt dafür zwei
+      grundlegend verschiedene Ansätze - <strong>symmetrisch</strong> und
+      <strong>asymmetrisch</strong> - die in der Praxis meist kombiniert
+      werden (<strong>hybrid</strong>, siehe unten).
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Symmetrische Verschlüsselung (z.B. AES)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Vorhängeschloss mit genau EINEM Schlüssel: derselbe
+          Schlüssel schliesst zu UND wieder auf. Beide Seiten müssen diesen
+          einen Schlüssel vorher besitzen - das eigentliche Problem ist also
+          nicht das Verschlüsseln selbst, sondern wie beide Seiten sich
+          sicher auf denselben Schlüssel einigen, ohne dass ihn jemand
+          unterwegs mitliest.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ein einziger geheimer Schlüssel wird sowohl zum Ver- als auch zum
+      Entschlüsseln verwendet. Der reale Standard dafür ist
+      <strong>AES</strong> (Advanced Encryption Standard, meist mit
+      128 oder 256 Bit Schlüssellänge) - eingesetzt z.B. bei
+      Festplattenverschlüsselung (BitLocker), WLAN (WPA2/3) und für die
+      eigentlichen Nutzdaten bei HTTPS und VPN.
+    </p>
+    <svg viewBox="0 0 560 150" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="50" width="110" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="65" y="80" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Sender</text>
+
+      <rect x="150" y="50" width="110" height="50" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="205" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">AES</text>
+      <text x="205" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">verschlüsseln</text>
+
+      <rect x="330" y="50" width="110" height="50" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="385" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">AES</text>
+      <text x="385" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">entschlüsseln</text>
+
+      <rect x="440" y="50" width="110" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="495" y="80" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Empfänger</text>
+
+      <line x1="120" y1="75" x2="150" y2="75" stroke="#9aa5b8" stroke-width="2"/>
+      <line x1="260" y1="75" x2="330" y2="75" stroke="#ffb648" stroke-width="2"/>
+      <text x="295" y="65" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Geheimtext</text>
+      <line x1="440" y1="75" x2="440" y2="75" stroke="#9aa5b8" stroke-width="2"/>
+      <line x1="440" y1="75" x2="440" y2="75" stroke="#9aa5b8" stroke-width="2"/>
+
+      <text x="205" y="30" fill="#4f8cff" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Schlüssel K</text>
+      <text x="385" y="30" fill="#4f8cff" font-size="11" text-anchor="middle" font-family="Consolas, monospace">derselbe Schlüssel K</text>
+      <line x1="205" y1="35" x2="205" y2="50" stroke="#4f8cff" stroke-width="2"/>
+      <line x1="385" y1="35" x2="385" y2="50" stroke="#4f8cff" stroke-width="2"/>
+      <line x1="205" y1="120" x2="385" y2="120" stroke="#4f8cff" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="295" y="138" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">beide müssen K vorher kennen - genau das ist das Problem</text>
+    </svg>
+    <p class="text-muted">
+      Vorteil: sehr schnell, auch für grosse Datenmengen geeignet. Nachteil:
+      der Schlüssel muss vorab sicher zwischen beiden Seiten ausgetauscht
+      werden ("Schlüsselverteilungsproblem") - genau das löst
+      Diffie-Hellman weiter unten.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Asymmetrische Verschlüsselung (Public-Key, z.B. RSA)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell dir einen Briefkasten mit einem offenen Schlitz vor
+          (öffentlicher Schlüssel): jeder darf etwas einwerfen, aber nur wer
+          den Kasten mit dem passenden Schlüssel aufschliessen kann
+          (privater Schlüssel), kommt wieder an den Inhalt. Den offenen
+          Schlitz darf jeder kennen - den Aufschliess-Schlüssel nur der
+          Besitzer.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Statt einem gemeinsamen Schlüssel besitzt jede Seite ein mathematisch
+      zusammengehöriges <strong>Schlüsselpaar</strong>: einen
+      <strong>öffentlichen</strong> Schlüssel (Public Key, darf jeder
+      kennen) und einen <strong>privaten</strong> Schlüssel (Private Key,
+      bleibt geheim). Was mit dem einen verschlüsselt wird, kann nur mit
+      dem jeweils anderen wieder entschlüsselt werden.
+    </p>
+    <svg viewBox="0 0 560 150" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="50" width="110" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="65" y="80" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Sender</text>
+
+      <rect x="150" y="50" width="130" height="50" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="215" y="70" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">verschlüsselt mit</text>
+      <text x="215" y="86" fill="#4f8cff" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Public Key (Empf.)</text>
+
+      <rect x="340" y="50" width="130" height="50" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="405" y="70" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">entschlüsselt mit</text>
+      <text x="405" y="86" fill="#29d3c1" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Private Key (Empf.)</text>
+
+      <rect x="470" y="0" width="90" height="34" rx="6" fill="none" stroke="#9aa5b8" stroke-width="1"/>
+      <text x="515" y="22" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">nur Empfänger hat</text>
+
+      <line x1="120" y1="75" x2="150" y2="75" stroke="#9aa5b8" stroke-width="2"/>
+      <line x1="280" y1="75" x2="340" y2="75" stroke="#ffb648" stroke-width="2"/>
+      <text x="310" y="65" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Geheimtext</text>
+
+      <text x="405" y="128" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Public Key ist frei bekannt - trotzdem kann NUR</text>
+      <text x="405" y="142" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">der Besitzer des Private Keys wieder entschlüsseln</text>
+    </svg>
+    <details class="info-toggle" style="margin-top:6px;">
+      <summary>i (Vertiefung: vereinfachtes Zahlenbeispiel)</summary>
+      <div class="info-content">
+        Echtes RSA nutzt Zahlen mit hunderten Stellen - hier ein stark
+        vereinfachtes Beispiel mit winzigen Zahlen nur zur Veranschaulichung
+        des Prinzips (modulare Potenzrechnung):<br /><br />
+        Primzahlen p=3, q=11 → n = p·q = 33.<br />
+        Öffentlicher Schlüssel: (n=33, e=7). Privater Schlüssel: d=3.<br />
+        Nachricht m=2 verschlüsseln: c = m<sup>e</sup> mod n = 2<sup>7</sup> mod 33 = <strong>29</strong><br />
+        Entschlüsseln: m = c<sup>d</sup> mod n = 29<sup>3</sup> mod 33 = <strong>2</strong> ✓ (Original zurück)<br /><br />
+        Bei n=33 könnte ein Angreifer die Primfaktoren 3 und 11 durch
+        Ausprobieren in Sekunden finden und damit d berechnen. Bei echtem
+        RSA ist n eine Zahl mit hunderten Stellen - die Primfaktorzerlegung
+        dauert dann selbst mit Supercomputern länger als das Universum alt
+        ist. Genau darauf beruht die Sicherheit von RSA.
+      </div>
+    </details>
+    <p class="text-muted" style="margin-top:10px;">
+      Nachteil: rechenintensiv und deutlich langsamer als symmetrische
+      Verfahren - für grosse Datenmengen ungeeignet. Zusätzlicher Nutzen:
+      "umgekehrt" angewendet (mit dem <em>privaten</em> Schlüssel signieren,
+      mit dem <em>öffentlichen</em> prüfen) entstehen digitale Signaturen -
+      genau das nutzt DKIM im Modul <a href="email-security.html">E-Mail-Sicherheit</a>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Hybrid-Verschlüsselung: das Beste aus beidem
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Tresor mit zwei Schlössern: das langsame, aber
+          fälschungssichere Schloss (asymmetrisch) wird nur einmal benutzt,
+          um den schnellen Alltagsschlüssel (symmetrisch) sicher zu
+          übergeben - danach läuft alles über den schnellen Schlüssel.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Praktisch jede reale Verschlüsselung im Internet - allen voran
+      <strong>HTTPS/TLS</strong> und auch VPN (siehe Modul
+      <a href="vpn-basics.html">VPN-Grundlagen</a>) - kombiniert beide
+      Verfahren, um deren jeweilige Schwäche auszugleichen:
+    </p>
+    <svg viewBox="0 0 560 160" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="20" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">Phase 1 - einmalig, asymmetrisch:</text>
+      <rect x="10" y="30" width="140" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="80" y="55" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Client</text>
+      <line x1="150" y1="50" x2="240" y2="50" stroke="#4f8cff" stroke-width="2" marker-end="url(#arrowE1)"/>
+      <text x="195" y="42" fill="#4f8cff" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Sitzungsschlüssel,</text>
+      <text x="195" y="66" fill="#4f8cff" font-size="9" text-anchor="middle" font-family="Consolas, monospace">mit Public Key verschlüsselt</text>
+      <rect x="240" y="30" width="140" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="310" y="55" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Server</text>
+
+      <text x="10" y="105" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">Phase 2 - laufend, symmetrisch:</text>
+      <rect x="10" y="115" width="140" height="40" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="80" y="140" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Client</text>
+      <line x1="150" y1="135" x2="240" y2="135" stroke="#29d3c1" stroke-width="2" marker-end="url(#arrowE1)"/>
+      <line x1="240" y1="145" x2="150" y2="145" stroke="#29d3c1" stroke-width="2" marker-end="url(#arrowE1)"/>
+      <text x="195" y="128" fill="#29d3c1" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Daten, AES-verschlüsselt (schnell)</text>
+      <rect x="240" y="115" width="140" height="40" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="310" y="140" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Server</text>
+
+      <defs>
+        <marker id="arrowE1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
+        </marker>
+      </defs>
+    </svg>
+    <p class="text-muted">
+      Der teure, langsame asymmetrische Teil kommt also nur EINMAL beim
+      Verbindungsaufbau zum Einsatz - und selbst dafür wird in der Praxis
+      meist kein Schlüssel direkt verschlüsselt übertragen, sondern ein
+      Diffie-Hellman-Austausch genutzt (siehe nächster Abschnitt), damit
+      nicht mal ein aufgezeichneter Verkehr später entschlüsselt werden
+      kann, selbst wenn der private Schlüssel des Servers künftig doch
+      noch geknackt werden sollte.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Diffie-Hellman-Schlüsselaustausch
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Die klassische Farbmisch-Analogie: Alice und Bob einigen sich
+          öffentlich auf eine Grundfarbe (z.B. Gelb). Jede Seite mischt
+          heimlich ihre eigene Geheimfarbe dazu und schickt nur das
+          Mischresultat (nicht die Geheimfarbe selbst!) an die andere
+          Seite. Beide mischen nun ihre eigene Geheimfarbe erneut in das
+          empfangene Gemisch - am Ende kommen beide auf exakt dieselbe
+          Endfarbe, ohne dass ihre jeweilige Geheimfarbe je übertragen
+          wurde. Farben lassen sich (im Gegensatz zu den echten Zahlen)
+          nicht zurückmischen - genau das macht die Analogie anschaulich.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Diffie-Hellman (DH) löst das Schlüsselverteilungsproblem der
+      symmetrischen Verschlüsselung: zwei Seiten können sich über einen
+      komplett unsicheren, öffentlich mitlesbaren Kanal auf einen
+      gemeinsamen geheimen Schlüssel einigen - <strong>ohne diesen
+      Schlüssel selbst jemals zu übertragen</strong>.
+    </p>
+    <svg viewBox="0 0 560 190" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <text x="140" y="18" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Alice</text>
+      <text x="420" y="18" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Bob</text>
+
+      <rect x="60" y="26" width="160" height="30" rx="6" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="140" y="46" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">öffentlich: Grundfarbe Gelb</text>
+      <rect x="340" y="26" width="160" height="30" rx="6" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="420" y="46" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">öffentlich: Grundfarbe Gelb</text>
+
+      <rect x="60" y="66" width="160" height="30" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="140" y="86" fill="#4f8cff" font-size="10" text-anchor="middle" font-family="Consolas, monospace">geheim: + eigene Farbe A</text>
+      <rect x="340" y="66" width="160" height="30" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="420" y="86" fill="#4f8cff" font-size="10" text-anchor="middle" font-family="Consolas, monospace">geheim: + eigene Farbe B</text>
+
+      <line x1="220" y1="81" x2="330" y2="115" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrowE2)"/>
+      <text x="275" y="95" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">sendet Mischung A</text>
+      <line x1="340" y1="81" x2="230" y2="115" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrowE2)"/>
+      <text x="285" y="130" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">sendet Mischung B</text>
+
+      <rect x="60" y="140" width="160" height="34" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="140" y="160" fill="#29d3c1" font-size="10" text-anchor="middle" font-family="Consolas, monospace">mischt Farbe A hinzu</text>
+      <rect x="340" y="140" width="160" height="34" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="420" y="160" fill="#29d3c1" font-size="10" text-anchor="middle" font-family="Consolas, monospace">mischt Farbe B hinzu</text>
+
+      <text x="280" y="185" fill="#29d3c1" font-size="11" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">→ beide erhalten dieselbe Endfarbe (Shared Secret)</text>
+
+      <defs>
+        <marker id="arrowE2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
+        </marker>
+      </defs>
+    </svg>
+    <details class="info-toggle" style="margin-top:6px;">
+      <summary>i (Vertiefung: vereinfachtes Zahlenbeispiel)</summary>
+      <div class="info-content">
+        Mathematisch läuft es über modulare Potenzrechnung statt Farben.
+        Öffentlich bekannt: Primzahl p=23, Basis g=5.<br /><br />
+        Alice wählt geheime Zahl a=6, berechnet A = g<sup>a</sup> mod p = 5<sup>6</sup> mod 23 = <strong>8</strong> und schickt A öffentlich an Bob.<br />
+        Bob wählt geheime Zahl b=15, berechnet B = g<sup>b</sup> mod p = 5<sup>15</sup> mod 23 = <strong>19</strong> und schickt B öffentlich an Alice.<br /><br />
+        Alice berechnet: B<sup>a</sup> mod p = 19<sup>6</sup> mod 23 = <strong>2</strong><br />
+        Bob berechnet: A<sup>b</sup> mod p = 8<sup>15</sup> mod 23 = <strong>2</strong><br />
+        Beide kommen unabhängig voneinander auf denselben gemeinsamen
+        Schlüssel (2), obwohl nur p, g, A und B öffentlich übertragen
+        wurden - a und b blieben immer geheim. Ein Lauscher, der nur p, g,
+        A und B kennt, müsste dafür a oder b zurückrechnen (diskreter
+        Logarithmus) - bei echten, sehr grossen Zahlen praktisch unmöglich.
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Hashfunktionen (z.B. SHA-256)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein Hash ist wie ein Fingerabdruck: aus beliebig grossen Daten
+          entsteht ein kurzer, fester "Abdruck". Zwei identische Daten
+          ergeben immer denselben Fingerabdruck, aber aus dem Fingerabdruck
+          allein lässt sich nicht auf die Originaldaten zurückschliessen -
+          im Gegensatz zur Verschlüsselung gibt es hier absichtlich KEINEN
+          Weg zurück.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Hashing ist <strong>keine Verschlüsselung</strong> - es gibt keinen
+      Schlüssel und keine Entschlüsselung. Eine Hashfunktion wie
+      <strong>SHA-256</strong> wandelt beliebig grosse Eingaben in einen
+      Wert fester Länge (bei SHA-256 immer 256 Bit = 64 Hex-Zeichen) um,
+      mit drei zentralen Eigenschaften:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Eigenschaft</th><th>Bedeutung</th>
+      </tr>
+      <tr><td>Deterministisch</td><td>dieselbe Eingabe ergibt immer exakt denselben Hash</td></tr>
+      <tr><td>Einweg-Funktion</td><td>vom Hash lässt sich nicht auf die Eingabe zurückschliessen</td></tr>
+      <tr><td>Avalanche-Effekt</td><td>schon 1 verändertes Zeichen ergibt einen komplett anderen Hash</td></tr>
+      <tr><td>Kollisionsresistent</td><td>praktisch unmöglich, zwei verschiedene Eingaben mit demselben Hash zu finden</td></tr>
+    </table>
+
+    <div class="field" style="margin-top:16px;">
+      <label for="hash-input">🧮 Live-Demo: SHA-256 in Echtzeit berechnen (läuft nur lokal im Browser)</label>
+      <input type="text" id="hash-input" placeholder="z.B. Passwort123 - dann nur ein Zeichen ändern" />
+    </div>
+    <p class="mono" id="hash-output" style="word-break:break-all; background:var(--bg-input); border:1px solid var(--border); border-radius:var(--radius); padding:10px 12px;">-</p>
+    <p class="text-muted">
+      Probier's aus: ändere nur ein einziges Zeichen in der Eingabe und
+      beobachte, wie sich der komplette Hash-Wert ändert (Avalanche-Effekt).
+    </p>
+
+    <p style="margin-top:14px;"><strong>Typische Anwendungen von Hashing:</strong></p>
+    <ul>
+      <li>Datei-Integritätsprüfung nach dem Download (Checksumme vergleichen)</li>
+      <li>Passwort-Speicherung (nie im Klartext, siehe nächster Abschnitt zu Salt)</li>
+      <li>Digitale Signaturen: nicht die ganze Nachricht wird signiert, sondern nur ihr Hash (schneller)</li>
+      <li>Git: jeder Commit wird über einen Hash seines Inhalts eindeutig identifiziert</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Salt: warum reines Hashing für Passwörter nicht reicht
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ohne Salt: wenn zwei Nutzer dasselbe Passwort "123456" verwenden,
+          haben sie in der Datenbank exakt denselben Hash-Wert - ein
+          Angreifer mit einer vorab berechneten Liste häufiger Passwörter
+          samt ihrer Hashes (Rainbow-Table) findet das Passwort dadurch
+          sofort. Mit Salt bekommt jeder Nutzer eine eigene, zufällige
+          "Würze" dazugemischt - identische Passwörter ergeben dann
+          unterschiedliche Hashes, und die Rainbow-Table wird nutzlos.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ein <strong>Salt</strong> ist ein zufälliger Wert, der vor dem
+      Hashen an das Passwort angehängt wird und zusammen mit dem Hash
+      (nicht geheim!) gespeichert wird. Bei der Anmeldung wird derselbe
+      Salt wieder an die Eingabe angehängt und erneut gehasht - stimmt das
+      Ergebnis mit dem gespeicherten Hash überein, war das Passwort korrekt.
+    </p>
+
+    <div class="field" style="margin-top:10px;">
+      <label for="salt-input">🧂 Live-Demo: Passwort eingeben</label>
+      <input type="text" id="salt-input" placeholder="z.B. Passwort123" />
+    </div>
+    <div class="btn-row">
+      <button id="regen-salt-btn" class="btn small ghost" type="button">Neuen zufälligen Salt erzeugen</button>
+    </div>
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Wert</th><th>Ergebnis</th>
+      </tr>
+      <tr><td>Aktueller Salt</td><td class="mono" id="salt-value" style="word-break:break-all;">-</td></tr>
+      <tr><td>Hash OHNE Salt</td><td class="mono" id="salt-plain-hash" style="word-break:break-all;">-</td></tr>
+      <tr><td>Hash MIT Salt</td><td class="mono" id="salt-salted-hash" style="word-break:break-all;">-</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:8px;">
+      Erzeuge mehrfach einen neuen Salt bei gleichbleibendem Passwort: der
+      "Hash OHNE Salt" bleibt immer identisch, der "Hash MIT Salt" ändert
+      sich jedes Mal komplett - genau das macht vorab berechnete
+      Rainbow-Tables wirkungslos.
+    </p>
+    <p class="text-muted">
+      In der Praxis reicht sogar Salt allein oft nicht: moderne Verfahren
+      wie <strong>bcrypt</strong> oder <strong>Argon2</strong> bringen Salt
+      automatisch mit und sind zusätzlich absichtlich langsam/rechenintensiv
+      gestaltet ("Key Stretching"), um Brute-Force-Angriffe massiv
+      auszubremsen - ein schneller Hash wie reines SHA-256 ist für
+      Passwörter allein nicht empfehlenswert.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Überblick: Wo wird was eingesetzt?</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Anwendung</th><th>Verfahren</th><th>Warum</th>
+      </tr>
+      <tr>
+        <td>HTTPS/TLS-Verbindung</td>
+        <td>Hybrid (asymmetrisch/DH für Schlüsselaustausch, dann symmetrisch)</td>
+        <td>Sicherer Schlüsselaustausch + hohe Geschwindigkeit für die Daten</td>
+      </tr>
+      <tr>
+        <td>VPN (IPSec/SSL-VPN)</td>
+        <td>Hybrid, DH-Schlüsselaustausch (siehe <a href="vpn-basics.html">VPN-Grundlagen</a>)</td>
+        <td>Gleiches Prinzip wie TLS, für ganze Netzwerktunnel</td>
+      </tr>
+      <tr>
+        <td>Passwort-Speicherung</td>
+        <td>Hash + Salt (idealerweise bcrypt/Argon2, nicht reines SHA-256)</td>
+        <td>Einweg-Funktion, Schutz vor Rainbow-Tables und Brute-Force</td>
+      </tr>
+      <tr>
+        <td>Datei-Integritätsprüfung</td>
+        <td>Hash (z.B. SHA-256-Checksumme)</td>
+        <td>Erkennt zuverlässig jede Veränderung, Geschwindigkeit ist hier egal</td>
+      </tr>
+      <tr>
+        <td>Digitale Signatur / DKIM</td>
+        <td>Asymmetrisch (Hash der Nachricht mit Private Key signieren)</td>
+        <td>Nachweis von Authentizität, siehe <a href="email-security.html">E-Mail-Sicherheit</a></td>
+      </tr>
+      <tr>
+        <td>Festplattenverschlüsselung (BitLocker)</td>
+        <td>Symmetrisch (AES)</td>
+        <td>Grosse Datenmengen, Geschwindigkeit entscheidend</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/encryption.js"></script>
+</body>
+</html>

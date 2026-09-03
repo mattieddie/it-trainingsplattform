@@ -138,6 +138,49 @@ const QUIZ = [
   },
 ];
 
+const MAIL_STEPS = [
+  {
+    label: "SPF",
+    parts: ["envelope"],
+    text:
+      "<strong>SPF prüft ausschliesslich den technischen Envelope-From</strong> (auch Return-Path genannt - die Absenderadresse auf SMTP-Ebene, die kein normaler Nutzer je zu sehen bekommt). Geprüft wird: kommt die Mail von einer Server-IP, die im SPF-Record GENAU DIESER Envelope-Domain als autorisiert gelistet ist? Der sichtbare From-Header, die DKIM-Signatur und der Body spielen für SPF keine Rolle.",
+  },
+  {
+    label: "DKIM",
+    parts: ["dkim", "from", "body"],
+    text:
+      "<strong>DKIM prüft die kryptografische Signatur</strong> im DKIM-Signature-Header. Diese deckt einen Hash des Bodys (<code class=\"mono\">bh=</code>) sowie eine festgelegte Liste an Headern ab (<code class=\"mono\">h=from:subject:date</code> - typischerweise inkl. From). Wurde seit dem Signieren auch nur ein Byte in Body oder den signierten Headern verändert, passt die Signatur nicht mehr zum neu berechneten Wert - unabhängig vom Envelope-From, den SPF prüft.",
+  },
+  {
+    label: "DMARC",
+    parts: ["from"],
+    text:
+      "<strong>DMARC prüft selbst gar keinen Mail-Inhalt direkt</strong>, sondern vergleicht die ERGEBNISSE von SPF und DKIM: stimmt die dabei jeweils geprüfte Domain (Envelope-From bzw. DKIM-<code class=\"mono\">d=</code>-Tag) mit der sichtbaren From-Adresse überein (\"Alignment\")? Erst dieser Abgleich mit dem sichtbaren From-Header schliesst die Lücke, die SPF und DKIM alleine offenlassen würden.",
+  },
+];
+
+function initInteractiveSteps() {
+  const buttons = document.querySelectorAll("#mail-step-buttons .step-btn");
+  const parts = document.querySelectorAll("#mail-mockup .mail-part");
+  const explanation = document.getElementById("mail-step-explanation");
+  if (!buttons.length) return;
+
+  function showStep(stepIdx) {
+    const step = MAIL_STEPS[stepIdx];
+    buttons.forEach((btn) => btn.classList.toggle("active", Number(btn.dataset.step) === stepIdx));
+    parts.forEach((part) => part.classList.toggle("highlight", step.parts.includes(part.dataset.part)));
+    explanation.classList.remove("hidden");
+    explanation.className = "feedback-box";
+    explanation.innerHTML = `<strong>${stepIdx + 1}. ${step.label} prüft:</strong> ${step.text}`;
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => showStep(Number(btn.dataset.step)));
+  });
+
+  showStep(0);
+}
+
 function renderQuiz() {
   const container = document.getElementById("quiz-container");
   container.innerHTML = "";
@@ -218,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("completion-banner").classList.remove("hidden");
   }
 
+  initInteractiveSteps();
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
 });
