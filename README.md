@@ -30,6 +30,20 @@ gespeichert.
 5. **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html))
    A/CNAME-Records, TTL, Propagation - inkl. Konfigurator fuer
    Beispiel-DNS-Eintraege zur eigenen GitHub-Pages-Domain.
+6. **CMD & PowerShell Terminal-Trainer** ([modules/terminal.html](modules/terminal.html))
+   Simuliertes Terminal (kein echter Shell-Zugriff): loese Aufgaben, indem
+   du den passenden CMD- oder PowerShell-Befehl eintippst, mit gestaffelten
+   Tipps nach Fehlversuchen.
+7. **Active Directory** ([modules/active-directory.html](modules/active-directory.html))
+   Gruppenrichtlinien-Vererbung (LSDOU, Enforce/Block Inheritance) als
+   Vorhersage-Quiz anhand einer festen OU-Struktur, plus Troubleshooting-
+   Tickets (Kontosperrung, falsche OU, Item-Level Targeting, Replikation,
+   FSMO-Rollen).
+8. **Intune / Entra ID / Hybrid** ([modules/intune-entra.html](modules/intune-entra.html))
+   Join-Typen, Entra Connect, Conditional Access (bewusst als Kontrast zum
+   Firewall-Modul: hier gewinnt nicht die erste Regel, sondern alle
+   zutreffenden Richtlinien wirken kumulativ) und Intune-Compliance, plus
+   Troubleshooting-Tickets aus der Cloud-Identitaets-Welt.
 
 ## Projektstruktur
 
@@ -43,13 +57,19 @@ gespeichert.
 │   ├── dhcp-dns.js
 │   ├── firewall.js
 │   ├── sqli.js
-│   └── dns-concepts.js
+│   ├── dns-concepts.js
+│   ├── terminal.js
+│   ├── active-directory.js
+│   └── intune-entra.js
 ├── modules/
 │   ├── subnetting.html
 │   ├── dhcp-dns.html
 │   ├── firewall.html
 │   ├── sqli.html
-│   └── dns-concepts.html
+│   ├── dns-concepts.html
+│   ├── terminal.html
+│   ├── active-directory.html
+│   └── intune-entra.html
 └── .nojekyll                    Verhindert GitHub-Pages-Jekyll-Verarbeitung
 ```
 

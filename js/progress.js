@@ -48,6 +48,30 @@ const MODULES = [
       "A/CNAME-Records, TTL und Propagation erklaert - inkl. Platzhaltern fuer die eigene GitHub-Pages-Domain.",
     href: "modules/dns-concepts.html",
   },
+  {
+    id: "terminal",
+    title: "CMD & PowerShell Terminal-Trainer",
+    icon: "\u{1F4BB}",
+    description:
+      "Simuliertes Terminal: loese Aufgaben, indem du den richtigen CMD- oder PowerShell-Befehl eintippst.",
+    href: "modules/terminal.html",
+  },
+  {
+    id: "activedirectory",
+    title: "Active Directory",
+    icon: "\u{1F4C1}",
+    description:
+      "OUs, Gruppenrichtlinien-Vererbung (LSDOU) und AD-Troubleshooting-Tickets (Sperrungen, Replikation, FSMO).",
+    href: "modules/active-directory.html",
+  },
+  {
+    id: "intuneentra",
+    title: "Intune / Entra ID / Hybrid",
+    icon: "\u{2601}\u{FE0F}",
+    description:
+      "Join-Typen, Conditional Access und Intune-Compliance verstehen - inkl. Troubleshooting-Tickets aus der Cloud-Welt.",
+    href: "modules/intune-entra.html",
+  },
 ];
 
 function loadProgress() {

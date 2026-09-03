@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CMD &amp; PowerShell Terminal-Trainer &ndash; Netzwerk-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="terminal.html" class="active">CMD/PowerShell</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">💻 CMD &amp; PowerShell Terminal-Trainer</h1>
+  <p class="page-subtitle">
+    Ein simuliertes Terminal &ndash; es wird nichts echtes ausgefuehrt. Tippe
+    den passenden Befehl fuer die gestellte Aufgabe ein und druecke Enter.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Du hast alle Terminal-Aufgaben geloest.
+  </div>
+
+  <div class="card">
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div class="flex gap-8 flex-wrap">
+        <div class="field" style="margin:0; min-width:150px;">
+          <label for="shell-select">Shell</label>
+          <select id="shell-select">
+            <option value="all">Beide</option>
+            <option value="cmd">CMD</option>
+            <option value="powershell">PowerShell</option>
+          </select>
+        </div>
+        <div class="field" style="margin:0; min-width:150px;">
+          <label for="difficulty-select">Schwierigkeit</label>
+          <select id="difficulty-select">
+            <option value="all">Alle</option>
+            <option value="easy">Leicht</option>
+            <option value="medium">Mittel</option>
+            <option value="hard">Schwer</option>
+          </select>
+        </div>
+      </div>
+      <span id="score-pill" class="score-pill">Geloest: 0 / 16 Aufgaben</span>
+    </div>
+
+    <hr class="sep" />
+
+    <div class="flex gap-8" style="align-items:center; margin-bottom:10px;">
+      <span id="shell-badge" class="badge status-none">CMD</span>
+      <span id="challenge-difficulty-badge" class="badge difficulty-easy">Leicht</span>
+    </div>
+    <p id="task-text" style="font-weight:600;"></p>
+
+    <div id="terminal-screen" class="terminal-output" style="min-height:160px; max-height:320px; overflow-y:auto;"></div>
+
+    <div class="flex gap-8 flex-wrap" style="margin-top:10px; align-items:center;">
+      <span id="prompt-prefix" class="mono text-muted">C:\Users\azubi&gt;</span>
+      <input type="text" id="cmd-input" class="mono" style="flex:1; min-width:180px;" autocomplete="off" spellcheck="false" placeholder="Befehl eintippen und Enter druecken..." />
+      <button id="run-btn" class="btn primary small">Ausfuehren</button>
+    </div>
+
+    <div id="hint-box" class="alert warning hidden" style="margin-top:14px;"></div>
+    <div id="feedback" class="feedback-box hidden"></div>
+
+    <div class="btn-row">
+      <button id="next-btn" class="btn ghost">Naechste Aufgabe</button>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/terminal.js"></script>
+</body>
+</html>

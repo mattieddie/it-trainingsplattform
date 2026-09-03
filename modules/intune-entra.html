@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intune / Entra ID / Hybrid &ndash; Netzwerk-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html" class="active">Intune/Entra ID</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">☁️ Intune / Entra ID (Azure AD) / Hybrid</h1>
+  <p class="page-subtitle">
+    Join-Typen, Entra Connect und Conditional Access verstehen &ndash; danach
+    ein Szenario-Quiz und Troubleshooting-Tickets aus der Cloud-Identitaets-Welt.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz und alle Tickets geloest.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Checkliste</h3>
+    <div id="check-quiz" class="checklist-item">⬜ Conditional-Access-Quiz vollstaendig richtig loesen</div>
+    <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets loesen</div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Geraete-Join-Typen im Vergleich</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Typ</th><th>Eigentuemer</th><th>Typischer Einsatz</th>
+      </tr>
+      <tr><td><strong>Entra Joined</strong></td><td>Firma</td><td>Reine Cloud-Umgebung, kein lokales AD noetig</td></tr>
+      <tr><td><strong>Hybrid Entra Joined</strong></td><td>Firma</td><td>On-Premises-AD vorhanden, zusaetzlich mit Entra ID verbunden (Uebergangsphase/Koexistenz)</td></tr>
+      <tr><td><strong>Entra Registered</strong></td><td>Privat (BYOD)</td><td>Persoenliches Geraet, nur fuer SSO/Zugriff registriert, keine volle Geraeteverwaltung</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Entra Connect: Synchronisierungsmethoden</h3>
+    <ul>
+      <li><strong>Password Hash Sync (PHS)</strong>: Passwort-Hashes werden periodisch (Standard: alle 2 Minuten) ins Entra ID synchronisiert - einfachste Methode, faellt bei On-Prem-Ausfall nicht aus.</li>
+      <li><strong>Pass-Through Authentication (PTA)</strong>: Anmeldungen werden in Echtzeit gegen das On-Premises-AD geprueft, Passwort-Hash verlaesst nie die Firma.</li>
+      <li><strong>Federation (z.B. ADFS)</strong>: Authentifizierung laeuft komplett ueber einen eigenen On-Premises-Dienst - am komplexesten, aber maximale Kontrolle.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Intune: Compliance vs. Konfiguration</h3>
+    <ul>
+      <li><strong>Compliance-Richtlinien</strong>: pruefen den Geraetezustand (z.B. Verschluesselung aktiv, OS-Version aktuell) - das Ergebnis ("konform"/"nicht konform") kann Conditional Access als Bedingung nutzen.</li>
+      <li><strong>Konfigurationsprofile</strong>: setzen aktiv Einstellungen auf dem Geraet (WLAN-Profile, Passwortrichtlinien, Zertifikate).</li>
+      <li><strong>App-Schutzrichtlinien (MAM)</strong>: schuetzen Firmendaten in Apps, auch auf nicht vollstaendig verwalteten (z.B. privaten) Geraeten.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Conditional-Access-Szenario-Quiz</h3>
+    <div class="alert info">
+      <strong>Wichtiger Unterschied zum Firewall-Modul:</strong> Bei Firewall-Regeln gewinnt die
+      erste passende Regel. Bei Conditional Access wirken hingegen <strong>alle zutreffenden
+      Richtlinien gleichzeitig</strong> - ihre Grant Controls werden UND-verknuepft, und eine
+      zutreffende "Blockieren"-Richtlinie ueberstimmt immer alles andere.
+    </div>
+    <p class="text-muted">Alle Fragen unten beziehen sich auf diese drei Richtlinien:</p>
+    <pre id="ca-policies-table" class="terminal-output"></pre>
+
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🎫 Troubleshooting-Tickets</h3>
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <span id="ticket-score-pill" class="score-pill">Geloest: 0 / 5 Tickets</span>
+    </div>
+
+    <div class="ticket" style="margin-top:16px;">
+      <div class="ticket-meta">Helpdesk-Ticket</div>
+      <span id="ticket-difficulty-badge" class="badge difficulty-easy" style="margin-bottom:6px;">Leicht</span>
+      <h3 id="ticket-title" style="margin:4px 0 8px;"></h3>
+      <p id="ticket-symptom" style="margin:0;"></p>
+    </div>
+
+    <h4>Diagnose-Tools anfordern</h4>
+    <div id="ticket-tool-buttons" class="tool-buttons"></div>
+    <div id="ticket-tool-outputs"></div>
+
+    <hr class="sep" />
+
+    <h4 id="ticket-question-text"></h4>
+    <div id="ticket-options-list" class="option-list"></div>
+
+    <div class="btn-row">
+      <button id="ticket-check-btn" class="btn primary">Antwort pruefen</button>
+      <button id="ticket-next-btn" class="btn ghost">Naechstes Ticket</button>
+    </div>
+
+    <div id="ticket-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/intune-entra.js"></script>
+</body>
+</html>
