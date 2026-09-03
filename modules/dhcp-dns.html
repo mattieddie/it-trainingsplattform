@@ -34,11 +34,21 @@
 
   <div class="card">
     <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div class="field" style="margin:0; min-width:180px;">
+        <label for="difficulty-select">Schwierigkeit</label>
+        <select id="difficulty-select">
+          <option value="all">Alle</option>
+          <option value="easy">Leicht</option>
+          <option value="medium">Mittel</option>
+          <option value="hard">Schwer</option>
+        </select>
+      </div>
       <span id="score-pill" class="score-pill">Geloest: 0 / 6</span>
     </div>
 
     <div class="ticket" style="margin-top:16px;">
       <div class="ticket-meta">Helpdesk-Ticket</div>
+      <span id="ticket-difficulty-badge" class="badge difficulty-easy" style="margin-bottom:6px;">Leicht</span>
       <h3 id="ticket-title" style="margin:4px 0 8px;"></h3>
       <p id="ticket-symptom" style="margin:0;"></p>
     </div>

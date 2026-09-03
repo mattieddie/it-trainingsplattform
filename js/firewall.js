@@ -1,10 +1,18 @@
 /*
  * firewall.js - Modul 3: Firewall-Regel-Puzzle
- * Der Nutzer bringt eine Menge von Firewall-Regeln in eine Reihenfolge.
- * Validiert wird nicht gegen eine "einzig richtige" Reihenfolge, sondern
- * indem simulierte Testpakete durch die Regeln laufen ("erste passende
- * Regel gewinnt") und das Ergebnis mit dem erwarteten Verhalten verglichen
- * wird. Das erlaubt mehrere gueltige Loesungen, solange das Verhalten stimmt.
+ *
+ * Zwei Aufgaben-Modi:
+ *  - "reorder": eine feste Menge an Regeln ist vorgegeben, der Nutzer bringt
+ *    sie nur in die richtige Reihenfolge.
+ *  - "build": es gibt anfangs KEINE Regeln. Der Nutzer muss die Regeln
+ *    (Quelle/Ziel/Port/Aktion) selbst entwerfen UND in die richtige
+ *    Reihenfolge bringen.
+ *
+ * In beiden Faellen wird nicht gegen eine "einzig richtige" Loesung
+ * geprueft, sondern indem simulierte Testpakete durch die aktuellen Regeln
+ * laufen ("erste passende Regel gewinnt") und das Ergebnis mit dem
+ * erwarteten Verhalten verglichen wird. Das erlaubt mehrere gueltige
+ * Loesungen, solange das resultierende Verhalten stimmt.
  */
 
 const MODULE_ID = "firewall";
@@ -12,6 +20,7 @@ const MODULE_ID = "firewall";
 const PUZZLES = [
   {
     id: "puzzle-easy",
+    mode: "reorder",
     difficulty: "easy",
     title: "SSH nur vom Management-Netz",
     goal:
@@ -29,6 +38,7 @@ const PUZZLES = [
   },
   {
     id: "puzzle-medium",
+    mode: "reorder",
     difficulty: "medium",
     title: "Bekannter Angreifer im internen Netz",
     goal:
@@ -47,6 +57,7 @@ const PUZZLES = [
   },
   {
     id: "puzzle-hard",
+    mode: "reorder",
     difficulty: "hard",
     title: "DMZ-Webserver mit Monitoring & Jump-Host",
     goal:
@@ -69,6 +80,70 @@ const PUZZLES = [
       { desc: "Beliebiger Host via RDP (3389)", source: "8.8.8.8", destination: "10.10.10.5", port: 3389, expected: "Deny" },
     ],
   },
+  {
+    id: "puzzle-build-medium",
+    mode: "build",
+    difficulty: "medium",
+    title: "🛠️ Selbst konfigurieren: Kleines Buero-Netzwerk",
+    goal:
+      "Es gibt noch keine einzige Regel - du musst sie komplett selbst anlegen (Quelle, Ziel, Port, Aktion) und richtig anordnen. Anforderungen:\n" +
+      "• Das interne Netz 192.168.20.0/24 darf uneingeschraenkt ins Internet (jedes Ziel, jeder Port).\n" +
+      "• Der Server 192.168.20.10 bietet auf Port 8080 einen Webdienst an, der von ueberall (auch aus dem Internet) erreichbar sein muss.\n" +
+      "• SSH (Port 22) auf den Server 192.168.20.10 darf NUR vom Admin-PC 192.168.20.50 aus erfolgen - auch nicht von anderen internen Rechnern.\n" +
+      "• Alles andere auf den Server ist zu blocken.",
+    rules: [],
+    tests: [
+      { desc: "Admin-PC via SSH zum Server", source: "192.168.20.50", destination: "192.168.20.10", port: 22, expected: "Allow" },
+      { desc: "Anderer interner PC via SSH zum Server", source: "192.168.20.77", destination: "192.168.20.10", port: 22, expected: "Deny" },
+      { desc: "Externer Host via SSH zum Server", source: "8.8.8.8", destination: "192.168.20.10", port: 22, expected: "Deny" },
+      { desc: "Interner PC surft ins Internet", source: "192.168.20.77", destination: "8.8.8.8", port: 443, expected: "Allow" },
+      { desc: "Externer Host via Webdienst (8080)", source: "8.8.8.8", destination: "192.168.20.10", port: 8080, expected: "Allow" },
+      { desc: "Interner PC via Webdienst (8080)", source: "192.168.20.77", destination: "192.168.20.10", port: 8080, expected: "Allow" },
+      { desc: "Externer Host via RDP (3389) zum Server", source: "8.8.8.8", destination: "192.168.20.10", port: 3389, expected: "Deny" },
+    ],
+    sampleSolution: [
+      { source: "192.168.20.50", destination: "192.168.20.10", port: "22", action: "Allow" },
+      { source: "any", destination: "192.168.20.10", port: "22", action: "Deny" },
+      { source: "192.168.20.0/24", destination: "any", port: "any", action: "Allow" },
+      { source: "any", destination: "192.168.20.10", port: "8080", action: "Allow" },
+    ],
+    sampleSolutionNote:
+      "Wichtig: Die beiden SSH-Regeln (Allow fuer den Admin-PC, danach Deny fuer alle anderen) muessen VOR der breiten 'internes Netz darf alles'-Regel stehen - sonst wuerden auch andere interne Rechner per SSH durchkommen.",
+  },
+  {
+    id: "puzzle-build-hard",
+    mode: "build",
+    difficulty: "hard",
+    title: "🛠️ Selbst konfigurieren: VPN, App-Server & Datenbank",
+    goal:
+      "Wieder komplett leer - alle Regeln selbst entwerfen. Anforderungen:\n" +
+      "• Der Datenbankserver 10.0.30.5 ist besonders sensibel: NUR der Applikationsserver 10.0.20.5 darf ihn erreichen, und zwar ausschliesslich auf Port 5432 (PostgreSQL). Das gilt ausnahmslos - auch das VPN-Management darf hier nicht durch.\n" +
+      "• Das VPN-Gateway 10.0.0.1 darf ansonsten auf alles zugreifen (Management-Zugriff).\n" +
+      "• Der Applikationsserver 10.0.20.5 nimmt auf Port 443 Verbindungen von ueberall entgegen.\n" +
+      "• Das interne Buero-Netz 10.0.10.0/24 darf den Applikationsserver zusaetzlich per SSH (22) verwalten.\n" +
+      "• Alles andere ist zu blocken.",
+    rules: [],
+    tests: [
+      { desc: "App-Server via PostgreSQL zur DB", source: "10.0.20.5", destination: "10.0.30.5", port: 5432, expected: "Allow" },
+      { desc: "App-Server auf falschem Port zur DB", source: "10.0.20.5", destination: "10.0.30.5", port: 5433, expected: "Deny" },
+      { desc: "VPN-Gateway versucht Zugriff auf DB", source: "10.0.0.1", destination: "10.0.30.5", port: 5432, expected: "Deny" },
+      { desc: "Buero-Netz versucht Zugriff auf DB", source: "10.0.10.7", destination: "10.0.30.5", port: 5432, expected: "Deny" },
+      { desc: "VPN-Gateway zum App-Server (beliebiger Port)", source: "10.0.0.1", destination: "10.0.20.5", port: 9999, expected: "Allow" },
+      { desc: "Beliebiger Host via HTTPS zum App-Server", source: "8.8.8.8", destination: "10.0.20.5", port: 443, expected: "Allow" },
+      { desc: "Buero-Netz via SSH zum App-Server", source: "10.0.10.7", destination: "10.0.20.5", port: 22, expected: "Allow" },
+      { desc: "Externer Host via SSH zum App-Server", source: "8.8.8.8", destination: "10.0.20.5", port: 22, expected: "Deny" },
+      { desc: "Externer Host zu einem Buero-PC", source: "8.8.8.8", destination: "10.0.10.50", port: 80, expected: "Deny" },
+    ],
+    sampleSolution: [
+      { source: "10.0.20.5", destination: "10.0.30.5", port: "5432", action: "Allow" },
+      { source: "any", destination: "10.0.30.5", port: "any", action: "Deny" },
+      { source: "10.0.0.1", destination: "any", port: "any", action: "Allow" },
+      { source: "any", destination: "10.0.20.5", port: "443", action: "Allow" },
+      { source: "10.0.10.0/24", destination: "10.0.20.5", port: "22", action: "Allow" },
+    ],
+    sampleSolutionNote:
+      "Entscheidend: die Deny-Regel fuer den Datenbankserver muss NACH der spezifischen App-Server-Erlaubnis, aber VOR der breiten VPN-Allow-Regel stehen. Sonst wuerde das VPN-Gateway die DB trotz 'ausnahmslos' erreichen koennen, weil seine Allow-alles-Regel zuerst greifen wuerde.",
+  },
 ];
 
 let currentPuzzle = null;
@@ -82,20 +157,28 @@ function ipToInt(ip) {
   return ((p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]) >>> 0;
 }
 
+function isValidIpLiteral(value) {
+  return /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value) &&
+    value.split(".").every((o) => Number(o) >= 0 && Number(o) <= 255);
+}
+
 function fieldMatches(fieldValue, actualIp) {
-  if (fieldValue === "any") return true;
-  if (fieldValue.includes("/")) {
-    const [base, bitsStr] = fieldValue.split("/");
+  const value = (fieldValue || "").trim();
+  if (value === "" || value.toLowerCase() === "any") return true;
+  if (value.includes("/")) {
+    const [base, bitsStr] = value.split("/");
     const bits = Number(bitsStr);
+    if (!isValidIpLiteral(base) || Number.isNaN(bits)) return false;
     const mask = bits === 0 ? 0 : (0xffffffff << (32 - bits)) >>> 0;
     return (ipToInt(base) & mask) === (ipToInt(actualIp) & mask);
   }
-  return fieldValue === actualIp;
+  return value === actualIp;
 }
 
 function portMatches(fieldValue, actualPort) {
-  if (fieldValue === "any") return true;
-  return Number(fieldValue) === Number(actualPort);
+  const value = (fieldValue || "").trim();
+  if (value === "" || value.toLowerCase() === "any") return true;
+  return Number(value) === Number(actualPort);
 }
 
 function simulatePacket(rules, packet) {
@@ -122,6 +205,10 @@ function shuffle(arr) {
   return a;
 }
 
+function cloneRules(rules) {
+  return rules.map((r) => ({ ...r }));
+}
+
 /* ---------------- Rendering ---------------- */
 
 function loadSolvedSet() {
@@ -132,24 +219,87 @@ function loadSolvedSet() {
 
 function renderPuzzle(puzzleId) {
   currentPuzzle = PUZZLES.find((p) => p.id === puzzleId) || PUZZLES[0];
-  currentOrder = shuffle(currentPuzzle.rules);
+  currentOrder =
+    currentPuzzle.mode === "build"
+      ? []
+      : shuffle(currentPuzzle.rules);
 
   document.getElementById("puzzle-title").textContent = currentPuzzle.title;
-  document.getElementById("puzzle-goal").textContent = currentPuzzle.goal;
+  document.getElementById("puzzle-goal").innerHTML = escapeHtml(
+    currentPuzzle.goal
+  ).replace(/\n/g, "<br>");
 
   const diffBadge = document.getElementById("puzzle-difficulty-badge");
   diffBadge.textContent =
     { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[currentPuzzle.difficulty];
   diffBadge.className = "badge difficulty-" + currentPuzzle.difficulty;
 
+  const modeBadge = document.getElementById("puzzle-mode-badge");
+  const isBuild = currentPuzzle.mode === "build";
+  modeBadge.textContent = isBuild ? "Regeln selbst erstellen" : "Reihenfolge-Puzzle";
+  modeBadge.className = "badge " + (isBuild ? "status-progress" : "status-none");
+
+  document.getElementById("add-rule-btn").classList.toggle("hidden", !isBuild);
+  document.getElementById("clear-rules-btn").classList.toggle("hidden", !isBuild);
+  document.getElementById("shuffle-btn").classList.toggle("hidden", isBuild);
+
+  const sampleBox = document.getElementById("sample-solution");
+  if (isBuild && currentPuzzle.sampleSolution) {
+    sampleBox.classList.remove("hidden");
+    sampleBox.innerHTML = `
+      <summary>🔎 Musterloesung anzeigen (erst versuchen!)</summary>
+      <ul class="rule-list" style="margin-top:10px;">
+        ${currentPuzzle.sampleSolution
+          .map(
+            (r, i) => `<li class="rule-item" style="cursor:default;">
+              <div class="rule-index">${i + 1}</div>
+              <div><span class="rule-field-label">Quelle</span>${r.source}</div>
+              <div><span class="rule-field-label">Ziel</span>${r.destination}</div>
+              <div><span class="rule-field-label">Port</span>${r.port}</div>
+              <div><span class="rule-field-label">Aktion</span>
+                <span class="${r.action === "Allow" ? "action-allow" : "action-deny"}">${r.action}</span>
+              </div>
+              <div></div>
+            </li>`
+          )
+          .join("")}
+      </ul>
+      ${
+        currentPuzzle.sampleSolutionNote
+          ? `<p class="text-muted" style="margin-top:8px;">${currentPuzzle.sampleSolutionNote}</p>`
+          : ""
+      }
+    `;
+  } else {
+    sampleBox.classList.add("hidden");
+    sampleBox.innerHTML = "";
+  }
+
   renderRuleList();
   document.getElementById("test-results").innerHTML = "";
   updateSolvedBadge();
 }
 
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderRuleList() {
   const list = document.getElementById("rule-list");
   list.innerHTML = "";
+  const isBuild = currentPuzzle.mode === "build";
+
+  if (isBuild && currentOrder.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "text-muted";
+    empty.style.padding = "10px 4px";
+    empty.textContent =
+      "Noch keine Regeln - klicke auf \"Regel hinzufuegen\", um zu starten.";
+    list.appendChild(empty);
+    return;
+  }
 
   currentOrder.forEach((rule, idx) => {
     const li = document.createElement("li");
@@ -157,17 +307,44 @@ function renderRuleList() {
     li.draggable = true;
     li.dataset.index = String(idx);
 
+    const fieldsHtml = isBuild
+      ? `
+        <div>
+          <span class="rule-field-label">Quelle</span>
+          <input class="rule-field-input" data-field="source" value="${rule.source}" placeholder="any / IP / CIDR" />
+        </div>
+        <div>
+          <span class="rule-field-label">Ziel</span>
+          <input class="rule-field-input" data-field="destination" value="${rule.destination}" placeholder="any / IP / CIDR" />
+        </div>
+        <div>
+          <span class="rule-field-label">Port</span>
+          <input class="rule-field-input" data-field="port" value="${rule.port}" placeholder="any / Zahl" />
+        </div>
+        <div>
+          <span class="rule-field-label">Aktion</span>
+          <select class="rule-field-input" data-field="action">
+            <option value="Allow" ${rule.action === "Allow" ? "selected" : ""}>Allow</option>
+            <option value="Deny" ${rule.action === "Deny" ? "selected" : ""}>Deny</option>
+          </select>
+        </div>
+      `
+      : `
+        <div><span class="rule-field-label">Quelle</span>${rule.source}</div>
+        <div><span class="rule-field-label">Ziel</span>${rule.destination}</div>
+        <div><span class="rule-field-label">Port</span>${rule.port}</div>
+        <div><span class="rule-field-label">Aktion</span>
+          <span class="${rule.action === "Allow" ? "action-allow" : "action-deny"}">${rule.action}</span>
+        </div>
+      `;
+
     li.innerHTML = `
       <div class="rule-index">${idx + 1}</div>
-      <div><span class="rule-field-label">Quelle</span>${rule.source}</div>
-      <div><span class="rule-field-label">Ziel</span>${rule.destination}</div>
-      <div><span class="rule-field-label">Port</span>${rule.port}</div>
-      <div><span class="rule-field-label">Aktion</span>
-        <span class="${rule.action === "Allow" ? "action-allow" : "action-deny"}">${rule.action}</span>
-      </div>
+      ${fieldsHtml}
       <div class="reorder-btns">
         <button class="btn small" data-move="up" title="Nach oben">↑</button>
         <button class="btn small" data-move="down" title="Nach unten">↓</button>
+        ${isBuild ? '<button class="btn small" data-move="delete" title="Regel loeschen">🗑</button>' : ""}
       </div>
     `;
 
@@ -189,6 +366,19 @@ function renderRuleList() {
     li.querySelector('[data-move="down"]').addEventListener("click", () => {
       if (idx < currentOrder.length - 1) moveRule(idx, idx + 1);
     });
+    const deleteBtn = li.querySelector('[data-move="delete"]');
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", () => deleteRule(idx));
+    }
+
+    if (isBuild) {
+      li.querySelectorAll(".rule-field-input").forEach((input) => {
+        const eventName = input.tagName === "SELECT" ? "change" : "input";
+        input.addEventListener(eventName, () => {
+          currentOrder[idx][input.dataset.field] = input.value;
+        });
+      });
+    }
 
     list.appendChild(li);
   });
@@ -198,6 +388,16 @@ function moveRule(fromIdx, toIdx) {
   const [moved] = currentOrder.splice(fromIdx, 1);
   currentOrder.splice(toIdx, 0, moved);
   dragFromIndex = null;
+  renderRuleList();
+}
+
+function deleteRule(idx) {
+  currentOrder.splice(idx, 1);
+  renderRuleList();
+}
+
+function addRule() {
+  currentOrder.push({ source: "any", destination: "any", port: "any", action: "Deny" });
   renderRuleList();
 }
 
@@ -223,8 +423,8 @@ function runTests() {
   const summary = document.createElement("div");
   summary.className = "feedback-box " + (allPass ? "correct" : "incorrect");
   summary.innerHTML = allPass
-    ? "<strong>Alle Tests bestanden!</strong> Diese Regelreihenfolge erzeugt das gewuenschte Verhalten."
-    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Ueberlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und ordne neu.`;
+    ? "<strong>Alle Tests bestanden!</strong> Diese Regeln erzeugen das gewuenschte Verhalten."
+    : `<strong>${results.filter((r) => r.pass).length} / ${results.length} Tests bestanden.</strong> Ueberlege, welche Regel zuerst greifen sollte ("erste passende Regel gewinnt") und passe Regeln bzw. Reihenfolge an.`;
   resultsEl.appendChild(summary);
 
   if (allPass) {
@@ -288,5 +488,14 @@ document.addEventListener("DOMContentLoaded", () => {
     currentOrder = shuffle(currentOrder);
     renderRuleList();
     document.getElementById("test-results").innerHTML = "";
+  });
+  document.getElementById("add-rule-btn").addEventListener("click", addRule);
+  document.getElementById("clear-rules-btn").addEventListener("click", () => {
+    if (currentOrder.length === 0) return;
+    if (confirm("Alle eigenen Regeln in diesem Puzzle loeschen?")) {
+      currentOrder = [];
+      renderRuleList();
+      document.getElementById("test-results").innerHTML = "";
+    }
   });
 });

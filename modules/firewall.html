@@ -41,8 +41,9 @@
 
     <hr class="sep" />
 
-    <div class="flex gap-8" style="align-items:center; margin-bottom:10px;">
+    <div class="flex gap-8" style="align-items:center; margin-bottom:10px; flex-wrap:wrap;">
       <span id="puzzle-difficulty-badge" class="badge difficulty-easy">Leicht</span>
+      <span id="puzzle-mode-badge" class="badge status-none">Reihenfolge-Puzzle</span>
       <h3 id="puzzle-title" style="margin:0;"></h3>
     </div>
     <div class="alert info" id="puzzle-goal-box">
@@ -55,7 +56,11 @@
     <div class="btn-row">
       <button id="run-tests-btn" class="btn primary">Regeln testen</button>
       <button id="shuffle-btn" class="btn ghost">Neu mischen</button>
+      <button id="add-rule-btn" class="btn ghost hidden">+ Regel hinzufuegen</button>
+      <button id="clear-rules-btn" class="btn ghost hidden">Alle Regeln loeschen</button>
     </div>
+
+    <details id="sample-solution" class="alert info hidden" style="margin-top:16px;"></details>
 
     <div id="test-results"></div>
   </div>

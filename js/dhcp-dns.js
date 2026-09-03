@@ -9,6 +9,7 @@ const MODULE_ID = "dhcpdns";
 const SCENARIOS = [
   {
     id: "apipa",
+    difficulty: "easy",
     title: "Ticket #1042 - Kein Netzwerkzugriff",
     symptom:
       "Ein Nutzer meldet: 'Mein PC hat seit heute Morgen keine Internetverbindung mehr. Andere Kollegen im gleichen Buero haben keine Probleme.'",
@@ -51,6 +52,7 @@ Kabel: kein Fehler erkannt`,
   },
   {
     id: "ping-name-fails",
+    difficulty: "easy",
     title: "Ticket #1055 - Webseiten laden nicht, Ping per IP funktioniert",
     symptom:
       "Ein Nutzer kann keine Webseiten mehr aufrufen. Er berichtet: 'Ich kann den Server per IP-Adresse anpingen, aber www.firma-intern.local erreiche ich nicht.'",
@@ -96,6 +98,7 @@ Address:  10.0.0.1
   },
   {
     id: "wrong-dns-result",
+    difficulty: "medium",
     title: "Ticket #1061 - Falsche Webseite wird angezeigt",
     symptom:
       "Ein Nutzer ruft intranet.firma.local auf und landet auf einer voellig fremden Seite. Andere Dienste funktionieren normal.",
@@ -131,6 +134,7 @@ Address: 203.0.113.77`,
   },
   {
     id: "duplicate-ip",
+    difficulty: "medium",
     title: "Ticket #1073 - Verbindung bricht immer wieder ab",
     symptom:
       "Ein Nutzer meldet sporadische Verbindungsabbrueche. Windows zeigt gelegentlich eine Meldung zu einem Adresskonflikt an.",
@@ -166,6 +170,7 @@ einem anderen Geraet (MAC 00-1A-2B-3C-4D-5E) im Netzwerk verwendet wird.`,
   },
   {
     id: "wrong-gateway",
+    difficulty: "medium",
     title: "Ticket #1080 - Internet geht nicht, lokales Netz schon",
     symptom:
       "Ein Nutzer kann Kollegen im lokalen Netz erreichen (Fileserver, Drucker), aber keine Internetseiten aufrufen.",
@@ -201,6 +206,7 @@ Zielhost nicht erreichbar.`,
   },
   {
     id: "stale-dns-cache",
+    difficulty: "medium",
     title: "Ticket #1091 - Alte Webseite wird trotz Umzug angezeigt",
     symptom:
       "Die Firmenseite www.beispiel-firma.ch wurde gestern auf einen neuen Server mit neuer IP umgezogen. Ein Nutzer sieht weiterhin die alte Version der Seite.",
@@ -239,6 +245,217 @@ Address: 203.0.113.200   (neue IP)`,
     explanation:
       "Ein oeffentlicher DNS-Server liefert bereits die neue IP, der lokale Cache des Clients aber noch die alte - erkennbar an der TTL (Gueltigkeitsdauer), die noch nicht abgelaufen ist. Loesung: Cache leeren (ipconfig /flushdns) oder auf Ablauf der TTL warten.",
   },
+  {
+    id: "rogue-dhcp",
+    difficulty: "hard",
+    title: "Ticket #1104 - Uneinheitliche Probleme im Grossraumbuero",
+    symptom:
+      "Im Grossraumbuero melden mehrere Nutzer unterschiedliche Probleme: Manche haben Internet, andere nicht; manche erreichen interne Server nicht, andere schon. Die Probleme traten auf, nachdem ein neuer Mitarbeiter seinen privaten WLAN-Router mitgebracht und per Kabel ans Netz angeschlossen hat.",
+    tools: [
+      {
+        id: "ipconfig-a",
+        label: "ipconfig /all - betroffener Client A",
+        output:
+`Ethernet-Adapter LAN-Verbindung:
+   IPv4-Adresse. . . . . . . . . . . : 192.168.50.140
+   Subnetzmaske. . . . . . . . . . . : 255.255.255.0
+   Standardgateway . . . . . . . . . : 192.168.50.1
+   DHCP-Server . . . . . . . . . . . : 192.168.50.254
+   DNS-Server. . . . . . . . . . . . : 192.168.50.254`,
+      },
+      {
+        id: "ipconfig-b",
+        label: "ipconfig /all - nicht betroffener Client B",
+        output:
+`Ethernet-Adapter LAN-Verbindung:
+   IPv4-Adresse. . . . . . . . . . . : 192.168.50.87
+   Subnetzmaske. . . . . . . . . . . : 255.255.255.0
+   Standardgateway . . . . . . . . . : 192.168.50.1
+   DHCP-Server . . . . . . . . . . . : 192.168.50.10
+   DNS-Server. . . . . . . . . . . . : 10.0.0.1`,
+      },
+      {
+        id: "switch-stats",
+        label: "Switch-Portstatistik pruefen",
+        output:
+`Port 03 (Client-Anschluesse): normaler Traffic
+Port 14 (neu angeschlossenes Geraet): stark erhoehter DHCP-Broadcast-Traffic
+        (DHCPOFFER-Pakete von unbekanntem Absender 192.168.50.254)`,
+      },
+      {
+        id: "asset-list",
+        label: "Geraeteliste: wem gehoert 192.168.50.10?",
+        output:
+`Inventar-Datenbank:
+192.168.50.10  -> offizieller DHCP-/DNS-Server (Server-Raum, dokumentiert)
+192.168.50.254 -> kein Eintrag gefunden`,
+      },
+    ],
+    question: "Was ist die wahrscheinlichste Ursache?",
+    options: [
+      "Ein nicht autorisierter (Rogue) DHCP-Server im Netz vergibt an einen Teil der Clients fehlerhafte Konfigurationen",
+      "Der offizielle DHCP-Server 192.168.50.10 ist ueberlastet und antwortet nur noch teilweise",
+      "Es liegt bei allen betroffenen Clients derselbe IP-Adresskonflikt vor",
+      "Die Switch-Ports sind falsch auf verschiedene VLANs aufgeteilt",
+      "Der DNS-Server 10.0.0.1 ist ausgefallen",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Der mitgebrachte private Router beantwortet DHCP-Anfragen mit als eigener (nicht autorisierter) DHCP-Server unter 192.168.50.254 - inklusive falschem DNS-Server. Je nachdem, ob ein Client die Antwort des echten Servers (.10) oder des Rogue-Geraets (.254) zuerst erhaelt (DHCP-Race), bekommt er eine funktionierende oder eine fehlerhafte Konfiguration. Das erklaert die uneinheitlichen, scheinbar zufaelligen Probleme. Loesung: Rogue-Geraet vom Netz trennen, ggf. DHCP-Snooping auf dem Switch aktivieren.",
+  },
+  {
+    id: "split-horizon-dns",
+    difficulty: "hard",
+    title: "Ticket #1117 - Intranet nur im Buero erreichbar",
+    symptom:
+      "Ein Mitarbeiter im Homeoffice (VPN aktuell nicht verbunden) kann intranet.firma.ch nicht oeffnen. Im Buero funktioniert derselbe Link fuer alle Kollegen einwandfrei.",
+    tools: [
+      {
+        id: "nslookup-office",
+        label: "nslookup intranet.firma.ch (Kollege im Buero)",
+        output:
+`Server:  dns-intern.firma.ch
+Address:  10.0.0.1
+
+Name:    intranet.firma.ch
+Address: 10.0.5.20`,
+      },
+      {
+        id: "nslookup-home",
+        label: "nslookup intranet.firma.ch (Homeoffice, ohne VPN)",
+        output:
+`Server:  dns.provider-home.net
+Address:  192.0.2.53
+
+*** dns.provider-home.net kann intranet.firma.ch nicht finden: Non-existent domain`,
+      },
+      {
+        id: "ping-home",
+        label: "ping 10.0.5.20 (Homeoffice, ohne VPN)",
+        output:
+`Ping wird ausgefuehrt fuer 10.0.5.20 mit 32 Bytes Daten:
+Zielhost nicht erreichbar.
+Zielhost nicht erreichbar.`,
+      },
+      {
+        id: "vpn-status",
+        label: "VPN-Client-Status pruefen",
+        output:
+`VPN-Status: Getrennt
+Letzte Verbindung: gestern, 18:42 Uhr`,
+      },
+    ],
+    question: "Was ist die wahrscheinlichste Ursache?",
+    options: [
+      "Der interne Name existiert nur in der internen (Split-Horizon-)DNS-Zone; ohne VPN wird der oeffentliche DNS-Server befragt, der die Zone nicht kennt",
+      "Der Mitarbeiter hat sein VPN-Passwort vergessen",
+      "Der interne Webserver 10.0.5.20 ist ausgefallen",
+      "Der Heimrouter blockiert ausgehende Verbindungen auf Port 443",
+      "Die TTL des DNS-Eintrags ist gerade abgelaufen",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Bei Split-Horizon- (bzw. Split-View-)DNS existieren fuer denselben Namen zwei getrennte Zonen: intern wird die private IP 10.0.5.20 geliefert, extern/oeffentlich ist der Name gar nicht bekannt (Non-existent domain). Ohne aktive VPN-Verbindung befragt der Homeoffice-Client den DNS-Server des Heim-Providers statt des internen DNS-Servers - und selbst mit der IP waere 10.0.5.20 von aussen ohnehin nicht direkt erreichbar (privates Netz). Loesung: VPN verbinden, bevor interne Ressourcen genutzt werden.",
+  },
+  {
+    id: "missing-dhcp-relay",
+    difficulty: "hard",
+    title: "Ticket #1129 - Nach Router-Tausch keine IP-Adressen mehr in Zweigstelle B",
+    symptom:
+      "Nach dem Austausch des Routers in Zweigstelle B bekommt dort seit heute Morgen niemand mehr eine IP-Adresse per DHCP. Der DHCP-Server steht zentral in Zweigstelle A, in einem anderen Subnetz (10.0.1.0/24). Zweigstelle B nutzt 10.0.20.0/24.",
+    tools: [
+      {
+        id: "ipconfig-b",
+        label: "ipconfig - Client in Zweigstelle B",
+        output:
+`Ethernet-Adapter LAN-Verbindung:
+   Autokonfigurations-IPv4-Adresse. : 169.254.12.9
+   Subnetzmaske. . . . . . . . . . . : 255.255.0.0
+   Standardgateway . . . . . . . . . :`,
+      },
+      {
+        id: "router-config",
+        label: "Router-Konfiguration Zweigstelle B (Ausschnitt, aktuell)",
+        output:
+`interface Vlan20
+ ip address 10.0.20.1 255.255.255.0
+! Hinweis: keine "ip helper-address" konfiguriert`,
+      },
+      {
+        id: "router-config-old",
+        label: "Router-Konfiguration Zweigstelle B (Backup vor dem Tausch)",
+        output:
+`interface Vlan20
+ ip address 10.0.20.1 255.255.255.0
+ ip helper-address 10.0.1.5`,
+      },
+      {
+        id: "ping-dhcp",
+        label: "Ping vom neuen Router zu 10.0.1.5 (DHCP-Server)",
+        output:
+`Ping wird ausgefuehrt fuer 10.0.1.5 mit 32 Bytes Daten:
+Antwort von 10.0.1.5: Bytes=32 Zeit=8ms TTL=62
+Antwort von 10.0.1.5: Bytes=32 Zeit=9ms TTL=62`,
+      },
+    ],
+    question: "Was ist die wahrscheinlichste Ursache?",
+    options: [
+      "Dem neuen Router fehlt die DHCP-Relay-Konfiguration (IP-Helper), daher werden DHCP-Broadcasts nicht mehr an den zentralen DHCP-Server weitergeleitet",
+      "Der zentrale DHCP-Server 10.0.1.5 hat keine freien Adressen mehr im Pool",
+      "Die Subnetzmaske auf dem neuen Router wurde falsch eingetragen",
+      "Der DNS-Server ist von Zweigstelle B aus nicht erreichbar",
+      "In Zweigstelle B liegt ein Adresskonflikt vor",
+    ],
+    correctIndex: 0,
+    explanation:
+      "DHCP-Anfragen sind lokale Broadcasts und werden von Routern standardmaessig NICHT in andere Subnetze weitergeleitet. Ein DHCP-Relay-Agent (IP-Helper-Adresse) leitet sie als Unicast an einen zentralen DHCP-Server weiter. Der Konfigurationsvergleich zeigt: Genau diese Zeile fehlt nach dem Router-Tausch. Da der Router den DHCP-Server aber grundsaetzlich per Ping erreichen kann (Routing ist also in Ordnung), liegt das Problem konkret an der fehlenden Relay-Weiterleitung fuer DHCP-Broadcasts - nicht an Erreichbarkeit, Pool oder DNS.",
+  },
+  {
+    id: "flaky-secondary-dns",
+    difficulty: "hard",
+    title: "Ticket #1136 - Namensaufloesung funktioniert nur manchmal",
+    symptom:
+      "Ein Nutzer meldet, dass interne Anwendungen (z.B. intranet.firma.local) mal erreichbar sind und mal nicht - ohne erkennbares Muster. Ein Neustart des PCs hilft nur kurzzeitig.",
+    tools: [
+      {
+        id: "ipconfig",
+        label: "ipconfig /all (Ausschnitt DNS-Server)",
+        output:
+`DNS-Server. . . . . . . . . . . . : 10.0.0.1
+                                     8.8.8.8`,
+      },
+      {
+        id: "nslookup-primary",
+        label: "nslookup intranet.firma.local 10.0.0.1",
+        output:
+`Server:  dns-intern.firma.local
+Address:  10.0.0.1
+
+Name:    intranet.firma.local
+Address: 10.0.5.20`,
+      },
+      {
+        id: "nslookup-secondary",
+        label: "nslookup intranet.firma.local 8.8.8.8",
+        output:
+`Server:  dns.google
+Address:  8.8.8.8
+
+*** dns.google kann intranet.firma.local nicht finden: Server failed`,
+      },
+    ],
+    question: "Was ist die wahrscheinlichste Ursache?",
+    options: [
+      "Als sekundaerer DNS-Server ist ein oeffentlicher DNS-Dienst eingetragen, der die interne Zone nicht kennt - wird er statt des internen Servers befragt, schlaegt die Aufloesung fehl",
+      "Der DHCP-Server vergibt gelegentlich doppelte IP-Adressen",
+      "Der interne DNS-Server 10.0.0.1 ist dauerhaft ausgefallen",
+      "Die Netzwerkkarte des Clients hat einen Wackelkontakt",
+      "Der Nutzer tippt den Namen gelegentlich falsch",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Windows befragt konfigurierte DNS-Server nicht immer nur streng der Reihe nach - bei Verzoegerungen oder Lastverteilung kann auch der sekundaere Server (hier: der oeffentliche 8.8.8.8) drankommen. Ein oeffentlicher DNS-Server kennt interne/private Zonen wie firma.local grundsaetzlich nicht und liefert einen Fehler zurueck. Das erklaert das 'mal geht's, mal nicht'-Verhalten. Loesung: als sekundaeren DNS-Server einen weiteren internen DNS-Server eintragen, keinen oeffentlichen.",
+  },
 ];
 
 let currentScenario = null;
@@ -250,10 +467,21 @@ function loadSolvedSet() {
   return stored && Array.isArray(stored.solved) ? stored.solved : [];
 }
 
+function getSelectedDifficulty() {
+  return document.getElementById("difficulty-select").value;
+}
+
+function scenariosForDifficulty(difficulty) {
+  if (difficulty === "all") return SCENARIOS;
+  return SCENARIOS.filter((s) => s.difficulty === difficulty);
+}
+
 function pickScenario() {
+  const difficulty = getSelectedDifficulty();
+  const candidates = scenariosForDifficulty(difficulty);
   const solved = loadSolvedSet();
-  const unsolved = SCENARIOS.filter((s) => !solved.includes(s.id));
-  const pool = unsolved.length > 0 ? unsolved : SCENARIOS;
+  const unsolved = candidates.filter((s) => !solved.includes(s.id));
+  const pool = unsolved.length > 0 ? unsolved : candidates;
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -263,6 +491,11 @@ function renderScenario() {
 
   document.getElementById("ticket-title").textContent = currentScenario.title;
   document.getElementById("ticket-symptom").textContent = currentScenario.symptom;
+
+  const diffBadge = document.getElementById("ticket-difficulty-badge");
+  diffBadge.textContent =
+    { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[currentScenario.difficulty];
+  diffBadge.className = "badge difficulty-" + currentScenario.difficulty;
 
   const toolsEl = document.getElementById("tool-buttons");
   toolsEl.innerHTML = "";
@@ -378,4 +611,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("check-btn").addEventListener("click", checkAnswer);
   document.getElementById("next-btn").addEventListener("click", renderScenario);
+  document
+    .getElementById("difficulty-select")
+    .addEventListener("change", renderScenario);
 });
