@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VPN-Grundlagen &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html" class="active">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    🔐 VPN-Grundlagen
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Stell dir einen VPN-Tunnel wie eine private, blickdichte Röhre vor,
+        die mitten durch eine belebte öffentliche Strasse (das Internet)
+        gebaut wird - alles was durch die Röhre fährt, ist von aussen
+        weder sichtbar noch veränderbar.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN, und warum
+    Split-Tunneling ein Kompromiss zwischen Bequemlichkeit und Sicherheit ist.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Das Tunnel-Prinzip</h3>
+    <p>
+      Ein VPN verschlüsselt Daten an einem Ende, schickt sie durch ein
+      unsicheres Netz (meist das Internet) und entschlüsselt sie am anderen
+      Ende wieder. Für alles, was durch den Tunnel läuft, sieht es so aus,
+      als wären beide Enden direkt lokal verbunden.
+    </p>
+    <svg viewBox="0 0 560 140" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="45" width="110" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="65" y="75" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Netz A</text>
+
+      <rect x="440" y="45" width="110" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="495" y="75" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Netz B</text>
+
+      <rect x="150" y="55" width="60" height="30" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="180" y="75" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VPN-GW</text>
+
+      <rect x="350" y="55" width="60" height="30" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="380" y="75" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VPN-GW</text>
+
+      <rect x="215" y="30" width="130" height="80" rx="10" fill="none" stroke="#29d3c1" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="280" y="20" fill="#29d3c1" font-size="11" text-anchor="middle" font-family="Consolas, monospace">verschlüsselter Tunnel</text>
+      <text x="280" y="75" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">(quer durchs</text>
+      <text x="280" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">öffentliche Internet)</text>
+
+      <line x1="120" y1="70" x2="150" y2="70" stroke="#9aa5b8" stroke-width="2"/>
+      <line x1="210" y1="70" x2="215" y2="70" stroke="#29d3c1" stroke-width="2"/>
+      <line x1="345" y1="70" x2="350" y2="70" stroke="#29d3c1" stroke-width="2"/>
+      <line x1="410" y1="70" x2="440" y2="70" stroke="#9aa5b8" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Site-to-Site vs. Client-to-Site
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Site-to-Site = zwei Gebäude bekommen eine feste private Standleitung.
+          Client-to-Site = eine einzelne Person bekommt bei Bedarf einen
+          temporären Zugang, egal von wo sie gerade kommt.
+        </div>
+      </details>
+    </h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>Site-to-Site</th><th>Client-to-Site (Remote Access)</th>
+      </tr>
+      <tr><td>Verbindet</td><td>zwei ganze Netzwerke/Standorte</td><td>ein einzelnes Gerät mit einem Netzwerk</td></tr>
+      <tr><td>Aufbau</td><td>Firewall/Router ↔ Firewall/Router</td><td>VPN-Client-Software ↔ VPN-Gateway</td></tr>
+      <tr><td>Dauer</td><td>dauerhaft aktiv</td><td>bei Bedarf, sitzungsbasiert</td></tr>
+      <tr><td>Typisches Beispiel</td><td>Hauptsitz ↔ Zweigstelle</td><td>Homeoffice-Mitarbeiter ↔ Firmennetz</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">IPSec vs. SSL-VPN</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>IPSec</th><th>SSL-VPN (TLS-VPN)</th>
+      </tr>
+      <tr><td>OSI-Schicht</td><td>3 (Vermittlung) - verschlüsselt ganze IP-Pakete</td><td>höher (nutzt TLS wie HTTPS)</td></tr>
+      <tr><td>Client</td><td>meist dedizierter Client/OS-Integration nötig</td><td>oft schon per Browser nutzbar</td></tr>
+      <tr><td>Firewall-Durchlässigkeit</td><td>eigene Ports (z.B. UDP 500/4500) - wird oft blockiert</td><td>meist Port 443 (HTTPS) - fast immer offen</td></tr>
+      <tr><td>Typischer Einsatz</td><td>Site-to-Site</td><td>Client-to-Site / Remote Access</td></tr>
+    </table>
+    <p class="text-muted">
+      IPSec handelt Schlüssel in zwei Phasen aus (IKE Phase 1: sicherer
+      Verhandlungskanal; Phase 2: eigentliche Datenverschlüsselungs-Schlüssel) -
+      dadurch wird nie unverschlüsselt über die Schlüssel selbst gesprochen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Split-Tunneling vs. Full-Tunneling
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Full Tunnel: die Firma sieht (und kontrolliert) deinen gesamten
+          Internetverkehr, auch privates Surfen. Split Tunnel: die Firma
+          sieht nur, was wirklich für sie bestimmt ist - dafür trägt dein
+          Gerät selbst mehr Verantwortung für den Rest.
+        </div>
+      </details>
+    </h3>
+    <svg viewBox="0 0 560 170" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="150" height="40" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="85" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Client (Homeoffice)</text>
+
+      <line x1="85" y1="50" x2="85" y2="75" stroke="#29d3c1" stroke-width="2"/>
+      <rect x="20" y="75" width="130" height="30" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="85" y="95" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">→ Firmennetz (VPN)</text>
+
+      <line x1="85" y1="50" x2="200" y2="105" stroke="#ffb648" stroke-width="2" stroke-dasharray="4 3"/>
+      <rect x="200" y="90" width="150" height="30" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="275" y="110" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">→ Internet (direkt)</text>
+      <text x="275" y="135" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">nur bei Split Tunneling</text>
+
+      <text x="85" y="155" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Full Tunnel: ALLES via VPN</text>
+      <text x="275" y="155" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Split Tunnel: nur Firmenverkehr via VPN</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/vpn-basics.js"></script>
+</body>
+</html>

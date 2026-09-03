@@ -12,28 +12,53 @@
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Übersicht</a>
-    <span class="nav-sep"></span>
-    <a href="computer-basics.html">Computer-Grundlagen</a>
-    <a href="terminal.html">CMD/PowerShell</a>
-    <a href="scripting.html">Skripting</a>
-    <span class="nav-sep"></span>
-    <a href="network-devices.html">Netzwerkgeräte</a>
-    <a href="network-packets.html" class="active">Pakete &amp; OSI</a>
-    <a href="subnetting.html">Subnetting</a>
-    <a href="dns-concepts.html">DNS-Konzepte</a>
-    <a href="dhcp-dns.html">DHCP/DNS</a>
-    <span class="nav-sep"></span>
-    <a href="active-directory.html">Active Directory</a>
-    <a href="intune-entra.html">Intune/Entra ID</a>
-    <a href="cloud-basics.html">Cloud-Grundlagen</a>
-    <span class="nav-sep"></span>
-    <a href="packaging.html">Paketierung</a>
-    <span class="nav-sep"></span>
-    <a href="firewall.html">Firewall</a>
-    <a href="sqli.html">SQL-Injection</a>
-    <a href="email-security.html">E-Mail-Sicherheit</a>
-    <span class="nav-sep"></span>
-    <a href="backup.html">Backup &amp; Recovery</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html" class="active">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
   </nav>
 </header>
 
@@ -114,6 +139,69 @@
       <rect x="360" y="222" width="180" height="30" fill="#241a33" stroke="#ffb648" stroke-width="1.5"/>
       <text x="450" y="242" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Netzzugriff</text>
     </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Die 7 OSI-Schichten im Detail
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Englische Eselsbrücke für die Reihenfolge 1&ndash;7 (von unten nach
+          oben): <strong>P</strong>lease <strong>D</strong>o <strong>N</strong>ot
+          <strong>T</strong>hrow <strong>S</strong>alami <strong>P</strong>izza
+          <strong>A</strong>way &ndash; also <strong>P</strong>hysical,
+          <strong>D</strong>ata Link, <strong>N</strong>etwork,
+          <strong>T</strong>ransport, <strong>S</strong>ession,
+          <strong>P</strong>resentation, <strong>A</strong>pplication.
+        </div>
+      </details>
+    </h3>
+    <p class="text-muted">
+      Merksatz (Layer 1 &rarr; 7): "Please Do Not Throw Salami Pizza Away."
+      Jeder Anfangsbuchstabe steht für eine Schicht, in aufsteigender
+      Reihenfolge von der Hardware (Layer 1) bis zur Anwendung (Layer 7).
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">#</th><th>Schicht (DE)</th><th>Layer (EN)</th><th>Merkwort</th><th>Aufgabe</th><th>Beispiel</th>
+      </tr>
+      <tr>
+        <td>1</td><td>Bitübertragung</td><td>Physical</td><td>Please</td>
+        <td>Rohe Bits als Signale (elektrisch, optisch, Funk) übertragen</td>
+        <td>Kabel, Hub, WLAN-Funksignal, Spannungspegel</td>
+      </tr>
+      <tr>
+        <td>2</td><td>Sicherung</td><td>Data Link</td><td>Do</td>
+        <td>Rahmen (Frames) zwischen direkt verbundenen Geräten im selben Segment adressieren</td>
+        <td>Switch, Ethernet, MAC-Adresse</td>
+      </tr>
+      <tr>
+        <td>3</td><td>Vermittlung</td><td>Network</td><td>Not</td>
+        <td>Pakete über mehrere Netzwerke hinweg zum Ziel routen (logische Adressierung)</td>
+        <td>Router, IP-Adresse, ICMP</td>
+      </tr>
+      <tr>
+        <td>4</td><td>Transport</td><td>Transport</td><td>Throw</td>
+        <td>Ende-zu-Ende-Verbindung, Segmentierung, Zuverlässigkeit/Portadressierung</td>
+        <td>TCP, UDP, Portnummern</td>
+      </tr>
+      <tr>
+        <td>5</td><td>Sitzung</td><td>Session</td><td>Salami</td>
+        <td>Sitzungen zwischen zwei Anwendungen aufbauen, verwalten und beenden</td>
+        <td>NetBIOS, RPC, Login-Sitzung</td>
+      </tr>
+      <tr>
+        <td>6</td><td>Darstellung</td><td>Presentation</td><td>Pizza</td>
+        <td>Datenformat, Verschlüsselung und Kompression, damit beide Seiten sich verstehen</td>
+        <td>TLS/SSL, JPEG, ASCII/Unicode</td>
+      </tr>
+      <tr>
+        <td>7</td><td>Anwendung</td><td>Application</td><td>Away</td>
+        <td>Schnittstelle zwischen Netzwerk und der eigentlichen Anwendung/dem Nutzer</td>
+        <td>HTTP, FTP, DNS, SMTP</td>
+      </tr>
+    </table>
   </div>
 
   <div class="card">

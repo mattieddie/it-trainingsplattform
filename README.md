@@ -12,11 +12,13 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 16 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 17 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
-sowohl die Gruppierung auf der Startseite als auch die Navigationsreihenfolge
-(inkl. sichtbarer Trenner zwischen den Baukästen in der Navigationsleiste).
+sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
+dort erscheint pro Baukasten ein Dropdown-Button, der beim Klick die
+zugehörigen Module auflistet (aktiver Baukasten und aktives Modul werden
+farblich hervorgehoben).
 
 **1. IT-Grundlagen** - das Handwerkszeug
 - **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen, Registry, Dateitypen.
@@ -29,6 +31,7 @@ sowohl die Gruppierung auf der Startseite als auch die Navigationsreihenfolge
 - **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen.
 - **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, inkl. Domain-Konfigurator.
 - **DHCP/DNS-Troubleshooting** ([modules/dhcp-dns.html](modules/dhcp-dns.html)) - zehn Helpdesk-Tickets mit simulierten Tool-Ausgaben.
+- **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN, Split- vs. Full-Tunneling.
 
 **3. Verzeichnisdienste & Identität** - On-Premises bis Cloud
 - **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus Troubleshooting-Tickets.
@@ -75,11 +78,13 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── cloud-basics.js
 │   ├── packaging.js
 │   ├── network-devices.js
-│   └── network-packets.js
+│   ├── network-packets.js
+│   └── vpn-basics.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── network-packets.html
 │   ├── network-devices.html
+│   ├── vpn-basics.html
 │   ├── subnetting.html
 │   ├── dhcp-dns.html
 │   ├── firewall.html

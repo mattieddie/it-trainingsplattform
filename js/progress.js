@@ -128,6 +128,15 @@ const MODULES = [
       "Helpdesk-Tickets mit simulierten Tool-Ausgaben (ipconfig, nslookup, ping). Finde die Ursache und die Lösung.",
     href: "modules/dhcp-dns.html",
   },
+  {
+    id: "vpnbasics",
+    track: "netzwerk",
+    title: "VPN-Grundlagen",
+    icon: "\u{1F510}",
+    description:
+      "Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN, Split- vs. Full-Tunneling.",
+    href: "modules/vpn-basics.html",
+  },
 
   // ---- Baukasten: Verzeichnisdienste & Identität ----
   {
@@ -328,3 +337,24 @@ function markModuleStarted(moduleId) {
     setModuleStatus(moduleId, "progress");
   }
 }
+
+/** Dropdown-Navigation: Baukasten-Gruppen oeffnen/schliessen per Klick. */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".nav-dropdown-toggle").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const dropdown = btn.closest(".nav-dropdown");
+      const wasOpen = dropdown.classList.contains("open");
+      document.querySelectorAll(".nav-dropdown.open").forEach((d) => d.classList.remove("open"));
+      if (!wasOpen) dropdown.classList.add("open");
+    });
+  });
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".nav-dropdown.open").forEach((d) => d.classList.remove("open"));
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".nav-dropdown.open").forEach((d) => d.classList.remove("open"));
+    }
+  });
+});
