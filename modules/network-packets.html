@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Netzwerkpakete, TCP/UDP &amp; OSI-Modell &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <span class="nav-sep"></span>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <span class="nav-sep"></span>
+    <a href="network-devices.html">Netzwerkgeräte</a>
+    <a href="network-packets.html" class="active">Pakete &amp; OSI</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <span class="nav-sep"></span>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <span class="nav-sep"></span>
+    <a href="packaging.html">Paketierung</a>
+    <span class="nav-sep"></span>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <span class="nav-sep"></span>
+    <a href="backup.html">Backup &amp; Recovery</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    📶 Netzwerkpakete, TCP/UDP &amp; OSI-Modell
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Wenn du eine Webseite aufrufst, wird diese eine Anfrage in mehrere
+        Umschläge ineinander verpackt, Stück für Stück über das Netz
+        geschickt und beim Empfänger wieder ausgepackt. Genau das steckt
+        hinter OSI-Modell, TCP/UDP und Paket-Headern.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Wie Daten in Pakete verpackt (gekapselt) werden, was TCP von UDP
+    unterscheidet, und wie das OSI-Modell mit dem in der Praxis verwendeten
+    TCP/IP-Modell zusammenhängt.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      OSI-Modell vs. TCP/IP-Modell
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          OSI ist die "Theorie" (7 sauber getrennte Schichten), TCP/IP ist
+          die "Praxis" (4 gröbere Schichten, direkt an echten Protokollen
+          orientiert). Im Alltag sagt man trotzdem oft OSI-Begriffe wie
+          "Layer 3", auch wenn man eigentlich TCP/IP meint.
+        </div>
+      </details>
+    </h3>
+    <svg viewBox="0 0 560 320" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <text x="130" y="20" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">OSI (7 Schichten)</text>
+      <text x="430" y="20" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">TCP/IP (4 Schichten)</text>
+
+      <rect x="20" y="30" width="220" height="30" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="130" y="50" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">7. Anwendung</text>
+      <rect x="20" y="62" width="220" height="30" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="130" y="82" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">6. Darstellung</text>
+      <rect x="20" y="94" width="220" height="30" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="130" y="114" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">5. Sitzung</text>
+
+      <rect x="20" y="126" width="220" height="30" fill="#1b2b4d" stroke="#4f8cff" stroke-width="1.5"/>
+      <text x="130" y="146" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">4. Transport</text>
+
+      <rect x="20" y="158" width="220" height="30" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="130" y="178" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">3. Vermittlung</text>
+
+      <rect x="20" y="190" width="220" height="30" fill="#241a33" stroke="#ffb648" stroke-width="1.5"/>
+      <text x="130" y="210" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">2. Sicherung</text>
+      <rect x="20" y="222" width="220" height="30" fill="#241a33" stroke="#ffb648" stroke-width="1.5"/>
+      <text x="130" y="242" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">1. Bitübertragung</text>
+
+      <path d="M240,45 C300,45 300,75 360,75" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <path d="M240,77 C300,77 300,75 360,75" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <path d="M240,109 C300,109 300,75 360,75" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <rect x="360" y="60" width="180" height="30" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="450" y="80" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Anwendung</text>
+
+      <path d="M240,141 C300,141 300,141 360,141" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <rect x="360" y="126" width="180" height="30" fill="#1b2b4d" stroke="#4f8cff" stroke-width="1.5"/>
+      <text x="450" y="146" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Transport</text>
+
+      <path d="M240,173 C300,173 300,173 360,173" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <rect x="360" y="158" width="180" height="30" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="450" y="178" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Internet</text>
+
+      <path d="M240,205 C300,205 300,237 360,237" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <path d="M240,237 C300,237 300,237 360,237" stroke="#9aa5b8" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      <rect x="360" y="222" width="180" height="30" fill="#241a33" stroke="#ffb648" stroke-width="1.5"/>
+      <text x="450" y="242" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Netzzugriff</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">TCP vs. UDP</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>TCP</th><th>UDP</th>
+      </tr>
+      <tr><td>Verbindung</td><td>verbindungsorientiert (Handshake)</td><td>verbindungslos</td></tr>
+      <tr><td>Zuverlässigkeit</td><td>garantiert (Bestätigungen, Neuübertragung)</td><td>keine Garantie</td></tr>
+      <tr><td>Reihenfolge</td><td>garantiert geordnet</td><td>keine Garantie</td></tr>
+      <tr><td>Geschwindigkeit</td><td>etwas langsamer (mehr Overhead)</td><td>schnell, schlank</td></tr>
+      <tr><td>Typische Nutzung</td><td>HTTP/HTTPS, SSH, E-Mail, Dateitransfer</td><td>DNS, Video-Streaming, VoIP, Online-Gaming</td></tr>
+    </table>
+
+    <h4>TCP-Drei-Wege-Handschlag (Handshake)</h4>
+    <svg viewBox="0 0 500 160" style="width:100%; max-width:500px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="60" width="100" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="60" y="85" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Client</text>
+
+      <rect x="390" y="60" width="100" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="440" y="85" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Server</text>
+
+      <line x1="115" y1="35" x2="385" y2="35" stroke="#4f8cff" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="250" y="28" fill="#4f8cff" font-size="12" text-anchor="middle" font-family="Consolas, monospace">1. SYN</text>
+
+      <line x1="385" y1="65" x2="115" y2="65" stroke="#29d3c1" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="250" y="58" fill="#29d3c1" font-size="12" text-anchor="middle" font-family="Consolas, monospace">2. SYN-ACK</text>
+
+      <line x1="115" y1="130" x2="385" y2="130" stroke="#ffb648" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="250" y="123" fill="#ffb648" font-size="12" text-anchor="middle" font-family="Consolas, monospace">3. ACK</text>
+
+      <text x="250" y="150" fill="#3ecf6c" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Verbindung steht - Datenübertragung beginnt</text>
+
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Kapselung: wie ein Paket aufgebaut ist
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie eine russische Matroschka-Puppe: die eigentlichen Daten
+          stecken innen, umhüllt von einem TCP/UDP-Umschlag, der wiederum
+          in einem IP-Umschlag steckt, der wiederum in einem
+          Ethernet-Umschlag steckt.
+        </div>
+      </details>
+    </h3>
+    <svg viewBox="0 0 560 180" style="width:100%; max-width:560px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="540" height="160" rx="8" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="24" y="30" fill="#ffb648" font-size="11" font-family="Consolas, monospace">Ethernet-Header (MAC-Adressen)</text>
+
+      <rect x="30" y="40" width="500" height="120" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="44" y="60" fill="#29d3c1" font-size="11" font-family="Consolas, monospace">IP-Header (Quell-/Ziel-IP, TTL, Protokoll)</text>
+
+      <rect x="50" y="70" width="460" height="80" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="64" y="90" fill="#4f8cff" font-size="11" font-family="Consolas, monospace">TCP/UDP-Header (Quell-/Ziel-Port, Sequenznummer)</text>
+
+      <rect x="70" y="100" width="420" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="280" y="124" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Nutzdaten (Payload) - z.B. HTTP-Anfrage</text>
+
+      <text x="24" y="172" fill="#9aa5b8" font-size="10" font-family="Consolas, monospace">+ Ethernet-Trailer (Prüfsumme) am Ende, nicht dargestellt</text>
+    </svg>
+    <p class="text-muted">
+      Jede Schicht kümmert sich nur um ihre eigene Aufgabe: Ethernet bringt
+      das Paket zum nächsten Gerät im selben Netzsegment (per MAC-Adresse),
+      IP bringt es über Router hinweg zum richtigen Zielnetzwerk, TCP/UDP
+      sorgt dafür, dass es beim richtigen Programm (Port) ankommt.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Wichtige Ports (Beispiele)</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Port</th><th>Dienst</th><th>Protokoll</th>
+      </tr>
+      <tr><td class="mono">53</td><td>DNS</td><td>UDP (meist), TCP bei grossen Antworten</td></tr>
+      <tr><td class="mono">80</td><td>HTTP</td><td>TCP</td></tr>
+      <tr><td class="mono">443</td><td>HTTPS</td><td>TCP</td></tr>
+      <tr><td class="mono">22</td><td>SSH</td><td>TCP</td></tr>
+      <tr><td class="mono">25</td><td>SMTP (E-Mail-Versand)</td><td>TCP</td></tr>
+      <tr><td class="mono">3389</td><td>RDP (Remotedesktop)</td><td>TCP</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/network-packets.js"></script>
+</body>
+</html>

@@ -84,6 +84,24 @@ const MODULES = [
 
   // ---- Baukasten: Netzwerk-Grundlagen ----
   {
+    id: "networkpackets",
+    track: "netzwerk",
+    title: "Netzwerkpakete, TCP/UDP & OSI-Modell",
+    icon: "\u{1F4F6}",
+    description:
+      "Kapselung/Paketaufbau, TTL, TCP vs. UDP (inkl. Drei-Wege-Handshake) und wie OSI- und TCP/IP-Modell zusammenhängen.",
+    href: "modules/network-packets.html",
+  },
+  {
+    id: "networkdevices",
+    track: "netzwerk",
+    title: "Netzwerkgeräte & Routing",
+    icon: "\u{1F50C}",
+    description:
+      "Hub vs. Switch vs. Router im Vergleich, plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).",
+    href: "modules/network-devices.html",
+  },
+  {
     id: "subnetting",
     track: "netzwerk",
     title: "Subnetting-Trainer",

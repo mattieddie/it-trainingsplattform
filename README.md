@@ -12,10 +12,11 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 14 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 16 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
-sowohl die Gruppierung auf der Startseite als auch die Navigationsreihenfolge.
+sowohl die Gruppierung auf der Startseite als auch die Navigationsreihenfolge
+(inkl. sichtbarer Trenner zwischen den Baukästen in der Navigationsleiste).
 
 **1. IT-Grundlagen** - das Handwerkszeug
 - **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen, Registry, Dateitypen.
@@ -23,6 +24,8 @@ sowohl die Gruppierung auf der Startseite als auch die Navigationsreihenfolge.
 - **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
+- **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau, TTL, TCP-Handshake, OSI- vs. TCP/IP-Modell.
+- **Netzwerkgeräte & Routing** ([modules/network-devices.html](modules/network-devices.html)) - Hub/Switch/Router im Vergleich, plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).
 - **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen.
 - **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, inkl. Domain-Konfigurator.
 - **DHCP/DNS-Troubleshooting** ([modules/dhcp-dns.html](modules/dhcp-dns.html)) - zehn Helpdesk-Tickets mit simulierten Tool-Ausgaben.
@@ -70,9 +73,13 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── email-security.js
 │   ├── scripting.js
 │   ├── cloud-basics.js
-│   └── packaging.js
+│   ├── packaging.js
+│   ├── network-devices.js
+│   └── network-packets.js
 ├── modules/
 │   ├── computer-basics.html
+│   ├── network-packets.html
+│   ├── network-devices.html
 │   ├── subnetting.html
 │   ├── dhcp-dns.html
 │   ├── firewall.html
@@ -161,7 +168,7 @@ Branch-Deployment-Variante oben vollkommen aus.
 ```bash
 git init
 git add .
-git commit -m "Initial commit: Netzwerk- & Security-Trainingsplattform"
+git commit -m "Initial commit: IT-Trainingsplattform"
 git branch -M main
 git remote add origin https://github.com/<dein-username>/<repo-name>.git
 git push -u origin main

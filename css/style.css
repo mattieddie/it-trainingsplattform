@@ -122,6 +122,14 @@ pre {
   text-decoration: none;
 }
 
+.nav-sep {
+  width: 1px;
+  align-self: stretch;
+  min-height: 22px;
+  background: var(--border);
+  margin: 2px 4px;
+}
+
 .container {
   max-width: 980px;
   margin: 0 auto;

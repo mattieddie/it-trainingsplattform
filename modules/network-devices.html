@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Netzwerkgeräte &amp; Routing &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <span class="nav-sep"></span>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="scripting.html">Skripting</a>
+    <span class="nav-sep"></span>
+    <a href="network-devices.html" class="active">Netzwerkgeräte</a>
+    <a href="network-packets.html">Pakete &amp; OSI</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <span class="nav-sep"></span>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <span class="nav-sep"></span>
+    <a href="packaging.html">Paketierung</a>
+    <span class="nav-sep"></span>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <span class="nav-sep"></span>
+    <a href="backup.html">Backup &amp; Recovery</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    🔌 Netzwerkgeräte &amp; Routing
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Hub, Switch und Router sehen von aussen ähnlich aus (Kisten mit
+        Kabeln dran), arbeiten aber auf komplett unterschiedlichen Ebenen
+        des Netzwerks - mit sehr unterschiedlichen Konsequenzen für
+        Performance und Netzwerkdesign.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Hub vs. Switch vs. Router im Vergleich - und wie ein Router anhand
+    seiner Routing-Tabelle entscheidet, wohin ein Paket als Nächstes geht.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Geräte-Quiz und Routing-Aufgaben-Ziel erreicht.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Checkliste</h3>
+    <div id="check-quiz" class="checklist-item">⬜ Geräte-Quiz vollständig richtig lösen</div>
+    <div id="check-tasks" class="checklist-item">⬜ Routing-Tabellen-Aufgaben: 0 / 8 richtig</div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Hub, Switch, Router im Vergleich</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Gerät</th><th>OSI-Schicht</th><th>Entscheidet anhand von</th><th>Verhalten</th>
+      </tr>
+      <tr>
+        <td><strong>Hub</strong></td>
+        <td>1 (Bitübertragung)</td>
+        <td>nichts (blind)</td>
+        <td>Sendet an ALLE Ports, geteilte Kollisionsdomäne, Half-Duplex</td>
+      </tr>
+      <tr>
+        <td><strong>Switch</strong></td>
+        <td>2 (Sicherung)</td>
+        <td>MAC-Adressen</td>
+        <td>Sendet gezielt an den richtigen Port, eigene Kollisionsdomäne pro Port</td>
+      </tr>
+      <tr>
+        <td><strong>Router</strong></td>
+        <td>3 (Vermittlung)</td>
+        <td>IP-Adressen (Routing-Tabelle)</td>
+        <td>Verbindet unterschiedliche Netzwerke/Subnetze miteinander</td>
+      </tr>
+    </table>
+
+    <svg viewBox="0 0 600 150" style="width:100%; max-width:600px; display:block; margin:14px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="180" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="100" y="42" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Hub: flutet ALLES</text>
+
+      <rect x="210" y="10" width="180" height="55" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="300" y="35" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Switch: gezielt</text>
+      <text x="300" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">per MAC-Adresse</text>
+
+      <rect x="410" y="10" width="180" height="55" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="500" y="35" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Router: zwischen</text>
+      <text x="500" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Netzwerken, per IP</text>
+
+      <text x="100" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">alle Geräte</text>
+      <text x="100" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">"hören" alles mit</text>
+
+      <text x="300" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">nur Absender +</text>
+      <text x="300" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Empfänger sehen es</text>
+
+      <text x="500" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">verbindet z.B. LAN</text>
+      <text x="500" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mit dem Internet</text>
+    </svg>
+
+    <p class="text-muted">
+      Wichtig: Ein Switch trennt <strong>Kollisionsdomänen</strong> (pro
+      Port), aber ohne VLANs bleibt die <strong>Broadcast-Domäne</strong>
+      dieselbe - ein Broadcast erreicht weiterhin alle angeschlossenen
+      Geräte. Erst ein Router (oder ein VLAN) trennt auch Broadcast-Domänen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Routing-Tabellen &amp; Longest Prefix Match
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell dir eine Postleitzahl vor: "8000 Zürich" ist spezifischer als
+          "8000-8999 Schweiz". Ein Router wählt immer die genaueste
+          passende Angabe - nicht die zuerst eingetragene.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Eine Routing-Tabelle besteht aus Einträgen mit <strong>Ziel-Netzwerk
+      (CIDR)</strong> und <strong>Gateway/Interface</strong>, über das
+      Pakete für dieses Netzwerk weitergeleitet werden. Passen mehrere
+      Einträge auf dieselbe Ziel-IP, gewinnt <strong>nicht</strong> der
+      zuerst eingetragene (wie bei Firewall-Regeln), sondern der mit der
+      <strong>längsten (spezifischsten) Präfixlänge</strong> - "Longest
+      Prefix Match".
+    </p>
+    <pre>Ziel-Netzwerk        Gateway
+0.0.0.0/0             203.0.113.1   (Standard-Route, "Rest der Welt")
+10.0.0.0/8            10.0.0.1      (ganzes Unternehmen)
+10.55.0.0/16          10.55.0.1     (ein Standort)
+10.55.3.0/24          10.55.3.1     (eine Abteilung)</pre>
+    <p class="text-muted">
+      Für die Ziel-IP <code class="mono">10.55.3.42</code> passen hier
+      gleich DREI Routen (/8, /16, /24) - gewonnen hat die /24-Route, weil
+      sie am spezifischsten ist.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Geräte-Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div class="field" style="margin:0; min-width:180px;">
+        <label for="task-difficulty-select">Schwierigkeit</label>
+        <select id="task-difficulty-select">
+          <option value="easy">Leicht</option>
+          <option value="medium">Mittel</option>
+          <option value="hard">Schwer</option>
+        </select>
+      </div>
+      <span id="task-score-pill" class="score-pill">0 / 8 richtig</span>
+    </div>
+
+    <hr class="sep" />
+
+    <div class="flex gap-8" style="align-items:center; margin-bottom:10px;">
+      <span id="task-difficulty-badge" class="badge difficulty-easy">Leicht</span>
+      <h4 style="margin:0;">Welche Route wird verwendet?</h4>
+    </div>
+
+    <table style="width:100%; border-collapse: collapse; margin-bottom:12px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Ziel-Netzwerk</th><th>Gateway</th>
+      </tr>
+      <tbody id="routing-table-body"></tbody>
+    </table>
+
+    <p>Ziel-IP: <span id="task-destination-ip" class="mono" style="font-size:1.2rem;"></span></p>
+
+    <div id="routing-options-list" class="option-list"></div>
+
+    <div class="btn-row">
+      <button id="check-task-btn" class="btn primary">Prüfen</button>
+      <button id="new-task-btn" class="btn ghost">Neue Aufgabe</button>
+    </div>
+
+    <div id="task-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/network-devices.js"></script>
+</body>
+</html>

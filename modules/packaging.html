@@ -12,19 +12,27 @@
   <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Übersicht</a>
+    <span class="nav-sep"></span>
     <a href="computer-basics.html">Computer-Grundlagen</a>
     <a href="terminal.html">CMD/PowerShell</a>
     <a href="scripting.html">Skripting</a>
+    <span class="nav-sep"></span>
+    <a href="network-devices.html">Netzwerkgeräte</a>
+    <a href="network-packets.html">Pakete &amp; OSI</a>
     <a href="subnetting.html">Subnetting</a>
     <a href="dns-concepts.html">DNS-Konzepte</a>
     <a href="dhcp-dns.html">DHCP/DNS</a>
+    <span class="nav-sep"></span>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
     <a href="cloud-basics.html">Cloud-Grundlagen</a>
+    <span class="nav-sep"></span>
     <a href="packaging.html" class="active">Paketierung</a>
+    <span class="nav-sep"></span>
     <a href="firewall.html">Firewall</a>
     <a href="sqli.html">SQL-Injection</a>
     <a href="email-security.html">E-Mail-Sicherheit</a>
+    <span class="nav-sep"></span>
     <a href="backup.html">Backup &amp; Recovery</a>
   </nav>
 </header>
@@ -170,6 +178,38 @@
       Engines durchtesten (oft an Dateieigenschaften oder enthaltenen
       Texten/Strings erkennbar) - notfalls mit Verbose-Logging beobachten,
       was der Installer tatsächlich tut.
+    </p>
+
+    <h4>
+      Gängige Exitcodes
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Nach jeder Installation prüft man in einem Skript automatisch den
+          Exitcode (<code>%ERRORLEVEL%</code> in CMD, <code>$LASTEXITCODE</code>
+          in PowerShell), um zu erkennen, ob es geklappt hat - Vorsicht: 0
+          ist nicht der einzige "Erfolg"-Code!
+        </div>
+      </details>
+    </h4>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Code</th><th>Bedeutung</th>
+      </tr>
+      <tr><td class="mono" style="color:var(--success);">0</td><td>Erfolgreich (ERROR_SUCCESS)</td></tr>
+      <tr><td class="mono" style="color:var(--success);">3010</td><td>Erfolgreich, aber ein Neustart ist noch erforderlich (ERROR_SUCCESS_REBOOT_REQUIRED) - <strong>kein Fehler!</strong></td></tr>
+      <tr><td class="mono" style="color:var(--success);">1641</td><td>Erfolgreich, Neustart wurde vom Installer bereits eingeleitet</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1602</td><td>Installation vom Nutzer abgebrochen (ERROR_INSTALL_USEREXIT)</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1603</td><td>Fataler, unspezifischer Installationsfehler (ERROR_INSTALL_FAILURE) - meist muss das Log (<code class="mono">/l*v</code>) analysiert werden</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1618</td><td>Eine andere Installation läuft bereits gleichzeitig (ERROR_INSTALL_ALREADY_RUNNING)</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1619</td><td>Installationspaket konnte nicht geöffnet werden (z.B. beschädigt oder falscher Pfad)</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1633</td><td>Diese Plattform/Architektur wird nicht unterstützt (z.B. x86-Paket auf falscher Umgebung)</td></tr>
+      <tr><td class="mono" style="color:var(--danger);">1638</td><td>Eine andere Version des Produkts ist bereits installiert (ERROR_PRODUCT_VERSION)</td></tr>
+    </table>
+    <p class="text-muted">
+      Faustregel für Deployment-Skripte (z.B. in Intune/SCCM): <code class="mono">0</code>
+      und <code class="mono">3010</code> als Erfolg werten, bei
+      <code class="mono">3010</code> zusätzlich einen Neustart einplanen.
     </p>
   </div>
 

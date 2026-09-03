@@ -31,6 +31,19 @@ const QUIZ = [
   {
     difficulty: "medium",
     question:
+      "Ein Deployment-Skript prüft nach der Installation nur, ob der Exitcode exakt 0 ist - bei allem anderen meldet es einen Fehler. Die Installation liefert Exitcode 3010. Was ist das Problem?",
+    options: [
+      "3010 bedeutet ebenfalls Erfolg, nur mit noch ausstehendem Neustart (ERROR_SUCCESS_REBOOT_REQUIRED) - das Skript meldet hier fälschlicherweise einen Fehler, obwohl die Installation geklappt hat",
+      "3010 ist ein schwerer Fehler, das Skript verhält sich korrekt",
+      "Exitcodes ungleich 0 kommen bei MSI-Installationen praktisch nie vor",
+    ],
+    correctIndex: 0,
+    explanation:
+      "3010 ist einer der häufigsten Stolpersteine bei automatisierten Deployments: es signalisiert Erfolg, aber einen noch ausstehenden Neustart. Skripte sollten deshalb sowohl 0 als auch 3010 als Erfolg werten.",
+  },
+  {
+    difficulty: "medium",
+    question:
       "Welche MSI-Tabelle legt fest, welche Datei zu welcher Komponente (Component) gehört?",
     options: [
       "Die File-Tabelle (in Verbindung mit der Component-Tabelle)",
