@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Netzwerk- &amp; Security-Trainingsplattform</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <nav class="main-nav">
+    <a href="index.html" class="active">Uebersicht</a>
+    <a href="modules/subnetting.html">Subnetting</a>
+    <a href="modules/dhcp-dns.html">DHCP/DNS</a>
+    <a href="modules/firewall.html">Firewall</a>
+    <a href="modules/sqli.html">SQL-Injection</a>
+    <a href="modules/dns-concepts.html">DNS-Konzepte</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">Willkommen bei der Trainingsplattform</h1>
+  <p class="page-subtitle">
+    Eine interaktive Uebungsumgebung fuer Netzwerk- und IT-Security-Grundlagen.
+    Alles laeuft komplett in deinem Browser &ndash; es gibt keinen echten Server
+    und keine echte Datenbank im Hintergrund. Dein Fortschritt wird nur lokal
+    auf diesem Geraet gespeichert (<code>localStorage</code>), es ist kein
+    Login noetig.
+  </p>
+
+  <div class="card">
+    <h3 class="mt-0">Gesamtfortschritt</h3>
+    <div class="progress-overview">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="overview-bar" style="width:0%"></div>
+      </div>
+      <span class="progress-label" id="overview-label">0 / 5 Module abgeschlossen</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn small ghost" id="reset-btn">Fortschritt zuruecksetzen</button>
+    </div>
+  </div>
+
+  <div id="module-grid" class="module-grid"></div>
+
+  <div class="alert info" style="margin-top:28px;">
+    <strong>Hinweis</strong>
+    Diese Plattform ist eine reine Lernsimulation. Insbesondere Modul 4
+    (SQL-Injection) arbeitet ausschliesslich gegen eine im Browser
+    hartcodierte Fake-Datenquelle &ndash; es gibt keine echte Datenbank,
+    keinen echten Server und keine echte Codeausfuehrung von Eingaben.
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="js/progress.js"></script>
+<script>
+  renderModuleOverview(
+    document.getElementById("module-grid"),
+    document.getElementById("overview-bar"),
+    document.getElementById("overview-label")
+  );
+
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    if (confirm("Gesamten lokalen Fortschritt wirklich zuruecksetzen?")) {
+      resetAllProgress();
+      renderModuleOverview(
+        document.getElementById("module-grid"),
+        document.getElementById("overview-bar"),
+        document.getElementById("overview-label")
+      );
+    }
+  });
+</script>
+</body>
+</html>

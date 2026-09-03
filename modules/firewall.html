@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Firewall-Regel-Puzzle &ndash; Netzwerk-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html" class="active">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+  </nav>
+</header>
+
+<main class="container wide">
+  <h1 class="page-title">🛡️ Firewall-Regel-Puzzle</h1>
+  <p class="page-subtitle">
+    Bringe die Firewall-Regeln per Drag &amp; Drop (oder mit den Pfeil-Buttons)
+    in die richtige Reihenfolge. Es gilt: <strong>die erste passende Regel
+    gewinnt</strong> &ndash; nachfolgende Regeln werden fuer ein Paket nicht
+    mehr geprueft.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Du hast alle Firewall-Puzzles geloest.
+  </div>
+
+  <div class="card">
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div id="puzzle-tabs" class="flex gap-8 flex-wrap"></div>
+      <span id="score-pill" class="score-pill">Geloest: 0 / 3</span>
+    </div>
+
+    <hr class="sep" />
+
+    <div class="flex gap-8" style="align-items:center; margin-bottom:10px;">
+      <span id="puzzle-difficulty-badge" class="badge difficulty-easy">Leicht</span>
+      <h3 id="puzzle-title" style="margin:0;"></h3>
+    </div>
+    <div class="alert info" id="puzzle-goal-box">
+      <strong>Ziel</strong>
+      <span id="puzzle-goal"></span>
+    </div>
+
+    <ul id="rule-list" class="rule-list"></ul>
+
+    <div class="btn-row">
+      <button id="run-tests-btn" class="btn primary">Regeln testen</button>
+      <button id="shuffle-btn" class="btn ghost">Neu mischen</button>
+    </div>
+
+    <div id="test-results"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/firewall.js"></script>
+</body>
+</html>

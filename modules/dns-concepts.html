@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DNS &amp; Domain-Konzepte &ndash; Netzwerk-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html" class="active">DNS-Konzepte</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">🌐 DNS &amp; Domain-Konzepte</h1>
+  <p class="page-subtitle">
+    Nach dem Deployment auf GitHub Pages hast du eine echte, oeffentlich
+    erreichbare Domain. Dieses Modul erklaert die wichtigsten DNS-Konzepte
+    dahinter und generiert dir Beispiel-Eintraege fuer deine eigene Domain.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz erfolgreich geloest.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">A-Record</h3>
+    <p>
+      Ein <strong>A-Record</strong> (Address Record) uebersetzt einen
+      Hostnamen direkt in eine <strong>IPv4-Adresse</strong>. Er wird meist
+      auf der "nackten" Domain (Apex, z.B. <code>beispiel.ch</code>)
+      verwendet, weil man dort keinen CNAME setzen darf.
+    </p>
+    <pre>beispiel.ch.        3600    IN    A       185.199.108.153</pre>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">CNAME-Record</h3>
+    <p>
+      Ein <strong>CNAME</strong> (Canonical Name) verweist nicht auf eine
+      IP-Adresse, sondern auf einen <strong>anderen Hostnamen</strong>. GitHub
+      Pages nutzt das typischerweise fuer Subdomains:
+    </p>
+    <pre>www.beispiel.ch.    3600    IN    CNAME   dein-username.github.io.</pre>
+    <p class="text-muted">
+      Wichtig: Ein CNAME darf laut DNS-Standard nicht direkt auf der
+      Apex-Domain (ohne Subdomain) liegen - dort braucht es A-Records.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">TTL (Time to Live)</h3>
+    <p>
+      Die <strong>TTL</strong> gibt in Sekunden an, wie lange ein
+      DNS-Resolver eine Antwort <strong>cachen</strong> darf, bevor er sie
+      erneut beim autoritativen Server abfragt. Eine TTL von
+      <code>3600</code> bedeutet: bis zu 1 Stunde lang koennen Resolver
+      weltweit noch die alte Antwort ausliefern, selbst wenn du den Eintrag
+      laengst geaendert hast.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Propagation</h3>
+    <p>
+      Wenn du einen DNS-Eintrag aenderst, wissen das nicht sofort alle
+      DNS-Server und Resolver weltweit. Jeder Resolver, der den alten Wert
+      bereits gecacht hat, liefert ihn weiter aus, bis dessen TTL
+      abgelaufen ist. Dieser schrittweise Uebergang heisst
+      <strong>Propagation</strong> und kann - je nach TTL und Cache-Verhalten
+      der beteiligten Resolver - von Minuten bis zu 24-48 Stunden dauern.
+      Tipp: Vor einer geplanten Domain-Aenderung die TTL vorab absenken.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🛠️ Konfigurator: Beispiel-Eintraege fuer deine Domain</h3>
+    <p class="text-muted">
+      Trag hier deine echten Werte ein, sobald die Seite auf GitHub Pages
+      laeuft. Alles wird nur lokal in deinem Browser gespeichert.
+    </p>
+    <div class="field-row">
+      <div class="field">
+        <label for="gh-username">GitHub-Benutzername</label>
+        <input type="text" id="gh-username" placeholder="z.B. max-muster" />
+      </div>
+      <div class="field">
+        <label for="gh-repo">Repository-Name (falls kein User-Pages-Repo)</label>
+        <input type="text" id="gh-repo" placeholder="z.B. netzwerk-trainer" />
+      </div>
+      <div class="field">
+        <label for="custom-domain">Eigene Domain (optional)</label>
+        <input type="text" id="custom-domain" placeholder="z.B. beispiel.ch oder www.beispiel.ch" />
+      </div>
+    </div>
+
+    <p>Deine GitHub-Pages-URL: <span class="mono" id="computed-pages-url">https://DEIN-USERNAME.github.io/</span></p>
+
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <thead>
+        <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+          <th style="padding:4px 0;">Typ</th><th>Name</th><th>Wert</th><th>TTL</th>
+        </tr>
+      </thead>
+      <tbody id="records-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">📝 Kurzes Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/dns-concepts.js"></script>
+</body>
+</html>
