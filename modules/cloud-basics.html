@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cloud-Grundlagen &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html" class="active">Cloud-Grundlagen</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    🌩️ Cloud-Grundlagen (Azure/M365)
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        RBAC (Role-Based Access Control) heisst einfach: statt jedem
+        Menschen individuell Rechte zu geben, bekommt er eine "Rolle"
+        (z.B. Helpdesk), die genau die Rechte mitbringt, die diese Rolle
+        braucht - nicht mehr, nicht weniger.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Rollenmodell (RBAC) nach dem Prinzip der minimalen Rechte und die
+    Grundlagen der M365-Lizenzierung.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollstaendig richtig geloest.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Rollenmodell (RBAC) &amp; Least Privilege</h3>
+    <p>
+      Statt jedem Admin die volle <strong>Global Administrator</strong>-Rolle
+      zu geben, gibt es dutzende eingeschraenkte Admin-Rollen fuer einzelne
+      Aufgabenbereiche - z.B. Helpdesk Administrator, User Administrator,
+      License Administrator, Exchange Administrator.
+    </p>
+    <p class="text-muted">
+      <strong>Least Privilege:</strong> jede Person bekommt nur genau die
+      Rechte, die sie fuer ihre Aufgabe wirklich braucht - nicht mehr. Das
+      begrenzt den moeglichen Schaden bei einem kompromittierten Konto oder
+      einem Bedienfehler.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Privileged Identity Management (PIM)</h3>
+    <p>
+      Statt hochprivilegierte Rollen dauerhaft zuzuweisen, aktiviert PIM sie
+      nur bei Bedarf, zeitlich begrenzt (Just-in-Time) - oft zusaetzlich mit
+      Genehmigung und MFA-Pflicht. Ein dauerhaft aktives Admin-Konto ist ein
+      bevorzugtes Angriffsziel; mit PIM existiert die erhoehte Berechtigung
+      nur so lange, wie sie tatsaechlich gebraucht wird.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">M365-Lizenzierung</h3>
+    <ul>
+      <li>Lizenzen werden <strong>pro Nutzer</strong> vergeben (nicht pro Geraet).</li>
+      <li>Ein Paket wie M365 E3 buendelt mehrere <strong>Service Plans</strong> (Exchange, Teams, SharePoint, ...) - einzelne Service Plans lassen sich bei Bedarf deaktivieren.</li>
+      <li><strong>Gruppenbasierte Lizenzierung</strong>: Lizenzen werden automatisch ueber Mitgliedschaft in einer Sicherheitsgruppe zugewiesen/entzogen - praktisch bei grossen, sich veraendernden Teams.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 RBAC- &amp; Lizenz-Szenario-Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/cloud-basics.js"></script>
+</body>
+</html>

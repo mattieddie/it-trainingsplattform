@@ -17,6 +17,7 @@ const MODULE_ID = "activedirectory";
 
 const GPO_QUIZ = [
   {
+    difficulty: "easy",
     question:
       "Ein Computer steht in der OU \"IT-Abteilung\" (unter \"Hauptsitz\"). Bekommt er den Firmenlogo-Hintergrund aus dem Domain-GPO \"Unternehmens-Standard\"?",
     options: ["Ja", "Nein"],
@@ -25,6 +26,7 @@ const GPO_QUIZ = [
       "Ja. Auf dem Weg Domain → Hauptsitz → IT-Abteilung blockiert keine OU die Vererbung, also wird das Domain-GPO ganz normal vererbt.",
   },
   {
+    difficulty: "easy",
     question:
       "Derselbe Computer in \"IT-Abteilung\" - bekommt er die USB-Sperre aus dem GPO \"Hauptsitz-Sicherheit\" (verknuepft an der OU \"Hauptsitz\")?",
     options: ["Ja", "Nein"],
@@ -33,6 +35,7 @@ const GPO_QUIZ = [
       "Ja. \"IT-Abteilung\" liegt unterhalb von \"Hauptsitz\" - ein an \"Hauptsitz\" verknuepftes GPO gilt automatisch auch fuer alle untergeordneten OUs.",
   },
   {
+    difficulty: "medium",
     question:
       "Ein Computer steht in der OU \"Filiale-Zuerich\" (unter \"Filialen\", welche die Vererbung blockiert). Bekommt er trotzdem den Firmenlogo-Hintergrund aus dem (nicht erzwungenen) Domain-GPO?",
     options: ["Ja", "Nein"],
@@ -41,6 +44,7 @@ const GPO_QUIZ = [
       "Nein. \"Block Inheritance\" an \"Filialen\" unterbindet die Vererbung von weiter oben - und da das Domain-GPO NICHT erzwungen ist, kann es sich dagegen nicht durchsetzen.",
   },
   {
+    difficulty: "hard",
     question:
       "Angenommen, das Domain-GPO \"Unternehmens-Standard\" wird jetzt zusaetzlich auf \"Erzwungen\" gesetzt. Bekommt der Computer in \"Filiale-Zuerich\" den Hintergrund jetzt?",
     options: ["Ja", "Nein"],
@@ -49,6 +53,7 @@ const GPO_QUIZ = [
       "Ja. Erzwungene (\"Enforced\") GPOs setzen sich IMMER durch - auch gegen \"Block Inheritance\" in tiefer liegenden OUs.",
   },
   {
+    difficulty: "hard",
     question:
       "Bekommt der Computer in \"Filiale-Zuerich\" die USB-Sperre aus \"Hauptsitz-Sicherheit\" (verknuepft an \"Hauptsitz\", erzwungen)?",
     options: ["Ja", "Nein"],
@@ -303,8 +308,10 @@ function renderQuiz() {
     const wrapper = document.createElement("div");
     wrapper.className = "card";
     wrapper.style.marginBottom = "14px";
+    const diffLabel = { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[q.difficulty];
     wrapper.innerHTML = `
-      <h4 style="margin-top:0;">${qIdx + 1}. ${q.question}</h4>
+      <span class="badge difficulty-${q.difficulty}" style="margin-bottom:8px;">${diffLabel}</span>
+      <h4 style="margin-top:4px;">${qIdx + 1}. ${q.question}</h4>
       <div class="option-list" data-question="${qIdx}"></div>
       <div class="feedback-box hidden" data-explanation="${qIdx}"></div>
     `;

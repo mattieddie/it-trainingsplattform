@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Intune / Entra ID / Hybrid &ndash; Netzwerk-Trainer</title>
+<title>Intune / Entra ID / Hybrid &ndash; IT-Trainer</title>
 <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
 <header class="page-header">
-  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
     <a href="subnetting.html">Subnetting</a>
     <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="firewall.html">Firewall</a>
@@ -20,23 +21,39 @@
     <a href="terminal.html">CMD/PowerShell</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html" class="active">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
   </nav>
 </header>
 
 <main class="container">
-  <h1 class="page-title">☁️ Intune / Entra ID (Azure AD) / Hybrid</h1>
+  <h1 class="page-title">
+    ☁️ Intune / Entra ID (Azure AD) / Hybrid
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Entra ID (fruehere "Azure AD") ist quasi das Active Directory fuer
+        die Cloud: es verwaltet Benutzer und Geraete nicht mehr aus einem
+        Serverraum, sondern ueber das Internet. Intune ist das Werkzeug
+        dazu, um Geraete (Laptops, Handys) aus der Cloud zu verwalten.
+      </div>
+    </details>
+  </h1>
   <p class="page-subtitle">
     Join-Typen, Entra Connect und Conditional Access verstehen &ndash; danach
     ein Szenario-Quiz und Troubleshooting-Tickets aus der Cloud-Identitaets-Welt.
   </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Modul abgeschlossen!</strong> Quiz und alle Tickets geloest.
+    <strong>Modul abgeschlossen!</strong> Beide Quiz und alle Tickets geloest.
   </div>
 
   <div class="card">
     <h3 class="mt-0">Checkliste</h3>
     <div id="check-quiz" class="checklist-item">⬜ Conditional-Access-Quiz vollstaendig richtig loesen</div>
+    <div id="check-device-quiz" class="checklist-item">⬜ Geraetemanagement-Quiz vollstaendig richtig loesen</div>
     <div id="check-tickets" class="checklist-item">⬜ Alle Troubleshooting-Tickets loesen</div>
   </div>
 
@@ -86,6 +103,19 @@
       <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">📱 Geraetemanagement-Quiz</h3>
+    <p class="text-muted">
+      Autopilot, Wipe vs. Retire, MDM vs. MAM (BYOD) und der richtige Umgang
+      mit nicht-konformen Geraeten - von leicht bis schwer.
+    </p>
+    <div id="device-quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-device-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="device-quiz-feedback" class="feedback-box hidden"></div>
   </div>
 
   <div class="card">

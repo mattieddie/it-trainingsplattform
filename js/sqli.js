@@ -23,6 +23,186 @@ const EXAMPLE_PAYLOADS = [
   { label: "Kommentar-Injection", value: "admin'--" },
 ];
 
+const FAKE_PRODUCTS = [
+  { name: "USB-C-Kabel" },
+  { name: "Laptop-Tasche" },
+  { name: "Webcam HD" },
+  { name: "Mechanische Tastatur" },
+];
+
+/* ---------------- Herausforderungen (schwierigkeitsgestuft) ---------------- */
+
+const CHALLENGES = [
+  {
+    id: "any-tautology",
+    difficulty: "easy",
+    type: "login",
+    title: "Logge dich als beliebiger Nutzer ein - ohne ein Passwort zu kennen",
+    instructions:
+      "Nutze eine Tautologie (eine Bedingung, die immer wahr ist) im Login-Formular unten. Der Benutzername ist dabei egal.",
+    validate: (username, password) =>
+      TAUTOLOGY_PATTERN.test(username) || TAUTOLOGY_PATTERN.test(password),
+    explanation:
+      "Eine Tautologie wie ' OR '1'='1 macht die WHERE-Klausel immer wahr - dadurch liefert die (simulierte) Abfrage einen Treffer, unabhaengig vom echten Passwort.",
+  },
+  {
+    id: "admin-comment",
+    difficulty: "medium",
+    type: "login",
+    title: "Melde dich gezielt als \"admin\" an - per Kommentar-Injection",
+    instructions:
+      "Diesmal ohne Tautologie: nutze eine Kommentar-Injection (-- oder #) direkt nach dem Benutzernamen \"admin\", um die Passwort-Pruefung auszukommentieren.",
+    validate: (username, password) =>
+      /^admin\s*'/i.test(username) &&
+      COMMENT_AFTER_QUOTE_PATTERN.test(username) &&
+      !TAUTOLOGY_PATTERN.test(username),
+    explanation:
+      "admin'-- schliesst den String nach \"admin\" ab und kommentiert den Rest der Query (inkl. AND password = '...') aus. Damit reicht der bekannte Benutzername admin allein.",
+  },
+  {
+    id: "union-leak",
+    difficulty: "hard",
+    type: "search",
+    title: "UNION-basierte Injection: Nutzerliste ueber die Produktsuche leaken",
+    instructions:
+      "Das Produktsuchfeld unten durchsucht normalerweise nur Produktnamen. Nutze eine UNION SELECT-Injection, um (simuliert) alle Benutzernamen aus der users-Tabelle mit auszugeben.",
+    validate: (input) => /union\s+select/i.test(input),
+    explanation:
+      "UNION SELECT haengt an das Ergebnis der eigentlichen Abfrage die Ergebnisse einer ZWEITEN, selbst gewaehlten Abfrage an - z.B. eine, die Benutzernamen aus einer ganz anderen Tabelle liest. So lassen sich ueber ein harmlos wirkendes Suchfeld ploetzlich Daten aus anderen Tabellen abgreifen.",
+  },
+];
+
+let currentChallenge = null;
+
+function loadSolvedChallenges() {
+  const progress = loadProgress();
+  const stored = progress[MODULE_ID];
+  return stored && Array.isArray(stored.solvedChallenges) ? stored.solvedChallenges : [];
+}
+
+function pickChallenge() {
+  const solved = loadSolvedChallenges();
+  const unsolved = CHALLENGES.filter((c) => !solved.includes(c.id));
+  const pool = unsolved.length > 0 ? unsolved : CHALLENGES;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function buildSearchQueryText(input) {
+  return `SELECT name FROM products WHERE name LIKE '%${input}%';`;
+}
+
+function evaluateProductSearch(input) {
+  const query = buildSearchQueryText(input);
+  if (/union\s+select/i.test(input)) {
+    return {
+      query,
+      leaked: true,
+      rows: FAKE_USERS.map((u) => u.username),
+    };
+  }
+  const rows = FAKE_PRODUCTS.filter((p) =>
+    p.name.toLowerCase().includes(input.toLowerCase())
+  ).map((p) => p.name);
+  return { query, leaked: false, rows };
+}
+
+function renderChallenge() {
+  currentChallenge = pickChallenge();
+
+  const diffBadge = document.getElementById("challenge-difficulty-badge");
+  diffBadge.textContent =
+    { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[currentChallenge.difficulty];
+  diffBadge.className = "badge difficulty-" + currentChallenge.difficulty;
+
+  document.getElementById("challenge-title").textContent = currentChallenge.title;
+  document.getElementById("challenge-instructions").textContent =
+    currentChallenge.instructions;
+
+  const isLogin = currentChallenge.type === "login";
+  document.getElementById("challenge-login-form").classList.toggle("hidden", !isLogin);
+  document.getElementById("challenge-search-form").classList.toggle("hidden", isLogin);
+
+  document.getElementById("challenge-username").value = "";
+  document.getElementById("challenge-password").value = "";
+  document.getElementById("challenge-search-input").value = "";
+
+  const fb = document.getElementById("challenge-result");
+  fb.className = "feedback-box hidden";
+  fb.innerHTML = "";
+
+  updateChallengeScorePill();
+}
+
+function updateChallengeScorePill() {
+  const solved = loadSolvedChallenges();
+  document.getElementById(
+    "challenge-score-pill"
+  ).textContent = `Geloest: ${solved.length} / ${CHALLENGES.length} Herausforderungen`;
+}
+
+function markChallengeSolved(id) {
+  const progress = loadProgress();
+  const stored = progress[MODULE_ID] || {};
+  const solved = new Set(stored.solvedChallenges || []);
+  solved.add(id);
+  const solvedArr = Array.from(solved);
+  const updated = Object.assign({}, stored, { solvedChallenges: solvedArr });
+  const done =
+    Boolean(updated.triedNaiveBypass) &&
+    Boolean(updated.triedSecureBlock) &&
+    solvedArr.length >= CHALLENGES.length;
+  const wasDone = stored.status === "done";
+  setModuleStatus(MODULE_ID, done ? "done" : "progress", updated);
+  updateChallengeScorePill();
+  updateChecklist(updated);
+  if (done && !wasDone) {
+    document.getElementById("completion-banner").classList.remove("hidden");
+  }
+}
+
+function handleChallengeLoginSubmit() {
+  if (!currentChallenge) return;
+  const username = document.getElementById("challenge-username").value;
+  const password = document.getElementById("challenge-password").value;
+  const solved = currentChallenge.validate(username, password);
+
+  const fb = document.getElementById("challenge-result");
+  fb.classList.remove("hidden");
+  if (solved) {
+    fb.className = "feedback-box correct";
+    fb.innerHTML = `<strong>Geschafft!</strong> ${currentChallenge.explanation}`;
+    markChallengeSolved(currentChallenge.id);
+  } else {
+    fb.className = "feedback-box incorrect";
+    fb.innerHTML =
+      "<strong>Noch nicht.</strong> Das erfuellt die Aufgabe noch nicht - lies dir die Anweisung nochmal genau durch.";
+  }
+}
+
+function handleChallengeSearchSubmit() {
+  if (!currentChallenge) return;
+  const input = document.getElementById("challenge-search-input").value;
+  const result = evaluateProductSearch(input);
+
+  const fb = document.getElementById("challenge-result");
+  fb.classList.remove("hidden");
+
+  if (result.leaked) {
+    fb.className = "feedback-box incorrect";
+    fb.innerHTML = `<strong>⚠️ Daten geleakt!</strong> Simulierter Query: <span class="mono">${escapeHtml(
+      result.query
+    )}</span><br>Ausgegebene "Benutzernamen": ${result.rows
+      .map((r) => `<span class="mono">${escapeHtml(r)}</span>`)
+      .join(", ")}<br>${currentChallenge.explanation}`;
+    markChallengeSolved(currentChallenge.id);
+  } else {
+    fb.className = "feedback-box correct";
+    fb.innerHTML = `Treffer: ${
+      result.rows.length ? result.rows.join(", ") : "(keine)"
+    } - das ist noch keine Injection, versuch es mit UNION SELECT.`;
+  }
+}
+
 /* ---------------- Naive (verwundbare) Simulation ---------------- */
 
 function buildNaiveQueryText(username, password) {
@@ -112,7 +292,11 @@ function markProgressFlag(flagName) {
   const progress = loadProgress();
   const stored = progress[MODULE_ID] || {};
   const updated = Object.assign({}, stored, { [flagName]: true });
-  const done = updated.triedNaiveBypass && updated.triedSecureBlock;
+  const solvedChallenges = updated.solvedChallenges || [];
+  const done =
+    Boolean(updated.triedNaiveBypass) &&
+    Boolean(updated.triedSecureBlock) &&
+    solvedChallenges.length >= CHALLENGES.length;
   const wasDone = stored.status === "done";
   setModuleStatus(MODULE_ID, done ? "done" : "progress", updated);
   updateChecklist(updated);
@@ -137,6 +321,13 @@ function updateChecklist(state) {
   document.getElementById("check-secure").textContent = state.triedSecureBlock
     ? "✅ Gleiche Eingabe im parametrisierten Formular getestet"
     : "⬜ Gleiche Eingabe im parametrisierten Formular testen";
+
+  const solvedChallenges = (state.solvedChallenges || []).length;
+  const challengesDone = solvedChallenges >= CHALLENGES.length;
+  document.getElementById("check-challenges").classList.toggle("status-done", challengesDone);
+  document.getElementById("check-challenges").textContent = challengesDone
+    ? "✅ Alle Herausforderungen (leicht/mittel/schwer) geloest"
+    : `⬜ Alle Herausforderungen loesen (${solvedChallenges} / ${CHALLENGES.length})`;
 }
 
 /* ---------------- Event-Wiring ---------------- */
@@ -259,4 +450,21 @@ document.addEventListener("DOMContentLoaded", () => {
       "naive-password"
     ).value;
   });
+
+  renderChallenge();
+  document
+    .getElementById("challenge-login-form")
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleChallengeLoginSubmit();
+    });
+  document
+    .getElementById("challenge-search-form")
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleChallengeSearchSubmit();
+    });
+  document
+    .getElementById("challenge-next-btn")
+    .addEventListener("click", renderChallenge);
 });

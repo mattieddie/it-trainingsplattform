@@ -18,18 +18,21 @@ const GITHUB_PAGES_IPS = [
 
 const QUIZ = [
   {
+    difficulty: "easy",
     question:
       "Welcher Record-Typ verweist auf eine andere IP-Adresse (z.B. auf einen Server)?",
     options: ["A-Record", "CNAME-Record", "MX-Record"],
     correctIndex: 0,
   },
   {
+    difficulty: "easy",
     question:
       "Welcher Record-Typ verweist auf einen anderen Hostnamen statt auf eine IP-Adresse?",
     options: ["A-Record", "CNAME-Record", "TXT-Record"],
     correctIndex: 1,
   },
   {
+    difficulty: "medium",
     question:
       "Was gibt die TTL (Time to Live) eines DNS-Eintrags an?",
     options: [
@@ -40,6 +43,7 @@ const QUIZ = [
     correctIndex: 0,
   },
   {
+    difficulty: "medium",
     question:
       "Warum kann eine DNS-Aenderung nach dem Speichern noch eine Weile 'alt' erscheinen (Propagation)?",
     options: [
@@ -48,6 +52,39 @@ const QUIZ = [
       "Weil Browser DNS-Eintraege nie cachen",
     ],
     correctIndex: 1,
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Wo darf laut DNS-Standard KEIN CNAME-Eintrag gesetzt werden?",
+    options: [
+      "Auf der Apex-/Root-Domain selbst (z.B. beispiel.ch ohne Subdomain)",
+      "Auf einer Subdomain wie www.beispiel.ch",
+      "Auf einer beliebigen Sub-Subdomain",
+    ],
+    correctIndex: 0,
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Eine Firma senkt die TTL eines Eintrags von 86400 (24h) auf 300 (5 Min) - und zwar einen Tag BEVOR sie den zugehoerigen Server wechselt. Warum dieses Vorgehen?",
+    options: [
+      "Damit die alte, hohe TTL vorher regulaer ablaeuft und Resolver nach dem eigentlichen Wechsel den neuen Wert viel schneller abfragen",
+      "Eine niedrige TTL macht die Webseite schneller",
+      "Das ist notwendig, damit der DNS-Server ueberhaupt Aenderungen akzeptiert",
+    ],
+    correctIndex: 0,
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Was unterscheidet die DNS-Fehlerantwort \"NXDOMAIN\" von \"SERVFAIL\"?",
+    options: [
+      "NXDOMAIN heisst, der Name existiert nachweislich nicht; SERVFAIL heisst, der DNS-Server selbst hat ein Problem (z.B. nicht erreichbar/ueberlastet) - der Name koennte trotzdem existieren",
+      "Beide bedeuten exakt dasselbe, nur unterschiedliche Formulierung",
+      "NXDOMAIN betrifft nur IPv6, SERVFAIL nur IPv4",
+    ],
+    correctIndex: 0,
   },
 ];
 
@@ -127,8 +164,10 @@ function renderQuiz() {
     const wrapper = document.createElement("div");
     wrapper.className = "card";
     wrapper.style.marginBottom = "14px";
+    const diffLabel = { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[q.difficulty];
     wrapper.innerHTML = `
-      <h4 style="margin-top:0;">${qIdx + 1}. ${q.question}</h4>
+      <span class="badge difficulty-${q.difficulty}" style="margin-bottom:8px;">${diffLabel}</span>
+      <h4 style="margin-top:4px;">${qIdx + 1}. ${q.question}</h4>
       <div class="option-list" data-question="${qIdx}"></div>
     `;
     const list = wrapper.querySelector(".option-list");
@@ -153,7 +192,7 @@ function renderQuiz() {
 }
 
 function checkQuiz() {
-  const lists = document.querySelectorAll(".option-list");
+  const lists = document.querySelectorAll("#quiz-container .option-list");
   let correctCount = 0;
 
   lists.forEach((list, qIdx) => {

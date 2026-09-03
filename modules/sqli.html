@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SQL-Injection-Simulation &ndash; Netzwerk-Trainer</title>
+<title>SQL-Injection-Simulation &ndash; IT-Trainer</title>
 <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
 <header class="page-header">
-  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
     <a href="subnetting.html">Subnetting</a>
     <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="firewall.html">Firewall</a>
@@ -20,11 +21,27 @@
     <a href="terminal.html">CMD/PowerShell</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
   </nav>
 </header>
 
 <main class="container wide">
-  <h1 class="page-title">🧪 SQL-Injection-Simulation</h1>
+  <h1 class="page-title">
+    🧪 SQL-Injection-Simulation
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Grundidee: eine Webseite baut oft einen Datenbank-Befehl aus deiner
+        Eingabe zusammen. Tippst du statt eines normalen Namens etwas mit
+        Anfuehrungszeichen/Sonderzeichen ein, kannst du diesen Befehl
+        "umbiegen" - genau das simulieren wir hier, ganz ohne echte
+        Datenbank.
+      </div>
+    </details>
+  </h1>
 
   <div class="alert warning">
     <strong>Dies ist eine reine Lernsimulation ohne echte Datenbank oder Codeausfuehrung.</strong>
@@ -43,6 +60,7 @@
     <h3 class="mt-0">Checkliste</h3>
     <div id="check-naive" class="checklist-item">⬜ Injection im unsicheren Formular ausloesen</div>
     <div id="check-secure" class="checklist-item">⬜ Gleiche Eingabe im parametrisierten Formular testen</div>
+    <div id="check-challenges" class="checklist-item">⬜ Alle Herausforderungen loesen (0 / 3)</div>
   </div>
 
   <div class="card">
@@ -132,6 +150,50 @@
       parametrisierte Queries</em> und ist der Standard-Schutz gegen
       SQL-Injection - unabhaengig von der Programmiersprache.
     </p>
+  </div>
+
+  <div class="card">
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <h3 class="mt-0">🎯 Herausforderungen (leicht → schwer)</h3>
+      <span id="challenge-score-pill" class="score-pill">Geloest: 0 / 3 Herausforderungen</span>
+    </div>
+    <div class="flex gap-8" style="align-items:center; margin-bottom:8px;">
+      <span id="challenge-difficulty-badge" class="badge difficulty-easy">Leicht</span>
+      <h4 id="challenge-title" style="margin:0;"></h4>
+    </div>
+    <p id="challenge-instructions" class="text-muted"></p>
+
+    <form id="challenge-login-form">
+      <div class="field-row">
+        <div class="field">
+          <label for="challenge-username">Benutzername</label>
+          <input type="text" id="challenge-username" />
+        </div>
+        <div class="field">
+          <label for="challenge-password">Passwort</label>
+          <input type="text" id="challenge-password" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn primary">Anmelden</button>
+      </div>
+    </form>
+
+    <form id="challenge-search-form" class="hidden">
+      <div class="field">
+        <label for="challenge-search-input">Produktsuche</label>
+        <input type="text" id="challenge-search-input" placeholder="z.B. Kabel" />
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn primary">Suchen</button>
+      </div>
+    </form>
+
+    <div id="challenge-result" class="feedback-box hidden"></div>
+
+    <div class="btn-row">
+      <button id="challenge-next-btn" class="btn ghost">Naechste Herausforderung</button>
+    </div>
   </div>
 
   <div class="card">

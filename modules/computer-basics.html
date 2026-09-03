@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Computer- &amp; Windows-Grundlagen &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html" class="active">Computer-Grundlagen</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">🧩 Computer- &amp; Windows-Grundlagen</h1>
+  <p class="page-subtitle">
+    Das Startmodul: Wie ist ein Computer aufgebaut, und wie haengen
+    Benutzer-/Systemebene, Berechtigungen, Registry und Dateitypen unter
+    Windows zusammen? Die Basis fuer alle weiteren Module.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollstaendig richtig geloest.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Aufbau eines Computers
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell dir den Computer wie eine kleine Werkstatt vor: die CPU ist
+          der Werker, der die Arbeit erledigt; RAM ist der Arbeitstisch fuer
+          Dinge, die er gerade braucht; die Festplatte/SSD ist das Regal, wo
+          alles dauerhaft lagert, auch wenn die Werkstatt schliesst
+          (Strom aus).
+        </div>
+      </details>
+    </h3>
+    <p>Ein Computer besteht aus mehreren Kernkomponenten, die auf dem Mainboard zusammenarbeiten:</p>
+
+    <svg viewBox="0 0 600 380" style="width:100%; max-width:600px; display:block; margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="580" height="360" rx="14" fill="#10151f" stroke="#2a3448" stroke-width="2"/>
+      <text x="26" y="34" fill="#9aa5b8" font-size="13" font-family="Consolas, monospace">PC-Gehaeuse</text>
+
+      <rect x="30" y="46" width="350" height="300" rx="10" fill="#171e2e" stroke="#2a3448" stroke-width="2"/>
+      <text x="46" y="70" fill="#e6e9f0" font-size="15" font-weight="700" font-family="Consolas, monospace">Mainboard</text>
+
+      <rect x="110" y="86" width="100" height="46" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="160" y="113" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kuehler</text>
+
+      <rect x="110" y="150" width="100" height="100" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="160" y="205" fill="#e6e9f0" font-size="15" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">CPU</text>
+
+      <text x="255" y="96" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">RAM</text>
+      <rect x="240" y="106" width="26" height="180" rx="4" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <rect x="280" y="106" width="26" height="180" rx="4" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+
+      <rect x="400" y="30" width="170" height="80" rx="8" fill="#1b2333" stroke="#29d3c1" stroke-width="2"/>
+      <text x="485" y="65" fill="#e6e9f0" font-size="14" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Grafikkarte</text>
+      <text x="485" y="84" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">(GPU)</text>
+
+      <rect x="400" y="130" width="170" height="80" rx="8" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="485" y="165" fill="#e6e9f0" font-size="14" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Netzteil</text>
+      <text x="485" y="184" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">(PSU)</text>
+
+      <rect x="400" y="230" width="170" height="96" rx="8" fill="#1b2333" stroke="#3ecf6c" stroke-width="2"/>
+      <text x="485" y="272" fill="#e6e9f0" font-size="14" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Speicher</text>
+      <text x="485" y="291" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">(SSD / HDD)</text>
+    </svg>
+
+    <ul style="margin-top:16px;">
+      <li><strong>Prozessor (CPU)</strong>: verarbeitet Daten und steuert Ablaeufe - das "Gehirn" des Computers.</li>
+      <li><strong>Arbeitsspeicher (RAM)</strong>: fluechtiges Gedaechtnis, speichert aktuell genutzte Daten fuer schnellen Zugriff.</li>
+      <li><strong>Speicherlaufwerke</strong>: HDDs speichern magnetisch/mechanisch, moderne SSDs elektronisch (schneller, keine bewegten Teile).</li>
+      <li><strong>Mainboard</strong>: verbindet CPU, RAM, Grafikkarte usw. physisch miteinander.</li>
+      <li><strong>Netzteil, Kuehlung, Grafikkarte</strong>: sorgen fuer Strom, Temperaturregulierung und Bildausgabe.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Benutzer- und Systembereich
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Merkhilfe: "Computer" = geraetebezogen (gilt fuer jeden, der sich
+          an DIESEM PC anmeldet). "Benutzer" = personenbezogen (folgt DIESER
+          Person auf jeden PC, an dem sie sich anmeldet).
+        </div>
+      </details>
+    </h3>
+    <p>
+      Windows unterscheidet zwischen Benutzer- und Systemebene. Viele
+      Einstellungen gelten systemweit, andere nur benutzerspezifisch. Die
+      Registry spiegelt das direkt: <code>HKEY_LOCAL_MACHINE</code> legt
+      globale Systemeinstellungen fest, <code>HKEY_CURRENT_USER</code> nur
+      das Profil des angemeldeten Nutzers.
+    </p>
+    <p class="text-muted">
+      Auch bei Programminstallationen kann man waehlen: "nur fuer mich"
+      (per-user, landet nur im eigenen Profil) oder "fuer alle Benutzer"
+      (per-machine, landet im gemeinsamen All-Users-Profil).
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Berechtigungen und Benutzerrechte
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell dir NTFS-Berechtigungen wie ein Schluesselsystem vor: jede
+          Person bekommt nur die Schluessel (Lesen/Schreiben/Aendern), die
+          sie tatsaechlich braucht - nicht automatisch den Generalschluessel.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Der Zugriff auf Dateien, Ordner und Systemfunktionen wird durch
+      <strong>NTFS-Dateiberechtigungen</strong> kontrolliert: fuer jeden
+      Benutzer oder jede Gruppe wird festgelegt, ob Lesen, Schreiben,
+      Ausfuehren oder Aendern erlaubt ist. Standardmaessig haben normale
+      Benutzer eingeschraenkte Rechte, Administratoren duerfen mehr - muessen
+      aber dank <strong>UAC (User Account Control)</strong> kritische
+      Aenderungen extra bestaetigen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Windows-Registry</h3>
+    <p>
+      Die Registry ist die zentrale Konfigurationsdatenbank von Windows -
+      hierarchisch aufgebaut in fuenf Hauptbaeumen (Hives), darunter
+      <code>HKLM</code> (systemweit) und <code>HKCU</code>
+      (benutzerspezifisch). Sie speichert Systemeinstellungen,
+      Treiberinformationen, installierte Software und Benutzerprofile.
+    </p>
+    <p class="text-muted">
+      Vor groesseren Aenderungen (z.B. per Skript) empfiehlt sich immer eine
+      Sicherung - ein fehlerhafter Eintrag kann das System unbrauchbar
+      machen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Dateisystem und Dateitypen</h3>
+    <p>
+      Windows nutzt meist <strong>NTFS</strong> als Dateisystem.
+      Dateiendungen zeigen den Typ: <code>.exe</code> (ausfuehrbar),
+      <code>.msi</code> (Installationspaket ueber den Windows-Installer),
+      <code>.dll</code> (wiederverwendbare Bibliothek), <code>.ps1</code>
+      (PowerShell-Skript), <code>.txt</code>/<code>.docx</code>
+      (Dokumente), <code>.cfg</code> (Konfigurationsdatei), <code>.inf</code>
+      (Setup-/Treiberanweisungen).
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/computer-basics.js"></script>
+</body>
+</html>

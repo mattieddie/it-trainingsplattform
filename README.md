@@ -1,9 +1,9 @@
-# Netzwerk- & Security-Trainingsplattform
+# IT-Trainingsplattform
 
-Eine interaktive, rein clientseitige Uebungsplattform fuer Netzwerk- und
-IT-Security-Grundlagen. Kein Server, keine echte Datenbank, kein Login -
-alles laeuft im Browser, Fortschritt wird nur lokal (`localStorage`)
-gespeichert.
+Eine interaktive, rein clientseitige Uebungsplattform fuer IT-Grundlagen -
+von Computer-Hardware und Windows ueber Netzwerke und Security bis Cloud.
+Kein Server, keine echte Datenbank, kein Login - alles laeuft im Browser,
+Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 > **Hinweis:** Dies ist eine Lernsimulation. Insbesondere das
 > SQL-Injection-Modul arbeitet ausschliesslich gegen ein hartcodiertes
@@ -12,6 +12,10 @@ gespeichert.
 
 ## Module
 
+0. **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul
+   Computeraufbau (CPU/RAM/Speicher/Mainboard, inkl. Diagramm), Benutzer- vs.
+   Systemebene, NTFS-Berechtigungen, Registry und Dateitypen - schwierigkeits-
+   gestuftes Quiz, thematisch gruppiert.
 1. **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html))
    Zufaellig generierte IP/CIDR-Aufgaben: Netzadresse, Broadcast, nutzbare
    Hosts, naechstes Subnetz. Drei Schwierigkeitsstufen.
@@ -42,8 +46,27 @@ gespeichert.
 8. **Intune / Entra ID / Hybrid** ([modules/intune-entra.html](modules/intune-entra.html))
    Join-Typen, Entra Connect, Conditional Access (bewusst als Kontrast zum
    Firewall-Modul: hier gewinnt nicht die erste Regel, sondern alle
-   zutreffenden Richtlinien wirken kumulativ) und Intune-Compliance, plus
+   zutreffenden Richtlinien wirken kumulativ), ein Geraetemanagement-Quiz
+   (Autopilot, Wipe vs. Retire, MDM vs. MAM) und Intune-Compliance, plus
    Troubleshooting-Tickets aus der Cloud-Identitaets-Welt.
+9. **Backup & Recovery** ([modules/backup.html](modules/backup.html))
+   3-2-1-Regel (inkl. Diagramm), generierte RPO/RTO-Rechenaufgaben in drei
+   Schwierigkeitsstufen, sowie ein 3-2-1-/Ransomware-Szenario-Quiz.
+10. **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html))
+    SPF/DKIM/DMARC (inkl. Ablaufdiagramm), Record-Interpretation und
+    Spoofing-/Zustellungs-Szenarien mit steigendem Schwierigkeitsgrad.
+11. **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html))
+    Batch- und PowerShell-Skripte lesen und die tatsaechliche Ausgabe
+    vorhersagen - inkl. klassischer Stolperfallen (Off-by-one, Batch-
+    Verzoegerungsproblem bei verzoegerter Variablenerweiterung).
+12. **Cloud-Grundlagen** ([modules/cloud-basics.html](modules/cloud-basics.html))
+    RBAC-Rollenwahl nach Least Privilege, Privileged Identity Management
+    (PIM) und M365-Lizenzierung (Service Plans, gruppenbasierte Lizenzierung).
+
+Jede Konzept-Karte hat wo sinnvoll einen kleinen "i"-Button (i-Punkt) mit
+einer kurzen, einfachen Zusatzerklaerung, und mehrere Module enthalten
+eingebettete SVG-Diagramme (Hardware-Aufbau, IP-Adress-Aufteilung,
+3-2-1-Regel, SPF/DKIM/DMARC-Ablauf) zur Veranschaulichung.
 
 ## Projektstruktur
 
@@ -53,6 +76,7 @@ gespeichert.
 ├── css/style.css                Gemeinsames responsives Theme
 ├── js/
 │   ├── progress.js               localStorage-Fortschritt (von allen Modulen genutzt)
+│   ├── computer-basics.js
 │   ├── subnetting.js
 │   ├── dhcp-dns.js
 │   ├── firewall.js
@@ -60,8 +84,13 @@ gespeichert.
 │   ├── dns-concepts.js
 │   ├── terminal.js
 │   ├── active-directory.js
-│   └── intune-entra.js
+│   ├── intune-entra.js
+│   ├── backup.js
+│   ├── email-security.js
+│   ├── scripting.js
+│   └── cloud-basics.js
 ├── modules/
+│   ├── computer-basics.html
 │   ├── subnetting.html
 │   ├── dhcp-dns.html
 │   ├── firewall.html
@@ -69,7 +98,11 @@ gespeichert.
 │   ├── dns-concepts.html
 │   ├── terminal.html
 │   ├── active-directory.html
-│   └── intune-entra.html
+│   ├── intune-entra.html
+│   ├── backup.html
+│   ├── email-security.html
+│   ├── scripting.html
+│   └── cloud-basics.html
 └── .nojekyll                    Verhindert GitHub-Pages-Jekyll-Verarbeitung
 ```
 

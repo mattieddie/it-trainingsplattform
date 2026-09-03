@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Subnetting-Trainer &ndash; Netzwerk-Trainer</title>
+<title>Subnetting-Trainer &ndash; IT-Trainer</title>
 <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
 <header class="page-header">
-  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
     <a href="subnetting.html" class="active">Subnetting</a>
     <a href="dhcp-dns.html">DHCP/DNS</a>
     <a href="firewall.html">Firewall</a>
@@ -20,6 +21,10 @@
     <a href="terminal.html">CMD/PowerShell</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
   </nav>
 </header>
 
@@ -87,7 +92,26 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">Kurz erklaert</h3>
+    <h3 class="mt-0">
+      Kurz erklaert
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Eine IP-Adresse mit CIDR (z.B. /24) teilt sich in zwei Teile: einen
+          Netz-Teil (identisch fuer alle Geraete im selben Subnetz) und
+          einen Host-Teil (unterscheidet die Geraete darin). Die Maske
+          markiert, wie viele Bits von links zum Netz-Teil gehoeren.
+        </div>
+      </details>
+    </h3>
+    <svg viewBox="0 0 520 90" style="width:100%; max-width:520px; display:block; margin:6px 0 14px;" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="20" fill="#9aa5b8" font-size="12" font-family="Consolas, monospace">Beispiel: 192.168.1.37 / 24</text>
+      <rect x="0" y="32" width="390" height="36" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="195" y="55" fill="#e6e9f0" font-size="14" text-anchor="middle" font-family="Consolas, monospace">192.168.1  -  Netz-Teil (24 Bit)</text>
+      <rect x="392" y="32" width="128" height="36" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="456" y="55" fill="#e6e9f0" font-size="14" text-anchor="middle" font-family="Consolas, monospace">.37</text>
+      <text x="456" y="82" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Host-Teil</text>
+    </svg>
     <ul>
       <li><strong>Netzadresse</strong>: IP-Adresse UND (bitweise) mit der Subnetzmaske.</li>
       <li><strong>Broadcast-Adresse</strong>: Netzadresse ODER mit der invertierten Maske (Wildcard).</li>

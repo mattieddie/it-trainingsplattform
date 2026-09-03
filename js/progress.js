@@ -9,6 +9,14 @@ const PROGRESS_STORAGE_KEY = "netsec-trainer-progress-v1";
 /** Reihenfolge und Metadaten der Module, zentral an einer Stelle gepflegt. */
 const MODULES = [
   {
+    id: "computerbasics",
+    title: "Computer- & Windows-Grundlagen",
+    icon: "\u{1F9E9}",
+    description:
+      "Startmodul: Computeraufbau (CPU/RAM/Speicher), Benutzer- vs. Systemebene, NTFS-Berechtigungen, Registry und Dateitypen.",
+    href: "modules/computer-basics.html",
+  },
+  {
     id: "subnetting",
     title: "Subnetting-Trainer",
     icon: "\u{1F522}",
@@ -71,6 +79,38 @@ const MODULES = [
     description:
       "Join-Typen, Conditional Access und Intune-Compliance verstehen - inkl. Troubleshooting-Tickets aus der Cloud-Welt.",
     href: "modules/intune-entra.html",
+  },
+  {
+    id: "backup",
+    title: "Backup & Recovery",
+    icon: "\u{1F4BE}",
+    description:
+      "3-2-1-Regel, RPO/RTO-Rechenaufgaben und Ransomware-Szenarien: welche Backup-Kopie ueberlebt einen Angriff?",
+    href: "modules/backup.html",
+  },
+  {
+    id: "emailsecurity",
+    title: "E-Mail-Sicherheit",
+    icon: "\u{1F4E7}",
+    description:
+      "SPF, DKIM und DMARC verstehen - inkl. Spoofing- und Zustellungs-Szenarien mit steigendem Schwierigkeitsgrad.",
+    href: "modules/email-security.html",
+  },
+  {
+    id: "scripting",
+    title: "Skripting-Grundlagen",
+    icon: "\u{1F4DC}",
+    description:
+      "Batch- und PowerShell-Skripte lesen und die tatsaechliche Ausgabe vorhersagen - inkl. klassischer Stolperfallen.",
+    href: "modules/scripting.html",
+  },
+  {
+    id: "cloudbasics",
+    title: "Cloud-Grundlagen",
+    icon: "\u{1F329}\u{FE0F}",
+    description:
+      "RBAC-Rollenwahl nach Least Privilege und M365-Lizenzierung - Azure/M365-Grundlagen fuer den Alltag.",
+    href: "modules/cloud-basics.html",
   },
 ];
 

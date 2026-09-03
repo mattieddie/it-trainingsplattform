@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DHCP/DNS-Troubleshooting &ndash; Netzwerk-Trainer</title>
+<title>DHCP/DNS-Troubleshooting &ndash; IT-Trainer</title>
 <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
 <header class="page-header">
-  <div class="brand"><span class="logo">🛰️</span> Netzwerk- &amp; Security-Trainer</div>
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
   <nav class="main-nav">
     <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
     <a href="subnetting.html">Subnetting</a>
     <a href="dhcp-dns.html" class="active">DHCP/DNS</a>
     <a href="firewall.html">Firewall</a>
@@ -20,11 +21,26 @@
     <a href="terminal.html">CMD/PowerShell</a>
     <a href="active-directory.html">Active Directory</a>
     <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
   </nav>
 </header>
 
 <main class="container">
-  <h1 class="page-title">📨 DHCP/DNS-Troubleshooting</h1>
+  <h1 class="page-title">
+    📨 DHCP/DNS-Troubleshooting
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Faustregel beim Troubleshooting: erst Fakten sammeln (Tools
+        anfordern), dann erst eine Diagnose waehlen - nicht umgekehrt. Ein
+        einzelnes Symptom (z.B. "kein Internet") kann viele verschiedene
+        Ursachen haben.
+      </div>
+    </details>
+  </h1>
   <p class="page-subtitle">
     Du bekommst ein Helpdesk-Ticket mit einem Symptom. Fordere passende
     Tool-Ausgaben an (simulierte <code>ipconfig</code>/<code>nslookup</code>/<code>ping</code>-Ausgaben)

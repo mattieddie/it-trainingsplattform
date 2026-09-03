@@ -28,6 +28,7 @@ const CA_POLICIES_TABLE =
 
 const CA_QUIZ = [
   {
+    difficulty: "easy",
     question:
       "Ein normaler Nutzer (kein Admin) meldet sich von zuhause (ausserhalb des Firmennetzwerks) an. Welche Anforderung(en) muss er erfuellen?",
     options: [
@@ -41,6 +42,7 @@ const CA_QUIZ = [
       "Nur Richtlinie 1 greift (ausserhalb des Netzwerks, gilt fuer alle Nutzer) → MFA erforderlich. Richtlinie 2 greift nicht (keine Admin-Gruppe), Richtlinie 3 nicht (kein Hochrisiko-Land).",
   },
   {
+    difficulty: "medium",
     question:
       "Ein Admin meldet sich aus dem Buero-Netzwerk an. Welche Anforderung(en) muss er erfuellen?",
     options: [
@@ -54,6 +56,7 @@ const CA_QUIZ = [
       "Richtlinie 1 greift nicht (er ist im Firmennetz, die Bedingung 'ausserhalb' trifft nicht zu). Richtlinie 2 greift (Admin-Gruppe, Bedingung 'beliebig') → MFA UND konformes Geraet.",
   },
   {
+    difficulty: "hard",
     question:
       "Ein Admin meldet sich von zuhause an (ausserhalb des Netzwerks). Welche Anforderung(en) gelten in Summe?",
     options: [
@@ -67,6 +70,7 @@ const CA_QUIZ = [
       "Anders als bei Firewall-Regeln gibt es bei Conditional Access KEIN 'erste Regel gewinnt'. Richtlinie 1 UND Richtlinie 2 treffen beide zu - ihre Grant Controls werden kumulativ mit UND verknuepft. Ergebnis: MFA UND konformes Geraet muessen erfuellt sein.",
   },
   {
+    difficulty: "hard",
     question:
       "Ein beliebiger Nutzer versucht sich aus einem als Hochrisiko eingestuften Land anzumelden, erfuellt aber MFA und hat ein konformes Geraet. Wird der Zugriff gewaehrt?",
     options: [
@@ -81,7 +85,115 @@ const CA_QUIZ = [
   },
 ];
 
-/* ================= Teil 2: Troubleshooting-Tickets ================= */
+/* ================= Teil 2: Geraetemanagement-Quiz ================= */
+
+const DEVICE_QUIZ = [
+  {
+    difficulty: "easy",
+    question: "Was ist Windows Autopilot?",
+    options: [
+      "Ein Dienst, der neue Geraete direkt ab Werk (out-of-box) automatisch mit Firmeneinstellungen provisioniert, ohne dass IT das Geraet vorher manuell einrichten muss",
+      "Eine Funktion, die Geraete automatisch neu startet, wenn Updates anstehen",
+      "Ein Tool, das defekte Geraete automatisch per Post an den Hersteller zurueckschickt",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Autopilot ermoeglicht \"Zero-Touch-Provisioning\": ein Nutzer packt ein neues Geraet aus, meldet sich mit dem Firmenkonto an, und Richtlinien/Apps/Einstellungen werden automatisch angewendet - IT muss das Geraet nie in der Hand gehabt haben.",
+  },
+  {
+    difficulty: "easy",
+    question:
+      "Was ist der Unterschied zwischen \"Zuruecksetzen\" (Wipe) und \"Ausmustern\" (Retire) eines Geraets in Intune?",
+    options: [
+      "Wipe loescht alle Daten und setzt das Geraet auf Werkseinstellungen zurueck; Retire entfernt nur die Firmenverwaltung/-daten (z.B. bei BYOD), persoenliche Daten bleiben erhalten",
+      "Beide Aktionen bedeuten exakt dasselbe, nur unterschiedliche Bezeichnung",
+      "Wipe entfernt nur die Verwaltung, Retire loescht saemtliche Daten inkl. privater Dateien",
+    ],
+    correctIndex: 0,
+    explanation:
+      "\"Wipe\" ist der drastischere Schritt (kompletter Reset, sinnvoll bei Verlust/Diebstahl eines Firmengeraets). \"Retire\" trennt ein Geraet sauber von der Verwaltung, ohne private Inhalte anzuruehren - typisch beim Ausscheiden eines Mitarbeiters mit eigenem (BYOD) Geraet.",
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Welcher Autopilot-Modus passt fuer Geraete, die sich ein einzelner Nutzer mit eigenem Konto selbst einrichten soll (im Gegensatz zu einem Kiosk-Geraet ohne persoenliche Anmeldung)?",
+    options: [
+      "User-Driven Mode - der Nutzer meldet sich beim Setup mit seinem Konto an, das Geraet wird ihm zugeordnet",
+      "Self-Deploying Mode - komplett ohne jede Nutzeranmeldung, typisch fuer Kiosk-/Gemeinsam genutzte Geraete",
+      "Beide Modi funktionieren fuer diesen Zweck identisch",
+    ],
+    correctIndex: 0,
+    explanation:
+      "User-Driven Mode bindet das Geraet an eine bestimmte Person (mit Anmeldung waehrend des Setups). Self-Deploying Mode ist fuer Geraete gedacht, die niemandem persoenlich zugeordnet sind (z.B. Empfangs-Kiosk, Besprechungsraum-Tablet).",
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Ein Nutzer soll eine Pflicht-App (z.B. der Firmen-VPN-Client) automatisch auf seinem verwalteten Geraet installiert bekommen, ohne sie manuell aus dem Firmenportal laden zu muessen.",
+    options: [
+      "Die App-Zuweisung auf \"Erforderlich\" (Required) statt \"Verfuegbar\" (Available) stellen",
+      "Die App als \"Verfuegbar\" (Available) zuweisen - das installiert automatisch bei allen Nutzern",
+      "Apps koennen in Intune generell nicht automatisch installiert werden",
+    ],
+    correctIndex: 0,
+    explanation:
+      "\"Erforderlich\" (Required) installiert die App automatisch im Hintergrund auf allen zugewiesenen Geraeten. \"Verfuegbar\" (Available) legt die App nur ins Firmenportal, von wo der Nutzer sie selbst installieren kann.",
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Ein privates (BYOD) Smartphone soll Firmen-E-Mail per Outlook nutzen duerfen, die IT soll das Geraet aber NICHT vollstaendig verwalten oder komplett loeschen koennen.",
+    options: [
+      "App-Schutzrichtlinien (MAM / App Protection Policies) statt vollstaendiger Geraeteverwaltung (MDM) einsetzen - schuetzt nur die Firmendaten innerhalb der App",
+      "Das Geraet trotzdem vollstaendig per MDM registrieren, das ist bei BYOD kein Problem",
+      "Ohne volle Geraeteverwaltung ist der Zugriff auf Firmen-Mail technisch nicht moeglich",
+    ],
+    correctIndex: 0,
+    explanation:
+      "App-Schutzrichtlinien (Mobile Application Management) schuetzen nur die Firmendaten innerhalb bestimmter Apps (z.B. Verhindern von Copy-Paste in private Apps, Anmeldezwang), ohne das gesamte Geraet zu verwalten - der uebliche Ansatz fuer private Geraete.",
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Ein Firmenlaptop wurde gestohlen. Welche Kombination sorgt dafuer, dass alle Firmendaten sofort remote geloescht werden UND das Geraet danach nicht mehr als Firmengeraet in der Verwaltung gefuehrt wird?",
+    options: [
+      "Zuerst \"Zuruecksetzen\" (Wipe) zum Loeschen aller Daten, danach das Geraet aus der Verwaltung entfernen (Retire/Loeschen des Geraeteobjekts)",
+      "Nur \"Ausmustern\" (Retire) reicht aus, das loescht automatisch auch alle Daten",
+      "Ein einfacher Passwort-Reset des Nutzerkontos genuegt bereits",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Retire allein loescht keine Firmendaten (es trennt nur die Verwaltung) - bei einem gestohlenen Geraet ist das zu wenig. Ein vollstaendiger Wipe loescht die Daten; anschliessend wird das Geraeteobjekt aus der Verwaltung entfernt, damit es nicht faelschlich als aktives Firmengeraet gilt.",
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Ein neu bestelltes Geraet soll beim allerersten Einschalten durch den Endnutzer zuhause automatisch der Firmenumgebung beitreten und alle Richtlinien/Apps erhalten - ganz ohne dass IT das Geraet vorher in der Hand hatte. Was ist dafuer zwingend noetig?",
+    options: [
+      "Die Hardware-ID (Hardware Hash) des Geraets muss vorab (z.B. vom Haendler) bei Windows Autopilot registriert und mit dem Tenant verknuepft worden sein",
+      "Der Nutzer braucht lediglich einen Domain-Administrator-Account",
+      "Das ist ohne physischen Kontakt der IT mit dem Geraet technisch nicht moeglich",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Autopilot funktioniert nur, wenn die eindeutige Hardware-ID des Geraets vorher in Autopilot registriert wurde (oft direkt durch den Haendler/OEM). Erst dann erkennt der Dienst das Geraet beim ersten Start automatisch als Firmengeraet.",
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Ein Geraet ist als \"nicht konform\" markiert (z.B. weil BitLocker fehlt), der Nutzer braucht aber dringend Zugriff auf eine kritische App. Was ist die sicherheitstechnisch richtige Vorgehensweise?",
+    options: [
+      "Das konkrete Problem beheben (z.B. BitLocker aktivieren), statt die Compliance-Richtlinie pauschal zu deaktivieren oder aufzuweichen",
+      "Die Compliance-Richtlinie fuer alle Geraete vorübergehend deaktivieren, bis das Problem behoben ist",
+      "Dem Nutzer dauerhaft eine Ausnahme von allen Sicherheitsrichtlinien einraeumen",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Eine pauschale Deaktivierung oder Aufweichung der Richtlinie senkt den Schutz fuer ALLE Geraete, nicht nur das betroffene. Der richtige Weg ist, die konkrete Ursache der Nichtkonformitaet zu beheben - das stellt Sicherheit UND Zugriff wieder her.",
+  },
+];
+
+/* ================= Teil 3: Troubleshooting-Tickets ================= */
 
 const TICKETS = [
   {
@@ -271,20 +383,20 @@ Grant: MFA erforderlich`,
 let currentTicket = null;
 let selectedOptionIndex = null;
 
-/* ---------------- Quiz-Logik ---------------- */
+/* ---------------- Quiz-Logik (generisch fuer beide Quiz-Bloecke) ---------------- */
 
-function renderQuiz() {
-  document.getElementById("ca-policies-table").textContent = CA_POLICIES_TABLE;
-
-  const container = document.getElementById("quiz-container");
+function renderQuizGeneric(quizArray, containerId, namePrefix) {
+  const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  CA_QUIZ.forEach((q, qIdx) => {
+  quizArray.forEach((q, qIdx) => {
     const wrapper = document.createElement("div");
     wrapper.className = "card";
     wrapper.style.marginBottom = "14px";
+    const diffLabel = { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[q.difficulty];
     wrapper.innerHTML = `
-      <h4 style="margin-top:0;">${qIdx + 1}. ${q.question}</h4>
+      <span class="badge difficulty-${q.difficulty}" style="margin-bottom:8px;">${diffLabel}</span>
+      <h4 style="margin-top:4px;">${qIdx + 1}. ${q.question}</h4>
       <div class="option-list" data-question="${qIdx}"></div>
       <div class="feedback-box hidden" data-explanation="${qIdx}"></div>
     `;
@@ -292,7 +404,7 @@ function renderQuiz() {
     q.options.forEach((opt, oIdx) => {
       const item = document.createElement("div");
       item.className = "option-item";
-      item.innerHTML = `<input type="radio" name="caq${qIdx}" /> <span>${opt}</span>`;
+      item.innerHTML = `<input type="radio" name="${namePrefix}${qIdx}" /> <span>${opt}</span>`;
       item.addEventListener("click", () => {
         list.querySelectorAll(".option-item").forEach((el) => {
           el.classList.remove("selected");
@@ -308,13 +420,13 @@ function renderQuiz() {
   });
 }
 
-function checkQuiz() {
-  const lists = document.querySelectorAll("#quiz-container .option-list");
+function checkQuizGeneric(quizArray, containerId, feedbackId, flagName) {
+  const lists = document.querySelectorAll(`#${containerId} .option-list`);
   let correctCount = 0;
 
   lists.forEach((list, qIdx) => {
     const chosenIndex = list.dataset.chosenIndex;
-    const q = CA_QUIZ[qIdx];
+    const q = quizArray[qIdx];
     const items = list.querySelectorAll(".option-item");
     items.forEach((item, oIdx) => {
       if (oIdx === q.correctIndex) item.classList.add("correct-answer");
@@ -324,20 +436,37 @@ function checkQuiz() {
     });
     if (Number(chosenIndex) === q.correctIndex) correctCount++;
 
-    const expBox = document.querySelector(`[data-explanation="${qIdx}"]`);
+    const expBox = list.parentElement.querySelector(`[data-explanation="${qIdx}"]`);
     expBox.classList.remove("hidden");
     expBox.className =
       "feedback-box " + (Number(chosenIndex) === q.correctIndex ? "correct" : "incorrect");
     expBox.innerHTML = q.explanation;
   });
 
-  const fb = document.getElementById("quiz-feedback");
+  const fb = document.getElementById(feedbackId);
   fb.classList.remove("hidden");
-  const allCorrect = correctCount === CA_QUIZ.length;
+  const allCorrect = correctCount === quizArray.length;
   fb.className = "feedback-box " + (allCorrect ? "correct" : "incorrect");
-  fb.innerHTML = `<strong>${correctCount} / ${CA_QUIZ.length} richtig.</strong>`;
+  fb.innerHTML = `<strong>${correctCount} / ${quizArray.length} richtig.</strong>`;
 
-  updateProgressFlag("quizDone", allCorrect);
+  updateProgressFlag(flagName, allCorrect);
+}
+
+function renderQuiz() {
+  document.getElementById("ca-policies-table").textContent = CA_POLICIES_TABLE;
+  renderQuizGeneric(CA_QUIZ, "quiz-container", "caq");
+}
+
+function checkQuiz() {
+  checkQuizGeneric(CA_QUIZ, "quiz-container", "quiz-feedback", "quizDone");
+}
+
+function renderDeviceQuiz() {
+  renderQuizGeneric(DEVICE_QUIZ, "device-quiz-container", "dq");
+}
+
+function checkDeviceQuiz() {
+  checkQuizGeneric(DEVICE_QUIZ, "device-quiz-container", "device-quiz-feedback", "deviceQuizDone");
 }
 
 /* ---------------- Ticket-Logik ---------------- */
@@ -469,7 +598,8 @@ function updateProgressFlag(flagName, value) {
   const progress = loadProgress();
   const stored = progress[MODULE_ID] || {};
   const updated = Object.assign({}, stored, { [flagName]: value });
-  const done = Boolean(updated.quizDone) && Boolean(updated.ticketsDone);
+  const done =
+    Boolean(updated.quizDone) && Boolean(updated.deviceQuizDone) && Boolean(updated.ticketsDone);
   const wasDone = stored.status === "done";
   setModuleStatus(MODULE_ID, done ? "done" : "progress", updated);
   updateChecklist(updated);
@@ -484,6 +614,12 @@ function updateChecklist(state) {
   quizItem.textContent = state.quizDone
     ? "✅ Conditional-Access-Quiz vollstaendig richtig geloest"
     : "⬜ Conditional-Access-Quiz vollstaendig richtig loesen";
+
+  const deviceQuizItem = document.getElementById("check-device-quiz");
+  deviceQuizItem.classList.toggle("status-done", Boolean(state.deviceQuizDone));
+  deviceQuizItem.textContent = state.deviceQuizDone
+    ? "✅ Geraetemanagement-Quiz vollstaendig richtig geloest"
+    : "⬜ Geraetemanagement-Quiz vollstaendig richtig loesen";
 
   const ticketsItem = document.getElementById("check-tickets");
   ticketsItem.classList.toggle("status-done", Boolean(state.ticketsDone));
@@ -504,6 +640,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  renderDeviceQuiz();
+  document.getElementById("check-device-quiz-btn").addEventListener("click", checkDeviceQuiz);
 
   renderTicket();
   document.getElementById("ticket-check-btn").addEventListener("click", checkTicketAnswer);

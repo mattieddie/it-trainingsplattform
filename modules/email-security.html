@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>E-Mail-Sicherheit &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Uebersicht</a>
+    <a href="computer-basics.html">Computer-Grundlagen</a>
+    <a href="subnetting.html">Subnetting</a>
+    <a href="dhcp-dns.html">DHCP/DNS</a>
+    <a href="firewall.html">Firewall</a>
+    <a href="sqli.html">SQL-Injection</a>
+    <a href="dns-concepts.html">DNS-Konzepte</a>
+    <a href="terminal.html">CMD/PowerShell</a>
+    <a href="active-directory.html">Active Directory</a>
+    <a href="intune-entra.html">Intune/Entra ID</a>
+    <a href="backup.html">Backup &amp; Recovery</a>
+    <a href="email-security.html" class="active">E-Mail-Sicherheit</a>
+    <a href="scripting.html">Skripting</a>
+    <a href="cloud-basics.html">Cloud-Grundlagen</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">📧 E-Mail-Sicherheit (SPF/DKIM/DMARC)</h1>
+  <p class="page-subtitle">
+    Wie E-Mail-Server pruefen, ob eine Mail wirklich von der angegebenen
+    Absenderdomain stammt &ndash; und warum Spoofing/Phishing trotzdem oft
+    funktioniert, wenn diese Mechanismen fehlen oder falsch konfiguriert sind.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollstaendig richtig geloest.
+  </div>
+
+  <div class="card">
+    <svg viewBox="0 0 560 130" style="width:100%; max-width:560px; display:block; margin-bottom:14px;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="40" width="130" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="75" y="70" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Absender-Server</text>
+
+      <line x1="140" y1="65" x2="215" y2="65" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="177" y="55" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">sendet Mail</text>
+
+      <rect x="215" y="10" width="130" height="50" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="280" y="40" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">SPF pruefen</text>
+
+      <rect x="215" y="70" width="130" height="50" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="280" y="100" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">DKIM pruefen</text>
+
+      <line x1="345" y1="35" x2="410" y2="60" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="345" y1="95" x2="410" y2="65" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <rect x="410" y="35" width="140" height="55" rx="8" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
+      <text x="480" y="58" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">DMARC-Richtlinie</text>
+      <text x="480" y="76" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">none/quarantine/reject</text>
+
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <h3 class="mt-0">
+      SPF (Sender Policy Framework)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          SPF ist wie eine Gaesteliste am Eingang: nur Server, die auf der
+          Liste der Domain stehen, duerfen im Namen dieser Domain Mails
+          verschicken. Ein fremder Server auf keiner Liste wird als
+          verdaechtig eingestuft.
+        </div>
+      </details>
+    </h3>
+    <p>Ein TXT-Record, der auflistet, welche Server im Namen einer Domain E-Mails versenden duerfen:</p>
+    <pre>firma.ch.   TXT   "v=spf1 include:_spf.google.com -all"</pre>
+    <table style="width:100%; border-collapse: collapse; margin-top:8px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Qualifier</th><th>Bedeutung</th>
+      </tr>
+      <tr><td class="mono">-all</td><td>HardFail - nicht gelistete Server strikt ablehnen</td></tr>
+      <tr><td class="mono">~all</td><td>SoftFail - nicht gelistete Server verdaechtigen, meist trotzdem zustellen</td></tr>
+      <tr><td class="mono">+all</td><td>Alles erlauben (in der Praxis unsicher, macht SPF wirkungslos)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">DKIM (DomainKeys Identified Mail)</h3>
+    <p>
+      Jede ausgehende Mail wird kryptografisch signiert. Der oeffentliche
+      Schluessel zur Pruefung liegt als TXT-Record in der DNS-Zone:
+    </p>
+    <pre>mail._domainkey.firma.ch.   TXT   "v=DKIM1; k=rsa; p=MIGfMA0GCSq..."</pre>
+    <p class="text-muted">Aendert sich auch nur ein Byte der Mail unterwegs, schlaegt die Signaturpruefung fehl.</p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">DMARC (Domain-based Message Authentication)</h3>
+    <p>Verknuepft SPF und DKIM mit einer Richtlinie, was bei einem Fehlschlag passieren soll:</p>
+    <pre>_dmarc.firma.ch.   TXT   "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@firma.ch"</pre>
+    <ul>
+      <li><code>p=none</code> - nur beobachten/Berichte sammeln, nichts blocken (empfohlener erster Schritt)</li>
+      <li><code>p=quarantine</code> - verdaechtige Mails in Quarantaene/Spam verschieben</li>
+      <li><code>p=reject</code> - verdaechtige Mails komplett ablehnen</li>
+    </ul>
+    <p class="text-muted">
+      DMARC verlangt im Standardfall, dass MINDESTENS EINER der beiden
+      Mechanismen (SPF oder DKIM) besteht UND mit der sichtbaren
+      Absenderdomain uebereinstimmt ("Alignment").
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Record- &amp; Szenario-Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/email-security.js"></script>
+</body>
+</html>

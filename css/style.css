@@ -604,6 +604,67 @@ details#sample-solution[open] summary {
   margin-bottom: 6px;
 }
 
+/* ---------- Info-Toggle (i-Punkt) ---------- */
+
+details.info-toggle {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+details.info-toggle summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(79, 140, 255, 0.15);
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+details.info-toggle summary::-webkit-details-marker {
+  display: none;
+}
+
+details.info-toggle summary::marker {
+  content: "";
+}
+
+details.info-toggle summary:hover {
+  background: rgba(79, 140, 255, 0.28);
+}
+
+details.info-toggle .info-content {
+  display: block;
+  margin: 8px 0 4px;
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  max-width: 420px;
+  white-space: normal;
+}
+
+h3 details.info-toggle,
+h4 details.info-toggle {
+  vertical-align: middle;
+}
+
+h3 details.info-toggle .info-content,
+h4 details.info-toggle .info-content {
+  font-family: var(--font);
+}
+
 /* ---------- Test results (firewall packets) ---------- */
 
 .test-result-list {
