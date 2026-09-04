@@ -208,6 +208,15 @@
       <tr><td>Inno Setup-EXE</td><td class="mono">setup.exe /VERYSILENT /NORESTART</td></tr>
       <tr><td>WiX-Bundle-EXE (kapselt MSI)</td><td class="mono">setup.exe /quiet /norestart</td></tr>
     </table>
+
+    <img class="doc-image" src="../images/silent-install-msi.jpg" alt="Eingabeaufforderung mit dem Befehl msiexec /I ProjectPlan_365_PC_20.69.1066.msi /q ADDLOCAL=ProjectPlan" style="max-width:480px;" />
+    <p class="text-muted">
+      <code class="mono">ADDLOCAL=</code> wählt gezielt einzelne
+      Features aus dem MSI-Paket aus, die installiert werden sollen -
+      nützlich, wenn ein Paket mehrere optionale Komponenten enthält und
+      nur bestimmte davon ausgerollt werden sollen.
+    </p>
+
     <p class="text-muted">
       Unbekannter Installer? Erst <code>setup.exe /?</code> bzw.
       <code>/help</code> probieren, dann typische Parameter der bekannten
@@ -216,18 +225,7 @@
       was der Installer tatsächlich tut.
     </p>
     <p class="text-muted" style="margin-bottom:4px;">Typische Ausgabe von <code class="mono">setup.exe /?</code> bei einem Inno-Setup-Installer:</p>
-    <pre>Setup
-
-The Setup program accepts optional command line parameters.
-
-/HELP, /?          Shows this information.
-/SILENT, /VERYSILENT
-                   Instructs Setup to be silent or very silent.
-/SUPPRESSMSGBOXES  Instructs Setup to suppress message boxes.
-/NORESTART         Prevents Setup from restarting the system following
-                   a successful installation.
-/LOG="filename"    Same as /LOG, except it allows you to specify a
-                   fixed path/filename for the log file.</pre>
+    <img class="doc-image" src="../images/cmd-exe-install.png" alt="PowerShell-Fenster mit Ausführung von FoxitPDFReader121_enu_Setup_Prom.exe /?, darunter ein Dialog mit den akzeptierten Kommandozeilenparametern, u.a. /HELP, /SILENT, /VERYSILENT und /NORESTART hervorgehoben" style="max-width:480px;" />
     <p class="text-muted">
       Genau diese Ausgabe verrät sofort die Engine: dieses Muster
       (<code class="mono">/VERYSILENT</code>, <code class="mono">/SUPPRESSMSGBOXES</code>)
