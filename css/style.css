@@ -1166,3 +1166,68 @@ hr.sep {
   margin: -6px 0 12px;
 }
 
+/* ---------- Datenbank-Modul (Testdatenbank, SQL-Sandbox) ---------- */
+
+.db-table-block {
+  margin-bottom: 20px;
+}
+
+.db-table-block h4 {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+  overflow-x: auto;
+  display: block;
+}
+
+.db-table thead,
+.db-table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.db-table th,
+.db-table td {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  text-align: left;
+  word-break: break-word;
+}
+
+.db-table thead {
+  background: var(--bg-input);
+}
+
+.db-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.task-prompt {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.task-sql-input {
+  margin-bottom: 10px;
+}
+
+.task-result-box {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+#sql-result {
+  margin-top: 14px;
+  overflow-x: auto;
+}
+

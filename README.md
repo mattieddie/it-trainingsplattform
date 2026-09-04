@@ -12,7 +12,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 22 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 23 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -32,6 +32,7 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **CMD & PowerShell Terminal-Trainer** ([modules/terminal.html](modules/terminal.html)) - simuliertes Terminal, Befehle eintippen statt auswählen, gestaffelte Tipps.
 - **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
 - **Virtualisierung & Docker-Grundlagen** ([modules/containers.html](modules/containers.html)) - Typ-1- vs. Typ-2-Hypervisor, virtuelle Maschinen vs. Container, Docker-Kernbegriffe (Image/Container/Dockerfile/Registry), inkl. Reihenfolge-Puzzle "vom Code zum laufenden Container".
+- **Datenbanken** ([modules/databases.html](modules/databases.html)) - Datenbanktypen (relational/Key-Value/Document/Wide-Column/Graph), relationale Beziehungen (1:1/1:N/M:N), ER-Diagramme/Kardinalitäten, Verbindungen zu Datenbanken (Ports/Treiber), inkl. offen einsehbarer Testdatenbank mit eigener SQL-Sandbox (selbstgebauter, stark vereinfachter SELECT-Interpreter) und 9 Abfrage-Aufgaben.
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
 - **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell, inkl. OSI-Reihenfolge-Puzzle und Port-↔-Dienst-Zuordnungsspiel.
@@ -98,10 +99,12 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── final-exam.js
 │   ├── dns-dhcp-basics.js
 │   ├── certificates.js
-│   └── containers.js
+│   ├── containers.js
+│   └── database.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── containers.html
+│   ├── databases.html
 │   ├── network-packets.html
 │   ├── network-devices.html
 │   ├── vpn-basics.html
@@ -248,7 +251,11 @@ mit eigenen Daten befüllt):
 
 Dazu kommt die bereits bestehende Drag&amp;Drop-Regelsortierung im
 Firewall-Modul (eigene Implementierung, da zusätzlich bearbeitbare
-Felder pro Regel nötig sind).
+Felder pro Regel nötig sind), sowie die **SQL-Sandbox** im
+Datenbanken-Modul (`js/database.js`) - ein selbstgebauter, stark
+vereinfachter SELECT-Interpreter (SELECT/WHERE/JOIN/ORDER BY) gegen eine
+offen einsehbare Testdatenbank, inkl. 9 Abfrage-Aufgaben, deren Ergebnis
+automatisch gegen eine hinterlegte Referenz-Query geprüft wird.
 
 ## Technische Hinweise
 

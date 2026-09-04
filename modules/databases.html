@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Datenbanken &ndash; IT-Trainer</title>
+<link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><img class="brand-logo" src="../images/abraxas-icon.png" alt="Abraxas Informatik AG" /> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+        <a href="containers.html">Virtualisierung &amp; Docker</a>
+        <a href="databases.html" class="active">Datenbanken</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="encryption.html">Verschlüsselung</a>
+        <a href="certificates.html">Zertifikate &amp; PKI</a>
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Abschlussprüfung</button>
+      <div class="nav-dropdown-menu">
+        <a href="final-exam.html">Abschlussprüfung</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">🗄️ Datenbanken</h1>
+  <p class="page-subtitle">
+    Datenbanktypen, relationale Beziehungen, Datenmodelle (ER-Diagramme),
+    Verbindungen zu Datenbanken - und eine offen einsehbare Testdatenbank
+    zum selber Abfragen mit eigenen SQL-Queries.
+  </p>
+
+  <p class="text-muted" style="margin-top:-8px; margin-bottom:20px;">
+    📺 Vertiefung: <a href="https://www.youtube.com/watch?v=-LJYaXfR2X4" target="_blank" rel="noopener">Datenbanken Grundlagen einfach erklärt</a> (IT &amp; Medien einfach erklärt)
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Alle Abfrage-Aufgaben gelöst und Quiz vollständig richtig beantwortet.
+  </div>
+
+  <div class="card">
+    <div id="check-tasks" class="checklist-item">⬜ Abfrage-Aufgaben: 0 / 9 gelöst</div>
+    <div id="check-quiz" class="checklist-item">⬜ Datenbank-Quiz vollständig richtig lösen</div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Warum überhaupt Datenbanken?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Eine einzelne Excel- oder Textdatei funktioniert für ein paar
+          Zeilen. Sobald aber mehrere Programme oder Personen GLEICHZEITIG
+          lesen/schreiben, riesige Datenmengen strukturiert durchsucht
+          werden müssen, oder Daten konsistent zueinander bleiben sollen
+          (z.B. eine Bestellung darf nicht auf einen nicht-existierenden
+          Kunden zeigen) - genau dafür gibt es Datenbank-Systeme.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Eine Datenbank speichert strukturierte Daten so, dass mehrere
+      Anwendungen/Nutzer gleichzeitig zuverlässig darauf zugreifen können,
+      Datenmengen effizient durchsucht werden können, und Regeln (z.B.
+      "jede Bestellung braucht einen gültigen Kunden") automatisch
+      durchgesetzt werden.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Datenbanktypen</h3>
+    <img class="doc-image" src="../images/Types-of-Databases.webp" alt="Relationale Datenbanken sind tabellenbasiert (Table-based). Nicht-relationale (NoSQL) Datenbanken umfassen mehrere Modelle: Key-Value, Graph, Wide-Column und Document" style="max-width:560px;" />
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Typ</th><th>Modell</th><th>Beispiele</th><th>Typischer Einsatz</th>
+      </tr>
+      <tr><td><strong>Relational</strong></td><td>Tabellen mit festem Schema</td><td>MySQL, PostgreSQL, SQL Server, Oracle</td><td>Geschäftsdaten mit klaren Beziehungen (Kunden, Bestellungen, Buchhaltung)</td></tr>
+      <tr><td>Key-Value</td><td>Schlüssel → Wert, keine Struktur vorgeschrieben</td><td>Redis, DynamoDB</td><td>Sessions, Caching - extrem schneller Zugriff über den Schlüssel</td></tr>
+      <tr><td>Document</td><td>JSON-ähnliche Dokumente, pro Datensatz flexibel</td><td>MongoDB, CouchDB</td><td>Uneinheitliche/sich häufig ändernde Datenstrukturen</td></tr>
+      <tr><td>Wide-Column</td><td>Tabellenähnlich, aber Spalten pro Zeile flexibel</td><td>Cassandra, HBase</td><td>Riesige Datenmengen, verteilt über viele Server</td></tr>
+      <tr><td>Graph</td><td>Knoten + Kanten (Beziehungen selbst sind Daten)</td><td>Neo4j</td><td>Stark vernetzte Daten: soziale Netzwerke, Empfehlungen, Abhängigkeiten</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Relationale Datenbanken: Tabellen &amp; Beziehungen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Statt den Namen jedes Kunden bei jeder Bestellung erneut
+          hinzuschreiben, steht er nur EINMAL in der Kunden-Tabelle. Die
+          Bestellungen-Tabelle merkt sich pro Zeile nur die Kunden-ID -
+          einen Verweis, keine Kopie.
+        </div>
+      </details>
+    </h3>
+    <img class="doc-image" src="../images/WP_Relationale-Datenbank-1-1024x576.jpg" alt="Beispiel einer relationalen Datenbank: Tabelle Kunden mit Kunden-ID, Vorname, Nachname; Tabelle Bestellungen mit Bestellnummer, Kunden-ID, Bestelldatum. Ein Pfeil zeigt von der Kunden-ID in Bestellungen zurück zur passenden Zeile in Kunden" style="max-width:560px;" />
+    <p>
+      Jede Tabelle hat einen <strong>Primärschlüssel</strong> (Primary Key)
+      - eine Spalte, die jede Zeile eindeutig identifiziert (z.B.
+      <code>kunden_id</code>). Andere Tabellen verweisen per
+      <strong>Fremdschlüssel</strong> (Foreign Key) darauf - z.B. die Spalte
+      <code>kunden_id</code> in der Tabelle <code>bestellungen</code>.
+      Genau dieses Prinzip verbindet die beiden Tabellen miteinander, ohne
+      Daten doppelt zu speichern.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Beziehungstypen: 1:1, 1:N, M:N</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Typ</th><th>Beispiel</th><th>Umsetzung</th>
+      </tr>
+      <tr><td><strong>1:1</strong></td><td>Ein Mitarbeiter hat genau einen Firmenausweis</td><td>Fremdschlüssel in einer der beiden Tabellen (mit Eindeutigkeits-Regel)</td></tr>
+      <tr><td><strong>1:N</strong></td><td>Ein Kunde hat mehrere Bestellungen, jede Bestellung hat aber nur einen Kunden</td><td>Fremdschlüssel auf der "N"-Seite (kunden_id in bestellungen)</td></tr>
+      <tr><td><strong>M:N</strong></td><td>Eine Bestellung enthält mehrere Artikel, ein Artikel steckt in vielen Bestellungen</td><td>Zusätzliche Verbindungstabelle (Junction Table) mit zwei Fremdschlüsseln</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:10px;">
+      M:N-Beziehungen kann eine relationale Datenbank nicht direkt
+      abbilden - es braucht immer eine Verbindungstabelle, die daraus zwei
+      1:N-Beziehungen macht:
+    </p>
+    <img class="doc-image" src="../images/datenbankmodell.png" alt="Zwei Tabellen (Student ID/Name, ProviderID/Provider name) werden über eine dritte Verbindungstabelle kombiniert, die Student ID, ProviderID, Type of plan und Start date enthält - so entsteht aus einer M:N-Beziehung eine Kombination aus zwei 1:N-Beziehungen" style="max-width:420px;" />
+    <p class="text-muted">
+      Im Testdatenbank-Beispiel unten übernimmt <code>bestellposten</code>
+      genau diese Rolle zwischen <code>bestellungen</code> und
+      <code>artikel</code>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Datenmodelle: ER-Diagramm &amp; Kardinalitäten
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein Entity-Relationship-Diagramm (ER-Diagramm) wird VOR dem Bau
+          einer Datenbank gezeichnet - es legt fest, welche Entitäten
+          (z.B. Kunde, Bestellung) es gibt, welche Attribute sie haben,
+          und wie sie zueinander stehen (Kardinalitäten), bevor auch nur
+          eine einzige Tabelle erstellt wird.
+        </div>
+      </details>
+    </h3>
+    <img class="doc-image" src="../images/db-modelle.png" alt="ER-Diagramm in Chen-Notation: oben mit einfachen Kardinalitäten (1, N, M) zwischen Bestellung-veranlasst-Kunde und Bestellung-enthaelt-Posten sowie Kunde-besitzt-Lieferadresse; unten dieselben Beziehungen in (min,max)-Notation (0..N, 1..1 usw.)" style="max-width:520px;" />
+    <p>
+      Die obere Variante zeigt die klassische Chen-Notation (1, N, M) - die
+      untere die genauere <strong>(min,max)-Notation</strong>: sie gibt pro
+      Seite eine Unter- UND Obergrenze an. "0..N" bei Bestellung (auf der
+      Kunde-Seite der Beziehung) bedeutet: ein Kunde hat null bis beliebig
+      viele Bestellungen. "1..1" bei Kunde bedeutet: eine Bestellung
+      gehört immer zu genau einem Kunden.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Verbindungen zu Datenbanken</h3>
+    <p>
+      Eine Anwendung spricht so gut wie nie direkt mit den Datendateien
+      auf der Festplatte - sie verbindet sich über das Netzwerk mit dem
+      Datenbank-Server, meist über einen fest zugewiesenen Port und einen
+      passenden Treiber:
+    </p>
+
+    <svg viewBox="0 0 620 140" style="width:100%; max-width:620px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="40" width="140" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="80" y="72" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Anwendung</text>
+
+      <text x="200" y="60" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
+      <text x="200" y="80" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Treiber</text>
+
+      <rect x="220" y="40" width="180" height="55" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="310" y="64" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Connection String</text>
+      <text x="310" y="82" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Host, Port, Login</text>
+
+      <text x="450" y="60" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
+      <text x="450" y="80" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">TCP/Port</text>
+
+      <rect x="470" y="40" width="140" height="55" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="540" y="72" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">DB-Server</text>
+    </svg>
+
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Datenbank</th><th>Standardport</th><th>Beispiel-Treiber</th>
+      </tr>
+      <tr><td>MySQL / MariaDB</td><td class="mono">3306</td><td>mysql2 (Node.js), mysqli (PHP)</td></tr>
+      <tr><td>PostgreSQL</td><td class="mono">5432</td><td>psycopg2 (Python), Npgsql (.NET)</td></tr>
+      <tr><td>Microsoft SQL Server</td><td class="mono">1433</td><td>ODBC, System.Data.SqlClient</td></tr>
+      <tr><td>MongoDB</td><td class="mono">27017</td><td>MongoDB-Treiber (Node.js/Python/...)</td></tr>
+      <tr><td>Redis</td><td class="mono">6379</td><td>redis-py, StackExchange.Redis</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:10px;">
+      Ein Connection String bündelt alle Verbindungsdaten in einer Zeile,
+      z.B. <code class="mono">Server=db01;Database=Shop;User Id=app;Password=***;</code>
+      - das Passwort sollte dabei nie im Klartext im Quellcode stehen,
+      sondern z.B. über einen Secret-Manager oder Umgebungsvariablen
+      bereitgestellt werden.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">SQL-Grundlagen (Spickzettel)</h3>
+    <p class="text-muted" style="margin-top:0;">
+      Diese Sandbox unten versteht eine bewusst vereinfachte SQL-Untermenge:
+    </p>
+    <pre>SELECT spalte1, spalte2   -- oder * für alle Spalten
+FROM tabelle
+JOIN andere_tabelle ON tabelle.spalte = andere_tabelle.spalte
+WHERE bedingung [AND|OR bedingung ...]
+ORDER BY spalte [ASC|DESC]</pre>
+    <p class="text-muted">
+      Vergleichsoperatoren in WHERE: <code class="mono">=</code>,
+      <code class="mono">!=</code>, <code class="mono">&gt;</code>,
+      <code class="mono">&lt;</code>, <code class="mono">&gt;=</code>,
+      <code class="mono">&lt;=</code>, sowie
+      <code class="mono">LIKE '%text%'</code> für Teiltreffer.
+      Nicht unterstützt: Klammern in WHERE, Aggregatfunktionen wie
+      COUNT/SUM, sowie INSERT/UPDATE/DELETE - die Sandbox ist bewusst
+      reines Lesen (SELECT).
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Testdatenbank (offen einsehbar)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Anders als bei einer echten Anwendung siehst du hier ALLE Daten
+          direkt - genau deshalb eignet sich diese Datenbank zum Üben: du
+          kannst dein Abfrage-Ergebnis jederzeit gegen die sichtbaren
+          Rohdaten gegenprüfen.
+        </div>
+      </details>
+    </h3>
+    <div id="schema-tables"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">SQL-Sandbox</h3>
+    <p class="text-muted" style="margin-top:0;">Probier's aus, z.B.:</p>
+    <div class="tool-buttons" style="margin-bottom:10px;">
+      <button type="button" class="btn small ghost sql-example-btn" data-sql="SELECT * FROM kunden">SELECT * FROM kunden</button>
+      <button type="button" class="btn small ghost sql-example-btn" data-sql="SELECT vorname, nachname FROM kunden WHERE ort = 'Bern'">Kunden aus Bern</button>
+      <button type="button" class="btn small ghost sql-example-btn" data-sql="SELECT vorname, nachname, bestelldatum FROM kunden JOIN bestellungen ON kunden.kunden_id = bestellungen.kunden_id ORDER BY bestelldatum DESC">JOIN-Beispiel</button>
+    </div>
+    <textarea id="sql-input" class="mono" rows="3" placeholder="SELECT * FROM kunden">SELECT * FROM kunden</textarea>
+    <div class="btn-row">
+      <button type="button" id="run-sql-btn" class="btn primary">Query ausführen</button>
+    </div>
+    <div id="sql-error" class="feedback-box danger hidden"></div>
+    <div id="sql-result"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🧩 Abfrage-Aufgaben</h3>
+    <p class="text-muted" style="margin-top:0;">
+      Schreib für jede Aufgabe eine eigene SQL-Abfrage gegen die
+      Testdatenbank oben und klicke "Prüfen".
+    </p>
+    <div id="tasks-container"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div id="next-module-nav" class="next-module-nav"></div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/database.js"></script>
+</body>
+</html>

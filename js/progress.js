@@ -100,6 +100,16 @@ const MODULES = [
     href: "modules/containers.html",
     prereqs: ["computerbasics"],
   },
+  {
+    id: "databases",
+    track: "grundlagen",
+    title: "Datenbanken",
+    icon: "\u{1F5C4}\u{FE0F}",
+    description:
+      "Datenbanktypen, relationale Beziehungen (1:1/1:N/M:N), ER-Diagramme, Verbindungen zu Datenbanken - inkl. offener Testdatenbank mit eigener SQL-Sandbox.",
+    href: "modules/databases.html",
+    prereqs: ["computerbasics"],
+  },
 
   // ---- Baukasten: Netzwerk-Grundlagen ----
   {
