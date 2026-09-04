@@ -99,6 +99,17 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">Das Grundprinzip</h3>
+    <img class="doc-image" src="../images/sql-injection.png" alt="Diagramm SQL Injection: Angreifer sendet http://teachers.com?teacherId=117 or 1=1;-- an den Web-API-Server, dieser baut daraus die Query SELECT * FROM teachers WHERE teacherId=117 or 1=1 und liefert die Daten aller Lehrer statt nur eines einzelnen zurück" style="max-width:600px;" />
+    <p class="text-muted">
+      Der Kernfehler: die Nutzereingabe (<code class="mono">117 or 1=1;--</code>)
+      landet direkt, unverändert im SQL-Befehl. <code class="mono">1=1</code>
+      ist immer wahr - die WHERE-Bedingung greift dadurch für JEDE Zeile,
+      nicht nur für den angefragten Datensatz.
+    </p>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">Checkliste</h3>
     <div id="check-naive" class="checklist-item">⬜ Injection im unsicheren Formular auslösen</div>
     <div id="check-secure" class="checklist-item">⬜ Gleiche Eingabe im parametrisierten Formular testen</div>

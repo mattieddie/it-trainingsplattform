@@ -190,6 +190,9 @@
 
     <p class="text-muted" style="margin-bottom:4px;">Beispiel mit mehreren Transforms (Reihenfolge zählt bei Konflikten):</p>
     <pre>msiexec /i app.msi TRANSFORMS=basis.mst;abteilung-vertrieb.mst /qn /norestart /l*v install.log</pre>
+
+    <p class="text-muted" style="margin-top:14px;">So sieht das in der Praxis im MSI-Editor Orca aus (hier ein Transform auf ein Adobe-Acrobat-Paket, grün markierte Zeilen sind die vom Transform veränderten Registry-Werte):</p>
+    <img class="doc-image" src="../images/msi-mst.png" alt="Orca-MSI-Editor mit geöffneter Registry-Tabelle eines Adobe-Acrobat-MSI-Pakets, grün markierte Zeilen zeigen die durch ein Transform (MST) veränderten Werte" style="max-width:560px;" />
   </div>
 
   <div class="card">

@@ -103,45 +103,7 @@
       gezielt ansprechen - deshalb läuft der Adressbezug per DHCP über
       Broadcasts, nach dem klassischen <strong>DORA</strong>-Schema:
     </p>
-    <svg viewBox="0 0 560 260" style="width:100%; max-width:520px; display:block; margin:12px auto;" xmlns="http://www.w3.org/2000/svg">
-      <text x="80" y="16" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Client</text>
-      <text x="480" y="16" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">DHCP-Server (A + B)</text>
-
-      <line x1="80" y1="24" x2="80" y2="230" stroke="#2a3448" stroke-width="1.5"/>
-      <line x1="480" y1="24" x2="480" y2="230" stroke="#2a3448" stroke-width="1.5"/>
-
-      <line x1="80" y1="40" x2="470" y2="40" stroke="#ffb648" stroke-width="2" marker-end="url(#arrDD1)"/>
-      <text x="270" y="34" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">1. DHCPDISCOVER (Broadcast)</text>
-
-      <line x1="470" y1="62" x2="90" y2="62" stroke="#4f8cff" stroke-width="2" marker-end="url(#arrDD1)"/>
-      <text x="270" y="56" fill="#4f8cff" font-size="10" text-anchor="middle" font-family="Consolas, monospace">2. DHCPOFFER von A und B (je IP + Konfig)</text>
-
-      <text x="270" y="80" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Client wählt eines der Angebote aus</text>
-
-      <line x1="80" y1="100" x2="470" y2="100" stroke="#ffb648" stroke-width="2" marker-end="url(#arrDD1)"/>
-      <text x="270" y="94" fill="#ffb648" font-size="10" text-anchor="middle" font-family="Consolas, monospace">3. DHCPREQUEST (Broadcast, referenziert Server A)</text>
-
-      <line x1="470" y1="122" x2="90" y2="122" stroke="#3ecf6c" stroke-width="2" marker-end="url(#arrDD1)"/>
-      <text x="270" y="116" fill="#3ecf6c" font-size="10" text-anchor="middle" font-family="Consolas, monospace">4. DHCPACK von Server A - Lease beginnt</text>
-
-      <text x="270" y="140" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Client konfiguriert sich, Lease-Timer läuft</text>
-
-      <line x1="80" y1="160" x2="470" y2="160" stroke="#29d3c1" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrDD1)"/>
-      <text x="270" y="154" fill="#29d3c1" font-size="10" text-anchor="middle" font-family="Consolas, monospace">5. Renewal-Request (Unicast, nach halber Lease-Zeit)</text>
-
-      <line x1="470" y1="182" x2="90" y2="182" stroke="#3ecf6c" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrDD1)"/>
-      <text x="270" y="176" fill="#3ecf6c" font-size="10" text-anchor="middle" font-family="Consolas, monospace">6. DHCPACK - Lease verlängert</text>
-
-      <line x1="80" y1="212" x2="470" y2="212" stroke="#ff5c6c" stroke-width="2" marker-end="url(#arrDD1)"/>
-      <text x="270" y="206" fill="#ff5c6c" font-size="10" text-anchor="middle" font-family="Consolas, monospace">7. DHCPRELEASE (z.B. ipconfig /release)</text>
-      <text x="270" y="230" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Adresse wird vorzeitig freigegeben</text>
-
-      <defs>
-        <marker id="arrDD1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
-        </marker>
-      </defs>
-    </svg>
+    <img class="doc-image" src="../images/dhcp.png" alt="DHCP-Sequenzdiagramm: Client fragt Server1/Server2 nach DHCP-Server, Server bieten IP-Adresse und Konfiguration an, Client sammelt Angebote und wählt eines, fordert Konfiguration vom gewählten Server an, dieser bestätigt, Client ist konfiguriert, später Leasing-Erneuerung anfordern/bestätigen, am Ende IP-Adresse freigeben" style="max-width:420px;" />
     <p class="text-muted">
       Praktische Konsequenz: läuft <code class="mono">ipconfig /release</code>
       gefolgt von <code class="mono">ipconfig /renew</code> - das ist der

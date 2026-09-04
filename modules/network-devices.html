@@ -124,27 +124,7 @@
       </tr>
     </table>
 
-    <svg viewBox="0 0 600 150" style="width:100%; max-width:600px; display:block; margin:14px 0;" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="10" width="180" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
-      <text x="100" y="42" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Hub: flutet ALLES</text>
-
-      <rect x="210" y="10" width="180" height="55" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
-      <text x="300" y="35" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Switch: gezielt</text>
-      <text x="300" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">per MAC-Adresse</text>
-
-      <rect x="410" y="10" width="180" height="55" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
-      <text x="500" y="35" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Router: zwischen</text>
-      <text x="500" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Netzwerken, per IP</text>
-
-      <text x="100" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">alle Geräte</text>
-      <text x="100" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">"hören" alles mit</text>
-
-      <text x="300" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">nur Absender +</text>
-      <text x="300" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Empfänger sehen es</text>
-
-      <text x="500" y="90" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">verbindet z.B. LAN</text>
-      <text x="500" y="105" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mit dem Internet</text>
-    </svg>
+    <img class="doc-image" src="../images/hub-switch-router.png" alt="Vergleichsgrafik Hub vs. Switch vs. Router: Hub sendet an alle Geräte (Layer 1, keine MAC-Erkennung, viele Kollisionen), Switch sendet gezielt per MAC-Adresse (Layer 2, weniger Verkehr, bessere Sicherheit), Router verbindet unterschiedliche Netzwerke per IP-Adresse (Layer 3, NAT/DHCP/Firewall/VPN, Internetzugang)" style="max-width:600px;" />
 
     <p class="text-muted">
       Wichtig: Ein Switch trennt <strong>Kollisionsdomänen</strong> (pro

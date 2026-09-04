@@ -182,6 +182,8 @@
       <tr><td class="mono">+all</td><td>Alles erlauben (in der Praxis unsicher, macht SPF wirkungslos)</td></tr>
     </table>
 
+    <img class="doc-image" src="../images/spf.png" alt="SPF-Authentifizierungsprozess: Sender schickt Mail an eingehenden Mailserver, dieser fragt per SPF-Lookup bei DNS an und erhält das SPF-Ergebnis zurück, worauf die Mail authentifiziert und je nach Ergebnis in Inbox, Junk-E-Mail, Quarantäne oder gelöscht landet" style="max-width:520px; margin-top:12px;" />
+
     <p style="margin-top:14px;"><strong>Beispiel-Ablauf einer SPF-Prüfung:</strong></p>
     <ol>
       <li>Ein Server mit der IP <code class="mono">142.250.185.10</code> verbindet sich und behauptet, im Auftrag von <code class="mono">firma.ch</code> zu senden.</li>
@@ -250,35 +252,7 @@
     </p>
     <pre>mail._domainkey.firma.ch.   TXT   "v=DKIM1; k=rsa; p=MIGfMA0GCSq..."</pre>
 
-    <svg viewBox="0 0 560 150" style="width:100%; max-width:560px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="10" width="160" height="60" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
-      <text x="90" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Sender signiert</text>
-      <text x="90" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mit PRIVATEM Schlüssel</text>
-
-      <line x1="170" y1="40" x2="230" y2="40" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
-
-      <rect x="230" y="10" width="160" height="60" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
-      <text x="310" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Mail + DKIM-</text>
-      <text x="310" y="53" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Signature-Header</text>
-
-      <line x1="390" y1="40" x2="450" y2="40" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
-
-      <rect x="450" y="10" width="100" height="60" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
-      <text x="500" y="35" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Empfänger</text>
-      <text x="500" y="53" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">prüft Signatur</text>
-
-      <line x1="500" y1="70" x2="500" y2="105" stroke="#9aa5b8" stroke-width="2" marker-end="url(#arrow2)"/>
-      <text x="410" y="98" fill="#9aa5b8" font-size="11" font-family="Consolas, monospace">holt OEFFENTLICHEN Schlüssel per DNS</text>
-
-      <rect x="380" y="110" width="170" height="35" rx="6" fill="#1b2333" stroke="#ffb648" stroke-width="2"/>
-      <text x="465" y="132" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">mail._domainkey.firma.ch</text>
-
-      <defs>
-        <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
-        </marker>
-      </defs>
-    </svg>
+    <img class="doc-image" src="../images/dkim.png" alt="DKIM-Prozess: die Firmendomain signiert mit ihrem privaten Schlüssel, die Mail geht über das Internet zum eingehenden Mailserver, dieser holt den öffentlichen Schlüssel per DNS, prüft den Public/Private-Key-Match zusammen mit Reputationsdaten (Pass/Fail) und stellt die Mail in die Inbox zu oder nicht" style="max-width:560px;" />
 
     <p class="text-muted">
       Ändert sich auch nur ein Byte der Mail unterwegs, passt die

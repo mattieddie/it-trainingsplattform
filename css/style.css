@@ -1024,70 +1024,23 @@ hr.sep {
   }
 }
 
-/* ---------- Nachgebaute Windows-Dialoge (nur zur Veranschaulichung) ---------- */
+/* ---------- Eingebundene Screenshots/Diagramme ---------- */
 
-.mockup-dialog {
-  border: 1px solid var(--border);
+.doc-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 12px auto;
   border-radius: var(--radius);
-  overflow: hidden;
-  margin: 14px 0;
-  max-width: 480px;
-  background: var(--bg-input);
-  font-size: 0.85rem;
-}
-
-.mockup-dialog-title {
-  background: #1b2333;
-  border-bottom: 1px solid var(--border);
-  padding: 8px 12px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.mockup-dialog-body {
-  padding: 12px 14px;
-}
-
-.mockup-list {
   border: 1px solid var(--border);
-  border-radius: 6px;
-  margin: 8px 0 12px;
-  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #fff;
 }
 
-.mockup-list-item {
-  padding: 6px 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.mockup-list-item:last-child {
-  border-bottom: none;
-}
-
-.mockup-list-item.selected {
-  background: rgba(79, 140, 255, 0.18);
-  color: var(--text);
-}
-
-.mockup-perm-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
-}
-
-.mockup-perm-table th {
-  text-align: left;
-  font-weight: 400;
-  color: var(--text-muted);
-  padding-bottom: 6px;
-}
-
-.mockup-perm-table td {
-  padding: 3px 0;
-  border-top: 1px solid var(--border);
-}
-
-.mockup-perm-table td.mockup-check {
+.doc-image-caption {
   text-align: center;
-  width: 70px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin: -6px 0 12px;
 }
+
