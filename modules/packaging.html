@@ -215,6 +215,26 @@
       Texten/Strings erkennbar) - notfalls mit Verbose-Logging beobachten,
       was der Installer tatsächlich tut.
     </p>
+    <p class="text-muted" style="margin-bottom:4px;">Typische Ausgabe von <code class="mono">setup.exe /?</code> bei einem Inno-Setup-Installer:</p>
+    <pre>Setup
+
+The Setup program accepts optional command line parameters.
+
+/HELP, /?          Shows this information.
+/SILENT, /VERYSILENT
+                   Instructs Setup to be silent or very silent.
+/SUPPRESSMSGBOXES  Instructs Setup to suppress message boxes.
+/NORESTART         Prevents Setup from restarting the system following
+                   a successful installation.
+/LOG="filename"    Same as /LOG, except it allows you to specify a
+                   fixed path/filename for the log file.</pre>
+    <p class="text-muted">
+      Genau diese Ausgabe verrät sofort die Engine: dieses Muster
+      (<code class="mono">/VERYSILENT</code>, <code class="mono">/SUPPRESSMSGBOXES</code>)
+      ist typisch für Inno Setup - andere Engines (NSIS, InstallShield)
+      geben bei <code class="mono">/?</code> jeweils ihre eigene,
+      unterschiedliche Parameterliste aus.
+    </p>
 
     <h4>
       Gängige Exitcodes
