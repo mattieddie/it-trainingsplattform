@@ -172,6 +172,80 @@ CMD ["node", "server.js"]</pre>
   </div>
 
   <div class="card">
+    <h3 class="mt-0">
+      Praxisbeispiel: Immich mit Docker Compose betreiben
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Immich ist eine selbst gehostete Foto-/Video-Backup-Lösung (Alternative
+          zu Google Fotos/iCloud). Sie besteht nicht aus einem einzigen Container,
+          sondern aus mehreren zusammenspielenden Diensten (Server, KI-Modell für
+          Gesichts-/Objekterkennung, Datenbank, Cache) - genau dafür gibt es
+          <strong>Docker Compose</strong>: eine YAML-Datei beschreibt alle Container
+          und ihr Zusammenspiel auf einmal, statt jeden einzeln mit langen
+          <code>docker run</code>-Befehlen zu starten.
+        </div>
+      </details>
+    </h3>
+    <p class="text-muted" style="margin-bottom:4px;">Vereinfachtes <code>docker-compose.yml</code>:</p>
+    <pre>services:
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:release
+    volumes:
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+    env_file:
+      - .env
+    ports:
+      - "2283:2283"
+    depends_on:
+      - redis
+      - database
+    restart: unless-stopped
+
+  immich-machine-learning:
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    volumes:
+      - model-cache:/cache
+    restart: unless-stopped
+
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+
+  database:
+    image: tensorchord/pgvecto-rs:pg14-v0.2.0
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  model-cache:
+  pgdata:</pre>
+    <p>Damit lässt sich der gesamte Stack mit drei Befehlen verwalten:</p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Befehl</th><th>Wirkung</th>
+      </tr>
+      <tr>
+        <td><code>docker compose up -d</code></td>
+        <td><strong>Run</strong> - erstellt und startet alle Container im Hintergrund (<code>-d</code> = detached). Fehlende Images werden vorher automatisch heruntergeladen.</td>
+      </tr>
+      <tr>
+        <td><code>docker compose pull &amp;&amp; docker compose up -d</code></td>
+        <td><strong>Update</strong> - lädt neue Image-Versionen herunter und ersetzt die laufenden Container damit. Die Daten in <code>pgdata</code> und dem Upload-Ordner bleiben erhalten, da Volumes unabhängig vom Container-Lebenszyklus existieren.</td>
+      </tr>
+      <tr>
+        <td><code>docker compose down</code></td>
+        <td><strong>Down</strong> - stoppt und entfernt alle Container sowie das gemeinsame Netzwerk. Die Volumes (und damit Fotos/Datenbank) bleiben standardmässig bestehen; erst <code>docker compose down -v</code> löscht auch diese.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">Wann VM, wann Container?</h3>
     <table style="width:100%; border-collapse: collapse;">
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
