@@ -49,6 +49,13 @@ const TRACKS = [
     icon: "\u{1F6E0}\u{FE0F}",
     description: "Alles läuft - aber was, wenn nicht? Vorsorge für den Ernstfall.",
   },
+  {
+    id: "abschluss",
+    title: "Abschlussprüfung",
+    icon: "\u{1F393}",
+    description:
+      "Der grosse Check: Fragen aus allen 6 Baukästen kombiniert, zufällig zusammengestellt - der Abschluss deines Lernwegs.",
+  },
 ];
 
 /** Reihenfolge und Metadaten der Module, zentral an einer Stelle gepflegt. */
@@ -242,6 +249,17 @@ const MODULES = [
       "3-2-1-Regel, RPO/RTO-Rechenaufgaben und Ransomware-Szenarien: welche Backup-Kopie überlebt einen Angriff?",
     href: "modules/backup.html",
     prereqs: ["activedirectory"],
+  },
+
+  // ---- Baukasten: Abschlussprüfung ----
+  {
+    id: "finalexam",
+    track: "abschluss",
+    title: "Abschlussprüfung",
+    icon: "\u{1F393}",
+    description:
+      "12 zufällig gezogene Fragen aus allen Baukästen (moderater Schwierigkeitsgrad) - am besten erst nach allen anderen Modulen angehen.",
+    href: "modules/final-exam.html",
   },
 ];
 

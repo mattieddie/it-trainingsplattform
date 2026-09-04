@@ -12,7 +12,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 18 Module sind in 6 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 19 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -57,6 +57,9 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 **6. Betrieb & Notfallvorsorge**
 - **Backup & Recovery** ([modules/backup.html](modules/backup.html)) - 3-2-1-Regel (inkl. Diagramm), generierte RPO/RTO-Rechenaufgaben, Ransomware-Szenario-Quiz.
 
+**7. Abschlussprüfung**
+- **Abschlussprüfung** ([modules/final-exam.html](modules/final-exam.html)) - 12 Fragen, zufällig gezogen aus einem grösseren Pool pro Baukasten (moderater Schwierigkeitsgrad, Anwendungsszenarien statt reinem Auswendiglernen), Antwortoptionen zusätzlich gemischt - bei jedem Versuch eine andere Zusammenstellung. Enthält einen deutlichen Hinweis, die Prüfung ohne KI-Hilfsmittel zu bearbeiten (technisch auf einer rein clientseitigen Seite nicht erzwingbar, siehe Hinweis im Modul selbst).
+
 Jede Konzept-Karte hat wo sinnvoll einen kleinen "i"-Button (i-Punkt) mit
 einer kurzen, einfachen Zusatzerklärung/Analogie, und mehrere Module
 enthalten eingebettete SVG-Diagramme (Hardware-Aufbau, IP-Adress-Aufteilung,
@@ -88,7 +91,8 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── network-devices.js
 │   ├── network-packets.js
 │   ├── vpn-basics.js
-│   └── encryption.js
+│   ├── encryption.js
+│   └── final-exam.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── network-packets.html
@@ -107,7 +111,8 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── email-security.html
 │   ├── scripting.html
 │   ├── cloud-basics.html
-│   └── packaging.html
+│   ├── packaging.html
+│   └── final-exam.html
 └── .nojekyll                    Verhindert GitHub-Pages-Jekyll-Verarbeitung
 ```
 
