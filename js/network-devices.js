@@ -14,7 +14,12 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welches Gerät leitet ankommende Daten ungefiltert an ALLE anderen Ports weiter (Schicht 1)?",
-    options: ["Hub", "Switch", "Router"],
+    options: [
+      "Ein Hub - er versteht keine Adressen und verstärkt/verteilt das Signal blind an alle Ports",
+      "Ein Switch - er lernt MAC-Adressen und leitet gezielt nur an den richtigen Port weiter",
+      "Ein Router - er trifft Weiterleitungsentscheidungen anhand der Ziel-IP-Adresse",
+      "Ein Access Point - er verbindet WLAN-Geräte mit dem restlichen Netzwerk",
+    ],
     correctIndex: 0,
     explanation:
       "Ein Hub versteht nichts von Adressen - er verstärkt das Signal nur elektrisch und schickt es blind an alle anderen Ports. Alle angeschlossenen Geräte teilen sich dieselbe Kollisionsdomäne.",
@@ -22,7 +27,12 @@ const QUIZ = [
   {
     difficulty: "easy",
     question: "Welches Gerät verbindet unterschiedliche Netzwerke/Subnetze anhand von IP-Adressen?",
-    options: ["Router", "Hub", "Switch"],
+    options: [
+      "Ein Router - er trifft Weiterleitungsentscheidungen auf Basis der Ziel-IP-Adresse und seiner Routing-Tabelle",
+      "Ein Hub - er kennt weder MAC- noch IP-Adressen und arbeitet rein elektrisch",
+      "Ein Switch - er leitet innerhalb EINES Netzwerks anhand von MAC-Adressen weiter, nicht zwischen Netzwerken",
+      "Ein Repeater - er verstärkt nur das Signal, ohne es anhand irgendeiner Adresse zu lenken",
+    ],
     correctIndex: 0,
     explanation:
       "Ein Router arbeitet auf Schicht 3 und trifft Weiterleitungsentscheidungen anhand der Ziel-IP-Adresse und seiner Routing-Tabelle - er verbindet verschiedene Netzwerke miteinander.",

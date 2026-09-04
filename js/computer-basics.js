@@ -12,7 +12,12 @@ const QUIZ = [
     topic: "🖥️ Hardware (Computeraufbau)",
     difficulty: "easy",
     question: "Welche Komponente wird oft als das \"Gehirn\" des Computers bezeichnet?",
-    options: ["Prozessor (CPU)", "Arbeitsspeicher (RAM)", "Mainboard", "Netzteil"],
+    options: [
+      "Der Prozessor (CPU) - er verarbeitet Berechnungen und steuert die Abläufe im System",
+      "Der Arbeitsspeicher (RAM) - er hält alle aktuell benötigten Daten für den schnellen Zugriff bereit",
+      "Das Mainboard - es verbindet alle Komponenten und regelt die Datenwege dazwischen",
+      "Das Netzteil - es versorgt sämtliche Komponenten mit der nötigen Stromspannung",
+    ],
     correctIndex: 0,
     explanation:
       "Die CPU (Central Processing Unit) verarbeitet Daten und steuert die Abläufe im System - daher der Vergleich mit dem \"Gehirn\".",
@@ -47,7 +52,12 @@ const QUIZ = [
     topic: "🖥️ Hardware (Computeraufbau)",
     difficulty: "medium",
     question: "Welche Komponente verbindet CPU, RAM, Grafikkarte und weitere Teile physisch miteinander?",
-    options: ["Mainboard", "Netzteil", "Kühler", "Gehäuse"],
+    options: [
+      "Das Mainboard - die Hauptplatine, auf der bzw. an der alle Komponenten stecken und miteinander kommunizieren",
+      "Das Netzteil - es verteilt Strom an alle angeschlossenen Komponenten",
+      "Der Kühler - er leitet die Abwärme der CPU an die Umgebungsluft ab",
+      "Das Gehäuse - es hält alle Komponenten mechanisch zusammen",
+    ],
     correctIndex: 0,
     explanation:
       "Das Mainboard (Hauptplatine) ist die zentrale Verbindungsplatine, auf der bzw. an der alle wichtigen Komponenten stecken oder angeschlossen sind.",
@@ -88,9 +98,10 @@ const QUIZ = [
     question:
       "In welchem Registry-Hauptzweig (Hive) findet man systemweite Einstellungen, die für alle Benutzer eines PCs gelten?",
     options: [
-      "HKEY_LOCAL_MACHINE (HKLM)",
-      "HKEY_CURRENT_USER (HKCU)",
-      "HKEY_CLASSES_ROOT",
+      "HKEY_LOCAL_MACHINE (HKLM) - systemweite Einstellungen, unabhängig davon, wer gerade angemeldet ist",
+      "HKEY_CURRENT_USER (HKCU) - nur die Einstellungen des aktuell angemeldeten Benutzers",
+      "HKEY_CLASSES_ROOT - Dateizuordnungen und COM-Objekt-Registrierungen",
+      "HKEY_USERS - die geladenen Profile aller Benutzer, aber nicht die reinen Systemeinstellungen",
     ],
     correctIndex: 0,
     explanation:
@@ -201,9 +212,14 @@ const QUIZ = [
     topic: "📄 Dateitypen",
     difficulty: "easy",
     question: "Welche Dateiendung kennzeichnet eine direkt ausführbare Datei?",
-    options: [".exe", ".txt", ".cfg"],
+    options: [
+      ".exe - wird beim Doppelklick direkt als Programmcode ausgeführt",
+      ".dll - enthält zwar ausführbaren Code, lässt sich aber nicht direkt per Doppelklick starten",
+      ".txt - enthält reinen, unformatierten Text ohne jeglichen Code",
+      ".cfg - enthält nur Konfigurationswerte, die ein anderes Programm einliest",
+    ],
     correctIndex: 0,
-    explanation: "\".exe\" (executable) führt beim Doppelklick direkt Programmcode aus.",
+    explanation: "\".exe\" (executable) führt beim Doppelklick direkt Programmcode aus. \".dll\" enthält zwar ebenfalls ausführbaren Code, kann aber - anders als eine .exe - nicht direkt gestartet werden, sondern nur von anderen Programmen eingebunden werden.",
   },
   {
     topic: "📄 Dateitypen",

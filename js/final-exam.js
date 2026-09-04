@@ -86,7 +86,12 @@ const QUESTION_POOL = {
     },
     {
       question: "Wie viele nutzbare Host-Adressen stehen in einem /26-Subnetz zur Verfügung?",
-      options: ["62", "64", "30"],
+      options: [
+        "62 - 64 Adressen insgesamt, minus Netz- und Broadcast-Adresse",
+        "64 - das ist die Gesamtzahl aller Adressen im Subnetz, inklusive Netz- und Broadcast-Adresse",
+        "30 - das wäre die nutzbare Anzahl in einem kleineren /27-Subnetz",
+        "126 - das wäre die nutzbare Anzahl in einem grösseren /25-Subnetz",
+      ],
       correctIndex: 0,
       explanation:
         "/26 ergibt 2^(32-26) = 64 Adressen insgesamt. Davon sind die erste (Netzadresse) und letzte (Broadcast-Adresse) reserviert, es bleiben also 64 - 2 = 62 nutzbare Host-Adressen.",
@@ -205,7 +210,12 @@ const QUESTION_POOL = {
     {
       question:
         "Eine MSI-Installation soll bei einem automatisierten Rollout komplett ohne Benutzerinteraktion laufen. Welcher msiexec-Parameter wird dafür typischerweise verwendet?",
-      options: ["/qn", "/passive", "/repair"],
+      options: [
+        "/qn - unterdrückt jegliche Benutzeroberfläche vollständig",
+        "/passive - zeigt weiterhin einen Fortschrittsbalken an, nur ohne Eingabemöglichkeit",
+        "/repair - repariert eine bereits installierte Anwendung, installiert aber nicht neu",
+        "/norestart - verhindert nur den automatischen Neustart, blendet die Oberfläche aber nicht aus",
+      ],
       correctIndex: 0,
       explanation:
         "/qn steht für \"quiet, no UI\" - keinerlei Anzeige oder Interaktion. /passive zeigt immerhin noch einen Fortschrittsbalken, /repair repariert eine bestehende Installation statt eine neue durchzuführen.",

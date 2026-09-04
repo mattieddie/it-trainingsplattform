@@ -9,7 +9,12 @@ const QUIZ = [
   {
     difficulty: "easy",
     question: "Wie viele Schichten hat das klassische OSI-Modell?",
-    options: ["7", "4", "5"],
+    options: [
+      "7 Schichten - von der Bitübertragung bis zur Anwendungsschicht",
+      "4 Schichten - das ist die Anzahl im TCP/IP-Modell, nicht im OSI-Modell",
+      "5 Schichten - so viele hätte man, würde man Sitzung, Darstellung und Anwendung zusammenfassen",
+      "3 Schichten - Netzwerk, Transport und Anwendung",
+    ],
     correctIndex: 0,
     explanation:
       "Das OSI-Modell hat 7 Schichten: Bitübertragung, Sicherung, Vermittlung, Transport, Sitzung, Darstellung, Anwendung. Das TCP/IP-Modell fasst dieselben Aufgaben pragmatischer in nur 4 Schichten zusammen.",
@@ -18,7 +23,12 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welches Transportprotokoll baut vor der Datenübertragung eine Verbindung auf (Handshake) und garantiert zuverlässige, geordnete Zustellung?",
-    options: ["TCP", "UDP", "IP"],
+    options: [
+      "TCP - verbindungsorientiert mit Handshake, Bestätigungen und erneutem Senden bei Verlust",
+      "UDP - verbindungslos, ohne Zustellgarantie, dafür mit weniger Overhead",
+      "IP - kümmert sich um die Adressierung und das Routing, nicht um Zustellgarantien",
+      "ICMP - dient der Fehlerdiagnose (z.B. bei ping), nicht der eigentlichen Datenübertragung",
+    ],
     correctIndex: 0,
     explanation:
       "TCP (Transmission Control Protocol) ist verbindungsorientiert: Drei-Wege-Handshake vor der Übertragung, Bestätigungen (ACKs), erneutes Senden bei Verlust, und Sortierung falls Pakete in falscher Reihenfolge ankommen.",
@@ -39,7 +49,12 @@ const QUIZ = [
     difficulty: "medium",
     question:
       "Welches Protokoll wird typischerweise für DNS-Anfragen, Video-Streaming und Online-Gaming verwendet, obwohl es keine Zustellung garantiert?",
-    options: ["UDP", "TCP", "ICMP"],
+    options: [
+      "UDP - schlank und ohne Verbindungsaufbau, ein verlorenes Paket wird einfach in Kauf genommen",
+      "TCP - würde durch Handshake und Bestätigungen bei Echtzeit-Anwendungen zu viel Verzögerung erzeugen",
+      "ICMP - dient primär der Fehlerdiagnose (z.B. \"Zielhost nicht erreichbar\"), nicht der Nutzdatenübertragung",
+      "IP - regelt nur die Adressierung, transportiert selbst keine Anwendungsdaten mit Ports",
+    ],
     correctIndex: 0,
     explanation:
       "UDP (User Datagram Protocol) verzichtet bewusst auf Verbindungsaufbau, Bestätigungen und Neuübertragung - das macht es schneller und schlanker. Für Echtzeit-Anwendungen ist eine leicht verspätete oder fehlende Antwort oft weniger schlimm als die Verzögerung durch TCP.",

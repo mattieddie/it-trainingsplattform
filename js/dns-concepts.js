@@ -21,14 +21,24 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welcher Record-Typ verweist auf eine andere IP-Adresse (z.B. auf einen Server)?",
-    options: ["A-Record", "CNAME-Record", "MX-Record"],
+    options: [
+      "A-Record - bildet einen Hostnamen direkt auf eine IPv4-Adresse ab",
+      "CNAME-Record - verweist auf einen anderen Hostnamen, nicht direkt auf eine IP-Adresse",
+      "MX-Record - gibt an, welcher Server für den Mailempfang der Domain zuständig ist",
+      "TXT-Record - speichert beliebigen Text, z.B. für SPF-Einträge",
+    ],
     correctIndex: 0,
   },
   {
     difficulty: "easy",
     question:
       "Welcher Record-Typ verweist auf einen anderen Hostnamen statt auf eine IP-Adresse?",
-    options: ["A-Record", "CNAME-Record", "TXT-Record"],
+    options: [
+      "A-Record - verweist direkt auf eine IPv4-Adresse, nicht auf einen anderen Namen",
+      "CNAME-Record - ein Alias, der auf einen anderen Hostnamen zeigt, der dann seinerseits aufgelöst wird",
+      "TXT-Record - speichert beliebigen Text, keine Namens- oder Adressverweise",
+      "MX-Record - regelt nur, welcher Server E-Mails für die Domain annimmt, ist aber kein allgemeiner Alias für den Hostnamen",
+    ],
     correctIndex: 1,
   },
   {

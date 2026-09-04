@@ -77,10 +77,10 @@ const QUIZ = [
     question:
       "Ein Mitarbeiter im Helpdesk soll Passwörter für normale Nutzer zurücksetzen können, aber sonst nichts verwalten dürfen. Welche Rolle passt am besten?",
     options: [
-      "Helpdesk Administrator",
-      "Global Administrator",
-      "User Administrator",
-      "Exchange Administrator",
+      "Helpdesk Administrator - darf gezielt Passwörter für normale Nutzer (nicht für andere Admins) zurücksetzen",
+      "Global Administrator - hat uneingeschränkten Zugriff auf sämtliche Dienste und Einstellungen des Tenants",
+      "User Administrator - darf zusätzlich Benutzerkonten anlegen, löschen und Lizenzen zuweisen",
+      "Exchange Administrator - verwaltet Postfächer und Mailflow-Regeln, nicht Passwörter allgemein",
     ],
     correctIndex: 0,
     explanation:
@@ -103,10 +103,10 @@ const QUIZ = [
     question:
       "Eine IT-Fachkraft soll ausschliesslich Lizenzen zuweisen und entziehen können, sonst nichts.",
     options: [
-      "License Administrator",
-      "Global Administrator",
-      "User Administrator",
-      "Billing Administrator",
+      "License Administrator - eingeschränkte Rolle speziell für die Lizenzverwaltung, ohne weitere Rechte",
+      "Global Administrator - hat uneingeschränkten Zugriff auf sämtliche Dienste, weit mehr als nur Lizenzen",
+      "User Administrator - darf zusätzlich Benutzerkonten anlegen, löschen und zurücksetzen",
+      "Billing Administrator - verwaltet Abonnements und Rechnungen, nicht die Lizenzzuweisung pro Nutzer",
     ],
     correctIndex: 0,
     explanation:

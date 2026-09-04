@@ -23,7 +23,12 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welcher msiexec-Parameter installiert eine MSI komplett unbeaufsichtigt, ganz ohne jede Anzeige?",
-    options: ["/qn", "/i", "/x", "/l*v"],
+    options: [
+      "/qn - unterdrückt jegliche Benutzeroberfläche (\"quiet, no UI\")",
+      "/i - löst die Installation überhaupt erst aus, zeigt aber ohne Zusatzparameter weiterhin die normale Oberfläche",
+      "/x - deinstalliert das Paket, statt es zu installieren",
+      "/l*v - aktiviert ein ausführliches Installationsprotokoll, blendet die Oberfläche aber nicht aus",
+    ],
     correctIndex: 0,
     explanation:
       "/qn (\"quiet, no UI\") unterdrückt jegliche Benutzeroberfläche. /i installiert (mit UI, falls kein /qn dabei ist), /x deinstalliert, /l*v aktiviert eine ausführliche Log-Datei.",

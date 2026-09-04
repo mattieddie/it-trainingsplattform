@@ -23,7 +23,12 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welcher VPN-Typ verbindet zwei komplette Standorte dauerhaft miteinander (z.B. Hauptsitz und Zweigstelle)?",
-    options: ["Site-to-Site-VPN", "Client-to-Site-VPN", "Peer-to-Peer-VPN"],
+    options: [
+      "Site-to-Site-VPN - zwischen den Firewalls/Routern beider Standorte, dauerhaft aufgebaut",
+      "Client-to-Site-VPN - für einzelne Geräte, die sich bei Bedarf mit einem Standort verbinden",
+      "Split-Tunnel-VPN - beschreibt, WELCHER Verkehr durch einen bestehenden Tunnel läuft, nicht WER verbunden wird",
+      "SSL-VPN - beschreibt die verwendete Verschlüsselungstechnik, nicht wer mit wem verbunden ist",
+    ],
     correctIndex: 0,
     explanation:
       "Ein Site-to-Site-VPN wird zwischen zwei Firewalls/Routern aufgebaut und verbindet zwei ganze Netzwerke dauerhaft - einzelne Nutzer merken davon meist nichts, sie greifen einfach auf Ressourcen am anderen Standort zu, als wären sie im selben Netz.",
@@ -32,7 +37,12 @@ const QUIZ = [
     difficulty: "easy",
     question:
       "Welcher VPN-Typ wird typischerweise von einzelnen Homeoffice-Mitarbeitern genutzt, um sich von unterwegs mit dem Firmennetz zu verbinden?",
-    options: ["Client-to-Site-VPN (Remote-Access-VPN)", "Site-to-Site-VPN", "Standard-DNS"],
+    options: [
+      "Client-to-Site-VPN (Remote-Access-VPN) - einzelnes Gerät verbindet sich bei Bedarf mit dem Firmennetz",
+      "Site-to-Site-VPN - dauerhafte Verbindung zwischen zwei ganzen Standorten, nicht für einzelne Nutzer gedacht",
+      "Full-Tunnel-VPN - beschreibt, dass ALLER Verkehr durch den Tunnel läuft, nicht wer sich verbindet",
+      "IPSec-VPN - beschreibt die verwendete Technik, nicht die Verbindungsart (Standort vs. Einzelgerät)",
+    ],
     correctIndex: 0,
     explanation:
       "Beim Client-to-Site- (auch Remote-Access-)VPN verbindet sich ein einzelnes Gerät mit VPN-Client-Software bei Bedarf mit dem Firmennetz - im Gegensatz zum dauerhaften Site-to-Site-VPN zwischen zwei Standorten.",
