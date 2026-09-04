@@ -238,8 +238,36 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">M365-Lizenzierung</h3>
-    <ul>
+    <h3 class="mt-0">
+      M365-Lizenzierung: Business Premium vs. E3
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Faustregel: "Business"-Pläne (bis 300 Nutzer) sind für kleinere
+          Firmen mit einfacherer Verwaltung gedacht, "Enterprise"-Pläne
+          (E3/E5, keine Nutzerobergrenze) bringen die tiefere
+          Sicherheits-/Compliance-Integration für grössere Umgebungen mit.
+        </div>
+      </details>
+    </h3>
+    <table style="width:100%; border-collapse: collapse; font-size:0.9rem;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>Microsoft 365 Business Premium</th><th>Microsoft 365 E3</th>
+      </tr>
+      <tr><td>Zielgruppe</td><td>KMU, bis 300 Nutzer</td><td>Grössere Unternehmen, keine Nutzerobergrenze</td></tr>
+      <tr><td>Identität</td><td>Entra ID Plan 1</td><td>Entra ID Plan 1</td></tr>
+      <tr><td>Geräteverwaltung</td><td>Intune Plan 1</td><td>Intune Plan 1 + 2 (erweiterte Analytics, Tunnel for MAM)</td></tr>
+      <tr><td>Windows-Lizenz</td><td>Windows Pro Upgrade</td><td>Windows Enterprise E3 (u.a. AppLocker, Credential Guard)</td></tr>
+      <tr><td>Sicherheit</td><td>Defender for Business (Basis-EDR)</td><td>Kein integriertes EDR - erst ab E5 bzw. als Zusatzlizenz</td></tr>
+      <tr><td>Compliance</td><td>Basis (DLP, Aufbewahrungsrichtlinien eingeschränkt)</td><td>Umfassender (eDiscovery Standard, Aufbewahrungs-Labels, Compliance Manager)</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:8px;">
+      Wichtige Falle: E3 wirkt auf den ersten Blick "grösser", bringt aber
+      <strong>kein</strong> integriertes Advanced-Threat-Protection-Paket mit -
+      wer das braucht, muss zusätzlich E5-Komponenten oder gezielte
+      Zusatzlizenzen (z.B. Defender for Endpoint P2) dazukaufen.
+    </p>
+    <ul style="margin-top:10px;">
       <li>Lizenzen werden <strong>pro Nutzer</strong> vergeben (nicht pro Gerät).</li>
       <li>Ein Paket wie M365 E3 bündelt mehrere <strong>Service Plans</strong> (Exchange, Teams, SharePoint, ...) - einzelne Service Plans lassen sich bei Bedarf deaktivieren.</li>
       <li><strong>Gruppenbasierte Lizenzierung</strong>: Lizenzen werden automatisch über Mitgliedschaft in einer Sicherheitsgruppe zugewiesen/entzogen - praktisch bei grossen, sich verändernden Teams.</li>

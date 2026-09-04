@@ -106,6 +106,7 @@
       <li><strong>Organisationseinheiten (OUs)</strong>: Container zur Strukturierung (z.B. nach Abteilung/Standort) - wichtigster Ankerpunkt für Gruppenrichtlinien und delegierte Verwaltung.</li>
       <li><strong>Sicherheitsgruppen</strong>: fassen Objekte für Berechtigungen zusammen (z.B. Dateifreigaben, GPO-Filterung). <strong>Verteilergruppen</strong> hingegen sind nur für E-Mail-Verteilerlisten gedacht und tragen keine Berechtigungen.</li>
     </ul>
+    <img class="doc-image" src="../images/ad.png" alt="Active-Directory-Benutzer-und-Computer-Konsole: OU-Baum links (Builtin, Computers, Domain Controllers, ORG mit Groups/Machines/User-Unterordnern), rechts die Eigenschaften eines Benutzerobjekts mit Vorname/Nachname/Anzeigename" style="max-width:600px;" />
   </div>
 
   <div class="card">
@@ -121,6 +122,7 @@
       <li><strong>Erzwungen (Enforced)</strong>: ein GPO kann so gesetzt werden, dass es sich IMMER durchsetzt - auch gegen "Block Inheritance" weiter unten im Baum.</li>
     </ul>
     <p class="text-muted">Wichtig: Vererbung wirkt nur top-down entlang der eigenen Astlinie - ein GPO an einer OU wirkt nie auf einen komplett anderen Zweig des Baums.</p>
+    <img class="doc-image" src="../images/gpo.png" alt="Gruppenrichtlinienverwaltung mit OU-Baum: Domänen-GPOs (Default Domain Policy, NTP-Zeitserver), darunter Computers/Workstations-OUs mit spezifischen GPOs wie 'Win10-Store-Computer verbieten' (deaktiviert) und 'Win10-Store-Computer erlauben' auf einer tiefer liegenden OU 'mit Store'" style="max-width:420px;" />
   </div>
 
   <div class="card">

@@ -60,6 +60,19 @@ const QUIZ = [
       "Der Vorteil von PIM for Groups liegt genau in der Bündelung: eine Gruppe kann mit mehreren Entra-ID- und Azure-Rollen gleichzeitig verknüpft werden, wodurch neue Mitglieder nur einmal (zur Gruppe) statt mehrfach (zu jeder Rolle) hinzugefügt werden müssen.",
   },
   {
+    difficulty: "medium",
+    question:
+      "Ein Unternehmen mit 500 Mitarbeitenden möchte eine integrierte Endpoint-Detection-and-Response(EDR)-Lösung ohne separate Zusatzlizenz. Warum reicht Microsoft 365 E3 dafür allein NICHT aus?",
+    options: [
+      "E3 enthält kein integriertes fortgeschrittenes EDR-Paket - das gibt es erst ab E5 oder als gezielte Zusatzlizenz (z.B. Defender for Endpoint P2)",
+      "E3 hat grundsätzlich eine Obergrenze von 300 Nutzern und scheidet daher aus",
+      "EDR ist ausschliesslich in Microsoft 365 Business Premium enthalten, nie in einem Enterprise-Plan",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Ein verbreiteter Irrtum: E3 wirkt umfangreicher als Business Premium, bringt aber kein vergleichbares integriertes EDR mit - Business Premium enthält dafür bereits Defender for Business, während E3-Kunden für vollwertiges EDR auf E5 oder eine gezielte Zusatzlizenz upgraden müssen.",
+  },
+  {
     difficulty: "easy",
     question:
       "Ein Mitarbeiter im Helpdesk soll Passwörter für normale Nutzer zurücksetzen können, aber sonst nichts verwalten dürfen. Welche Rolle passt am besten?",
