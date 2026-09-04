@@ -90,6 +90,16 @@ const MODULES = [
     href: "modules/scripting.html",
     prereqs: ["terminal"],
   },
+  {
+    id: "containers",
+    track: "grundlagen",
+    title: "Virtualisierung & Docker-Grundlagen",
+    icon: "\u{1F433}",
+    description:
+      "Typ-1- vs. Typ-2-Hypervisor, virtuelle Maschinen vs. Container, Docker-Kernbegriffe (Image/Container/Dockerfile/Registry).",
+    href: "modules/containers.html",
+    prereqs: ["computerbasics"],
+  },
 
   // ---- Baukasten: Netzwerk-Grundlagen ----
   {
@@ -217,6 +227,16 @@ const MODULES = [
       "Symmetrisch, asymmetrisch und hybrid verschlüsseln, Diffie-Hellman-Schlüsselaustausch, sowie Hashing und Salt - mit zwei echten SHA-256-Live-Demos.",
     href: "modules/encryption.html",
     prereqs: ["networkpackets"],
+  },
+  {
+    id: "certificates",
+    track: "security",
+    title: "Zertifikate & PKI",
+    icon: "\u{1F4DC}",
+    description:
+      "Vertrauenskette (Root-CA/Intermediate-CA), Ablauf & Widerruf (CRL/OCSP), und automatisierte Zertifikatsverteilung per SCEP über Intune.",
+    href: "modules/certificates.html",
+    prereqs: ["encryption"],
   },
   {
     id: "firewall",
@@ -516,3 +536,161 @@ document.addEventListener("keydown", (e) => {
     document.querySelectorAll("details.info-toggle[open]").forEach((d) => (d.open = false));
   }
 });
+
+/**
+ * Wiederverwendbares Reihenfolge-Puzzle: rendert `items` (Objekte mit
+ * {id, label}, in der KORREKTEN Reihenfolge übergeben) gemischt als
+ * Drag&Drop-Liste mit Auf/Ab-Fallback-Buttons (für Touch/Tastatur).
+ * Gibt ein Objekt mit einer check()-Funktion zurück, die die aktuelle
+ * gegen die korrekte Reihenfolge vergleicht, jede Position einfärbt und
+ * true/false (alles korrekt?) liefert.
+ */
+function initReorderPuzzle(containerEl, items) {
+  const correctIds = items.map((it) => it.id);
+  let order = shuffleArray(items);
+  let dragFromId = null;
+
+  function render() {
+    containerEl.innerHTML = "";
+    const ul = document.createElement("ul");
+    ul.className = "reorder-list";
+
+    order.forEach((item, idx) => {
+      const li = document.createElement("li");
+      li.className = "reorder-item";
+      li.draggable = true;
+      li.dataset.id = item.id;
+      li.innerHTML = `
+        <span class="reorder-index">${idx + 1}</span>
+        <span class="reorder-label">${item.label}</span>
+        <span class="reorder-btns">
+          <button type="button" class="btn small" data-move="up" title="Nach oben">↑</button>
+          <button type="button" class="btn small" data-move="down" title="Nach unten">↓</button>
+        </span>
+      `;
+
+      li.addEventListener("dragstart", () => {
+        dragFromId = item.id;
+        li.classList.add("dragging");
+      });
+      li.addEventListener("dragend", () => li.classList.remove("dragging"));
+      li.addEventListener("dragover", (e) => e.preventDefault());
+      li.addEventListener("drop", (e) => {
+        e.preventDefault();
+        if (dragFromId === null || dragFromId === item.id) return;
+        moveItem(dragFromId, item.id);
+      });
+
+      li.querySelector('[data-move="up"]').addEventListener("click", () => {
+        if (idx > 0) swapIndices(idx, idx - 1);
+      });
+      li.querySelector('[data-move="down"]').addEventListener("click", () => {
+        if (idx < order.length - 1) swapIndices(idx, idx + 1);
+      });
+
+      ul.appendChild(li);
+    });
+
+    containerEl.appendChild(ul);
+  }
+
+  function swapIndices(i, j) {
+    [order[i], order[j]] = [order[j], order[i]];
+    render();
+  }
+
+  function moveItem(fromId, toId) {
+    const fromIdx = order.findIndex((it) => it.id === fromId);
+    const toIdx = order.findIndex((it) => it.id === toId);
+    const [moved] = order.splice(fromIdx, 1);
+    order.splice(toIdx, 0, moved);
+    render();
+  }
+
+  render();
+
+  return {
+    check() {
+      const items2 = Array.from(containerEl.querySelectorAll(".reorder-item"));
+      let allCorrect = true;
+      items2.forEach((li, idx) => {
+        const isCorrect = li.dataset.id === correctIds[idx];
+        li.classList.remove("correct-position", "wrong-position");
+        li.classList.add(isCorrect ? "correct-position" : "wrong-position");
+        if (!isCorrect) allCorrect = false;
+      });
+      return allCorrect;
+    },
+    reset() {
+      order = shuffleArray(items);
+      render();
+    },
+  };
+}
+
+/**
+ * Wiederverwendbares Match-Puzzle: `pairs` ist ein Array von
+ * {id, left, right}. Linke und rechte Spalte werden unabhängig
+ * gemischt gerendert; per Klick erst links, dann rechts auswählen.
+ * Bei korrekter Zuordnung werden beide dauerhaft als "matched"
+ * markiert, bei falscher Zuordnung kurz rot aufblitzen und wieder
+ * freigeben. onProgress(matchedCount, total) wird nach jedem Versuch
+ * aufgerufen.
+ */
+function initMatchPuzzle(containerEl, pairs, onProgress) {
+  let matchedCount = 0;
+  let selectedLeft = null;
+
+  containerEl.innerHTML = "";
+  const grid = document.createElement("div");
+  grid.className = "match-puzzle";
+  const leftCol = document.createElement("div");
+  leftCol.className = "match-column";
+  const rightCol = document.createElement("div");
+  rightCol.className = "match-column";
+  grid.appendChild(leftCol);
+  grid.appendChild(rightCol);
+  containerEl.appendChild(grid);
+
+  const shuffledLeft = shuffleArray(pairs);
+  const shuffledRight = shuffleArray(pairs);
+
+  shuffledLeft.forEach((pair) => {
+    const el = document.createElement("div");
+    el.className = "match-item";
+    el.dataset.id = pair.id;
+    el.textContent = pair.left;
+    el.addEventListener("click", () => {
+      if (el.classList.contains("matched")) return;
+      leftCol.querySelectorAll(".match-item").forEach((it) => it.classList.remove("selected"));
+      el.classList.add("selected");
+      selectedLeft = pair.id;
+    });
+    leftCol.appendChild(el);
+  });
+
+  shuffledRight.forEach((pair) => {
+    const el = document.createElement("div");
+    el.className = "match-item";
+    el.dataset.id = pair.id;
+    el.textContent = pair.right;
+    el.addEventListener("click", () => {
+      if (el.classList.contains("matched") || selectedLeft === null) return;
+      const leftEl = leftCol.querySelector(`.match-item[data-id="${selectedLeft}"]`);
+      if (selectedLeft === pair.id) {
+        leftEl.classList.remove("selected");
+        leftEl.classList.add("matched");
+        el.classList.add("matched");
+        matchedCount++;
+        selectedLeft = null;
+        if (onProgress) onProgress(matchedCount, pairs.length);
+      } else {
+        el.classList.add("wrong-flash");
+        setTimeout(() => el.classList.remove("wrong-flash"), 400);
+        if (leftEl) leftEl.classList.remove("selected");
+        selectedLeft = null;
+      }
+    });
+    rightCol.appendChild(el);
+  });
+}

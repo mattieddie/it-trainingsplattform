@@ -18,6 +18,7 @@
         <a href="computer-basics.html">Computer-Grundlagen</a>
         <a href="terminal.html">CMD/PowerShell</a>
         <a href="scripting.html">Skripting</a>
+      <a href="containers.html">Virtualisierung &amp; Docker</a>
       </div>
     </div>
     <div class="nav-dropdown">
@@ -50,6 +51,7 @@
       <button type="button" class="nav-dropdown-toggle">IT-Security</button>
       <div class="nav-dropdown-menu">
         <a href="encryption.html">Verschlüsselung</a>
+        <a href="certificates.html">Zertifikate &amp; PKI</a>
         <a href="firewall.html">Firewall</a>
         <a href="sqli.html">SQL-Injection</a>
         <a href="email-security.html">E-Mail-Sicherheit</a>
@@ -337,6 +339,43 @@
       <tr><td class="mono">25</td><td>SMTP (E-Mail-Versand)</td><td>TCP</td></tr>
       <tr><td class="mono">3389</td><td>RDP (Remotedesktop)</td><td>TCP</td></tr>
     </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🧩 Puzzle: OSI-Schichten in die richtige Reihenfolge bringen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ziehe die Karten per Drag&amp;Drop um, oder nutze die
+          Auf/Ab-Pfeile - sortiert von Schicht 1 (unten, Hardware) bis
+          Schicht 7 (oben, Anwendung).
+        </div>
+      </details>
+    </h3>
+    <div id="osi-reorder-container"></div>
+    <div class="btn-row">
+      <button id="check-osi-order-btn" class="btn primary">Reihenfolge prüfen</button>
+      <button id="reset-osi-order-btn" class="btn small ghost" type="button">Neu mischen</button>
+    </div>
+    <div id="osi-order-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🧩 Zuordnen: Port ↔ Dienst
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Klick zuerst auf einen Port links, dann auf den passenden
+          Dienst rechts. Bei korrekter Zuordnung bleiben beide grün
+          markiert, bei falscher Zuordnung kannst du es sofort erneut
+          versuchen.
+        </div>
+      </details>
+    </h3>
+    <div id="port-match-container"></div>
+    <p class="text-muted" id="port-match-progress">0 / 6 Paare gefunden</p>
   </div>
 
   <div class="card">

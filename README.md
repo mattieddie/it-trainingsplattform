@@ -12,7 +12,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 20 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 22 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -31,13 +31,14 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen (inkl. nachgebautem Berechtigungsdialog), Registry (inkl. Root-Key/Schlüssel/Wert-Baumdiagramm), Dateitypen.
 - **CMD & PowerShell Terminal-Trainer** ([modules/terminal.html](modules/terminal.html)) - simuliertes Terminal, Befehle eintippen statt auswählen, gestaffelte Tipps.
 - **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
+- **Virtualisierung & Docker-Grundlagen** ([modules/containers.html](modules/containers.html)) - Typ-1- vs. Typ-2-Hypervisor, virtuelle Maschinen vs. Container, Docker-Kernbegriffe (Image/Container/Dockerfile/Registry), inkl. Reihenfolge-Puzzle "vom Code zum laufenden Container".
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
-- **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell.
+- **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell, inkl. OSI-Reihenfolge-Puzzle und Port-↔-Dienst-Zuordnungsspiel.
 - **Netzwerkgeräte & Routing** ([modules/network-devices.html](modules/network-devices.html)) - Hub/Switch/Router im Vergleich, plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).
 - **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen, inkl. Bit-für-Bit-Aufschlüsselung einer Subnetzmaske.
 - **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, inkl. Domain-Konfigurator.
-- **DNS-Auflösung & DHCP-Prozess** ([modules/dns-dhcp-basics.html](modules/dns-dhcp-basics.html)) - der DHCP-DORA-Prozess und die rekursive DNS-Auflösung Schritt für Schritt (Diagramme), plus Referenztabelle aller DNS-Record-Typen.
+- **DNS-Auflösung & DHCP-Prozess** ([modules/dns-dhcp-basics.html](modules/dns-dhcp-basics.html)) - der DHCP-DORA-Prozess und die rekursive DNS-Auflösung Schritt für Schritt (Diagramme), plus Referenztabelle aller DNS-Record-Typen, inkl. DORA-Reihenfolge-Puzzle und Record-Typ-↔-Zweck-Zuordnungsspiel.
 - **DHCP/DNS-Troubleshooting** ([modules/dhcp-dns.html](modules/dhcp-dns.html)) - zehn Helpdesk-Tickets mit simulierten Tool-Ausgaben.
 - **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN (inkl. Vergleichsdiagramm), Split- vs. Full-Tunneling.
 
@@ -51,6 +52,7 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 
 **5. IT-Security** - Angriffsflächen erkennen und absichern
 - **Verschlüsselung** ([modules/encryption.html](modules/encryption.html)) - symmetrisch/asymmetrisch/hybrid, Diffie-Hellman-Schlüsselaustausch, Hashing & Salt, inkl. zweier Live-Demos mit echtem SHA-256 (Web-Crypto-API im Browser).
+- **Zertifikate & PKI** ([modules/certificates.html](modules/certificates.html)) - Vertrauenskette (Root-CA/Intermediate-CA), Zertifikatsfelder, Ablauf & Widerruf (CRL/OCSP), automatisierte Zertifikatsverteilung per SCEP über Intune (inkl. NDES), Begriffs-Zuordnungsspiel.
 - **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html)) - Regeln umsortieren, selbst entwerfen, Multi-Firewall-Topologien (DMZ/VPN).
 - **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html)) - sandboxed, unsicher vs. parametrisiert, drei Herausforderungen.
 - **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Erklärung von `include:_spf.google.com`, interaktivem Schritt-für-Schritt-Vergleich ("welche Prüfung schaut welchen Mail-Teil an"), Alignment-Konzept und komplettem Beispiel-Ablauf mit vier Szenarien.
@@ -94,9 +96,12 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── vpn-basics.js
 │   ├── encryption.js
 │   ├── final-exam.js
-│   └── dns-dhcp-basics.js
+│   ├── dns-dhcp-basics.js
+│   ├── certificates.js
+│   └── containers.js
 ├── modules/
 │   ├── computer-basics.html
+│   ├── containers.html
 │   ├── network-packets.html
 │   ├── network-devices.html
 │   ├── vpn-basics.html
@@ -104,6 +109,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── dns-dhcp-basics.html
 │   ├── dhcp-dns.html
 │   ├── encryption.html
+│   ├── certificates.html
 │   ├── firewall.html
 │   ├── sqli.html
 │   ├── dns-concepts.html
@@ -116,6 +122,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── cloud-basics.html
 │   ├── packaging.html
 │   └── final-exam.html
+├── images/                      Eingebundene Screenshots/Diagramme (siehe unten)
 └── .nojekyll                    Verhindert GitHub-Pages-Jekyll-Verarbeitung
 ```
 
@@ -223,6 +230,25 @@ werden:
 
 Das Modul "DNS & Domain-Konzepte" in der App enthält einen Konfigurator,
 der die passenden Beispiel-Einträge für die eigene Domain generiert.
+
+## Interaktive Übungsformate
+
+Neben klassischen Multiple-Choice-Quiz gibt es zwei wiederverwendbare
+Übungstypen (implementiert in `js/progress.js`, von einzelnen Modulen
+mit eigenen Daten befüllt):
+
+- **Reihenfolge-Puzzle** (`initReorderPuzzle`) - Karten per Drag&amp;Drop
+  oder Auf/Ab-Buttons in die richtige Reihenfolge bringen. Im Einsatz
+  bei: OSI-Schichten (Netzwerkpakete), DORA-Schritte (DNS-Auflösung &amp;
+  DHCP), Docker-Workflow (Virtualisierung &amp; Docker).
+- **Zuordnungs-Puzzle** (`initMatchPuzzle`) - zwei gemischte Spalten per
+  Klick zu Paaren verbinden. Im Einsatz bei: Port ↔ Dienst
+  (Netzwerkpakete), DNS-Record-Typ ↔ Zweck (DNS-Auflösung &amp; DHCP),
+  PKI-Begriff ↔ Bedeutung (Zertifikate &amp; PKI).
+
+Dazu kommt die bereits bestehende Drag&amp;Drop-Regelsortierung im
+Firewall-Modul (eigene Implementierung, da zusätzlich bearbeitbare
+Felder pro Regel nötig sind).
 
 ## Technische Hinweise
 

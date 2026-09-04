@@ -204,6 +204,24 @@ function checkQuiz() {
   }
 }
 
+const DORA_STEPS = [
+  { id: "d", label: "Discover - Client sucht per Broadcast nach DHCP-Servern" },
+  { id: "o", label: "Offer - Server bieten je eine IP-Adresse + Konfiguration an" },
+  { id: "r", label: "Request - Client fordert per Broadcast ein Angebot verbindlich an" },
+  { id: "a", label: "Acknowledge - gewählter Server bestätigt, Lease beginnt" },
+];
+
+const RECORD_PAIRS = [
+  { id: "a", left: "A", right: "IPv4-Adresse einer Domain" },
+  { id: "aaaa", left: "AAAA", right: "IPv6-Adresse einer Domain" },
+  { id: "cname", left: "CNAME", right: "Verweis auf einen anderen Domainnamen" },
+  { id: "mx", left: "MX", right: "Zuständiger Mailserver" },
+  { id: "ptr", left: "PTR", right: "Reverse-DNS: IP → Domainname" },
+  { id: "ns", left: "NS", right: "Zuständiger Nameserver einer Domain" },
+  { id: "soa", left: "SOA", right: "Administrative Zonen-Basisdaten" },
+  { id: "txt", left: "TXT", right: "Freier Text, z.B. für SPF/DKIM" },
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
   if (getModuleStatus(MODULE_ID) === "done") {
@@ -212,4 +230,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  const doraPuzzle = initReorderPuzzle(document.getElementById("dora-reorder-container"), DORA_STEPS);
+  document.getElementById("check-dora-order-btn").addEventListener("click", () => {
+    const allCorrect = doraPuzzle.check();
+    const fb = document.getElementById("dora-order-feedback");
+    fb.classList.remove("hidden");
+    fb.className = "feedback-box " + (allCorrect ? "correct" : "incorrect");
+    fb.innerHTML = allCorrect
+      ? "Richtig! Discover → Offer → Request → Acknowledge."
+      : "Noch nicht ganz - grün markierte Karten stehen an der richtigen Stelle, rot markierte nicht.";
+  });
+  document.getElementById("reset-dora-order-btn").addEventListener("click", () => {
+    doraPuzzle.reset();
+    document.getElementById("dora-order-feedback").classList.add("hidden");
+  });
+
+  initMatchPuzzle(document.getElementById("record-match-container"), RECORD_PAIRS, (matched, total) => {
+    document.getElementById("record-match-progress").textContent = `${matched} / ${total} Paare gefunden`;
+  });
 });

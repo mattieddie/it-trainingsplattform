@@ -195,6 +195,25 @@ function checkQuiz() {
   }
 }
 
+const OSI_LAYERS = [
+  { id: "l1", label: "1. Bitübertragung (Physical)" },
+  { id: "l2", label: "2. Sicherung (Data Link)" },
+  { id: "l3", label: "3. Vermittlung (Network)" },
+  { id: "l4", label: "4. Transport" },
+  { id: "l5", label: "5. Sitzung (Session)" },
+  { id: "l6", label: "6. Darstellung (Presentation)" },
+  { id: "l7", label: "7. Anwendung (Application)" },
+];
+
+const PORT_PAIRS = [
+  { id: "p53", left: "Port 53", right: "DNS" },
+  { id: "p80", left: "Port 80", right: "HTTP" },
+  { id: "p443", left: "Port 443", right: "HTTPS" },
+  { id: "p22", left: "Port 22", right: "SSH" },
+  { id: "p25", left: "Port 25", right: "SMTP (E-Mail-Versand)" },
+  { id: "p3389", left: "Port 3389", right: "RDP (Remotedesktop)" },
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
   if (getModuleStatus(MODULE_ID) === "done") {
@@ -203,4 +222,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  const osiPuzzle = initReorderPuzzle(document.getElementById("osi-reorder-container"), OSI_LAYERS);
+  document.getElementById("check-osi-order-btn").addEventListener("click", () => {
+    const allCorrect = osiPuzzle.check();
+    const fb = document.getElementById("osi-order-feedback");
+    fb.classList.remove("hidden");
+    fb.className = "feedback-box " + (allCorrect ? "correct" : "incorrect");
+    fb.innerHTML = allCorrect
+      ? "Richtig! Genau in dieser Reihenfolge werden Daten von Schicht 1 bis 7 verarbeitet."
+      : "Noch nicht ganz - grün markierte Karten stehen an der richtigen Stelle, rot markierte nicht.";
+  });
+  document.getElementById("reset-osi-order-btn").addEventListener("click", () => {
+    osiPuzzle.reset();
+    document.getElementById("osi-order-feedback").classList.add("hidden");
+  });
+
+  initMatchPuzzle(document.getElementById("port-match-container"), PORT_PAIRS, (matched, total) => {
+    document.getElementById("port-match-progress").textContent = `${matched} / ${total} Paare gefunden`;
+  });
 });

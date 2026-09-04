@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zertifikate &amp; PKI &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+        <a href="containers.html">Virtualisierung &amp; Docker</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="encryption.html">Verschlüsselung</a>
+        <a href="certificates.html" class="active">Zertifikate &amp; PKI</a>
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Abschlussprüfung</button>
+      <div class="nav-dropdown-menu">
+        <a href="final-exam.html">Abschlussprüfung</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">📜 Zertifikate &amp; PKI</h1>
+  <p class="page-subtitle">
+    Wie ein öffentlicher Schlüssel vertrauenswürdig an eine Identität
+    gebunden wird, die Vertrauenskette von Root-CA bis Endzertifikat,
+    Ablauf &amp; Widerruf, sowie automatisierte Zertifikatsverteilung per
+    SCEP über Intune.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Warum reicht ein Schlüsselpaar allein nicht?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein öffentlicher Schlüssel allein ist wie eine unbeschriftete
+          Visitenkarte: du weisst zwar, dass irgendjemand diesen Schlüssel
+          besitzt, aber nicht, OB die Person, die ihn dir gegeben hat,
+          wirklich die ist, für die sie sich ausgibt. Ein Zertifikat ist
+          diese Visitenkarte PLUS eine Unterschrift einer vertrauenswürdigen
+          Stelle, die die Identität vorher geprüft hat.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Im Modul <a href="encryption.html">Verschlüsselung</a> hast du
+      gelernt, dass bei asymmetrischer Verschlüsselung jede Seite ein
+      Schlüsselpaar besitzt. Offen bleibt dabei eine entscheidende Frage:
+      <strong>woher weiss ich, dass ein bestimmter öffentlicher Schlüssel
+      wirklich zu der Person/dem Server gehört, die/der er vorgibt zu
+      sein?</strong> Eine <strong>Public-Key-Infrastruktur (PKI)</strong>
+      löst genau dieses Problem: eine <strong>Zertifizierungsstelle
+      (Certificate Authority, CA)</strong> prüft die Identität und bürgt
+      mit ihrer eigenen Signatur für die Bindung zwischen Identität und
+      öffentlichem Schlüssel - das Ergebnis ist ein
+      <strong>Zertifikat</strong>.
+    </p>
+    <img class="doc-image" src="../images/pki-overview.jpg" alt="PKI-Übersicht: eine Registrierungsstelle (RA) prüft die Identität, die Zertifizierungsstelle (CA) stellt das Zertifikat aus, ein Validierungsdienst (VA) prüft dessen Gültigkeit, damit sich zwei Parteien gegenseitig authentifizieren können" style="max-width:560px;" />
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Was steckt in einem Zertifikat?</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Feld</th><th>Bedeutung</th>
+      </tr>
+      <tr><td><strong>Subject</strong></td><td>Für wen das Zertifikat ausgestellt wurde (z.B. eine Domain oder ein Gerät)</td></tr>
+      <tr><td><strong>Issuer</strong></td><td>Welche CA das Zertifikat ausgestellt/signiert hat</td></tr>
+      <tr><td><strong>Public Key</strong></td><td>Der öffentliche Schlüssel, dessen Zugehörigkeit bestätigt wird</td></tr>
+      <tr><td><strong>Gültigkeit</strong></td><td>Ausstellungs- und Ablaufdatum (Not Before / Not After)</td></tr>
+      <tr><td><strong>Seriennummer</strong></td><td>Eindeutige ID, u.a. für Widerruf über CRL/OCSP relevant</td></tr>
+      <tr><td><strong>Signatur</strong></td><td>Kryptografische Unterschrift der ausstellenden CA über alle übrigen Felder</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Die Vertrauenskette (Chain of Trust)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Notar, der einen Notar-Gehilfen beauftragt, statt jede
+          einzelne Unterschrift selbst zu leisten: die Root-CA (der Notar)
+          bleibt möglichst selten aktiv/offline, während Intermediate-CAs
+          (die Gehilfen) das Tagesgeschäft übernehmen - fliegt ein Gehilfe
+          auf, wird nur er ausgetauscht, der Notar selbst bleibt
+          unangetastet.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Zertifikate bilden fast immer eine mehrstufige Hierarchie:
+    </p>
+    <ul>
+      <li><strong>Root-CA</strong>: die oberste, selbstsignierte Zertifizierungsstelle - vorab als vertrauenswürdig im Betriebssystem/Browser hinterlegt. Bleibt aus Sicherheitsgründen meist offline.</li>
+      <li><strong>Intermediate-CA</strong>: von der Root-CA signiert, übernimmt das tägliche Ausstellen von Zertifikaten. Bei einem Vorfall lässt sie sich isoliert widerrufen, ohne die Root-CA zu gefährden.</li>
+      <li><strong>Endzertifikat (Leaf/End-entity)</strong>: das eigentliche Zertifikat für einen Server, ein Gerät oder eine Person, signiert von der Intermediate-CA.</li>
+    </ul>
+    <p class="text-muted">
+      Ein Client prüft die gesamte Kette rückwärts: vertraut er der
+      Root-CA UND ist jede Signatur in der Kette gültig, vertraut er auch
+      dem Endzertifikat - fehlt ein Glied oder ist eine Signatur ungültig,
+      schlägt die Prüfung fehl.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Ablauf &amp; Widerruf</h3>
+    <p>
+      Ein Zertifikat verliert seine Gültigkeit auf zwei unterschiedliche
+      Arten:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>Ablauf (Expiry)</th><th>Widerruf (Revocation)</th>
+      </tr>
+      <tr><td>Zeitpunkt</td><td>Geplant, im Zertifikat selbst festgelegt</td><td>Ungeplant, jederzeit möglich</td></tr>
+      <tr><td>Typischer Grund</td><td>Normale Laufzeit erreicht</td><td>Privater Schlüssel kompromittiert, Mitarbeiter ausgeschieden</td></tr>
+      <tr><td>Wie geprüft</td><td>Client vergleicht Datum lokal</td><td>Client fragt CRL oder OCSP</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:8px;">
+      <strong>CRL</strong> (Certificate Revocation List) ist eine
+      herunterladbare Liste aller widerrufenen Zertifikate einer CA.
+      <strong>OCSP</strong> (Online Certificate Status Protocol) fragt
+      stattdessen in Echtzeit nur den Status EINES einzelnen Zertifikats
+      ab - schneller und aktueller, aber es braucht eine aktive
+      Online-Verbindung zum OCSP-Responder.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      SCEP-Zertifikate über Intune verteilen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ohne SCEP müsste ein Admin für jedes einzelne Gerät manuell ein
+          Zertifikat beantragen und installieren - bei hunderten Geräten
+          unrealistisch. SCEP lässt jedes Gerät sein Zertifikat
+          selbstständig und automatisiert anfordern, sobald es ein
+          entsprechendes Profil von Intune erhält.
+        </div>
+      </details>
+    </h3>
+    <p>
+      <strong>SCEP</strong> (Simple Certificate Enrollment Protocol) ist
+      ein Standardprotokoll, mit dem Geräte automatisiert Zertifikate bei
+      einer Zertifizierungsstelle anfordern können - ideal, um ganze
+      Geräteflotten über <strong>Intune</strong> mit Zertifikaten für
+      WLAN-Authentifizierung (EAP-TLS), VPN oder E-Mail-Signierung
+      auszustatten, ganz ohne manuelles Eingreifen pro Gerät.
+    </p>
+    <img class="doc-image" src="../images/scep-certificate-profile-flow.png" alt="SCEP Certificate Profile Flow: Intune verteilt ein Profil ans Gerät, das Gerät sendet eine Zertifikatsanfrage an NDES + Intune NDES Connector, dieser leitet die Anfrage an die Certification Authority weiter, welche das Zertifikat ausstellt und über NDES ans Gerät zurückgibt" style="max-width:480px;" />
+    <ol>
+      <li>Intune verteilt ein <strong>SCEP-Zertifikatprofil</strong> (inkl. Vorlage, Schlüsselverwendung, Challenge-Mechanismus) an das Gerät.</li>
+      <li>Das Gerät sendet daraufhin selbstständig eine Zertifikatsanfrage an den <strong>NDES-Server</strong> (Network Device Enrollment Service) - meist vermittelt über den Intune-NDES-Connector.</li>
+      <li>NDES leitet die Anfrage an die interne <strong>Zertifizierungsstelle (CA)</strong> weiter.</li>
+      <li>Die CA stellt das Zertifikat aus, NDES liefert es zurück ans Gerät.</li>
+    </ol>
+    <p class="text-muted">
+      Fast immer wird zusätzlich ein <strong>Trusted-Root-Certificate-Profil</strong>
+      an dieselben Geräte verteilt: das Gerät muss der ausstellenden
+      internen CA vertrauen, bevor es dem neuen Zertifikat selbst
+      vertrauen kann - fehlt dieses Profil, bleibt das SCEP-Zertifikat für
+      Zwecke wie WLAN-Authentifizierung nutzlos, obwohl es technisch
+      gültig ist.
+    </p>
+    <p class="text-muted">
+      Wichtige Voraussetzung: NDES muss für cloud-verwaltete Geräte
+      erreichbar sein (klassisch über eine im Internet exponierte
+      NDES-URL oder eine Anwendungs-Proxy-Lösung), da die Anfrage vom
+      Gerät aus dem Internet kommt, die CA selbst aber meist rein
+      On-Premises betrieben wird.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🧩 Zuordnen: Begriff ↔ Bedeutung</h3>
+    <div id="term-match-container"></div>
+    <p class="text-muted" id="term-match-progress">0 / 7 Paare gefunden</p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/certificates.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Virtualisierung &amp; Docker-Grundlagen &ndash; IT-Trainer</title>
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><span class="logo">🛰️</span> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+        <a href="containers.html" class="active">Virtualisierung &amp; Docker</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="encryption.html">Verschlüsselung</a>
+        <a href="certificates.html">Zertifikate &amp; PKI</a>
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Abschlussprüfung</button>
+      <div class="nav-dropdown-menu">
+        <a href="final-exam.html">Abschlussprüfung</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">🐳 Virtualisierung &amp; Docker-Grundlagen</h1>
+  <p class="page-subtitle">
+    Typ-1- vs. Typ-2-Hypervisor, der grundlegende Unterschied zwischen
+    virtuellen Maschinen und Containern, sowie die Kernbegriffe von
+    Docker.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Drei Wege, Software isoliert laufen zu lassen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Bare Metal ist eine Wohnung ganz für dich allein. Eine VM ist ein
+          Mehrfamilienhaus, in dem jede Wohnung ihre eigene komplette
+          Infrastruktur (Strom, Wasser, Heizung) hat. Ein Container ist
+          eine WG: alle teilen sich Küche und Bad (den Kernel), haben aber
+          ihr eigenes abschliessbares Zimmer.
+        </div>
+      </details>
+    </h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>Bare Metal</th><th>Virtuelle Maschine</th><th>Container</th>
+      </tr>
+      <tr><td>Eigenes Betriebssystem</td><td>Ja (das einzige)</td><td>Ja, pro VM eines</td><td>Nein - Kernel wird geteilt</td></tr>
+      <tr><td>Startzeit</td><td>Minuten (Boot)</td><td>Minuten</td><td>Sekunden oder schneller</td></tr>
+      <tr><td>Ressourcenbedarf</td><td>Volle Hardware</td><td>Hoch (GB pro VM)</td><td>Niedrig (MB pro Container)</td></tr>
+      <tr><td>Isolation</td><td>Physisch komplett</td><td>Sehr stark (Hardware-Ebene)</td><td>Gut, aber schwächer (geteilter Kernel)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Virtualisierung: Typ 1 vs. Typ 2 Hypervisor</h3>
+    <img class="doc-image" src="../images/hypervisor-type1-type2.png" alt="Typ 1 (Native/Bare-Metal): Hardware, direkt darauf der Hypervisor, darauf mehrere Gast-Betriebssysteme. Typ 2 (Hosted): Hardware, darauf ein Host-Betriebssystem, darin der Hypervisor als Anwendung, darauf mehrere Gast-Betriebssysteme" style="max-width:520px;" />
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;"></th><th>Typ 1 (Native/Bare-Metal)</th><th>Typ 2 (Hosted)</th>
+      </tr>
+      <tr><td>Läuft auf</td><td>Direkt auf der Hardware</td><td>Als Anwendung im Host-Betriebssystem</td></tr>
+      <tr><td>Beispiele</td><td>VMware ESXi, Hyper-V (Server), Citrix XenServer</td><td>VirtualBox, VMware Workstation/Fusion, Parallels</td></tr>
+      <tr><td>Typischer Einsatz</td><td>Produktionsserver, Rechenzentrum</td><td>Entwickler-/Testumgebung auf Desktop/Laptop</td></tr>
+      <tr><td>Performance/Sicherheit</td><td>Besser (kein zusätzliches OS als Overhead)</td><td>Etwas geringer, dafür einfacher einzurichten</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Virtuelle Maschinen vs. Container: der grosse Unterschied
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Der wichtigste Satz dieses Moduls: ein Container ist KEINE kleine
+          virtuelle Maschine - er ist ein isolierter Prozess, der sich den
+          Kernel des Host-Betriebssystems mit allen anderen Containern
+          teilt.
+        </div>
+      </details>
+    </h3>
+    <img class="doc-image" src="../images/what-is-a-container.avif" alt="Containerisierte Anwendungen: mehrere Apps (A bis F) laufen jeweils in eigenen Containern, alle auf derselben Docker-Schicht, die wiederum auf einem gemeinsamen Host-Betriebssystem und der darunterliegenden Infrastruktur läuft" style="max-width:480px;" />
+    <p>
+      Bei einer VM virtualisiert der Hypervisor komplette Hardware - jede
+      VM bringt ihr eigenes Betriebssystem inkl. eigenem Kernel mit. Bei
+      Containern übernimmt eine <strong>Container-Engine</strong> (z.B.
+      Docker) die Isolation auf Prozessebene (via Linux-Namespaces &amp;
+      Cgroups bzw. Windows Containers) - alle Container auf einem Host
+      teilen sich denselben Kernel.
+    </p>
+    <p class="text-muted">
+      Praktische Konsequenz: ein Linux-Container braucht einen laufenden
+      Linux-Kernel. Unter Windows läuft deshalb im Hintergrund eine
+      leichte Linux-Umgebung (z.B. WSL2), damit Linux-Container überhaupt
+      funktionieren - eine echte VM wäre davon unabhängig, da sie ihr
+      eigenes Betriebssystem mitbringt.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Was ist Docker genau?</h3>
+    <p>Docker ist die bekannteste Container-Engine (nicht die einzige - andere: Podman, containerd) mit vier Kernbegriffen:</p>
+    <ul>
+      <li><strong>Image</strong>: ein unveränderliches, geschichtetes Dateisystem-Template mit allem, was eine Anwendung braucht - der "Bauplan".</li>
+      <li><strong>Container</strong>: eine laufende Instanz eines Images - das tatsächlich "gebaute Exemplar". Mehrere Container können vom selben Image gestartet werden.</li>
+      <li><strong>Dockerfile</strong>: eine Textdatei mit der Bauanleitung, wie ein Image Schritt für Schritt entsteht.</li>
+      <li><strong>Registry</strong> (z.B. Docker Hub): ein zentraler Speicherort zum Hoch-/Herunterladen fertiger Images.</li>
+    </ul>
+    <p class="text-muted" style="margin-bottom:4px;">Ein minimales Beispiel-Dockerfile:</p>
+    <pre>FROM node:20
+COPY . /app
+WORKDIR /app
+RUN npm install
+CMD ["node", "server.js"]</pre>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">Wann VM, wann Container?</h3>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Situation</th><th>Empfehlung</th>
+      </tr>
+      <tr><td>Komplett anderes Betriebssystem als der Host nötig</td><td>VM</td></tr>
+      <tr><td>Sehr strikte Isolation zwischen fremden Mandanten nötig</td><td>VM (oder VM + Container kombiniert)</td></tr>
+      <tr><td>Viele gleichartige Instanzen schnell hoch-/runterskalieren</td><td>Container</td></tr>
+      <tr><td>Microservices-Architektur</td><td>Container</td></tr>
+      <tr><td>Alte Anwendung, die ein spezielles altes OS braucht</td><td>VM</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Praxisbeispiel: Produktions- und Management-Cluster trennen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein reales Muster aus dem Rechenzentrums-Alltag: die
+          Verwaltungswerkzeuge für die gesamte Virtualisierungsumgebung
+          (z.B. vCenter) laufen bewusst NICHT auf denselben Servern wie
+          die eigentlichen Produktions-VMs - fällt ein Produktions-Cluster
+          aus, bleibt die Verwaltung trotzdem erreichbar.
+        </div>
+      </details>
+    </h3>
+    <p>
+      In grösseren Typ-1-Hypervisor-Umgebungen (z.B. VMware) werden
+      Produktions- und Verwaltungsaufgaben oft bewusst auf getrennte
+      Cluster verteilt, die sich denselben gemeinsamen Storage teilen:
+    </p>
+    <img class="doc-image" src="../images/vsan-management-cluster.webp" alt="Diagramm: zwei Produktions-Cluster und ein separates Management-Cluster, jeweils mit eigenen VMs, verbunden über eine gemeinsame Storage Fabric mit gemeinsamem Shared Storage" style="max-width:520px;" />
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🧩 Puzzle: Vom Code zum laufenden Container</h3>
+    <div id="workflow-reorder-container"></div>
+    <div class="btn-row">
+      <button id="check-workflow-order-btn" class="btn primary">Reihenfolge prüfen</button>
+      <button id="reset-workflow-order-btn" class="btn small ghost" type="button">Neu mischen</button>
+    </div>
+    <div id="workflow-order-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js"></script>
+<script src="../js/containers.js"></script>
+</body>
+</html>
