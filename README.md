@@ -289,6 +289,13 @@ und Backup-Troubleshooting.
 - Fortschritt wird ausschliesslich lokal im Browser gespeichert
   (`localStorage`), es gibt keine Server-Komponente und keine
   Nutzerkonten.
+- `css/style.css` und `js/progress.js` werden auf jeder Seite mit einem
+  `?v=YYYYMMDD`-Parameter eingebunden (Cache-Busting), da sie von allen
+  Modulen gemeinsam genutzt werden und Browser sie sonst über einen
+  Seitenwechsel hinweg zwischenspeichern. Nach inhaltlichen Änderungen an
+  einer der beiden Dateien das Datum in allen `<link>`/`<script>`-Tags
+  hochzählen, sonst sehen wiederkehrende Besucher ggf. eine veraltete
+  Version.
 - Das SQL-Injection-Modul erkennt Injection-Muster (z.B.
   `' OR '1'='1`, Kommentar-Injection) über einfache Mustererkennung
   (RegEx) auf einem rein zur Veranschaulichung zusammengebauten
