@@ -196,13 +196,13 @@ function checkQuiz() {
 }
 
 const OSI_LAYERS = [
-  { id: "l1", label: "1. Bitübertragung (Physical)" },
-  { id: "l2", label: "2. Sicherung (Data Link)" },
-  { id: "l3", label: "3. Vermittlung (Network)" },
-  { id: "l4", label: "4. Transport" },
-  { id: "l5", label: "5. Sitzung (Session)" },
-  { id: "l6", label: "6. Darstellung (Presentation)" },
-  { id: "l7", label: "7. Anwendung (Application)" },
+  { id: "l1", label: "Bitübertragung (Physical)" },
+  { id: "l2", label: "Sicherung (Data Link)" },
+  { id: "l3", label: "Vermittlung (Network)" },
+  { id: "l4", label: "Transport" },
+  { id: "l5", label: "Sitzung (Session)" },
+  { id: "l6", label: "Darstellung (Presentation)" },
+  { id: "l7", label: "Anwendung (Application)" },
 ];
 
 const PORT_PAIRS = [
