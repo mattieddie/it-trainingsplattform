@@ -31,7 +31,7 @@ Ethernet-Adapter LAN-Verbindung:
     shell: "cmd",
     difficulty: "easy",
     task: "Prüfe per CMD, ob der Host 8.8.8.8 erreichbar ist.",
-    accept: [/^ping\s+8\.8\.8\.8(\s+-n\s*\d+)?$/i],
+    accept: [/^ping\s+8\.8\.8\.8(\s+-n\s*\d+)?$/i, /^ping\s+-n\s*\d+\s+8\.8\.8\.8$/i],
     output:
 `Ping wird ausgeführt für 8.8.8.8 mit 32 Bytes Daten:
 Antwort von 8.8.8.8: Bytes=32 Zeit=14ms TTL=115
@@ -217,7 +217,7 @@ Gesamter phys. Speicher:   16'384 MB`,
     shell: "cmd",
     difficulty: "hard",
     task: "Beende den Prozess \"notepad.exe\" zwangsweise per CMD.",
-    accept: [/^taskkill\s+\/im\s+notepad\.exe\s+\/f$/i, /^taskkill\s+\/f\s+\/im\s+notepad\.exe$/i],
+    accept: [/^taskkill\s+\/im\s+"?notepad\.exe"?\s+\/f$/i, /^taskkill\s+\/f\s+\/im\s+"?notepad\.exe"?$/i],
     output:
 `ERFOLGREICH: Der Prozess "notepad.exe" mit PID 5544 wurde beendet.`,
     hint: "Prozesse beendet man in der CMD mit \"taskkill /IM <prozessname> /F\" (F = erzwingen).",
@@ -228,7 +228,12 @@ Gesamter phys. Speicher:   16'384 MB`,
     shell: "powershell",
     difficulty: "hard",
     task: "Zeige die 10 neuesten Einträge aus dem System-Ereignisprotokoll mit PowerShell an.",
-    accept: [/^get-eventlog\s+-logname\s+system\s+-newest\s+10$/i, /^get-winevent\s+-logname\s+system\s+-maxevents\s+10$/i],
+    accept: [
+      /^get-eventlog\s+-logname\s+system\s+-newest\s+10$/i,
+      /^get-eventlog\s+-newest\s+10\s+-logname\s+system$/i,
+      /^get-winevent\s+-logname\s+system\s+-maxevents\s+10$/i,
+      /^get-winevent\s+-maxevents\s+10\s+-logname\s+system$/i,
+    ],
     output:
 `Index Time          EntryType  Source          Message
 ----- ----          ---------  ------          -------
