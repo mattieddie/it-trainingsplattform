@@ -236,16 +236,43 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">Dateisystem und Dateitypen</h3>
+    <h3 class="mt-0">
+      Dateisystem und Dateitypen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Die Dateiendung ist wie ein Etikett auf einer Kiste: Windows öffnet
+          sie nicht, um zu wissen was drin ist, sondern verlässt sich einfach
+          auf das Etikett (<code>.exe</code>, <code>.docx</code>, ...), um zu
+          entscheiden, welches Programm die Datei behandeln soll.
+        </div>
+      </details>
+    </h3>
     <p>
-      Windows nutzt meist <strong>NTFS</strong> als Dateisystem.
-      Dateiendungen zeigen den Typ: <code>.exe</code> (ausführbar),
-      <code>.msi</code> (Installationspaket über den Windows-Installer),
-      <code>.dll</code> (wiederverwendbare Bibliothek), <code>.ps1</code>
-      (PowerShell-Skript), <code>.txt</code>/<code>.docx</code>
-      (Dokumente), <code>.cfg</code> (Konfigurationsdatei), <code>.inf</code>
-      (Setup-/Treiberanweisungen).
+      Windows nutzt meist <strong>NTFS</strong> als Dateisystem. Die
+      Dateiendung (Extension) sagt Windows dabei, wie eine Datei zu
+      behandeln ist - unabhängig vom eigentlichen Dateinamen. Die
+      gängigsten Endungen im IT-Alltag:
     </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Endung</th><th>Typ</th><th>Bedeutung</th>
+      </tr>
+      <tr><td class="mono">.exe</td><td>Ausführbare Datei</td><td>Eigenständiges Programm, wird direkt gestartet</td></tr>
+      <tr><td class="mono">.msi</td><td>Installationspaket</td><td>Installiert/deinstalliert Software über den Windows Installer (siehe Modul <a href="packaging.html">Paketierung</a>)</td></tr>
+      <tr><td class="mono">.dll</td><td>Bibliothek (Dynamic Link Library)</td><td>Enthält Programmcode/Funktionen, die sich mehrere Programme teilen - kein eigenständig startbares Programm</td></tr>
+      <tr><td class="mono">.bat / .cmd</td><td>Batch-Skript</td><td>Einfache Befehlsfolge für die Eingabeaufforderung (CMD)</td></tr>
+      <tr><td class="mono">.ps1</td><td>PowerShell-Skript</td><td>Skript für die PowerShell - deutlich mächtiger als Batch (siehe Modul <a href="scripting.html">Skripting</a>)</td></tr>
+      <tr><td class="mono">.vbs</td><td>VBScript</td><td>Älteres Skriptformat, u.a. für Logon-Skripte - heute meist durch PowerShell ersetzt</td></tr>
+      <tr><td class="mono">.ini</td><td>Konfigurationsdatei</td><td>Einstellungen im Klartext-Format, gegliedert in Abschnitte mit Schlüssel=Wert-Paaren</td></tr>
+      <tr><td class="mono">.cfg / .xml / .json</td><td>Konfiguration/Daten</td><td>Weitere gängige Formate für Einstellungen oder strukturierte Daten</td></tr>
+      <tr><td class="mono">.reg</td><td>Registry-Datei</td><td>Import-/Exportformat für Registry-Einträge (siehe Windows-Registry oben)</td></tr>
+      <tr><td class="mono">.inf</td><td>Setup-Informationsdatei</td><td>Beschreibt z.B., wie ein Treiber installiert werden soll</td></tr>
+      <tr><td class="mono">.log</td><td>Protokolldatei</td><td>Textbasierte Aufzeichnung von Ereignissen, z.B. Installationsprotokolle</td></tr>
+      <tr><td class="mono">.txt</td><td>Reiner Text</td><td>Unformatierter Text ohne Schriftformatierung</td></tr>
+      <tr><td class="mono">.docx</td><td>Word-Dokument</td><td>Formatiertes Textdokument (Microsoft Word)</td></tr>
+      <tr><td class="mono">.zip</td><td>Archiv</td><td>Komprimiert mehrere Dateien platzsparend in eine einzige Datei</td></tr>
+    </table>
   </div>
 
   <div class="card">
