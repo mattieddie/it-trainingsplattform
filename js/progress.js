@@ -133,6 +133,16 @@ const MODULES = [
     prereqs: ["networkpackets"],
   },
   {
+    id: "dnsdhcpdetail",
+    track: "netzwerk",
+    title: "DNS-Auflösung & DHCP-Prozess",
+    icon: "\u{1F9ED}",
+    description:
+      "Der DHCP-DORA-Prozess und die rekursive DNS-Auflösung Schritt für Schritt, plus Referenztabelle aller DNS-Record-Typen (A/AAAA/CNAME/MX/PTR/NS/SOA/TXT).",
+    href: "modules/dns-dhcp-basics.html",
+    prereqs: ["dnsconcepts"],
+  },
+  {
     id: "dhcpdns",
     track: "netzwerk",
     title: "DHCP/DNS-Troubleshooting",
@@ -140,7 +150,7 @@ const MODULES = [
     description:
       "Helpdesk-Tickets mit simulierten Tool-Ausgaben (ipconfig, nslookup, ping). Finde die Ursache und die Lösung.",
     href: "modules/dhcp-dns.html",
-    prereqs: ["subnetting", "dnsconcepts"],
+    prereqs: ["subnetting", "dnsdhcpdetail"],
   },
   {
     id: "vpnbasics",

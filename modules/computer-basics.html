@@ -27,6 +27,7 @@
         <a href="network-devices.html">Netzwerkgeräte</a>
         <a href="subnetting.html">Subnetting</a>
         <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a>
         <a href="dhcp-dns.html">DHCP/DNS</a>
         <a href="vpn-basics.html">VPN-Grundlagen</a>
       </div>
@@ -183,16 +184,85 @@
       aber dank <strong>UAC (User Account Control)</strong> kritische
       Änderungen extra bestätigen.
     </p>
+
+    <div class="mockup-dialog">
+      <div class="mockup-dialog-title">🔒 Berechtigungen für "Freigabe"</div>
+      <div class="mockup-dialog-body">
+        <p class="mono text-muted" style="margin-top:0;">Objektname: D:\Freigabe</p>
+        <p class="text-muted" style="margin-bottom:4px;">Gruppen- oder Benutzernamen:</p>
+        <div class="mockup-list">
+          <div class="mockup-list-item">👥 Authentifizierte Benutzer</div>
+          <div class="mockup-list-item">💻 SYSTEM</div>
+          <div class="mockup-list-item selected">👥 Domänen-Benutzer</div>
+        </div>
+        <p class="text-muted" style="margin-bottom:4px;">Berechtigungen für "Domänen-Benutzer":</p>
+        <table class="mockup-perm-table">
+          <tr><th></th><th class="mockup-check">Zulassen</th><th class="mockup-check">Verweigern</th></tr>
+          <tr><td>Vollzugriff</td><td class="mockup-check">☐</td><td class="mockup-check">☐</td></tr>
+          <tr><td>Ändern</td><td class="mockup-check">☐</td><td class="mockup-check">☐</td></tr>
+          <tr><td>Lesen, Ausführen</td><td class="mockup-check">☑</td><td class="mockup-check">☐</td></tr>
+          <tr><td>Ordnerinhalt anzeigen</td><td class="mockup-check">☑</td><td class="mockup-check">☐</td></tr>
+          <tr><td>Lesen</td><td class="mockup-check">☑</td><td class="mockup-check">☐</td></tr>
+        </table>
+      </div>
+    </div>
+    <p class="text-muted">
+      Auch hier gilt die Deny-Vorrang-Regel: wäre bei "Verweigern" für
+      "Lesen" ein Häkchen gesetzt, würde das die erlaubende Einstellung
+      darüber in der Liste komplett aushebeln - unabhängig davon, was bei
+      "Vollzugriff" steht.
+    </p>
   </div>
 
   <div class="card">
-    <h3 class="mt-0">Windows-Registry</h3>
+    <h3 class="mt-0">
+      Windows-Registry
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Vergleich mit einem Aktenschrank: die 5 Hauptbäume (Hives) sind die
+          grossen Schubladen, Schlüssel und Unterschlüssel sind Ordner und
+          Unterordner darin, und die Werte sind die einzelnen Blätter Papier
+          mit den eigentlichen Informationen.
+        </div>
+      </details>
+    </h3>
     <p>
       Die Registry ist die zentrale Konfigurationsdatenbank von Windows -
       hierarchisch aufgebaut in fünf Hauptbäumen (Hives), darunter
       <code>HKLM</code> (systemweit) und <code>HKCU</code>
       (benutzerspezifisch). Sie speichert Systemeinstellungen,
       Treiberinformationen, installierte Software und Benutzerprofile.
+    </p>
+
+    <svg viewBox="0 0 560 220" style="width:100%; max-width:560px; display:block; margin:12px auto;" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="20" fill="#e6e9f0" font-size="12" font-family="Consolas, monospace">🖥️ Computer</text>
+      <text x="26" y="42" fill="#ffb648" font-weight="700" font-size="12" font-family="Consolas, monospace">HKEY_CURRENT_USER</text>
+      <text x="42" y="64" fill="#e6e9f0" font-size="12" font-family="Consolas, monospace">Software</text>
+      <text x="58" y="86" fill="#4f8cff" font-weight="700" font-size="12" font-family="Consolas, monospace">Microsoft</text>
+      <text x="74" y="108" fill="#4f8cff" font-weight="700" font-size="12" font-family="Consolas, monospace">Windows</text>
+      <text x="90" y="130" fill="#4f8cff" font-weight="700" font-size="12" font-family="Consolas, monospace">CurrentVersion</text>
+      <text x="106" y="152" fill="#29d3c1" font-weight="700" font-size="12" font-family="Consolas, monospace">Run</text>
+
+      <rect x="330" y="140" width="220" height="60" rx="6" fill="#1b2333" stroke="#3ecf6c" stroke-width="1.5"/>
+      <text x="340" y="158" fill="#3ecf6c" font-size="11" font-family="Consolas, monospace">Name: OneDriveSetup</text>
+      <text x="340" y="176" fill="#3ecf6c" font-size="11" font-family="Consolas, monospace">Typ: REG_SZ</text>
+      <text x="340" y="194" fill="#3ecf6c" font-size="11" font-family="Consolas, monospace">Daten: "C:\...\OneDriveSetup.exe"</text>
+
+      <line x1="26" y1="48" x2="130" y2="48" stroke="#ffb648" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="200" y="48" fill="#ffb648" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Root Key (Hauptbaum)</text>
+
+      <line x1="58" y1="92" x2="130" y2="92" stroke="#4f8cff" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="200" y="92" fill="#4f8cff" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Schlüssel / Unterschlüssel</text>
+
+      <line x1="330" y1="160" x2="220" y2="152" stroke="#3ecf6c" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="440" y="128" fill="#3ecf6c" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Werte (Name/Typ/Daten)</text>
+    </svg>
+    <p class="text-muted">
+      In diesem Beispiel sorgt der Wert <code class="mono">OneDriveSetup</code>
+      im Schlüssel <code class="mono">...\Run</code> dafür, dass OneDrive bei
+      jeder Benutzeranmeldung automatisch gestartet wird - ein klassischer
+      Autostart-Eintrag.
     </p>
     <p class="text-muted">
       Vor grösseren Änderungen (z.B. per Skript) empfiehlt sich immer eine

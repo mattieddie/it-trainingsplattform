@@ -12,7 +12,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 19 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 20 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -28,17 +28,18 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 `prereqs`-Feld pro Modul in `js/progress.js` gepflegt.
 
 **1. IT-Grundlagen** - das Handwerkszeug
-- **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen, Registry, Dateitypen.
+- **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen (inkl. nachgebautem Berechtigungsdialog), Registry (inkl. Root-Key/Schlüssel/Wert-Baumdiagramm), Dateitypen.
 - **CMD & PowerShell Terminal-Trainer** ([modules/terminal.html](modules/terminal.html)) - simuliertes Terminal, Befehle eintippen statt auswählen, gestaffelte Tipps.
 - **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
-- **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau, TTL, TCP-Handshake, OSI- vs. TCP/IP-Modell.
+- **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell.
 - **Netzwerkgeräte & Routing** ([modules/network-devices.html](modules/network-devices.html)) - Hub/Switch/Router im Vergleich, plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).
-- **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen.
+- **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen, inkl. Bit-für-Bit-Aufschlüsselung einer Subnetzmaske.
 - **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, inkl. Domain-Konfigurator.
+- **DNS-Auflösung & DHCP-Prozess** ([modules/dns-dhcp-basics.html](modules/dns-dhcp-basics.html)) - der DHCP-DORA-Prozess und die rekursive DNS-Auflösung Schritt für Schritt (Diagramme), plus Referenztabelle aller DNS-Record-Typen.
 - **DHCP/DNS-Troubleshooting** ([modules/dhcp-dns.html](modules/dhcp-dns.html)) - zehn Helpdesk-Tickets mit simulierten Tool-Ausgaben.
-- **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN, Split- vs. Full-Tunneling.
+- **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN (inkl. Vergleichsdiagramm), Split- vs. Full-Tunneling.
 
 **3. Verzeichnisdienste & Identität** - On-Premises bis Cloud
 - **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus Troubleshooting-Tickets.
@@ -92,13 +93,15 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── network-packets.js
 │   ├── vpn-basics.js
 │   ├── encryption.js
-│   └── final-exam.js
+│   ├── final-exam.js
+│   └── dns-dhcp-basics.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── network-packets.html
 │   ├── network-devices.html
 │   ├── vpn-basics.html
 │   ├── subnetting.html
+│   ├── dns-dhcp-basics.html
 │   ├── dhcp-dns.html
 │   ├── encryption.html
 │   ├── firewall.html
