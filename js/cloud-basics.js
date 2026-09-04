@@ -10,6 +10,58 @@ const QUIZ = [
   {
     difficulty: "easy",
     question:
+      "Eine Firma nutzt Microsoft 365 (SaaS) für E-Mail und Office-Anwendungen. Wer ist dafür verantwortlich, dass die zugrundeliegenden Server und das Betriebssystem gepatcht sind?",
+    options: [
+      "Microsoft (der Cloud-Anbieter) - bei SaaS liegen Infrastruktur, Betriebssystem und die Anwendung selbst in der Verantwortung des Anbieters",
+      "Die Firma selbst muss dafür eigene Administratoren mit Serverzugriff einstellen",
+      "Niemand - bei SaaS gibt es technisch keine Server mehr, um die man sich kümmern müsste",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Bei SaaS übernimmt der Anbieter fast die komplette Verantwortung bis hinauf zur Anwendung - der Kunde bleibt aber weiterhin selbst für Daten, Zugriffsrechte und Konfiguration innerhalb der Anwendung verantwortlich.",
+  },
+  {
+    difficulty: "easy",
+    question:
+      "Worin unterscheidet sich IaaS (z.B. eine Azure-VM) grundlegend von PaaS (z.B. Azure App Service)?",
+    options: [
+      "Bei IaaS verwaltet der Kunde noch selbst Betriebssystem und Laufzeitumgebung, bei PaaS übernimmt das der Anbieter - der Kunde kümmert sich nur noch um seine Anwendung und Daten",
+      "IaaS und PaaS sind technisch identisch, nur die Bezeichnung unterscheidet sich",
+      "PaaS bietet grundsätzlich weniger Funktionen als IaaS",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Mit steigendem Servicegrad (IaaS → PaaS → SaaS) übernimmt der Anbieter jeweils mehr Verantwortung - bei PaaS muss sich der Kunde z.B. nicht mehr um Betriebssystem-Updates kümmern, nur noch um seinen eigenen Code und seine Daten.",
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Ein Unternehmen möchte eine Sicherheitsrichtlinie für ALLE seine Azure-Abonnements gleichzeitig durchsetzen, ohne sie in jedem Abonnement einzeln einzurichten. Auf welcher Ebene der Ressourcenhierarchie ist das am sinnvollsten?",
+    options: [
+      "Auf Ebene der Management Group, die mehrere Abonnements zusammenfasst - die Richtlinie vererbt sich automatisch an alle darunterliegenden Abonnements",
+      "Auf Ebene einer einzelnen Ressourcengruppe, das reicht für die gesamte Firma aus",
+      "Richtlinien müssen bei Azure zwingend für jedes Abonnement einzeln konfiguriert werden",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Management Groups sitzen in der Hierarchie über den Abonnements und sind genau für konzernweite Richtlinien gedacht - eine Zuweisung dort vererbt sich automatisch nach unten.",
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Wie unterscheidet sich \"PIM for Groups\" vom klassischen PIM für einzelne Rollen, wenn ein neues Teammitglied Zugriff auf mehrere zusammengehörige Rollen braucht?",
+    options: [
+      "Bei PIM for Groups reicht die Aufnahme in EINE Gruppe, die bereits mit allen benötigten Rollen verknüpft ist - ohne PIM for Groups müsste jede Rolle einzeln pro Person eingerichtet werden",
+      "PIM for Groups funktioniert nur mit genau einer einzigen Rolle, nie mit mehreren gleichzeitig",
+      "PIM for Groups ersetzt MFA und Genehmigungs-Workflows vollständig",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Der Vorteil von PIM for Groups liegt genau in der Bündelung: eine Gruppe kann mit mehreren Entra-ID- und Azure-Rollen gleichzeitig verknüpft werden, wodurch neue Mitglieder nur einmal (zur Gruppe) statt mehrfach (zu jeder Rolle) hinzugefügt werden müssen.",
+  },
+  {
+    difficulty: "easy",
+    question:
       "Ein Mitarbeiter im Helpdesk soll Passwörter für normale Nutzer zurücksetzen können, aber sonst nichts verwalten dürfen. Welche Rolle passt am besten?",
     options: [
       "Helpdesk Administrator",

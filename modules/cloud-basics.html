@@ -93,6 +93,95 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">
+      Cloud-Servicemodelle: On-Premises, IaaS, PaaS, SaaS
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie beim Pizzabestellen: On-Premises ist selbst backen (alles
+          selbst besorgen und tun), IaaS ist Teig kaufen und selbst belegen
+          und backen, PaaS ist eine Fertigpizza selbst nur noch aufbacken,
+          SaaS ist die Pizza liefern lassen - fertig zum Essen, um nichts
+          musst du dich mehr kümmern.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Je nach Servicemodell verschiebt sich die Verantwortung zwischen dir
+      (Kunde) und dem Cloud-Anbieter - das ist das sogenannte
+      <strong>Shared-Responsibility-Modell</strong>:
+    </p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; min-width:520px; border-collapse: collapse; text-align:center; font-size:0.85rem;">
+        <tr style="color: var(--text-muted);">
+          <th style="text-align:left; padding:4px 0;">Ebene</th><th>On-Premises</th><th>IaaS</th><th>PaaS</th><th>SaaS</th>
+        </tr>
+        <tr><td style="text-align:left;">Anwendung &amp; Daten</td><td>Kunde</td><td>Kunde</td><td>Kunde</td><td style="color:var(--success);">Anbieter</td></tr>
+        <tr><td style="text-align:left;">Laufzeitumgebung / Middleware</td><td>Kunde</td><td>Kunde</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td></tr>
+        <tr><td style="text-align:left;">Betriebssystem</td><td>Kunde</td><td>Kunde</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td></tr>
+        <tr><td style="text-align:left;">Virtualisierung / Server</td><td>Kunde</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td></tr>
+        <tr><td style="text-align:left;">Netzwerk &amp; Rechenzentrum</td><td>Kunde</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td><td style="color:var(--success);">Anbieter</td></tr>
+        <tr><td style="text-align:left;">Beispiel</td><td>eigener Serverraum</td><td>Azure VM</td><td>Azure App Service</td><td>Microsoft 365</td></tr>
+      </table>
+    </div>
+    <p class="text-muted" style="margin-top:8px;">
+      Wichtige Ausnahme, die oft übersehen wird: <strong>Daten und Zugriffskontrolle
+      bleiben bei JEDEM Modell (auch SaaS) immer in der Verantwortung des
+      Kunden</strong> - Microsoft sichert z.B. bei M365 die Plattform ab, aber
+      nicht, wer worauf Zugriff hat oder ob Daten korrekt klassifiziert sind.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Azure-Ressourcenhierarchie
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie eine Firma mit Konzern, Tochterfirmen und Abteilungen: der
+          Tenant ist der Gesamtkonzern, Management Groups bündeln
+          Tochterfirmen mit ähnlichen Regeln, Abonnements sind die
+          einzelnen Tochterfirmen (mit eigener Abrechnung), Ressourcengruppen
+          sind die Abteilungen darin.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Berechtigungen und Richtlinien (z.B. per RBAC oder Azure Policy) lassen
+      sich auf jeder dieser Ebenen zuweisen und werden nach unten vererbt:
+    </p>
+    <svg viewBox="0 0 560 220" style="width:100%; max-width:480px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="180" y="10" width="200" height="34" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="280" y="32" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Tenant (Entra ID)</text>
+
+      <line x1="280" y1="44" x2="280" y2="58" stroke="#9aa5b8" stroke-width="1.5"/>
+      <rect x="150" y="58" width="260" height="34" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="280" y="80" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Management Group</text>
+
+      <line x1="280" y1="92" x2="180" y2="106" stroke="#4f8cff" stroke-width="1.5"/>
+      <line x1="280" y1="92" x2="380" y2="106" stroke="#4f8cff" stroke-width="1.5"/>
+      <rect x="90" y="106" width="180" height="34" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="180" y="128" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Abonnement A</text>
+      <rect x="290" y="106" width="180" height="34" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="380" y="128" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Abonnement B</text>
+
+      <line x1="180" y1="140" x2="180" y2="154" stroke="#29d3c1" stroke-width="1.5"/>
+      <rect x="100" y="154" width="160" height="30" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="180" y="174" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Ressourcengruppe</text>
+
+      <line x1="180" y1="184" x2="180" y2="196" stroke="#ffb648" stroke-width="1.5"/>
+      <text x="180" y="210" fill="#9aa5b8" font-size="9" text-anchor="middle" font-family="Consolas, monospace">VM, Datenbank, Storage, ...</text>
+    </svg>
+    <p class="text-muted">
+      Eine Berechtigung, die z.B. auf Ebene der Management Group vergeben
+      wird, gilt automatisch für alle darunterliegenden Abonnements,
+      Ressourcengruppen und Ressourcen - praktisch für konzernweite
+      Richtlinien, aber riskant bei einer versehentlich zu weit oben
+      vergebenen Berechtigung.
+    </p>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">Rollenmodell (RBAC) &amp; Least Privilege</h3>
     <p>
       Statt jedem Admin die volle <strong>Global Administrator</strong>-Rolle
@@ -109,13 +198,84 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">Privileged Identity Management (PIM)</h3>
+    <h3 class="mt-0">
+      Privileged Identity Management (PIM)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Schlüsseltresor beim Empfang: statt jedem Mitarbeiter
+          dauerhaft einen eigenen Schlüssel zum Serverraum zu geben, muss
+          er sich den Schlüssel bei Bedarf kurz aus dem Tresor holen - und
+          gibt ihn danach wieder zurück.
+        </div>
+      </details>
+    </h3>
     <p>
       Statt hochprivilegierte Rollen dauerhaft zuzuweisen, aktiviert PIM sie
       nur bei Bedarf, zeitlich begrenzt (Just-in-Time) - oft zusätzlich mit
       Genehmigung und MFA-Pflicht. Ein dauerhaft aktives Admin-Konto ist ein
       bevorzugtes Angriffsziel; mit PIM existiert die erhöhte Berechtigung
       nur so lange, wie sie tatsächlich gebraucht wird.
+    </p>
+
+    <h4>
+      PIM for Groups
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Statt für jede einzelne Person jede einzelne Rolle separat per
+          PIM zu verwalten, wird EINE Gruppe für alle betroffenen Rollen
+          eingerichtet - neue Teammitglieder werden einfach nur noch zu
+          dieser einen Gruppe hinzugefügt und erhalten dadurch automatisch
+          Zugriff auf das gesamte Rollenpaket.
+        </div>
+      </details>
+    </h4>
+    <p>
+      Statt PIM für jede Rolle einzeln pro Person einzurichten, lässt sich
+      eine ganze <strong>Gruppe</strong> für PIM konfigurieren: Mitglieder
+      sind für die Gruppe "eligible" (berechtigt, aber nicht automatisch
+      aktiv) und aktivieren bei Bedarf ihre Mitgliedschaft zeitlich begrenzt
+      - die Gruppe selbst kann dabei mit mehreren Rollen gleichzeitig
+      verknüpft sein (z.B. eine Entra-ID-Rolle UND eine Azure-Rolle für
+      mehrere Abonnements).
+    </p>
+    <svg viewBox="0 0 560 190" style="width:100%; max-width:520px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
+      <text x="60" y="16" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Berechtigte Mitglieder</text>
+      <rect x="10" y="24" width="100" height="26" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="60" y="41" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Person A</text>
+      <rect x="10" y="56" width="100" height="26" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="60" y="73" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Person B</text>
+      <rect x="10" y="88" width="100" height="26" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="60" y="105" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Person C</text>
+
+      <line x1="110" y1="37" x2="215" y2="80" stroke="#9aa5b8" stroke-width="1.5"/>
+      <line x1="110" y1="69" x2="215" y2="80" stroke="#9aa5b8" stroke-width="1.5"/>
+      <line x1="110" y1="101" x2="215" y2="80" stroke="#9aa5b8" stroke-width="1.5"/>
+
+      <rect x="215" y="60" width="130" height="40" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="280" y="78" fill="#e6e9f0" font-size="10" text-anchor="middle" font-family="Consolas, monospace">PIM for Groups</text>
+      <text x="280" y="93" fill="#9aa5b8" font-size="8" text-anchor="middle" font-family="Consolas, monospace">(zeitlich begrenzt aktiviert)</text>
+
+      <line x1="345" y1="70" x2="440" y2="30" stroke="#29d3c1" stroke-width="1.5"/>
+      <line x1="345" y1="76" x2="440" y2="70" stroke="#29d3c1" stroke-width="1.5"/>
+      <line x1="345" y1="84" x2="440" y2="110" stroke="#29d3c1" stroke-width="1.5"/>
+      <line x1="345" y1="90" x2="440" y2="150" stroke="#29d3c1" stroke-width="1.5"/>
+
+      <rect x="440" y="16" width="110" height="28" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="495" y="34" fill="#e6e9f0" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Entra-ID-Rolle</text>
+      <rect x="440" y="56" width="110" height="28" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="495" y="74" fill="#e6e9f0" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Azure-Rolle (Abo 1)</text>
+      <rect x="440" y="96" width="110" height="28" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="495" y="114" fill="#e6e9f0" font-size="9" text-anchor="middle" font-family="Consolas, monospace">Azure-Rolle (Abo 2)</text>
+      <rect x="440" y="136" width="110" height="28" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="1.5"/>
+      <text x="495" y="154" fill="#e6e9f0" font-size="9" text-anchor="middle" font-family="Consolas, monospace">weitere Rolle ...</text>
+    </svg>
+    <p class="text-muted">
+      Vorteil in der Praxis: kommt ein neues Teammitglied dazu, das genau
+      dieses Rollenpaket braucht, reicht die Aufnahme in EINE Gruppe -
+      ohne PIM for Groups müsste jede der Rollen einzeln pro Person
+      eingerichtet werden.
     </p>
   </div>
 

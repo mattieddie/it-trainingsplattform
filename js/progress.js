@@ -190,7 +190,7 @@ const MODULES = [
     title: "Cloud-Grundlagen",
     icon: "\u{1F329}\u{FE0F}",
     description:
-      "RBAC-Rollenwahl nach Least Privilege und M365-Lizenzierung - Azure/M365-Grundlagen für den Alltag.",
+      "IaaS/PaaS/SaaS-Verantwortungsmodell, Azure-Ressourcenhierarchie, RBAC nach Least Privilege, PIM & PIM for Groups, M365-Lizenzierung.",
     href: "modules/cloud-basics.html",
     prereqs: ["intuneentra"],
   },
@@ -484,4 +484,35 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".nav-dropdown.open").forEach((d) => d.classList.remove("open"));
     }
   });
+});
+
+/**
+ * Info-Toggle-Popover ("i"-Punkte): nur ein Popover gleichzeitig offen,
+ * schliesst bei Klick ausserhalb oder Escape. Das eigentliche Ein-/Ausblenden
+ * übernimmt weiterhin das native <details>-Element, hier kommt nur das
+ * "andere schliessen" / "aussen schliessen" dazu.
+ */
+document.addEventListener(
+  "toggle",
+  (e) => {
+    if (!(e.target instanceof HTMLElement) || !e.target.matches("details.info-toggle")) return;
+    if (e.target.open) {
+      document.querySelectorAll("details.info-toggle[open]").forEach((d) => {
+        if (d !== e.target) d.open = false;
+      });
+    }
+  },
+  true
+);
+
+document.addEventListener("click", (e) => {
+  document.querySelectorAll("details.info-toggle[open]").forEach((d) => {
+    if (!d.contains(e.target)) d.open = false;
+  });
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    document.querySelectorAll("details.info-toggle[open]").forEach((d) => (d.open = false));
+  }
 });

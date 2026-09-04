@@ -854,10 +854,11 @@ details#sample-solution[open] summary {
   margin-bottom: 6px;
 }
 
-/* ---------- Info-Toggle (i-Punkt) ---------- */
+/* ---------- Info-Toggle (i-Punkt, als Popover statt Inline-Aufklappen) ---------- */
 
 details.info-toggle {
   display: inline-block;
+  position: relative;
   vertical-align: middle;
   margin-left: 6px;
 }
@@ -866,9 +867,10 @@ details.info-toggle summary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  min-width: 20px;
   height: 20px;
-  border-radius: 50%;
+  padding: 0 7px;
+  border-radius: 999px;
   background: rgba(79, 140, 255, 0.15);
   color: var(--primary);
   font-size: 0.78rem;
@@ -876,6 +878,7 @@ details.info-toggle summary {
   cursor: pointer;
   list-style: none;
   user-select: none;
+  white-space: nowrap;
 }
 
 details.info-toggle summary::-webkit-details-marker {
@@ -890,19 +893,27 @@ details.info-toggle summary:hover {
   background: rgba(79, 140, 255, 0.28);
 }
 
+/* position:absolute nimmt den Inhalt aus dem normalen Textfluss heraus -
+   das Öffnen verschiebt dadurch keine umliegenden Elemente mehr. */
 details.info-toggle .info-content {
-  display: block;
-  margin: 8px 0 4px;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  margin: 0;
   padding: 10px 14px;
-  background: var(--bg-input);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-left: 3px solid var(--primary);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   font-size: 0.88rem;
   font-weight: 400;
   color: var(--text-muted);
-  max-width: 420px;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 40px));
   white-space: normal;
+  text-align: left;
 }
 
 h3 details.info-toggle,
@@ -913,6 +924,19 @@ h4 details.info-toggle {
 h3 details.info-toggle .info-content,
 h4 details.info-toggle .info-content {
   font-family: var(--font);
+}
+
+@media (max-width: 480px) {
+  details.info-toggle .info-content {
+    position: fixed;
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: none;
+    z-index: 200;
+  }
 }
 
 /* ---------- Test results (firewall packets) ---------- */

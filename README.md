@@ -44,7 +44,7 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 **3. Verzeichnisdienste & Identität** - On-Premises bis Cloud
 - **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus Troubleshooting-Tickets.
 - **Intune / Entra ID / Hybrid** ([modules/intune-entra.html](modules/intune-entra.html)) - Join-Typen, Conditional Access (Kontrast zum Firewall-Modul: kumulative statt erste-Regel-Logik), Gerätemanagement-Quiz, Tickets.
-- **Cloud-Grundlagen** ([modules/cloud-basics.html](modules/cloud-basics.html)) - RBAC/Least Privilege, PIM, M365-Lizenzierung.
+- **Cloud-Grundlagen** ([modules/cloud-basics.html](modules/cloud-basics.html)) - Shared-Responsibility-Modell (On-Premises/IaaS/PaaS/SaaS), Azure-Ressourcenhierarchie, RBAC/Least Privilege, PIM &amp; PIM for Groups, M365-Lizenzierung.
 
 **4. Softwareverteilung & Paketierung** - Apps bereitstellen
 - **Software-Paketierung** ([modules/packaging.html](modules/packaging.html)) - MSI-Aufbau (Tabellen/Dateistreams), Transforms (MST), stille CMD-Installation, Repackaging-Workflow (RayPack: RCP/RPP).
