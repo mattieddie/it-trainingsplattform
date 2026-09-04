@@ -126,6 +126,209 @@
 
   <div class="card">
     <h3 class="mt-0">
+      RAID: mehrere Festplatten zu einem Verbund kombinieren
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          RAID (Redundant Array of Independent Disks) fasst mehrere
+          physische Platten zu EINEM logischen Laufwerk zusammen -
+          je nach Level entweder für mehr Tempo, mehr Ausfallsicherheit,
+          oder beides. Wichtig: RAID schützt nur vor dem Ausfall EINZELNER
+          Platten, nicht vor Löschung, Verschlüsselung durch Ransomware
+          oder einem zerstörten Gehäuse.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ein einzelner Datenträger ist ein Single Point of Failure - fällt er
+      aus, sind alle darauf liegenden Daten weg. RAID kombiniert daher
+      mehrere physische Platten zu einem Verbund. Je nach Level (0, 1, 5, 6
+      oder 10) unterscheidet sich, ob dabei Tempo, Redundanz oder beides im
+      Vordergrund steht.
+    </p>
+
+    <h4>RAID 0 - Striping (reine Geschwindigkeit, keine Redundanz)</h4>
+    <p class="text-muted" style="margin-bottom:4px;">Daten werden blockweise auf beide Platten verteilt (gestriped) - es gibt keine Kopie irgendwo.</p>
+    <svg viewBox="0 0 620 300" style="width:100%; max-width:620px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="160" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Festplatte 1</text>
+      <rect x="70" y="50" width="180" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="90" y="65" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="160" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="90" y="115" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="160" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+      <rect x="90" y="165" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="160" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A5</text>
+
+      <text x="460" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Festplatte 2</text>
+      <rect x="370" y="50" width="180" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="390" y="65" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="460" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="390" y="115" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="460" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A4</text>
+      <rect x="390" y="165" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="460" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A6</text>
+
+      <text x="310" y="255" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kapazität: Platte 1 + Platte 2 (100% nutzbar)</text>
+      <text x="310" y="275" fill="#ffb648" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">⚠ Ausfall einer Platte = ALLE Daten verloren</text>
+    </svg>
+
+    <h4>RAID 1 - Mirroring (1:1-Spiegelung)</h4>
+    <p class="text-muted" style="margin-bottom:4px;">Jede Platte erhält eine vollständig identische Kopie aller Daten.</p>
+    <svg viewBox="0 0 620 300" style="width:100%; max-width:620px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="160" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Festplatte 1</text>
+      <rect x="70" y="50" width="180" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="90" y="65" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="160" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="90" y="115" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="160" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="90" y="165" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="160" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+
+      <text x="460" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Festplatte 2</text>
+      <rect x="370" y="50" width="180" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="390" y="65" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="460" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="390" y="115" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="460" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="390" y="165" width="140" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="460" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+
+      <text x="310" y="255" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kapazität: nur 1 Platte nutzbar (Rest ist 1:1-Kopie)</text>
+      <text x="310" y="275" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">✓ Eine Platte darf komplett ausfallen - Daten bleiben erhalten</text>
+    </svg>
+
+    <h4>RAID 5 - Striping mit verteilter Parität (mind. 3 Platten)</h4>
+    <p class="text-muted" style="margin-bottom:4px;">Daten UND ein Prüfsummenblock (Parität) werden über alle Platten verteilt - die Parität wandert von Stripe zu Stripe.</p>
+    <svg viewBox="0 0 650 300" style="width:100%; max-width:650px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="110" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 1</text>
+      <rect x="30" y="50" width="160" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="40" y="65" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="110" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="40" y="115" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="110" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+      <rect x="40" y="165" width="140" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="110" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">P3</text>
+
+      <text x="310" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 2</text>
+      <rect x="230" y="50" width="160" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="240" y="65" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="310" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="240" y="115" width="140" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="310" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">P2</text>
+      <rect x="240" y="165" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="310" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A5</text>
+
+      <text x="510" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 3</text>
+      <rect x="430" y="50" width="160" height="170" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="440" y="65" width="140" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="510" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">P1</text>
+      <rect x="440" y="115" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="510" y="141" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A4</text>
+      <rect x="440" y="165" width="140" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="510" y="191" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A6</text>
+
+      <text x="325" y="255" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kapazität: 2 von 3 Platten nutzbar (Parität P rotiert)</text>
+      <text x="325" y="275" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">✓ Eine Platte darf ausfallen - wird rekonstruiert</text>
+    </svg>
+
+    <h4>RAID 6 - wie RAID 5, aber mit doppelter Parität (mind. 4 Platten)</h4>
+    <p class="text-muted" style="margin-bottom:4px;">Zwei unabhängige Paritätsblöcke (P und Q) pro Stripe statt einem - kostet mehr Kapazität, verkraftet dafür zwei gleichzeitige Ausfälle.</p>
+    <svg viewBox="0 0 720 260" style="width:100%; max-width:720px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="95" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 1</text>
+      <rect x="20" y="50" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="30" y="65" width="130" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="95" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="30" y="117" width="130" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="95" y="143" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">P2</text>
+
+      <text x="270" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 2</text>
+      <rect x="195" y="50" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="205" y="65" width="130" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="270" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="205" y="117" width="130" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="270" y="143" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Q2</text>
+
+      <text x="445" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 3</text>
+      <rect x="370" y="50" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="380" y="65" width="130" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="445" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">P1</text>
+      <rect x="380" y="117" width="130" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="445" y="143" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+
+      <text x="620" y="36" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 4</text>
+      <rect x="545" y="50" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="555" y="65" width="130" height="42" rx="6" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="620" y="91" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Q1</text>
+      <rect x="555" y="117" width="130" height="42" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="620" y="143" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A4</text>
+
+      <text x="360" y="210" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kapazität: 2 von 4 Platten nutzbar (P + Q pro Stripe)</text>
+      <text x="360" y="230" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">✓✓ Zwei Platten dürfen GLEICHZEITIG ausfallen</text>
+    </svg>
+
+    <h4>RAID 10 - gespiegelte Paare, zusätzlich gestriped (mind. 4 Platten)</h4>
+    <p class="text-muted" style="margin-bottom:4px;">Je zwei Platten bilden ein Spiegel-Paar (wie RAID 1), die Daten werden zusätzlich über die Paare verteilt (wie RAID 0) - Tempo UND Redundanz.</p>
+    <svg viewBox="0 0 720 300" style="width:100%; max-width:720px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <text x="182" y="26" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Spiegel-Paar A</text>
+      <line x1="20" y1="38" x2="345" y2="38" stroke="#9aa5b8" stroke-width="1.5"/>
+      <text x="532" y="26" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Spiegel-Paar B</text>
+      <line x1="370" y1="38" x2="695" y2="38" stroke="#9aa5b8" stroke-width="1.5"/>
+
+      <text x="95" y="60" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 1</text>
+      <rect x="20" y="70" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="30" y="85" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="95" y="111" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="30" y="137" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="95" y="163" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+
+      <text x="270" y="60" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 2</text>
+      <rect x="195" y="70" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="205" y="85" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="270" y="111" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A1</text>
+      <rect x="205" y="137" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="270" y="163" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A3</text>
+
+      <text x="445" y="60" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 3</text>
+      <rect x="370" y="70" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="380" y="85" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="445" y="111" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="380" y="137" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="445" y="163" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A4</text>
+
+      <text x="620" y="60" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Platte 4</text>
+      <rect x="545" y="70" width="150" height="130" rx="10" fill="none" stroke="#9aa5b8" stroke-width="2"/>
+      <rect x="555" y="85" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="620" y="111" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A2</text>
+      <rect x="555" y="137" width="130" height="42" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="620" y="163" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">A4</text>
+
+      <text x="360" y="235" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Kapazität: 50% (wie RAID 1, zusätzlich gestriped)</text>
+      <text x="360" y="255" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">✓ Mehrfachausfall ok, ausser BEIDE Platten eines Paars</text>
+    </svg>
+
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Level</th><th>Prinzip</th><th>Min. Platten</th><th>Nutzkapazität</th><th>Ausfallsicherheit</th>
+      </tr>
+      <tr><td><strong>RAID 0</strong></td><td>Striping</td><td>2</td><td>100%</td><td>Keine</td></tr>
+      <tr><td><strong>RAID 1</strong></td><td>Mirroring</td><td>2</td><td>50%</td><td>1 Platte</td></tr>
+      <tr><td><strong>RAID 5</strong></td><td>Striping + 1 Parität</td><td>3</td><td>(n-1)/n</td><td>1 Platte</td></tr>
+      <tr><td><strong>RAID 6</strong></td><td>Striping + 2 Paritäten</td><td>4</td><td>(n-2)/n</td><td>2 Platten</td></tr>
+      <tr><td><strong>RAID 10</strong></td><td>Mirroring + Striping</td><td>4</td><td>50%</td><td>mehrere, ausser beide Platten eines Paars</td></tr>
+    </table>
+
+    <div class="alert warning" style="margin-top:16px;">
+      <strong>⚠ RAID ersetzt kein Backup!</strong> RAID schützt nur vor dem
+      Ausfall einzelner Platten. Löscht jemand versehentlich eine Datei,
+      verschlüsselt Ransomware den Datenbestand, oder brennt/stiehlt man
+      das ganze Gehäuse - trifft das ALLE Platten des Verbunds gleichzeitig,
+      egal welches RAID-Level. Genau deshalb braucht es zusätzlich die
+      3-2-1-Regel von oben, mit einer wirklich getrennten (offsite) Kopie.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
       Backup-Typen im Vergleich
       <details class="info-toggle">
         <summary>i</summary>

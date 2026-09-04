@@ -256,22 +256,253 @@
     </p>
     <table style="width:100%; border-collapse: collapse;">
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
-        <th style="padding:4px 0;">Endung</th><th>Typ</th><th>Bedeutung</th>
+        <th style="padding:4px 0;">Endung</th><th>Typ</th><th>Bedeutung</th><th>Beispiel</th>
       </tr>
-      <tr><td class="mono">.exe</td><td>Ausführbare Datei</td><td>Eigenständiges Programm, wird direkt gestartet</td></tr>
-      <tr><td class="mono">.msi</td><td>Installationspaket</td><td>Installiert/deinstalliert Software über den Windows Installer (siehe Modul <a href="packaging.html">Paketierung</a>)</td></tr>
-      <tr><td class="mono">.dll</td><td>Bibliothek (Dynamic Link Library)</td><td>Enthält Programmcode/Funktionen, die sich mehrere Programme teilen - kein eigenständig startbares Programm</td></tr>
-      <tr><td class="mono">.bat / .cmd</td><td>Batch-Skript</td><td>Einfache Befehlsfolge für die Eingabeaufforderung (CMD)</td></tr>
-      <tr><td class="mono">.ps1</td><td>PowerShell-Skript</td><td>Skript für die PowerShell - deutlich mächtiger als Batch (siehe Modul <a href="scripting.html">Skripting</a>)</td></tr>
-      <tr><td class="mono">.vbs</td><td>VBScript</td><td>Älteres Skriptformat, u.a. für Logon-Skripte - heute meist durch PowerShell ersetzt</td></tr>
-      <tr><td class="mono">.ini</td><td>Konfigurationsdatei</td><td>Einstellungen im Klartext-Format, gegliedert in Abschnitte mit Schlüssel=Wert-Paaren</td></tr>
-      <tr><td class="mono">.cfg / .xml / .json</td><td>Konfiguration/Daten</td><td>Weitere gängige Formate für Einstellungen oder strukturierte Daten</td></tr>
-      <tr><td class="mono">.reg</td><td>Registry-Datei</td><td>Import-/Exportformat für Registry-Einträge (siehe Windows-Registry oben)</td></tr>
-      <tr><td class="mono">.inf</td><td>Setup-Informationsdatei</td><td>Beschreibt z.B., wie ein Treiber installiert werden soll</td></tr>
-      <tr><td class="mono">.log</td><td>Protokolldatei</td><td>Textbasierte Aufzeichnung von Ereignissen, z.B. Installationsprotokolle</td></tr>
-      <tr><td class="mono">.txt</td><td>Reiner Text</td><td>Unformatierter Text ohne Schriftformatierung</td></tr>
-      <tr><td class="mono">.docx</td><td>Word-Dokument</td><td>Formatiertes Textdokument (Microsoft Word)</td></tr>
-      <tr><td class="mono">.zip</td><td>Archiv</td><td>Komprimiert mehrere Dateien platzsparend in eine einzige Datei</td></tr>
+      <tr>
+        <td class="mono">.exe</td><td>Ausführbare Datei</td><td>Eigenständiges Programm, wird direkt gestartet</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Binärdatei - kein lesbarer Text. Öffnet man sie trotzdem in
+              einem Texteditor, sieht man grösstenteils kryptische Zeichen,
+              aber ganz am Anfang stehen immer die zwei lesbaren Buchstaben
+              <strong>"MZ"</strong> (Kennung des DOS-EXE-Headers):
+              <pre>MZ......@.......
+........!..L.!
+This program cannot
+be run in DOS mode.</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.msi</td><td>Installationspaket</td><td>Installiert/deinstalliert Software über den Windows Installer (siehe Modul <a href="packaging.html">Paketierung</a>)</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Auch binär - technisch eine strukturierte Speicherdatei (OLE
+              Compound Storage), keine ZIP und kein Klartext. Intern aber
+              wie eine kleine Datenbank aus Tabellen (Datei-, Komponenten-,
+              Registry-Tabelle usw.) organisiert - genau die Tabellen, die
+              im Modul Paketierung im Editor Orca zu sehen sind.
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.dll</td><td>Bibliothek (Dynamic Link Library)</td><td>Enthält Programmcode/Funktionen, die sich mehrere Programme teilen - kein eigenständig startbares Programm</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Technisch fast identisch zu einer EXE - gleiches Dateiformat,
+              gleicher "MZ"-Header am Anfang. Der Unterschied steckt nur in
+              einem internen Flag: "kann nicht alleine gestartet werden,
+              nur von anderen Programmen bei Bedarf nachgeladen werden".
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.bat / .cmd</td><td>Batch-Skript</td><td>Einfache Befehlsfolge für die Eingabeaufforderung (CMD)</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text, Zeile für Zeile wie manuell in CMD eingetippt:
+              <pre>@echo off
+echo Kopiere Config...
+copy "\\srv\share\app.cfg" "C:\App\"
+if %errorlevel% neq 0 (
+  echo Fehler!
+  exit /b 1
+)
+echo Fertig.</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.ps1</td><td>PowerShell-Skript</td><td>Skript für die PowerShell - deutlich mächtiger als Batch (siehe Modul <a href="scripting.html">Skripting</a>)</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Ebenfalls reiner Text, aber mit echten Objekten/Cmdlets statt
+              einzelner Befehlszeilen:
+              <pre>param(
+  [string]$Pfad = "C:\Logs"
+)
+Get-ChildItem $Pfad -Filter *.log |
+  Where-Object {
+    $_.LastWriteTime -lt (Get-Date).AddDays(-30)
+  } |
+  Remove-Item -Force</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.vbs</td><td>VBScript</td><td>Älteres Skriptformat, u.a. für Logon-Skripte - heute meist durch PowerShell ersetzt</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text in VBScript-Syntax:
+              <pre>Set objShell = _
+  CreateObject("WScript.Shell")
+objShell.Run "notepad.exe"
+WScript.Echo "Gestartet"</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.ini</td><td>Konfigurationsdatei</td><td>Einstellungen im Klartext-Format, gegliedert in Abschnitte mit Schlüssel=Wert-Paaren</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text mit Abschnitten in eckigen Klammern:
+              <pre>[General]
+Version=3.2.1
+Language=de-DE
+
+[Server]
+Host=192.168.1.10
+Port=8443
+UseSSL=true</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.cfg / .xml / .json</td><td>Konfiguration/Daten</td><td>Weitere gängige Formate für Einstellungen oder strukturierte Daten</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Je nach Programm entweder simpel wie .ini, oder strukturiert
+              mit Verschachtelung:
+              <pre>&lt;settings&gt;
+  &lt;server host="10.0.0.5"
+          port="443"/&gt;
+&lt;/settings&gt;
+
+{ "server": {
+    "host": "10.0.0.5",
+    "port": 443 } }</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.reg</td><td>Registry-Datei</td><td>Import-/Exportformat für Registry-Einträge (siehe Windows-Registry oben)</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text mit fester Kopfzeile, danach Schlüsselpfad und
+              Werte:
+              <pre>Windows Registry Editor
+Version 5.00
+
+[HKEY_CURRENT_USER\Software\
+Firma\App]
+"AutoStart"=dword:00000001
+"Pfad"="C:\\Program Files\\App"</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.inf</td><td>Setup-Informationsdatei</td><td>Beschreibt z.B., wie ein Treiber installiert werden soll</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text, ähnlich einer INI, aber mit festgelegten
+              Abschnittsnamen, die der Windows-Setup-Prozess versteht:
+              <pre>[Version]
+Signature="$WINDOWS NT$"
+Class=Printer
+
+[Manufacturer]
+%Hersteller%=Modelle
+
+[Modelle]
+%Drucker%=Treiberinstall</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.log</td><td>Protokolldatei</td><td>Textbasierte Aufzeichnung von Ereignissen, z.B. Installationsprotokolle</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Reiner Text, meist eine Zeile pro Ereignis mit Zeitstempel:
+              <pre>09:12:03 INFO  Setup gestartet
+09:12:05 INFO  Datei kopiert:
+              app.exe
+09:12:07 ERROR Zugriff verweigert:
+              config.ini</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.txt</td><td>Reiner Text</td><td>Unformatierter Text ohne Schriftformatierung</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Genau das, was drinsteht - ohne jede Formatierung, Schriftart
+              oder Struktur:
+              <pre>Einkaufsliste:
+- Netzwerkkabel
+- USB-Stick
+- Ersatzmaus</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.docx</td><td>Word-Dokument</td><td>Formatiertes Textdokument (Microsoft Word)</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Auch binär auf den ersten Blick - technisch aber ein ZIP-Archiv
+              voller XML-Dateien. Benennt man sie in .zip um, lässt sie sich
+              entpacken. Der eigentliche Text steckt z.B. in
+              <code>word/document.xml</code>:
+              <pre>&lt;w:p&gt;
+  &lt;w:r&gt;
+    &lt;w:t&gt;Hallo Welt&lt;/w:t&gt;
+  &lt;/w:r&gt;
+&lt;/w:p&gt;</pre>
+            </div>
+          </details>
+        </td>
+      </tr>
+      <tr>
+        <td class="mono">.zip</td><td>Archiv</td><td>Komprimiert mehrere Dateien platzsparend in eine einzige Datei</td>
+        <td>
+          <details class="info-toggle">
+            <summary>i</summary>
+            <div class="info-content">
+              Binär, aber mit klarer Struktur: die komprimierten Dateien
+              hintereinander, plus ein "Inhaltsverzeichnis" (Central
+              Directory) am Ende der Datei, das sagt, wo jede einzelne
+              Datei beginnt und wie sie heisst.
+            </div>
+          </details>
+        </td>
+      </tr>
     </table>
   </div>
 
