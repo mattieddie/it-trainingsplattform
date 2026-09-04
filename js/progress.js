@@ -694,3 +694,34 @@ function initMatchPuzzle(containerEl, pairs, onProgress) {
     rightCol.appendChild(el);
   });
 }
+
+/**
+ * Rendert am Ende einer Modulseite einen Link zum nächsten Modul in der
+ * Baukästen-Reihenfolge (Array-Reihenfolge von MODULES). Beim letzten
+ * Modul gibt es stattdessen einen Link zurück zur Übersicht.
+ */
+function renderNextModuleNav(containerEl, currentModuleId) {
+  if (!containerEl) return;
+  const idx = MODULES.findIndex((m) => m.id === currentModuleId);
+  if (idx === -1) return;
+  const next = MODULES[idx + 1];
+
+  if (next) {
+    const nextHref = next.href.replace(/^modules\//, "");
+    containerEl.innerHTML = `
+      <p class="text-muted next-module-label">Weiter geht's mit:</p>
+      <a class="btn primary" href="${nextHref}">${next.icon} ${next.title} →</a>
+    `;
+  } else {
+    containerEl.innerHTML = `
+      <p class="text-muted next-module-label">Das war das letzte Modul im Lernpfad.</p>
+      <a class="btn primary" href="../index.html">🏁 Zurück zur Übersicht</a>
+    `;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof MODULE_ID !== "undefined") {
+    renderNextModuleNav(document.getElementById("next-module-nav"), MODULE_ID);
+  }
+});

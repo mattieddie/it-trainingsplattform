@@ -400,6 +400,14 @@
       <li><strong>RPO (Recovery Point Objective)</strong>: wie viel Datenverlust (in Zeit gemessen) ist maximal akzeptabel? Wird durch die Backup-Frequenz bestimmt.</li>
       <li><strong>RTO (Recovery Time Objective)</strong>: wie lange darf die Wiederherstellung nach einem Ausfall maximal dauern? Wird durch die Restore-Geschwindigkeit bestimmt.</li>
     </ul>
+
+    <img class="doc-image" src="../images/rpo-vs-rto-explained-business-continuity-diagram.png" alt="Zeitstrahl: von 'Normal operation' bis zum Event/Disaster liegt die RPO-Phase (Data Loss - abhängig vom letzten Backup-Zeitpunkt), vom Event/Disaster bis 'Resume normal operation' liegt die RTO-Phase (Recovery Time - abhängig von der Wiederherstellungsdauer)" style="max-width:600px;" />
+    <p class="text-muted">
+      Der Zeitstrahl macht den Unterschied greifbar: RPO schaut RÜCKWÄRTS
+      vom Ausfallzeitpunkt (wie viel geht verloren, seit wann?), RTO schaut
+      VORWÄRTS (wie lange bis alles wieder läuft?).
+    </p>
+
     <p class="text-muted">Faustregel GFS-Rotation (Grandfather-Father-Son): tägliche Sicherungen kurz aufbewahren, wöchentliche länger, monatliche am längsten - so bleibt der Speicherbedarf überschaubar, während trotzdem lange zurückliegende Wiederherstellungspunkte verfügbar bleiben.</p>
   </div>
 
@@ -442,6 +450,7 @@
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
   </div>
+  <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
 <footer class="site-footer">

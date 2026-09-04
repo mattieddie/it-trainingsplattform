@@ -251,6 +251,17 @@ pre {
   max-width: 70ch;
 }
 
+.next-module-nav {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.next-module-nav .next-module-label {
+  margin-bottom: 10px;
+}
+
 footer.site-footer {
   text-align: center;
   color: var(--text-muted);
