@@ -245,6 +245,20 @@ const MODULES = [
   },
 ];
 
+/**
+ * Fisher-Yates-Shuffle. Wird von allen Modulen genutzt, um die Reihenfolge
+ * der Antwortoptionen bei jedem Rendern neu zu mischen - die richtige
+ * Antwort soll nicht immer an derselben Position stehen.
+ */
+function shuffleArray(array) {
+  const arr = array.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 function loadProgress() {
   try {
     const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);

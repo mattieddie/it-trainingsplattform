@@ -136,9 +136,12 @@ function renderQuiz() {
       <div class="feedback-box hidden" data-explanation="${qIdx}"></div>
     `;
     const list = wrapper.querySelector(".option-list");
-    q.options.forEach((opt, oIdx) => {
+    const shuffledOrder = shuffleArray(q.options.map((_, i) => i));
+    shuffledOrder.forEach((oIdx) => {
+      const opt = q.options[oIdx];
       const item = document.createElement("div");
       item.className = "option-item";
+      item.dataset.origIndex = String(oIdx);
       item.innerHTML = `<input type="radio" name="pkq${qIdx}" /> <span>${opt}</span>`;
       item.addEventListener("click", () => {
         list.querySelectorAll(".option-item").forEach((el) => {
@@ -163,7 +166,8 @@ function checkQuiz() {
     const chosenIndex = list.dataset.chosenIndex;
     const q = QUIZ[qIdx];
     const items = list.querySelectorAll(".option-item");
-    items.forEach((item, oIdx) => {
+    items.forEach((item) => {
+      const oIdx = Number(item.dataset.origIndex);
       if (oIdx === q.correctIndex) item.classList.add("correct-answer");
       if (chosenIndex !== undefined && Number(chosenIndex) === oIdx && oIdx !== q.correctIndex) {
         item.classList.add("wrong-answer");

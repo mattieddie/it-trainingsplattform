@@ -512,12 +512,13 @@ function renderScenario() {
   document.getElementById("question-text").textContent = currentScenario.question;
   const optionsEl = document.getElementById("options-list");
   optionsEl.innerHTML = "";
-  currentScenario.options.forEach((opt, idx) => {
+  const shuffledOrder = shuffleArray(currentScenario.options.map((_, i) => i));
+  shuffledOrder.forEach((idx) => {
+    const opt = currentScenario.options[idx];
     const item = document.createElement("div");
     item.className = "option-item";
-    item.innerHTML = `<input type="radio" name="option" ${
-      idx === 0 ? "" : ""
-    } /> <span>${opt}</span>`;
+    item.dataset.origIndex = String(idx);
+    item.innerHTML = `<input type="radio" name="option" /> <span>${opt}</span>`;
     item.addEventListener("click", () => selectOption(idx));
     optionsEl.appendChild(item);
   });
@@ -551,9 +552,10 @@ function escapeHtml(str) {
 
 function selectOption(idx) {
   selectedOptionIndex = idx;
-  document.querySelectorAll(".option-item").forEach((el, i) => {
-    el.classList.toggle("selected", i === idx);
-    el.querySelector("input").checked = i === idx;
+  document.querySelectorAll(".option-item").forEach((el) => {
+    const match = Number(el.dataset.origIndex) === idx;
+    el.classList.toggle("selected", match);
+    el.querySelector("input").checked = match;
   });
 }
 
@@ -561,9 +563,10 @@ function checkAnswer() {
   if (selectedOptionIndex === null || !currentScenario) return;
 
   const correct = selectedOptionIndex === currentScenario.correctIndex;
-  document.querySelectorAll(".option-item").forEach((el, i) => {
-    if (i === currentScenario.correctIndex) el.classList.add("correct-answer");
-    if (i === selectedOptionIndex && !correct) el.classList.add("wrong-answer");
+  document.querySelectorAll(".option-item").forEach((el) => {
+    const origIdx = Number(el.dataset.origIndex);
+    if (origIdx === currentScenario.correctIndex) el.classList.add("correct-answer");
+    if (origIdx === selectedOptionIndex && !correct) el.classList.add("wrong-answer");
   });
 
   const fb = document.getElementById("feedback");

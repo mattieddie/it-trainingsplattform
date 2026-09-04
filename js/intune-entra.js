@@ -401,9 +401,12 @@ function renderQuizGeneric(quizArray, containerId, namePrefix) {
       <div class="feedback-box hidden" data-explanation="${qIdx}"></div>
     `;
     const list = wrapper.querySelector(".option-list");
-    q.options.forEach((opt, oIdx) => {
+    const shuffledOrder = shuffleArray(q.options.map((_, i) => i));
+    shuffledOrder.forEach((oIdx) => {
+      const opt = q.options[oIdx];
       const item = document.createElement("div");
       item.className = "option-item";
+      item.dataset.origIndex = String(oIdx);
       item.innerHTML = `<input type="radio" name="${namePrefix}${qIdx}" /> <span>${opt}</span>`;
       item.addEventListener("click", () => {
         list.querySelectorAll(".option-item").forEach((el) => {
@@ -428,7 +431,8 @@ function checkQuizGeneric(quizArray, containerId, feedbackId, flagName) {
     const chosenIndex = list.dataset.chosenIndex;
     const q = quizArray[qIdx];
     const items = list.querySelectorAll(".option-item");
-    items.forEach((item, oIdx) => {
+    items.forEach((item) => {
+      const oIdx = Number(item.dataset.origIndex);
       if (oIdx === q.correctIndex) item.classList.add("correct-answer");
       if (chosenIndex !== undefined && Number(chosenIndex) === oIdx && oIdx !== q.correctIndex) {
         item.classList.add("wrong-answer");
@@ -516,9 +520,12 @@ function renderTicket() {
   document.getElementById("ticket-question-text").textContent = currentTicket.question;
   const optionsEl = document.getElementById("ticket-options-list");
   optionsEl.innerHTML = "";
-  currentTicket.options.forEach((opt, idx) => {
+  const shuffledOrder = shuffleArray(currentTicket.options.map((_, i) => i));
+  shuffledOrder.forEach((idx) => {
+    const opt = currentTicket.options[idx];
     const item = document.createElement("div");
     item.className = "option-item";
+    item.dataset.origIndex = String(idx);
     item.innerHTML = `<input type="radio" name="ticket-option" /> <span>${opt}</span>`;
     item.addEventListener("click", () => selectTicketOption(idx));
     optionsEl.appendChild(item);
@@ -547,9 +554,10 @@ function toggleToolOutput(tool) {
 
 function selectTicketOption(idx) {
   selectedOptionIndex = idx;
-  document.querySelectorAll("#ticket-options-list .option-item").forEach((el, i) => {
-    el.classList.toggle("selected", i === idx);
-    el.querySelector("input").checked = i === idx;
+  document.querySelectorAll("#ticket-options-list .option-item").forEach((el) => {
+    const match = Number(el.dataset.origIndex) === idx;
+    el.classList.toggle("selected", match);
+    el.querySelector("input").checked = match;
   });
 }
 
@@ -557,9 +565,10 @@ function checkTicketAnswer() {
   if (selectedOptionIndex === null || !currentTicket) return;
 
   const correct = selectedOptionIndex === currentTicket.correctIndex;
-  document.querySelectorAll("#ticket-options-list .option-item").forEach((el, i) => {
-    if (i === currentTicket.correctIndex) el.classList.add("correct-answer");
-    if (i === selectedOptionIndex && !correct) el.classList.add("wrong-answer");
+  document.querySelectorAll("#ticket-options-list .option-item").forEach((el) => {
+    const origIdx = Number(el.dataset.origIndex);
+    if (origIdx === currentTicket.correctIndex) el.classList.add("correct-answer");
+    if (origIdx === selectedOptionIndex && !correct) el.classList.add("wrong-answer");
   });
 
   const fb = document.getElementById("ticket-feedback");
