@@ -5,14 +5,16 @@ von Computer-Hardware und Windows über Netzwerke und Security bis Cloud.
 Kein Server, keine echte Datenbank, kein Login - alles läuft im Browser,
 Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
-> **Hinweis:** Dies ist eine Lernsimulation. Insbesondere das
-> SQL-Injection-Modul arbeitet ausschliesslich gegen ein hartcodiertes
-> JavaScript-Array im Browser. Es gibt keine echte Datenbank, keinen
-> echten Server und keine echte Codeausführung von Nutzereingaben.
+> **Hinweis:** Dies ist eine Lernsimulation. Sowohl das
+> SQL-Injection-Modul als auch die SQL-Sandbox im Datenbanken-Modul
+> arbeiten ausschliesslich gegen hartcodierte JavaScript-Daten im
+> Browser (bzw. einen selbstgebauten, stark vereinfachten
+> SELECT-Interpreter). Es gibt keine echte Datenbank, keinen echten
+> Server und keine echte Codeausführung von Nutzereingaben.
 
 ## Module
 
-Die 23 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 28 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -33,6 +35,7 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
 - **Virtualisierung & Docker-Grundlagen** ([modules/containers.html](modules/containers.html)) - Typ-1- vs. Typ-2-Hypervisor, virtuelle Maschinen vs. Container, Docker-Kernbegriffe (Image/Container/Dockerfile/Registry), inkl. Reihenfolge-Puzzle "vom Code zum laufenden Container".
 - **Datenbanken** ([modules/databases.html](modules/databases.html)) - Datenbanktypen (relational/Key-Value/Document/Wide-Column/Graph), relationale Beziehungen (1:1/1:N/M:N), ER-Diagramme/Kardinalitäten, Verbindungen zu Datenbanken (Ports/Treiber), inkl. offen einsehbarer Testdatenbank mit eigener SQL-Sandbox (selbstgebauter, stark vereinfachter SELECT-Interpreter) und 9 Abfrage-Aufgaben.
+- **PC-Troubleshooting** ([modules/pc-troubleshooting.html](modules/pc-troubleshooting.html)) - 8 Helpdesk-Tickets rund um PC-/Windows-Grundlagen (Boot-Probleme, Spooler, Speicherplatz, Malware, defektes RAM, Firmware-Bugs, gebrochene Domain-Vertrauensstellung).
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
 - **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell, inkl. OSI-Reihenfolge-Puzzle und Port-↔-Dienst-Zuordnungsspiel.
@@ -47,9 +50,11 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus Troubleshooting-Tickets.
 - **Intune / Entra ID / Hybrid** ([modules/intune-entra.html](modules/intune-entra.html)) - Join-Typen, Conditional Access (Kontrast zum Firewall-Modul: kumulative statt erste-Regel-Logik), Gerätemanagement-Quiz, Tickets.
 - **Cloud-Grundlagen** ([modules/cloud-basics.html](modules/cloud-basics.html)) - Shared-Responsibility-Modell (On-Premises/IaaS/PaaS/SaaS), Azure-Ressourcenhierarchie, RBAC/Least Privilege, PIM &amp; PIM for Groups, M365-Lizenzierung.
+- **Identitäts-Troubleshooting** ([modules/identity-troubleshooting.html](modules/identity-troubleshooting.html)) - 8 Helpdesk-Tickets rund um Active Directory, Entra ID, Intune und Hybrid-Identität (Kontosperrung, GPO-Sicherheitsfilterung, Connect-Sync, Conditional Access, Lizenzdienste, Password-Hash-Sync-Delay, dynamische Gruppen, Compliance-Richtlinien).
 
 **4. Softwareverteilung & Paketierung** - Apps bereitstellen
 - **Software-Paketierung** ([modules/packaging.html](modules/packaging.html)) - MSI-Aufbau (Tabellen/Dateistreams), Transforms (MST), stille CMD-Installation, Repackaging-Workflow (RayPack: RCP/RPP).
+- **Paketierungs-Troubleshooting** ([modules/packaging-troubleshooting.html](modules/packaging-troubleshooting.html)) - 8 Helpdesk-Tickets rund um MSI/Silent-Install-Fehler, GPO-Softwareverteilung, Repackaging-Abhängigkeiten, Intune-Erkennungsregeln und fehlende UpgradeCodes.
 
 **5. IT-Security** - Angriffsflächen erkennen und absichern
 - **Verschlüsselung** ([modules/encryption.html](modules/encryption.html)) - symmetrisch/asymmetrisch/hybrid, Diffie-Hellman-Schlüsselaustausch, Hashing & Salt, inkl. zweier Live-Demos mit echtem SHA-256 (Web-Crypto-API im Browser).
@@ -57,9 +62,11 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html)) - Regeln umsortieren, selbst entwerfen, Multi-Firewall-Topologien (DMZ/VPN).
 - **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html)) - sandboxed, unsicher vs. parametrisiert, drei Herausforderungen.
 - **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Erklärung von `include:_spf.google.com`, interaktivem Schritt-für-Schritt-Vergleich ("welche Prüfung schaut welchen Mail-Teil an"), Alignment-Konzept und komplettem Beispiel-Ablauf mit vier Szenarien.
+- **Security-Troubleshooting** ([modules/security-troubleshooting.html](modules/security-troubleshooting.html)) - 8 Security-Tickets rund um Phishing/CEO-Fraud, abgelaufene Zertifikate, Firewall-Regelreihenfolge, SQL-Injection, fehlendes DMARC, falsch verwendete Schlüssel, kompromittierte Server und VPN-Session-Timeouts.
 
 **6. Betrieb & Notfallvorsorge**
-- **Backup & Recovery** ([modules/backup.html](modules/backup.html)) - 3-2-1-Regel (inkl. Diagramm), generierte RPO/RTO-Rechenaufgaben, Ransomware-Szenario-Quiz.
+- **Backup & Recovery** ([modules/backup.html](modules/backup.html)) - 3-2-1-Regel (inkl. Diagramm), RAID-Level 0/1/5/6/10 mit Diagrammen, generierte RPO/RTO-Rechenaufgaben (inkl. Diagramm), Ransomware-Szenario-Quiz.
+- **Backup-Troubleshooting** ([modules/backup-troubleshooting.html](modules/backup-troubleshooting.html)) - 8 Betriebs-Tickets rund um volle Backup-Ziele, lange inkrementelle Restores, degradierte RAID-Arrays, unbemerkt beschädigte Sicherungen, Ransomware auf dem Backup-Ziel, RTO-Verletzungen und fehlgeschlagene GFS-Läufe.
 
 **7. Abschlussprüfung**
 - **Abschlussprüfung** ([modules/final-exam.html](modules/final-exam.html)) - 12 Fragen, zufällig gezogen aus einem grösseren Pool pro Baukasten (moderater Schwierigkeitsgrad, Anwendungsszenarien statt reinem Auswendiglernen), Antwortoptionen zusätzlich gemischt - bei jedem Versuch eine andere Zusammenstellung. Enthält einen deutlichen Hinweis, die Prüfung ohne KI-Hilfsmittel zu bearbeiten (technisch auf einer rein clientseitigen Seite nicht erzwingbar, siehe Hinweis im Modul selbst).
@@ -100,11 +107,17 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── dns-dhcp-basics.js
 │   ├── certificates.js
 │   ├── containers.js
-│   └── database.js
+│   ├── database.js
+│   ├── pc-troubleshooting.js
+│   ├── identity-troubleshooting.js
+│   ├── packaging-troubleshooting.js
+│   ├── security-troubleshooting.js
+│   └── backup-troubleshooting.js
 ├── modules/
 │   ├── computer-basics.html
 │   ├── containers.html
 │   ├── databases.html
+│   ├── pc-troubleshooting.html
 │   ├── network-packets.html
 │   ├── network-devices.html
 │   ├── vpn-basics.html
@@ -119,11 +132,15 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── terminal.html
 │   ├── active-directory.html
 │   ├── intune-entra.html
+│   ├── identity-troubleshooting.html
 │   ├── backup.html
+│   ├── backup-troubleshooting.html
 │   ├── email-security.html
+│   ├── security-troubleshooting.html
 │   ├── scripting.html
 │   ├── cloud-basics.html
 │   ├── packaging.html
+│   ├── packaging-troubleshooting.html
 │   └── final-exam.html
 ├── images/                      Eingebundene Screenshots/Diagramme (siehe unten)
 └── .nojekyll                    Verhindert GitHub-Pages-Jekyll-Verarbeitung
@@ -256,6 +273,15 @@ Datenbanken-Modul (`js/database.js`) - ein selbstgebauter, stark
 vereinfachter SELECT-Interpreter (SELECT/WHERE/JOIN/ORDER BY) gegen eine
 offen einsehbare Testdatenbank, inkl. 9 Abfrage-Aufgaben, deren Ergebnis
 automatisch gegen eine hinterlegte Referenz-Query geprüft wird.
+
+Ausserdem gibt es den generischen **Ticket-Troubleshooting-Trainer**
+(`initTicketTrainer`, ursprünglich für DHCP/DNS gebaut, jetzt
+wiederverwendbar): ein Helpdesk-Ticket mit Symptom, anforderbaren
+Diagnose-Tool-Ausgaben und einer Multiple-Choice-Ursachenfrage. Jedes
+Modul-JS liefert nur noch eigene SCENARIOS-Daten. Im Einsatz bei:
+DHCP/DNS-Troubleshooting (Netzwerk), PC-Troubleshooting (IT-Grundlagen),
+Identitäts-Troubleshooting (Verzeichnisdienste), Paketierungs-, Security-
+und Backup-Troubleshooting.
 
 ## Technische Hinweise
 

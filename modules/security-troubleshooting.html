@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Abschlussprüfung &ndash; IT-Trainer</title>
+<title>Security-Troubleshooting &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
 <link rel="stylesheet" href="../css/style.css" />
 </head>
@@ -19,9 +19,9 @@
         <a href="computer-basics.html">Computer-Grundlagen</a>
         <a href="terminal.html">CMD/PowerShell</a>
         <a href="scripting.html">Skripting</a>
-      <a href="containers.html">Virtualisierung &amp; Docker</a>
-      <a href="databases.html">Datenbanken</a>
-      <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
+        <a href="containers.html">Virtualisierung &amp; Docker</a>
+        <a href="databases.html">Datenbanken</a>
+        <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
       </div>
     </div>
     <div class="nav-dropdown">
@@ -53,14 +53,14 @@
       </div>
     </div>
     <div class="nav-dropdown">
-      <button type="button" class="nav-dropdown-toggle">IT-Security</button>
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Security</button>
       <div class="nav-dropdown-menu">
         <a href="encryption.html">Verschlüsselung</a>
         <a href="certificates.html">Zertifikate &amp; PKI</a>
         <a href="firewall.html">Firewall</a>
         <a href="sqli.html">SQL-Injection</a>
         <a href="email-security.html">E-Mail-Sicherheit</a>
-        <a href="security-troubleshooting.html">Security-Troubleshooting</a>
+        <a href="security-troubleshooting.html" class="active">Security-Troubleshooting</a>
       </div>
     </div>
     <div class="nav-dropdown">
@@ -71,62 +71,77 @@
       </div>
     </div>
     <div class="nav-dropdown">
-      <button type="button" class="nav-dropdown-toggle active-group">Abschlussprüfung</button>
+      <button type="button" class="nav-dropdown-toggle">Abschlussprüfung</button>
       <div class="nav-dropdown-menu">
-        <a href="final-exam.html" class="active">Abschlussprüfung</a>
+        <a href="final-exam.html">Abschlussprüfung</a>
       </div>
     </div>
   </nav>
 </header>
 
 <main class="container">
-  <h1 class="page-title">🎓 Abschlussprüfung</h1>
+  <h1 class="page-title">
+    🕵️ Security-Troubleshooting
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Faustregel beim Troubleshooting: erst Fakten sammeln (Tools
+        anfordern), dann erst eine Diagnose wählen - nicht umgekehrt. Ein
+        einzelnes Symptom kann viele verschiedene Ursachen haben.
+      </div>
+    </details>
+  </h1>
   <p class="page-subtitle">
-    12 zufällig ausgewählte Fragen aus allen 6 Baukästen, moderater
-    Schwierigkeitsgrad, mit gemischten Antwortoptionen - bei jedem Versuch
-    eine andere Zusammenstellung.
+    Du bekommst ein Security-Ticket rund um Phishing, Zertifikate,
+    Firewall-Regeln, SQL-Injection, E-Mail-Sicherheit und Verschlüsselung.
+    Fordere passende Diagnose-Ausgaben an und wähle danach die
+    wahrscheinlichste Ursache.
   </p>
 
-  <div class="alert warning">
-    <strong>⚠️ Bevor du startest</strong>
-    Bearbeite diese Prüfung <strong>ohne KI-Chatbots (ChatGPT, Claude,
-    Copilot etc.), ohne Suchmaschinen, ohne Notizen und ohne Hilfe von
-    anderen Personen</strong>. Diese Prüfung soll DEIN eigenes Wissen
-    prüfen - lässt du dir die Antworten von einer KI geben, betrügst du
-    nur dich selbst und weisst am Ende nicht, was du wirklich kannst.
-    <br /><br />
-    Ehrlich gesagt: eine rein clientseitige Lernwebseite kann KI-Nutzung
-    technisch nicht zuverlässig verhindern - der komplette Fragenkatalog
-    liegt für jeden einsehbar im Quellcode, und Tricks wie versteckte
-    Zeichen würden von seriösen KI-Assistenten ohnehin ignoriert und
-    liessen sich leicht umgehen (z.B. per Screenshot). Die Ehrlichkeit
-    liegt bei dir - das Einzige, das hier wirklich zählt, ist dass DU am
-    Ende weisst, was du kannst.
-  </div>
+  <p class="text-muted" style="margin-top:-8px; margin-bottom:20px;">
+    📺 Vertiefung: <a href="https://www.youtube.com/watch?v=cagJPv3-OmU" target="_blank" rel="noopener">Incident Response: Was ist bei einem akuten IT-Sicherheitsvorfall zu tun?</a> (SySS Pentest TV)
+  </p>
 
   <div id="completion-banner" class="alert success hidden">
-    <strong>Bestanden!</strong> Alle Fragen dieses Versuchs richtig gelöst.
+    <strong>Modul abgeschlossen!</strong> Du hast alle Szenarien mindestens einmal richtig gelöst.
   </div>
 
   <div class="card">
-    <h3 class="mt-0">
-      🔎 Prüfung
-      <details class="info-toggle">
-        <summary>i</summary>
-        <div class="info-content">
-          Die Fragen werden aus einem grösseren Pool pro Baukasten zufällig
-          gezogen und die Antwortoptionen zusätzlich gemischt - dadurch ist
-          kein Versuch wie der andere, und ein einmal notierter
-          "Lösungsschlüssel" hilft beim nächsten Versuch nicht mehr weiter.
-        </div>
-      </details>
-    </h3>
-    <div id="quiz-container"></div>
-    <div class="btn-row">
-      <button id="check-quiz-btn" class="btn primary">Prüfung auswerten</button>
-      <button id="new-attempt-btn" class="btn small ghost" type="button">Neuer Versuch (neue Fragen)</button>
+    <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <div class="field" style="margin:0; min-width:180px;">
+        <label for="difficulty-select">Schwierigkeit</label>
+        <select id="difficulty-select">
+          <option value="all">Alle</option>
+          <option value="easy">Leicht</option>
+          <option value="medium">Mittel</option>
+          <option value="hard">Schwer</option>
+        </select>
+      </div>
+      <span id="score-pill" class="score-pill">Gelöst: 0 / 8</span>
     </div>
-    <div id="quiz-feedback" class="feedback-box hidden"></div>
+
+    <div class="ticket" style="margin-top:16px;">
+      <div class="ticket-meta">Security-Ticket</div>
+      <span id="ticket-difficulty-badge" class="badge difficulty-easy" style="margin-bottom:6px;">Leicht</span>
+      <h3 id="ticket-title" style="margin:4px 0 8px;"></h3>
+      <p id="ticket-symptom" style="margin:0;"></p>
+    </div>
+
+    <h4>Diagnose-Tools anfordern</h4>
+    <div id="tool-buttons" class="tool-buttons"></div>
+    <div id="tool-outputs"></div>
+
+    <hr class="sep" />
+
+    <h4 id="question-text"></h4>
+    <div id="options-list" class="option-list"></div>
+
+    <div class="btn-row">
+      <button id="check-btn" class="btn primary">Antwort prüfen</button>
+      <button id="next-btn" class="btn ghost">Nächstes Ticket</button>
+    </div>
+
+    <div id="feedback" class="feedback-box hidden"></div>
   </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
@@ -136,6 +151,6 @@
 </footer>
 
 <script src="../js/progress.js"></script>
-<script src="../js/final-exam.js"></script>
+<script src="../js/security-troubleshooting.js"></script>
 </body>
 </html>

@@ -110,6 +110,16 @@ const MODULES = [
     href: "modules/databases.html",
     prereqs: ["computerbasics"],
   },
+  {
+    id: "pctickets",
+    track: "grundlagen",
+    title: "PC-Troubleshooting",
+    icon: "\u{1F6E0}\u{FE0F}",
+    description:
+      "Helpdesk-Tickets rund um PC-/Windows-Grundlagen: Diagnose-Tools anfordern und die wahrscheinlichste Ursache bestimmen.",
+    href: "modules/pc-troubleshooting.html",
+    prereqs: ["computerbasics", "terminal"],
+  },
 
   // ---- Baukasten: Netzwerk-Grundlagen ----
   {
@@ -214,6 +224,16 @@ const MODULES = [
     href: "modules/cloud-basics.html",
     prereqs: ["intuneentra"],
   },
+  {
+    id: "identitytickets",
+    track: "identitaet",
+    title: "Identitäts-Troubleshooting",
+    icon: "\u{1FAAA}",
+    description:
+      "Helpdesk-Tickets rund um Active Directory, Entra ID, Intune und Hybrid-Identität: Diagnose-Tools anfordern und die wahrscheinlichste Ursache bestimmen.",
+    href: "modules/identity-troubleshooting.html",
+    prereqs: ["activedirectory", "intuneentra"],
+  },
 
   // ---- Baukasten: Softwareverteilung & Paketierung ----
   {
@@ -225,6 +245,16 @@ const MODULES = [
       "MSI-Aufbau (Tabellen, Dateistreams), Transforms (MST), stille Installation per CMD und Repackaging (RayPack: RCP/RPP).",
     href: "modules/packaging.html",
     prereqs: ["scripting"],
+  },
+  {
+    id: "packagingtickets",
+    track: "paketierung",
+    title: "Paketierungs-Troubleshooting",
+    icon: "\u{1F4E5}",
+    description:
+      "Helpdesk-Tickets rund um Software-Paketierung/-Verteilung (MSI/MST, Silent-Install, GPO, Repackaging, Intune): Diagnose-Tools anfordern und die wahrscheinlichste Ursache bestimmen.",
+    href: "modules/packaging-troubleshooting.html",
+    prereqs: ["packaging"],
   },
 
   // ---- Baukasten: IT-Security ----
@@ -278,6 +308,16 @@ const MODULES = [
     href: "modules/email-security.html",
     prereqs: ["dnsconcepts", "encryption"],
   },
+  {
+    id: "securitytickets",
+    track: "security",
+    title: "Security-Troubleshooting",
+    icon: "\u{1F575}\u{FE0F}",
+    description:
+      "Security-Tickets rund um Phishing, Zertifikate, Firewall-Regeln, SQL-Injection und Verschlüsselung: Diagnose-Tools anfordern und die wahrscheinlichste Ursache bestimmen.",
+    href: "modules/security-troubleshooting.html",
+    prereqs: ["firewall", "sqli", "emailsecurity"],
+  },
 
   // ---- Baukasten: Betrieb & Notfallvorsorge ----
   {
@@ -289,6 +329,16 @@ const MODULES = [
       "3-2-1-Regel, RPO/RTO-Rechenaufgaben und Ransomware-Szenarien: welche Backup-Kopie überlebt einen Angriff?",
     href: "modules/backup.html",
     prereqs: ["activedirectory"],
+  },
+  {
+    id: "backuptickets",
+    track: "betrieb",
+    title: "Backup-Troubleshooting",
+    icon: "\u{1F6A8}",
+    description:
+      "Betriebs-Tickets rund um Backup, RAID und Notfallvorsorge: Diagnose-Tools anfordern und die wahrscheinlichste Ursache bestimmen.",
+    href: "modules/backup-troubleshooting.html",
+    prereqs: ["backup"],
   },
 
   // ---- Baukasten: Abschlussprüfung ----
@@ -735,3 +785,167 @@ document.addEventListener("DOMContentLoaded", () => {
     renderNextModuleNav(document.getElementById("next-module-nav"), MODULE_ID);
   }
 });
+
+/**
+ * Generischer Ticket-Troubleshooting-Trainer: ein Helpdesk-Ticket mit
+ * Symptom, anforderbaren Diagnose-Tool-Ausgaben und einer Multiple-Choice-
+ * Ursachenfrage. Erwartet dieselben Element-IDs wie das ursprüngliche
+ * DHCP/DNS-Troubleshooting-Modul (siehe modules/dhcp-dns.html), damit sich
+ * neue Ticket-Module 1:1 nach demselben HTML-Muster bauen lassen - das
+ * jeweilige Modul-JS liefert nur noch die SCENARIOS-Daten und ruft
+ * initTicketTrainer(SCENARIOS, MODULE_ID) auf.
+ */
+function initTicketTrainer(scenarios, moduleId) {
+  let currentScenario = null;
+  let selectedOptionIndex = null;
+
+  function loadSolvedSet() {
+    const progress = loadProgress();
+    const stored = progress[moduleId];
+    return stored && Array.isArray(stored.solved) ? stored.solved : [];
+  }
+
+  function getSelectedDifficulty() {
+    const sel = document.getElementById("difficulty-select");
+    return sel ? sel.value : "all";
+  }
+
+  function scenariosForDifficulty(difficulty) {
+    if (difficulty === "all") return scenarios;
+    return scenarios.filter((s) => s.difficulty === difficulty);
+  }
+
+  function pickScenario() {
+    const difficulty = getSelectedDifficulty();
+    const candidates = scenariosForDifficulty(difficulty);
+    const solved = loadSolvedSet();
+    const unsolved = candidates.filter((s) => !solved.includes(s.id));
+    const pool = unsolved.length > 0 ? unsolved : candidates;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function toggleToolOutput(tool) {
+    const outputsEl = document.getElementById("tool-outputs");
+    const existing = document.getElementById("output-" + tool.id);
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    const block = document.createElement("div");
+    block.id = "output-" + tool.id;
+    block.innerHTML = `<div class="terminal-output">${escapeHtml(tool.output)}</div>`;
+    outputsEl.appendChild(block);
+  }
+
+  function selectOption(idx) {
+    selectedOptionIndex = idx;
+    document.querySelectorAll(".option-item").forEach((el) => {
+      const match = Number(el.dataset.origIndex) === idx;
+      el.classList.toggle("selected", match);
+      el.querySelector("input").checked = match;
+    });
+  }
+
+  function updateScorePill() {
+    const solved = loadSolvedSet();
+    const pill = document.getElementById("score-pill");
+    if (pill) pill.textContent = `Gelöst: ${solved.length} / ${scenarios.length} Szenarien`;
+  }
+
+  function markSolved(id) {
+    const progress = loadProgress();
+    const stored = progress[moduleId] || {};
+    const solved = new Set(stored.solved || []);
+    solved.add(id);
+    const solvedArr = Array.from(solved);
+    const status = solvedArr.length >= scenarios.length ? "done" : "progress";
+    const wasDone = stored.status === "done";
+    setModuleStatus(moduleId, status, { solved: solvedArr });
+    updateScorePill();
+    if (status === "done" && !wasDone) {
+      document.getElementById("completion-banner").classList.remove("hidden");
+    }
+  }
+
+  function checkAnswer() {
+    if (selectedOptionIndex === null || !currentScenario) return;
+
+    const correct = selectedOptionIndex === currentScenario.correctIndex;
+    document.querySelectorAll(".option-item").forEach((el) => {
+      const origIdx = Number(el.dataset.origIndex);
+      if (origIdx === currentScenario.correctIndex) el.classList.add("correct-answer");
+      if (origIdx === selectedOptionIndex && !correct) el.classList.add("wrong-answer");
+    });
+
+    const fb = document.getElementById("feedback");
+    fb.classList.remove("hidden");
+    fb.className = "feedback-box " + (correct ? "correct" : "incorrect");
+    fb.innerHTML = `<strong>${correct ? "Richtig!" : "Nicht ganz."}</strong> ${currentScenario.explanation}`;
+
+    document.getElementById("check-btn").disabled = true;
+
+    if (correct) markSolved(currentScenario.id);
+  }
+
+  function renderScenario() {
+    currentScenario = pickScenario();
+    selectedOptionIndex = null;
+
+    document.getElementById("ticket-title").textContent = currentScenario.title;
+    document.getElementById("ticket-symptom").textContent = currentScenario.symptom;
+
+    const diffBadge = document.getElementById("ticket-difficulty-badge");
+    diffBadge.textContent = { easy: "Leicht", medium: "Mittel", hard: "Schwer" }[currentScenario.difficulty];
+    diffBadge.className = "badge difficulty-" + currentScenario.difficulty;
+
+    const toolsEl = document.getElementById("tool-buttons");
+    toolsEl.innerHTML = "";
+    currentScenario.tools.forEach((tool) => {
+      const btn = document.createElement("button");
+      btn.className = "btn small";
+      btn.textContent = "▶ " + tool.label;
+      btn.addEventListener("click", () => toggleToolOutput(tool));
+      toolsEl.appendChild(btn);
+    });
+
+    document.getElementById("tool-outputs").innerHTML = "";
+
+    document.getElementById("question-text").textContent = currentScenario.question;
+    const optionsEl = document.getElementById("options-list");
+    optionsEl.innerHTML = "";
+    const shuffledOrder = shuffleArray(currentScenario.options.map((_, i) => i));
+    shuffledOrder.forEach((idx) => {
+      const opt = currentScenario.options[idx];
+      const item = document.createElement("div");
+      item.className = "option-item";
+      item.dataset.origIndex = String(idx);
+      item.innerHTML = `<input type="radio" name="option" /> <span>${opt}</span>`;
+      item.addEventListener("click", () => selectOption(idx));
+      optionsEl.appendChild(item);
+    });
+
+    const fb = document.getElementById("feedback");
+    fb.className = "feedback-box hidden";
+    fb.innerHTML = "";
+    document.getElementById("check-btn").disabled = false;
+
+    updateScorePill();
+  }
+
+  markModuleStarted(moduleId);
+  if (getModuleStatus(moduleId) === "done") {
+    document.getElementById("completion-banner").classList.remove("hidden");
+  }
+  renderScenario();
+
+  document.getElementById("check-btn").addEventListener("click", checkAnswer);
+  document.getElementById("next-btn").addEventListener("click", renderScenario);
+  const diffSelect = document.getElementById("difficulty-select");
+  if (diffSelect) diffSelect.addEventListener("change", renderScenario);
+}
