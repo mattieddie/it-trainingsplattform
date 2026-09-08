@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DNS-Auflösung &amp; DHCP-Prozess &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260910" />
+<link rel="stylesheet" href="../css/style.css?v=20260911" />
 </head>
 <body>
 
@@ -245,6 +245,99 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 1: eigene DHCP/DNS-Testumgebung mit VMs aufbauen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Die Animationen oben zeigen, WAS passiert - hier baust du eine
+          echte, kleine Testumgebung, um es selbst zu erleben: dein
+          eigener DHCP-Server vergibt eine IP an einen echten (virtuellen)
+          Client, dein eigener DNS-Server beantwortet eine echte Anfrage.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Anders als die Animationen oben läuft dieses Labor NICHT im Browser -
+      du baust es in echten virtuellen Maschinen (VMs) nach. Rechne mit
+      ca. 1-2 Stunden (inkl. Downloads/Installation). Ziel: ein
+      Windows-Client bezieht seine IP-Konfiguration automatisch von einem
+      selbst eingerichteten DHCP-Server und löst einen selbst angelegten
+      DNS-Eintrag auf. Dieser Server wird im Modul
+      <a href="active-directory.html">Active Directory</a> im Praxislabor
+      Teil 2 direkt weiterverwendet (Beförderung zum Domänencontroller) -
+      also nicht gleich wieder löschen.
+    </p>
+
+    <h4>Voraussetzungen &amp; Downloads</h4>
+    <ul class="lab-downloads">
+      <li>
+        <span class="lab-download-tag">Virtualisierung</span>
+        <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">Oracle VirtualBox</a>
+        (kostenlos, Windows/Mac/Linux) - oder alternativ das in Windows
+        Pro/Enterprise/Education bereits eingebaute
+        <a href="https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/Install-Hyper-V?tabs=powershell&amp;pivots=windows" target="_blank" rel="noopener">Hyper-V</a>
+        (nur aktivieren, kein Download nötig).
+      </li>
+      <li>
+        <span class="lab-download-tag">Server-ISO</span>
+        <a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025" target="_blank" rel="noopener">Windows Server 2025 Evaluation</a>
+        (Microsoft Evaluation Center, 180 Tage kostenlos nutzbar - nur für
+        Test-/Lernzwecke, nicht produktiv einsetzen).
+      </li>
+      <li>
+        <span class="lab-download-tag">Client-ISO</span>
+        <a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-11-enterprise" target="_blank" rel="noopener">Windows 11 Enterprise Evaluation</a>
+        (ebenfalls Microsoft Evaluation Center, 90 Tage kostenlos).
+      </li>
+      <li>
+        <span class="lab-download-tag">Hardware</span>
+        Empfehlung: mind. 8 GB RAM frei (beide VMs gleichzeitig laufen
+        lassen), ca. 60 GB freier Speicherplatz.
+      </li>
+    </ul>
+
+    <h4>Schritt für Schritt</h4>
+    <ol>
+      <li>Virtualisierungssoftware installieren, zwei VMs anlegen: <strong>SRV01</strong> (Windows Server) und <strong>CL01</strong> (Windows 11).</li>
+      <li>
+        Beide VMs an dasselbe <strong>interne/private Netzwerk</strong> hängen
+        (VirtualBox: "Internes Netzwerk", Hyper-V: "Privater virtueller Switch") -
+        <strong>nicht</strong> NAT, sonst sehen sich die beiden VMs gegenseitig nicht.
+      </li>
+      <li>Windows Server auf SRV01 installieren (Desktop Experience, nicht Server Core - einfacher für den Einstieg), danach eine statische IP setzen, z.B. <code class="mono">192.168.100.10 / 255.255.255.0</code>.</li>
+      <li>
+        Auf SRV01 die <strong>DHCP-Serverrolle</strong> installieren und einen Scope einrichten
+        (z.B. Bereich <code class="mono">192.168.100.100</code>-<code class="mono">200</code>,
+        Gateway und DNS-Server = die eigene Server-IP <code class="mono">192.168.100.10</code>).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/windows-server/networking/technologies/dhcp/quickstart-install-configure-dhcp-server?tabs=powershell" target="_blank" rel="noopener">Microsoft Learn - DHCP-Server installieren</a></span>
+      </li>
+      <li>
+        Auf SRV01 die <strong>DNS-Serverrolle</strong> installieren, eine Forward-Lookup-Zone
+        anlegen (z.B. <code class="mono">lab.local</code>) und einen Testeintrag ergänzen
+        (z.B. A-Record <code class="mono">server1.lab.local</code> → <code class="mono">192.168.100.10</code>).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/windows-server/networking/dns/quickstart-install-configure-dns-server?tabs=powershell" target="_blank" rel="noopener">Microsoft Learn - DNS-Server installieren</a></span>
+      </li>
+      <li>Windows 11 auf CL01 installieren (Netzwerkadapter bleibt auf Standard = "IP automatisch beziehen").</li>
+      <li>
+        Verifizieren auf CL01:
+        <code class="mono">ipconfig /all</code> (hat der Client eine Adresse aus 192.168.100.100-200 samt korrektem DNS-Server bekommen?)
+        und <code class="mono">nslookup server1.lab.local</code> (löst der eigene DNS-Server den Testeintrag auf?).
+      </li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Wenn's nicht klappt:</strong> die häufigsten Ursachen sind
+      das falsche Netzwerk (NAT statt intern/privat gewählt) oder eine
+      aktive Windows-Firewall-Regel, die DHCP-Broadcasts blockiert - beides
+      lässt sich gut mit dem Wissen aus dem Modul
+      <a href="dhcp-dns.html">DHCP/DNS-Troubleshooting</a> eingrenzen.
+    </div>
+
+    <h4>Fortschritt</h4>
+    <div id="dhcp-lab-checklist"></div>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">🧩 Puzzle: DORA-Schritte in die richtige Reihenfolge bringen</h3>
     <div id="dora-reorder-container"></div>
     <div class="btn-row">
@@ -275,7 +368,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260910"></script>
+<script src="../js/progress.js?v=20260911"></script>
 <script src="../js/dns-dhcp-basics.js"></script>
 </body>
 </html>

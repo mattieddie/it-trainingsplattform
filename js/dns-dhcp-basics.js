@@ -576,6 +576,17 @@ document.addEventListener("DOMContentLoaded", () => {
   wireDhcpAnimation();
   wireDnsAnimation();
 
+  initLabChecklist(document.getElementById("dhcp-lab-checklist"), "lab_dhcpdns_checklist", [
+    "Virtualisierungssoftware installiert (VirtualBox oder Hyper-V aktiviert)",
+    "SRV01 und CL01 angelegt, beide im selben internen/privaten Netzwerk",
+    "Windows Server auf SRV01 installiert, statische IP gesetzt",
+    "DHCP-Rolle installiert und Scope eingerichtet",
+    "DNS-Rolle installiert, Zone + Testeintrag angelegt",
+    "Windows 11 auf CL01 installiert",
+    "ipconfig /all: Client hat IP aus dem eigenen DHCP-Scope bekommen",
+    "nslookup: eigener DNS-Testeintrag wird korrekt aufgelöst",
+  ]);
+
   const doraPuzzle = initReorderPuzzle(document.getElementById("dora-reorder-container"), DORA_STEPS);
   document.getElementById("check-dora-order-btn").addEventListener("click", () => {
     const allCorrect = doraPuzzle.check();

@@ -425,6 +425,41 @@ function protoAnimRenderDetail(containerEl, fields) {
  * Rendert Prüf-Badges (z.B. SPF/DKIM/DMARC, Zertifikatsprüfung).
  * checks: [{label, state: "pending"|"pass"|"fail"}, ...].
  */
+/**
+ * Persönliche Checkliste für Praxislabore (echte VM-Übungen ausserhalb der
+ * Seite) - der Haken-Status wird pro Item unter storageKey in localStorage
+ * gemerkt. Anders als der Modul-Fortschritt (setModuleStatus) kann hier
+ * nichts automatisch geprüft werden - die Übung findet ausserhalb des
+ * Browsers statt, daher rein manuelles Abhaken.
+ */
+function initLabChecklist(containerEl, storageKey, items) {
+  let checked = {};
+  try {
+    checked = JSON.parse(localStorage.getItem(storageKey) || "{}");
+  } catch (e) {
+    checked = {};
+  }
+
+  containerEl.innerHTML = items
+    .map((item, i) => {
+      const isChecked = !!checked[i];
+      return `
+      <label class="lab-checklist-item${isChecked ? " checked" : ""}">
+        <input type="checkbox" data-idx="${i}" ${isChecked ? "checked" : ""} />
+        <span>${item}</span>
+      </label>`;
+    })
+    .join("");
+
+  containerEl.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.addEventListener("change", () => {
+      checked[cb.dataset.idx] = cb.checked;
+      localStorage.setItem(storageKey, JSON.stringify(checked));
+      cb.closest(".lab-checklist-item").classList.toggle("checked", cb.checked);
+    });
+  });
+}
+
 function protoAnimRenderChecks(containerEl, checks) {
   if (!checks || checks.length === 0) {
     containerEl.innerHTML = "";

@@ -538,6 +538,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("completion-banner").classList.remove("hidden");
   }
 
+  initLabChecklist(document.getElementById("ad-lab-checklist"), "lab_ad_checklist", [
+    "AD DS-Rolle auf SRV01 installiert",
+    "SRV01 zum Domänencontroller heraufgestuft (Domäne lab.local), DSRM-Kennwort notiert",
+    "CL01 ist der Domäne lab.local beigetreten",
+    "Anmeldung auf CL01 mit Domänenkonto funktioniert (whoami /fqdn geprüft)",
+    "CL01 erscheint in Active Directory-Benutzer und -Computer unter Computers",
+    "(Optional) Testbenutzer + OU mit eigener GPO angelegt",
+  ]);
+
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
 

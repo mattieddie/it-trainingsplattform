@@ -1584,3 +1584,57 @@ hr.sep {
   margin: 0 0 12px;
 }
 
+/* ---------- Praxislabor: Downloads & Checkliste ---------- */
+
+.lab-downloads {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lab-downloads li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+}
+
+.lab-downloads .lab-download-tag {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.lab-checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.lab-checklist-item input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.lab-checklist-item.checked span {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
