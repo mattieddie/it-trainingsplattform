@@ -84,8 +84,10 @@
   <h1 class="page-title">🔗 API-Grundlagen</h1>
   <p class="page-subtitle">
     Was eine API ist, REST-Prinzipien, HTTP-Methoden und Statuscodes -
-    und eine simulierte REST-API zum selber Abfragen: Schritt für Schritt
-    Aufgaben abrufen, anlegen, ändern und löschen.
+    und eine simulierte, realistischere REST-API rund um eine
+    Mitarbeiterverwaltung: verschachtelte Ressourcen, Filtern/Suchen/
+    Sortieren/Paginieren per Query-Parameter, und ein simulierter
+    Bearer-Token-Schutz auf allen schreibenden Endpunkten.
   </p>
 
   <p class="text-muted" style="margin-top:-8px; margin-bottom:20px;">
@@ -97,7 +99,7 @@
   </div>
 
   <div class="card">
-    <div id="check-tasks" class="checklist-item">⬜ API-Aufgaben: 0 / 9 gelöst</div>
+    <div id="check-tasks" class="checklist-item">⬜ API-Aufgaben: 0 / 12 gelöst</div>
     <div id="check-quiz" class="checklist-item">⬜ API-Quiz vollständig richtig lösen</div>
   </div>
 
@@ -126,26 +128,7 @@
       Webseiten überträgt) und adressiert Daten über URLs.
     </p>
 
-    <svg viewBox="0 0 640 150" style="width:100%; max-width:640px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="45" width="140" height="55" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
-      <text x="80" y="77" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Client</text>
-
-      <text x="200" y="55" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Request</text>
-      <text x="200" y="68" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Methode+URL+Body</text>
-      <text x="235" y="60" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
-
-      <rect x="250" y="45" width="140" height="55" rx="8" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
-      <text x="320" y="77" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">API-Server</text>
-
-      <text x="450" y="55" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Datenbank-</text>
-      <text x="450" y="68" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">Zugriff</text>
-      <text x="410" y="60" fill="#9aa5b8" font-size="18" text-anchor="middle">→</text>
-
-      <rect x="490" y="45" width="140" height="55" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
-      <text x="560" y="77" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Datenbank</text>
-
-      <text x="320" y="125" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">← Response: Statuscode + JSON-Body</text>
-    </svg>
+    <img class="doc-image" src="../images/rest-api.png" alt="Ablauf einer REST-API-Anfrage: der Client sendet per HTTP (GET/POST/DELETE/PUT) eine Anfrage an eine URL (z.B. /surveys/123) an den Server, dieser antwortet mit einem JSON-Objekt (z.B. survey_id, score, message, response_id)" style="max-width:520px;" />
   </div>
 
   <div class="card">
@@ -154,11 +137,11 @@
       <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
         <th style="padding:4px 0;">Methode</th><th>CRUD-Bedeutung</th><th>Beispiel</th>
       </tr>
-      <tr><td class="mono">GET</td><td>Read (lesen, keine Änderung)</td><td class="mono">GET /tasks</td></tr>
-      <tr><td class="mono">POST</td><td>Create (neu anlegen)</td><td class="mono">POST /tasks</td></tr>
-      <tr><td class="mono">PUT</td><td>Update - komplett ersetzen</td><td class="mono">PUT /tasks/1</td></tr>
-      <tr><td class="mono">PATCH</td><td>Update - nur einzelne Felder ändern</td><td class="mono">PATCH /tasks/1</td></tr>
-      <tr><td class="mono">DELETE</td><td>Delete (löschen)</td><td class="mono">DELETE /tasks/1</td></tr>
+      <tr><td class="mono">GET</td><td>Read (lesen, keine Änderung)</td><td class="mono">GET /employees</td></tr>
+      <tr><td class="mono">POST</td><td>Create (neu anlegen)</td><td class="mono">POST /employees</td></tr>
+      <tr><td class="mono">PUT</td><td>Update - komplett ersetzen</td><td class="mono">PUT /employees/1</td></tr>
+      <tr><td class="mono">PATCH</td><td>Update - nur einzelne Felder ändern</td><td class="mono">PATCH /employees/1</td></tr>
+      <tr><td class="mono">DELETE</td><td>Delete (löschen)</td><td class="mono">DELETE /employees/1</td></tr>
     </table>
   </div>
 
@@ -166,16 +149,57 @@
     <h3 class="mt-0">Aufbau einer Anfrage</h3>
     <p>
       <strong>Pfad-Parameter</strong> identifizieren eine konkrete Ressource
-      direkt in der URL (<code class="mono">/tasks/42</code> = Aufgabe Nr. 42).
-      <strong>Query-Parameter</strong> filtern/steuern die Anfrage zusätzlich,
-      angehängt nach einem Fragezeichen
-      (<code class="mono">/tasks?done=true</code>). Der
-      <strong>Request-Body</strong> (meist JSON) trägt bei POST/PUT/PATCH
-      die eigentlichen Daten. Wichtige Header:
+      direkt in der URL (<code class="mono">/employees/42</code> = Mitarbeiter
+      Nr. 42). Verschachtelte Pfade drücken zusätzlich eine
+      Zugehörigkeits-Beziehung aus
+      (<code class="mono">/departments/1/employees</code> = alle Mitarbeiter
+      DIESER Abteilung). <strong>Query-Parameter</strong> filtern/steuern
+      die Anfrage zusätzlich, angehängt nach einem Fragezeichen und mit
+      <code class="mono">&amp;</code> kombinierbar
+      (<code class="mono">/employees?department=1&amp;sort=-salary</code>).
+      Der <strong>Request-Body</strong> (meist JSON) trägt bei
+      POST/PUT/PATCH die eigentlichen Daten. Wichtige Header:
       <code class="mono">Content-Type: application/json</code> (sagt dem
       Server, wie der Body zu lesen ist) und
       <code class="mono">Authorization: Bearer &lt;token&gt;</code> (weist
-      den Absender aus).
+      den Absender aus - erforderlich für alle schreibenden Endpunkte in
+      der Sandbox unten).
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Filtern, Suchen, Sortieren, Paginieren
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Bei grossen Datenmengen will niemand ALLES auf einmal geschickt
+          bekommen - Query-Parameter erlauben es dem Client, genau
+          einzugrenzen, was er wirklich braucht.
+        </div>
+      </details>
+    </h3>
+    <p class="text-muted" style="margin-top:0;">
+      Die Sandbox unten unterstützt bei <code class="mono">GET /employees</code>
+      mehrere kombinierbare Query-Parameter:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Parameter</th><th>Wirkung</th><th>Beispiel</th>
+      </tr>
+      <tr><td class="mono">department</td><td>Nur Mitarbeiter dieser Abteilungs-ID</td><td class="mono">?department=2</td></tr>
+      <tr><td class="mono">active</td><td>Nur aktive/inaktive Mitarbeiter</td><td class="mono">?active=true</td></tr>
+      <tr><td class="mono">search</td><td>Teiltreffer im Namen (Gross-/Kleinschreibung egal)</td><td class="mono">?search=meier</td></tr>
+      <tr><td class="mono">sort</td><td>Sortierung; ein führendes "-" kehrt sie um</td><td class="mono">?sort=-salary</td></tr>
+      <tr><td class="mono">page / limit</td><td>Nur eine "Seite" von N Einträgen abrufen</td><td class="mono">?page=1&amp;limit=2</td></tr>
+    </table>
+    <p class="text-muted">
+      Die Antwort auf <code class="mono">GET /employees</code> hat deshalb
+      immer die Form
+      <code class="mono">{ data: [...], meta: { total, page, limit } }</code> -
+      das <code class="mono">meta</code>-Feld verrät dem Client, wie viele
+      Einträge es insgesamt gibt, auch wenn gerade nur ein Ausschnitt
+      geliefert wurde.
     </p>
   </div>
 
@@ -198,7 +222,7 @@
       <tr><td class="mono">200 OK</td><td>Erfolgreich, mit Antwortinhalt (z.B. bei GET, PUT, PATCH)</td></tr>
       <tr><td class="mono">201 Created</td><td>Erfolgreich angelegt (typisch nach POST)</td></tr>
       <tr><td class="mono">204 No Content</td><td>Erfolgreich, aber bewusst ohne Antwortinhalt (typisch nach DELETE)</td></tr>
-      <tr><td class="mono">400 Bad Request</td><td>Die Anfrage selbst ist fehlerhaft (z.B. Pflichtfeld fehlt, ungültiges JSON)</td></tr>
+      <tr><td class="mono">400 Bad Request</td><td>Die Anfrage selbst ist fehlerhaft (z.B. Pflichtfeld fehlt, ungültige Referenz, ungültiges JSON)</td></tr>
       <tr><td class="mono">401 Unauthorized</td><td>Keine oder ungültige Anmeldedaten mitgeschickt</td></tr>
       <tr><td class="mono">403 Forbidden</td><td>Angemeldet, aber ohne Berechtigung für diese Aktion</td></tr>
       <tr><td class="mono">404 Not Found</td><td>Die angefragte Ressource existiert nicht</td></tr>
@@ -208,18 +232,52 @@
 
   <div class="card">
     <h3 class="mt-0">
+      Realistisches Beispiel: Mitarbeiterverwaltung
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Zwei zusammenhängende Ressourcen, wie in echten APIs üblich:
+          jeder Mitarbeiter gehört über "departmentId" zu genau einer
+          Abteilung - ein Fremdschlüssel, ganz wie im Datenbanken-Modul.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Diese Sandbox simuliert zwei verknüpfte Ressourcen:
+      <code class="mono">departments</code> (Abteilungen) und
+      <code class="mono">employees</code> (Mitarbeiter, mit Fremdschlüssel
+      <code class="mono">departmentId</code>). Lesende Endpunkte
+      (<code class="mono">GET</code>) sind frei zugänglich, alle
+      schreibenden Endpunkte (<code class="mono">POST</code>,
+      <code class="mono">PUT</code>, <code class="mono">PATCH</code>,
+      <code class="mono">DELETE</code> auf <code class="mono">/employees</code>)
+      verlangen einen gültigen Authorization-Header:
+    </p>
+    <pre>Authorization: Bearer demo-token-123</pre>
+    <p class="text-muted">
+      Fehlt dieser Header oder stimmt der Token nicht, antwortet die
+      Sandbox mit <code class="mono">401 Unauthorized</code> - unabhängig
+      davon, ob der restliche Request ansonsten korrekt wäre.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
       Aktueller Zustand des simulierten Backends
       <details class="info-toggle">
         <summary>i</summary>
         <div class="info-content">
-          Diese Tabelle zeigt live, was die simulierte API tatsächlich
+          Diese Tabellen zeigen live, was die simulierte API tatsächlich
           "gespeichert" hat - jede Anfrage unten wirkt sich sofort hier
           aus. So siehst du direkt, was z.B. ein POST oder DELETE bewirkt
           hat.
         </div>
       </details>
     </h3>
-    <div id="backend-state"></div>
+    <p class="text-muted" style="margin-top:0; margin-bottom:4px;">departments</p>
+    <div id="backend-departments"></div>
+    <p class="text-muted" style="margin-bottom:4px;">employees</p>
+    <div id="backend-employees"></div>
     <div class="btn-row" style="margin-top:10px;">
       <button type="button" id="reset-backend-btn" class="btn small ghost">Backend zurücksetzen</button>
     </div>
@@ -229,10 +287,10 @@
     <h3 class="mt-0">API-Sandbox</h3>
     <p class="text-muted" style="margin-top:0;">Probier's aus, z.B.:</p>
     <div class="tool-buttons" style="margin-bottom:10px;">
-      <button type="button" class="btn small ghost api-example-btn" data-method="GET" data-path="/tasks" data-body="">GET /tasks</button>
-      <button type="button" class="btn small ghost api-example-btn" data-method="GET" data-path="/tasks/1" data-body="">GET /tasks/1</button>
-      <button type="button" class="btn small ghost api-example-btn" data-method="POST" data-path="/tasks" data-body='{"title": "Neue Aufgabe"}'>POST /tasks</button>
-      <button type="button" class="btn small ghost api-example-btn" data-method="DELETE" data-path="/tasks/2" data-body="">DELETE /tasks/2</button>
+      <button type="button" class="btn small ghost api-example-btn" data-method="GET" data-path="/departments/1/employees" data-body="" data-auth="">GET /departments/1/employees</button>
+      <button type="button" class="btn small ghost api-example-btn" data-method="GET" data-path="/employees?sort=-salary" data-body="" data-auth="">GET /employees?sort=-salary</button>
+      <button type="button" class="btn small ghost api-example-btn" data-method="POST" data-path="/employees" data-body='{"name": "Nina Vogel", "departmentId": 3, "salary": 7500}' data-auth="Bearer demo-token-123">POST /employees (mit Auth)</button>
+      <button type="button" class="btn small ghost api-example-btn" data-method="DELETE" data-path="/employees/4" data-body="" data-auth="Bearer demo-token-123">DELETE /employees/4 (mit Auth)</button>
     </div>
     <div class="field-row">
       <div class="field" style="max-width:130px;">
@@ -247,12 +305,16 @@
       </div>
       <div class="field" style="flex:1;">
         <label for="api-path">Pfad</label>
-        <input type="text" id="api-path" class="mono" value="/tasks" placeholder="/tasks" />
+        <input type="text" id="api-path" class="mono" value="/employees" placeholder="/employees" />
       </div>
     </div>
     <div class="field">
+      <label for="api-auth">Authorization-Header (nur für POST/PUT/PATCH/DELETE nötig)</label>
+      <input type="text" id="api-auth" class="mono" placeholder="Bearer demo-token-123" />
+    </div>
+    <div class="field">
       <label for="api-body">Request-Body (JSON, falls nötig)</label>
-      <textarea id="api-body" class="mono" rows="2" placeholder='{ "title": "..." }'></textarea>
+      <textarea id="api-body" class="mono" rows="2" placeholder='{ "name": "..." }'></textarea>
     </div>
     <div class="btn-row">
       <button type="button" id="send-request-btn" class="btn primary">Anfrage senden</button>
@@ -264,7 +326,7 @@
     <h3 class="mt-0">🧩 Schritt für Schritt: eine API abfragen</h3>
     <p class="text-muted" style="margin-top:0;">
       Baue für jede Aufgabe unten selbst die passende Anfrage (Methode,
-      Pfad, ggf. Body) und klicke "Senden &amp; Prüfen".
+      Pfad, ggf. Authorization-Header und Body) und klicke "Senden &amp; Prüfen".
     </p>
     <div id="tasks-container"></div>
   </div>

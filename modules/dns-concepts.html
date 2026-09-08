@@ -209,6 +209,25 @@
       selbst nutzen, unabhängig vom im Betriebssystem eingestellten
       DNS-Server.
     </p>
+
+    <img class="doc-image" src="../images/dns-over-tls.jpg" alt="TLS-Handshake-Ablauf zwischen Client und Server: Client kontaktiert den Server und schlägt TLS-Version/Cipher-Einstellungen vor, der Server antwortet mit seinem Zertifikat (öffentlicher Schlüssel), beide Seiten erzeugen daraus einen gemeinsamen symmetrischen Sitzungsschlüssel, mit dem anschliessend alle Nachrichten - hier die DNS-Anfragen bei DoT - verschlüsselt übertragen werden" style="max-width:480px;" />
+    <p class="text-muted">
+      Genau dieser TLS-Handshake läuft auch bei DoT ab, bevor die
+      eigentliche DNS-Anfrage übertragen wird - danach ist der komplette
+      DNS-Datenverkehr durch denselben symmetrischen Sitzungsschlüssel
+      abgesichert, den auch HTTPS-Verbindungen verwenden.
+    </p>
+
+    <img class="doc-image" src="../images/dns-doh-protocol-format.png" alt="Vergleich der Übertragungsformate: DNS over TLS sendet DNS-Nachrichten mit vorangestellter Längenangabe direkt über die TLS-Verbindung; DNS over HTTPS via HTTP/2 verpackt dieselbe DNS-Nachricht zusätzlich in HTTP-Headers/Daten-Frames; DNS over HTTPS via HTTP/1.1 kodiert die DNS-Anfrage sogar direkt als Base64 in der GET-Anfrage-URL (z.B. GET /doh?dns=AAABAAAB...)" style="max-width:640px;" />
+    <p class="text-muted">
+      Der Unterschied auf Protokollebene: DoT überträgt DNS-Nachrichten
+      recht direkt (nur mit einer Längenangabe davor). DoH verpackt
+      dieselbe DNS-Nachricht zusätzlich in ein vollständiges
+      HTTP-Request/Response - bei HTTP/1.1 sogar direkt Base64-kodiert in
+      der URL selbst. Genau dieser zusätzliche HTTP-"Umschlag" ist es, der
+      DoH-Verkehr von gewöhnlichem HTTPS-Surfen praktisch ununterscheidbar
+      macht.
+    </p>
     <div class="alert warning" style="margin-top:10px;">
       <strong>Kehrseite für Unternehmensnetzwerke</strong>
       Nutzt eine Anwendung DoH direkt zu einem externen Resolver, umgeht
