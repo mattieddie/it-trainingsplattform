@@ -206,6 +206,157 @@
 
     <div id="ticket-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 6: eigener Intune-Tenant, Gerät, Policy &amp; App
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Bewusst ein NEUES Gerät (CL02) statt CL01: CL01 bleibt klassisch
+          per GPO verwaltetes Mitglied der on-prem Domäne (siehe vorherige
+          Labore), CL02 wird komplett cloud-nativ über Intune verwaltet -
+          ein direkter Kontrast, den viele Firmen heute genau so fahren
+          (Koexistenz alter und neuer Geräteverwaltung).
+        </div>
+      </details>
+    </h3>
+    <p>
+      Eigenständiger Cloud-Teil des Labors - baut NICHT auf SRV01 auf,
+      sondern auf einem separaten Microsoft-365/Entra-ID-Tenant. Zwei Wege,
+      um an einen Tenant zu kommen:
+    </p>
+
+    <h4>Weg A: CDX (Microsoft Demo eXperiences) - falls verfügbar</h4>
+    <p>
+      Zugang über ein Geschäfts-/Schulkonto mit Zugehörigkeit zum
+      Microsoft-Partner-Netzwerk (z.B. über den Arbeitgeber) - Microsoft-
+      Partner, MVPs und Engineers erhalten darüber vorbefüllte Demo-Tenants.
+    </p>
+    <ul class="lab-downloads">
+      <li>
+        <span class="lab-download-tag">CDX</span>
+        <a href="https://cdx.transform.microsoft.com/" target="_blank" rel="noopener">cdx.transform.microsoft.com</a>
+        anmelden → "Meine Umgebungen"/"My Environments" → "Tenant erstellen" →
+        Laufzeit wählen (90 Tage oder 1 Jahr).
+      </li>
+    </ul>
+
+    <h4>Weg B: Microsoft 365 Developer Program (öffentlich zugänglich)</h4>
+    <p>
+      Ohne Partner-Zugang: ein kostenloses, verlängerbares Microsoft 365
+      E5-Entwickler-Abo inkl. Intune - für aktive Entwicklungs-/Lernzwecke
+      gedacht.
+    </p>
+    <ul class="lab-downloads">
+      <li>
+        <span class="lab-download-tag">Dev Program</span>
+        <a href="https://developer.microsoft.com/en-us/microsoft-365/dev-program" target="_blank" rel="noopener">Microsoft 365 Developer Program</a>
+        - "Join now", Voraussetzungen prüfen (u.a. Visual-Studio-Abo oder andere qualifizierende Programme).
+      </li>
+    </ul>
+
+    <h4>Schritt für Schritt</h4>
+    <ol>
+      <li>Tenant über Weg A oder B erstellen, im <a href="https://intune.microsoft.com" target="_blank" rel="noopener">Microsoft Intune Admin Center</a> anmelden und prüfen, dass Intune-Lizenzen zugewiesen sind.</li>
+      <li>
+        Eine neue VM <strong>CL02</strong> (Windows 11) anlegen - NICHT CL01
+        wiederverwenden, da CL01 bereits Mitglied der on-prem Domäne
+        <code class="mono">lab.local</code> ist und klassisch verwaltet bleiben soll.
+      </li>
+      <li>
+        Auf CL02: Einstellungen → Konten → Zugriff auf Geschäfts-, Schul-
+        oder Uni-Konto → Verbinden, mit dem neuen Tenant-Konto anmelden -
+        das Gerät registriert sich automatisch bei Intune (Entra Joined).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/intune/user-help/enrollment/enroll-windows" target="_blank" rel="noopener">Microsoft Learn - Windows-Geräte in Intune registrieren</a></span>
+      </li>
+      <li>
+        <strong>Konfigurationsprofil</strong> (Configuration Policy) anlegen:
+        Geräte → Konfiguration → Neue Richtlinie → Einstellungskatalog,
+        z.B. Sperrbildschirm-Zeitlimit setzen, Zuweisung an "Alle Geräte".
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/intune/device-configuration/create-device-profile" target="_blank" rel="noopener">Microsoft Learn - Gerätekonfigurationsprofile</a></span>
+      </li>
+      <li>
+        <strong>Win32-App</strong>: dieselbe 7-Zip-.msi wie in den vorherigen
+        Laboren mit dem offiziellen Content-Prep-Tool in ein
+        <code class="mono">.intunewin</code>-Paket verpacken, als Win32-App
+        hochladen (Installationsbefehl <code class="mono">msiexec /i 7z-x64.msi /qn</code>,
+        Erkennungsregel: MSI-Produktcode), Zuweisung <strong>Erforderlich</strong>.
+        <span class="text-muted">Tool: <a href="https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool" target="_blank" rel="noopener">Microsoft Win32 Content Prep Tool (GitHub)</a> ·
+        Anleitung: <a href="https://learn.microsoft.com/de-de/intune/app-management/deployment/add-win32" target="_blank" rel="noopener">Microsoft Learn - Win32-Apps zu Intune hinzufügen</a></span>
+      </li>
+      <li>
+        Auf CL02 die <strong>Unternehmensportal</strong>-App öffnen (meist
+        automatisch installiert), mit dem Tenant-Konto anmelden, prüfen
+        dass 7-Zip zur Installation erscheint bzw. bereits installiert wurde.
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/intune/user-help/company-portal/" target="_blank" rel="noopener">Microsoft Learn - Unternehmensportal-App</a></span>
+      </li>
+      <li>Verifizieren im Intune Admin Center: CL02 taucht unter "Geräte" als verwaltet auf, Konfigurationsprofil-Status "Erfolgreich", App-Installationsstatus "Installiert".</li>
+    </ol>
+
+    <h4>Fortschritt</h4>
+    <div id="intune-lab-checklist"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 7 (finalster Schritt): lokales AD hybrid mit Entra ID verbinden
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Der Clou an diesem letzten Schritt: es werden bewusst NUR
+          Benutzer und Gruppen synchronisiert, keine Geräte. Damit bleibt
+          die komplette Geräteverwaltung/Policy-Steuerung bei Intune (wie
+          in Teil 6) - ein echter Hybrid Azure AD Join (der Geräte
+          einbeziehen würde) findet gar nicht erst statt.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Der Abschluss des gesamten Laborbogens: SRV01 (on-prem
+      Domänencontroller aus den vorherigen Modulen) wird jetzt mit dem in
+      Teil 6 erstellten Cloud-Tenant verbunden. Ergebnis: Benutzerkonten
+      aus <code class="mono">lab.local</code> erscheinen automatisch in
+      Entra ID, das on-prem AD bleibt dabei die "Source of Truth" für
+      Identitäten - Geräte-/Richtlinienverwaltung läuft komplett getrennt
+      davon weiter über Intune.
+    </p>
+    <ol>
+      <li>
+        Auf SRV01 <strong>Microsoft Entra Connect</strong> herunterladen (aus dem
+        Entra Admin Center des Cloud-Tenants) und installieren.
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/entra/identity/hybrid/install" target="_blank" rel="noopener">Microsoft Learn - Synchronisierungstool installieren</a></span>
+      </li>
+      <li><strong>Benutzerdefinierte Installation</strong> wählen (nicht die Express-Einstellungen) - nur damit lässt sich die Filterung im nächsten Schritt konfigurieren.</li>
+      <li>Mit einem globalen Administrator-Konto des Cloud-Tenants anmelden, danach <code class="mono">lab.local</code> als lokales Verzeichnis verbinden.</li>
+      <li>
+        Bei der <strong>Domänen-/OU-Filterung</strong>: NUR die OU(s) mit
+        Benutzer- und Gruppenobjekten auswählen (z.B. den Standard-Container
+        "Users") - die OU <code class="mono">Support</code> (enthält das
+        Computerobjekt CL01) und "Domain Controllers" bewusst NICHT
+        auswählen. Das ist der entscheidende Punkt: keine Computerobjekte
+        im Sync-Bereich = kein Hybrid Azure AD Join möglich.
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/entra/identity/hybrid/connect/how-to-connect-sync-configure-filtering" target="_blank" rel="noopener">Microsoft Learn - Sync-Filterung konfigurieren</a></span>
+      </li>
+      <li>Als Sync-Methode <strong>Password Hash Sync</strong> wählen (siehe Kapitel "Entra Connect: Synchronisierungsmethoden" oben - für ein Labor die einfachste, robusteste Wahl).</li>
+      <li>Installation abschliessen, ersten Sync-Zyklus abwarten (Standard alle 30 Minuten) oder auf SRV01 mit <code class="mono">Start-ADSyncSyncCycle -PolicyType Delta</code> manuell anstossen.</li>
+      <li>
+        Verifizieren im Entra Admin Center unter "Benutzer": die
+        synchronisierten <code class="mono">lab.local</code>-Konten tauchen
+        mit "Lokales Verzeichnis synchronisiert = Ja" auf - unter "Geräte"
+        sollte CL01 dagegen NICHT erscheinen.
+      </li>
+    </ol>
+    <div class="alert success" style="margin-top:10px;">
+      <strong>Damit ist der gesamte Laborbogen geschlossen:</strong> vom
+      DHCP/DNS-Server über den Domänencontroller mit eigener PKI, GPO- und
+      Configuration-Manager-basierter Softwareverteilung bis zur
+      Hybrid-Identität mit rein cloud-nativer Geräteverwaltung.
+    </div>
+
+    <h4>Fortschritt</h4>
+    <div id="hybrid-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 

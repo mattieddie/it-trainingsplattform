@@ -656,4 +656,25 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTicket();
   document.getElementById("ticket-check-btn").addEventListener("click", checkTicketAnswer);
   document.getElementById("ticket-next-btn").addEventListener("click", renderTicket);
+
+  initLabChecklist(document.getElementById("intune-lab-checklist"), "lab_intune_checklist", [
+    "Tenant erstellt (CDX oder Microsoft 365 Developer Program)",
+    "Im Intune Admin Center angemeldet, Lizenzen geprüft",
+    "CL02 (neue VM) angelegt",
+    "CL02 über 'Zugriff auf Geschäfts-/Schulkonto' bei Intune registriert (Entra Joined)",
+    "Konfigurationsprofil erstellt und zugewiesen",
+    "7-Zip als Win32-App (.intunewin) hochgeladen und als Erforderlich zugewiesen",
+    "Unternehmensportal auf CL02 geöffnet, Installation verifiziert",
+    "Im Intune Admin Center verifiziert: Gerät verwaltet, Profil + App erfolgreich",
+  ]);
+
+  initLabChecklist(document.getElementById("hybrid-lab-checklist"), "lab_hybrid_checklist", [
+    "Microsoft Entra Connect auf SRV01 heruntergeladen und installiert",
+    "Benutzerdefinierte Installation gewählt",
+    "lab.local als lokales Verzeichnis verbunden",
+    "OU-Filterung gesetzt: nur Benutzer-/Gruppen-OU ausgewählt, Support/Domain Controllers ausgeschlossen",
+    "Password Hash Sync als Methode gewählt",
+    "Ersten Sync-Zyklus abgewartet bzw. manuell angestossen",
+    "Verifiziert: Benutzer synchronisiert, CL01 (Gerät) NICHT in Entra ID sichtbar",
+  ]);
 });
