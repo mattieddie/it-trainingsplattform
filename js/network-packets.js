@@ -12,16 +12,28 @@ const TCP_HANDSHAKE_STEPS = [
     key: "syn",
     to: "server",
     text: 'Client sendet SYN: "Ich möchte eine Verbindung aufbauen, meine Sequenznummer ist X."',
+    detail: [
+      { label: "Flags", value: "SYN" },
+      { label: "Seq / Ack", value: "Seq=X / Ack=-" },
+    ],
   },
   {
     key: "syn-ack",
     to: "client",
     text: 'Server antwortet mit SYN-ACK: "Verstanden, hier ist meine Sequenznummer Y, und ich bestätige deine X+1."',
+    detail: [
+      { label: "Flags", value: "SYN, ACK" },
+      { label: "Seq / Ack", value: "Seq=Y / Ack=X+1" },
+    ],
   },
   {
     key: "ack",
     to: "server",
     text: 'Client bestätigt mit ACK: "Verstanden, Y+1." Die Verbindung steht - Datenübertragung kann beginnen.',
+    detail: [
+      { label: "Flags", value: "ACK" },
+      { label: "Seq / Ack", value: "Seq=X+1 / Ack=Y+1" },
+    ],
   },
 ];
 
@@ -53,6 +65,7 @@ async function tcpAnimPlayStep(index) {
   packet.classList.toggle("at-server", step.to === "server");
 
   status.textContent = step.text;
+  protoAnimRenderDetail(document.getElementById("tcp-anim-detail"), step.detail);
   await tcpAnimWait(1100);
 
   stepEls[index].classList.remove("active");
@@ -97,10 +110,13 @@ function tcpAnimResetVisuals() {
   const packet = document.getElementById("tcp-packet");
   packet.className = "tcp-anim-packet";
   document.querySelectorAll(".proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("tcp-anim-detail"), null);
 }
 
 function tcpAnimReset() {
   tcpAnimResetVisuals();
+  tcpAnimRunning = false;
+  tcpAnimSetButtonsDisabled(false);
   document.getElementById("tcp-anim-status").textContent =
     'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
 }

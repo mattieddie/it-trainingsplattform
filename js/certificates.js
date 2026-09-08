@@ -210,11 +210,166 @@ function checkQuiz() {
   }
 }
 
+/* ---------- TLS-Handshake-Animation ---------- */
+
+const TLS_NODES = {
+  client: { left: "10%", top: "50%" },
+  server: { left: "88%", top: "50%" },
+};
+
+const TLS_ANIM_STEPS = [
+  {
+    text: "Client Hello: Browser schlägt eine TLS-Version und unterstützte Cipher Suites vor.",
+    from: "client",
+    to: "server",
+    cls: "pkt-query",
+    detail: [
+      { label: "TLS-Version", value: "TLS 1.3 (vorgeschlagen)" },
+      { label: "Cipher Suites", value: "TLS_AES_128_GCM_SHA256, TLS_CHACHA20_POLY1305_SHA256, ..." },
+      { label: "Client-Random", value: "4f3a9c7e..." },
+    ],
+  },
+  {
+    text: "Server Hello + Zertifikat: Server wählt eine Cipher Suite und schickt sein Zertifikat (inkl. öffentlichem Schlüssel) mit.",
+    from: "server",
+    to: "client",
+    cls: "pkt-reply",
+    detail: [
+      { label: "Gewählte Suite", value: "TLS_AES_128_GCM_SHA256" },
+      { label: "Zertifikat", value: "CN=shop.beispiel.ch, Issuer=Beispiel Intermediate CA" },
+      { label: "Server-Random", value: "9b21ffa0..." },
+    ],
+  },
+  {
+    text: 'Browser prüft das Zertifikat, BEVOR er dem Server vertraut - siehe Kapitel "Vertrauenskette" oben.',
+    checksOnly: true,
+    checks: [
+      { label: "Kette zu vertrauenswürdiger Root-CA", state: "pass" },
+      { label: "Innerhalb Gültigkeitszeitraum", state: "pass" },
+      { label: "Hostname passt zum Zertifikat", state: "pass" },
+      { label: "Nicht widerrufen (OCSP)", state: "pass" },
+    ],
+  },
+  {
+    text: "Client Key Exchange: Browser erzeugt ein Pre-Master-Secret und verschlüsselt es mit dem öffentlichen Schlüssel aus dem Zertifikat.",
+    from: "client",
+    to: "server",
+    cls: "pkt-query",
+    detail: [{ label: "Inhalt", value: "Pre-Master-Secret, verschlüsselt mit dem öffentlichen Schlüssel des Servers" }],
+  },
+  {
+    text: 'Beide Seiten berechnen daraus denselben Sitzungsschlüssel und tauschen verschlüsselte "Finished"-Nachrichten aus - die Verbindung ist gesichert.',
+    from: "client",
+    to: "server",
+    cls: "pkt-final",
+    detail: [
+      { label: "Sitzungsschlüssel", value: "unabhängig auf beiden Seiten berechnet (identisch)" },
+      { label: "Status", value: "Ab jetzt: verschlüsselte HTTPS-Anwendungsdaten" },
+    ],
+  },
+];
+
+let tlsAnimStep = 0;
+let tlsAnimRunning = false;
+
+function tlsAnimSetButtonsDisabled(disabled) {
+  document.getElementById("tls-anim-play").disabled = disabled;
+  document.getElementById("tls-anim-step").disabled = disabled;
+}
+
+async function tlsAnimPlayStep(index) {
+  const step = TLS_ANIM_STEPS[index];
+  const packet = document.getElementById("tls-packet");
+  const status = document.getElementById("tls-anim-status");
+  const stepEls = document.querySelectorAll("#tls-anim-steps .proto-anim-step");
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  if (step.checksOnly) {
+    packet.classList.add("hidden-packet");
+    protoAnimRenderChecks(document.getElementById("tls-anim-checks"), step.checks);
+    protoAnimRenderDetail(document.getElementById("tls-anim-detail"), null);
+  } else {
+    packet.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final");
+    packet.classList.add(step.cls);
+    protoAnimJumpTo(packet, TLS_NODES[step.from]);
+    protoAnimMoveTo(packet, TLS_NODES[step.to]);
+    protoAnimRenderDetail(document.getElementById("tls-anim-detail"), step.detail);
+  }
+
+  status.textContent = step.text;
+  await protoAnimWait(1200);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function tlsAnimPlayAll() {
+  if (tlsAnimRunning) return;
+  tlsAnimRunning = true;
+  tlsAnimSetButtonsDisabled(true);
+  tlsAnimResetVisuals();
+
+  for (let i = 0; i < TLS_ANIM_STEPS.length; i++) {
+    await tlsAnimPlayStep(i);
+  }
+  tlsAnimStep = TLS_ANIM_STEPS.length;
+
+  document.getElementById("tls-anim-status").textContent =
+    'Der TLS-Handshake ist abgeschlossen - alle weiteren Daten werden verschlüsselt übertragen. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  tlsAnimSetButtonsDisabled(false);
+  tlsAnimRunning = false;
+}
+
+async function tlsAnimNextStep() {
+  if (tlsAnimRunning || tlsAnimStep >= TLS_ANIM_STEPS.length) return;
+  tlsAnimRunning = true;
+  tlsAnimSetButtonsDisabled(true);
+
+  await tlsAnimPlayStep(tlsAnimStep);
+  tlsAnimStep++;
+
+  if (tlsAnimStep >= TLS_ANIM_STEPS.length) {
+    document.getElementById("tls-anim-status").textContent =
+      'Der TLS-Handshake ist abgeschlossen - alle weiteren Daten werden verschlüsselt übertragen. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  tlsAnimSetButtonsDisabled(false);
+  tlsAnimRunning = false;
+}
+
+function tlsAnimResetVisuals() {
+  tlsAnimStep = 0;
+  const packet = document.getElementById("tls-packet");
+  packet.className = "proto-anim-packet2d hidden-packet";
+  packet.style.left = TLS_NODES.client.left;
+  packet.style.top = TLS_NODES.client.top;
+  document.querySelectorAll("#tls-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("tls-anim-detail"), null);
+  protoAnimRenderChecks(document.getElementById("tls-anim-checks"), null);
+}
+
+function tlsAnimReset() {
+  tlsAnimResetVisuals();
+  tlsAnimRunning = false;
+  tlsAnimSetButtonsDisabled(false);
+  document.getElementById("tls-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireTlsAnimation() {
+  tlsAnimReset();
+  document.getElementById("tls-anim-play").addEventListener("click", tlsAnimPlayAll);
+  document.getElementById("tls-anim-step").addEventListener("click", tlsAnimNextStep);
+  document.getElementById("tls-anim-reset").addEventListener("click", tlsAnimReset);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
   if (getModuleStatus(MODULE_ID) === "done") {
     document.getElementById("completion-banner").classList.remove("hidden");
   }
+
+  wireTlsAnimation();
 
   initMatchPuzzle(document.getElementById("term-match-container"), TERM_PAIRS, (matched, total) => {
     document.getElementById("term-match-progress").textContent = `${matched} / ${total} Paare gefunden`;

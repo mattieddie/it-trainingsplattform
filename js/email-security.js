@@ -259,12 +259,273 @@ function checkQuiz() {
   }
 }
 
+/* ---------- Mail-Zustellungs-Animation (Umschlag öffnen + SPF/DKIM/DMARC) ---------- */
+
+const MAIL_NODES = {
+  sender: { left: "6%", top: "50%" },
+  receiver: { left: "42%", top: "50%" },
+  inbox: { left: "88%", top: "20%" },
+  quarantine: { left: "88%", top: "80%" },
+};
+
+const MAIL_SCENARIOS = {
+  legit: {
+    finalStatus: "Mail zugestellt - alle Prüfungen bestanden.",
+    steps: [
+      {
+        label: "1. SMTP-Versand",
+        text: "Absender-Server sendet die Mail via SMTP an den empfangenden Mailserver.",
+        from: "sender",
+        to: "receiver",
+        cls: "pkt-query",
+        envelope: "closed",
+        detail: [
+          { label: "Envelope-From", value: "bounce.mailer@mail.google.com" },
+          { label: "Sichtbar (From:)", value: "chef@firma.ch" },
+        ],
+      },
+      {
+        label: "2. Umschlag öffnen",
+        text: "Empfangender Server öffnet den Umschlag und liest die Kopfzeilen (Header).",
+        noMove: true,
+        envelope: "open",
+        detail: [
+          { label: "Envelope-From", value: "bounce.mailer@mail.google.com" },
+          { label: "From:-Header", value: "chef@firma.ch" },
+          { label: "DKIM-Signature", value: "vorhanden (d=firma.ch; s=mail)" },
+        ],
+      },
+      {
+        label: "3. SPF",
+        text: "SPF-Prüfung: ist die sendende IP im SPF-Record von firma.ch (via include:_spf.google.com) gelistet?",
+        noMove: true,
+        envelope: "open",
+        checks: [{ label: "SPF", state: "pass" }],
+      },
+      {
+        label: "4. DKIM",
+        text: "DKIM-Prüfung: passt die Signatur zum öffentlichen Schlüssel aus dem DNS-Record von firma.ch?",
+        noMove: true,
+        envelope: "open",
+        checks: [
+          { label: "SPF", state: "pass" },
+          { label: "DKIM", state: "pass" },
+        ],
+      },
+      {
+        label: "5. DMARC-Entscheid",
+        text: "DMARC-Alignment: SPF-/DKIM-geprüfte Domain passt zum sichtbaren From-Header - die Richtlinie erlaubt die Zustellung.",
+        from: "receiver",
+        to: "inbox",
+        cls: "pkt-final",
+        envelope: "open",
+        checks: [
+          { label: "SPF", state: "pass" },
+          { label: "DKIM", state: "pass" },
+          { label: "DMARC", state: "pass" },
+        ],
+        detail: [{ label: "Ergebnis", value: "Zugestellt - alle Prüfungen bestanden" }],
+      },
+    ],
+  },
+  phishing: {
+    finalStatus: "Mail in Quarantäne verschoben - Spoofing-Versuch erkannt.",
+    steps: [
+      {
+        label: "1. SMTP-Versand",
+        text: "Angreifer-Server sendet eine Mail und gibt sich als firma.ch aus.",
+        from: "sender",
+        to: "receiver",
+        cls: "pkt-query",
+        envelope: "closed",
+        detail: [
+          { label: "Envelope-From", value: "irgendwas@angreifer-server.example" },
+          { label: "Sichtbar (From:)", value: "chef@firma.ch (gefälscht)" },
+        ],
+      },
+      {
+        label: "2. Umschlag öffnen",
+        text: "Empfangender Server öffnet den Umschlag und liest die Kopfzeilen (Header).",
+        noMove: true,
+        envelope: "open",
+        detail: [
+          { label: "Envelope-From", value: "irgendwas@angreifer-server.example" },
+          { label: "From:-Header", value: "chef@firma.ch (gefälscht)" },
+          { label: "DKIM-Signature", value: "fehlt" },
+        ],
+      },
+      {
+        label: "3. SPF",
+        text: "SPF-Prüfung: die sendende IP steht in KEINEM SPF-Record von firma.ch.",
+        noMove: true,
+        envelope: "open",
+        checks: [{ label: "SPF", state: "fail" }],
+      },
+      {
+        label: "4. DKIM",
+        text: "DKIM-Prüfung: keine gültige Signatur vorhanden - der Angreifer kennt den privaten Schlüssel von firma.ch nicht.",
+        noMove: true,
+        envelope: "open",
+        checks: [
+          { label: "SPF", state: "fail" },
+          { label: "DKIM", state: "fail" },
+        ],
+      },
+      {
+        label: "5. DMARC-Entscheid",
+        text: "DMARC: weder SPF noch DKIM bestehen - laut Richtlinie (p=quarantine) wird die Mail zurückgehalten.",
+        from: "receiver",
+        to: "quarantine",
+        cls: "pkt-danger",
+        envelope: "open",
+        checks: [
+          { label: "SPF", state: "fail" },
+          { label: "DKIM", state: "fail" },
+          { label: "DMARC", state: "fail" },
+        ],
+        detail: [{ label: "Ergebnis", value: "Quarantäne - Spoofing-Versuch erkannt" }],
+      },
+    ],
+  },
+};
+
+let mailScenarioKey = "legit";
+let mailAnimStep = 0;
+let mailAnimRunning = false;
+
+function mailAnimSetButtonsDisabled(disabled) {
+  document.getElementById("mail-anim-play").disabled = disabled;
+  document.getElementById("mail-anim-step").disabled = disabled;
+}
+
+function mailAnimRenderStepsList() {
+  const steps = MAIL_SCENARIOS[mailScenarioKey].steps;
+  document.getElementById("mail-anim-steps").innerHTML = steps
+    .map(
+      (s, i) =>
+        `<li class="proto-anim-step" data-step="${i}"><span class="proto-anim-step-label">${s.label}</span>${s.text}</li>`
+    )
+    .join("");
+}
+
+async function mailAnimPlayStep(index) {
+  const step = MAIL_SCENARIOS[mailScenarioKey].steps[index];
+  const packet = document.getElementById("mail-packet");
+  const status = document.getElementById("mail-anim-status");
+  const stepEls = document.querySelectorAll("#mail-anim-steps .proto-anim-step");
+  const envelope = document.getElementById("mail-anim-envelope");
+  const envelopeLabel = document.getElementById("mail-anim-envelope-label");
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  envelope.classList.toggle("open", step.envelope === "open");
+  envelopeLabel.textContent = step.envelope === "open" ? "Umschlag geöffnet" : "Umschlag geschlossen";
+
+  if (step.noMove) {
+    packet.classList.add("hidden-packet");
+  } else {
+    packet.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final", "pkt-danger");
+    packet.classList.add(step.cls);
+    protoAnimJumpTo(packet, MAIL_NODES[step.from]);
+    protoAnimMoveTo(packet, MAIL_NODES[step.to]);
+  }
+
+  protoAnimRenderChecks(document.getElementById("mail-anim-checks"), step.checks);
+  protoAnimRenderDetail(document.getElementById("mail-anim-detail"), step.detail);
+
+  status.textContent = step.text;
+  await protoAnimWait(1300);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function mailAnimPlayAll() {
+  if (mailAnimRunning) return;
+  mailAnimRunning = true;
+  mailAnimSetButtonsDisabled(true);
+  mailAnimResetVisuals();
+
+  const steps = MAIL_SCENARIOS[mailScenarioKey].steps;
+  for (let i = 0; i < steps.length; i++) {
+    await mailAnimPlayStep(i);
+  }
+  mailAnimStep = steps.length;
+
+  document.getElementById("mail-anim-status").textContent =
+    `${MAIL_SCENARIOS[mailScenarioKey].finalStatus} Klicke "Zurücksetzen", um es erneut zu sehen.`;
+  mailAnimSetButtonsDisabled(false);
+  mailAnimRunning = false;
+}
+
+async function mailAnimNextStep() {
+  const steps = MAIL_SCENARIOS[mailScenarioKey].steps;
+  if (mailAnimRunning || mailAnimStep >= steps.length) return;
+  mailAnimRunning = true;
+  mailAnimSetButtonsDisabled(true);
+
+  await mailAnimPlayStep(mailAnimStep);
+  mailAnimStep++;
+
+  if (mailAnimStep >= steps.length) {
+    document.getElementById("mail-anim-status").textContent =
+      `${MAIL_SCENARIOS[mailScenarioKey].finalStatus} Klicke "Zurücksetzen", um es erneut zu sehen.`;
+  }
+  mailAnimSetButtonsDisabled(false);
+  mailAnimRunning = false;
+}
+
+function mailAnimResetVisuals() {
+  mailAnimStep = 0;
+  const packet = document.getElementById("mail-packet");
+  packet.className = "proto-anim-packet2d hidden-packet";
+  packet.style.left = MAIL_NODES.sender.left;
+  packet.style.top = MAIL_NODES.sender.top;
+  document.querySelectorAll("#mail-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  document.getElementById("mail-anim-envelope").classList.remove("open");
+  document.getElementById("mail-anim-envelope-label").textContent = "Umschlag geschlossen";
+  protoAnimRenderDetail(document.getElementById("mail-anim-detail"), null);
+  protoAnimRenderChecks(document.getElementById("mail-anim-checks"), null);
+}
+
+function mailAnimReset() {
+  mailAnimResetVisuals();
+  mailAnimRunning = false;
+  mailAnimSetButtonsDisabled(false);
+  document.getElementById("mail-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function mailAnimSetScenario(key) {
+  if (key === mailScenarioKey) return;
+  mailScenarioKey = key;
+  document.querySelectorAll("#mail-scenario-buttons .btn").forEach((btn) => {
+    const active = btn.dataset.scenario === key;
+    btn.classList.toggle("primary", active);
+    btn.classList.toggle("ghost", !active);
+  });
+  mailAnimRenderStepsList();
+  mailAnimReset();
+}
+
+function wireMailAnimation() {
+  mailAnimRenderStepsList();
+  mailAnimReset();
+  document.getElementById("mail-anim-play").addEventListener("click", mailAnimPlayAll);
+  document.getElementById("mail-anim-step").addEventListener("click", mailAnimNextStep);
+  document.getElementById("mail-anim-reset").addEventListener("click", mailAnimReset);
+  document.querySelectorAll("#mail-scenario-buttons .btn").forEach((btn) => {
+    btn.addEventListener("click", () => mailAnimSetScenario(btn.dataset.scenario));
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
   if (getModuleStatus(MODULE_ID) === "done") {
     document.getElementById("completion-banner").classList.remove("hidden");
   }
 
+  wireMailAnimation();
   initInteractiveSteps();
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);

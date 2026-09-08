@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Zertifikate &amp; PKI &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260909" />
+<link rel="stylesheet" href="../css/style.css?v=20260910" />
 </head>
 <body>
 
@@ -175,6 +175,59 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">
+      Animation: der TLS-Handshake
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Treffen mit einer unbekannten Person, die einen
+          Ausweis zeigt: erst prüfst du den Ausweis (Zertifikat) gegen
+          eine dir bekannte, vertrauenswürdige Stelle - erst DANACH
+          vereinbarst du ein gemeinsames Geheimwort (Sitzungsschlüssel)
+          für den Rest des Gesprächs.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Genau hier, beim Verbindungsaufbau zu einer HTTPS-Seite, kommt die
+      Vertrauenskette von oben tatsächlich zum Einsatz:
+    </p>
+
+    <div class="proto-anim-track2d" id="tls-anim-track" style="height:150px;">
+      <div class="proto-anim-node2d" id="tls-node-client" style="left:10%; top:50%;">
+        <div class="proto-anim-node2d-icon">💻</div>
+        <div>Browser</div>
+      </div>
+      <div class="proto-anim-node2d" id="tls-node-server" style="left:88%; top:50%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>shop.beispiel.ch</div>
+      </div>
+      <div id="tls-packet" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+    <ol class="proto-anim-steps" id="tls-anim-steps">
+      <li class="proto-anim-step" data-step="0"><span class="proto-anim-step-label">1. Client Hello</span>Browser schlägt eine TLS-Version und unterstützte Cipher Suites vor.</li>
+      <li class="proto-anim-step" data-step="1"><span class="proto-anim-step-label">2. Server Hello + Zertifikat</span>Server wählt eine Cipher Suite und schickt sein Zertifikat mit.</li>
+      <li class="proto-anim-step" data-step="2"><span class="proto-anim-step-label">3. Zertifikatsprüfung</span>Browser prüft die Vertrauenskette, Gültigkeit, Hostname und Widerruf - BEVOR er dem Server vertraut.</li>
+      <li class="proto-anim-step" data-step="3"><span class="proto-anim-step-label">4. Schlüsselaustausch</span>Browser verschlüsselt ein Pre-Master-Secret mit dem öffentlichen Schlüssel aus dem Zertifikat.</li>
+      <li class="proto-anim-step" data-step="4"><span class="proto-anim-step-label">5. Finished</span>Beide Seiten berechnen denselben Sitzungsschlüssel - die Verbindung ist gesichert (das Schloss-Symbol erscheint).</li>
+    </ol>
+    <div class="proto-anim-checks" id="tls-anim-checks"></div>
+    <div class="proto-anim-detail" id="tls-anim-detail"></div>
+    <p id="tls-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="tls-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="tls-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="tls-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
+    <p class="text-muted">
+      Wichtig: der öffentliche Schlüssel im Zertifikat wird NUR für
+      diesen einmaligen Schlüsselaustausch benutzt - die eigentlichen
+      Nutzdaten laufen danach über den viel schnelleren symmetrischen
+      Sitzungsschlüssel (siehe Modul <a href="encryption.html">Verschlüsselung</a>).
+    </p>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">Ablauf &amp; Widerruf</h3>
     <p>
       Ein Zertifikat verliert seine Gültigkeit auf zwei unterschiedliche
@@ -265,7 +318,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260909"></script>
+<script src="../js/progress.js?v=20260910"></script>
 <script src="../js/certificates.js"></script>
 </body>
 </html>

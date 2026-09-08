@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>VPN-Grundlagen &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260909" />
+<link rel="stylesheet" href="../css/style.css?v=20260910" />
 </head>
 <body>
 
@@ -119,6 +119,64 @@
 
   <div class="card">
     <h3 class="mt-0">
+      Animation: Tunnelaufbau + Datenkapselung
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Brief in einem blickdichten Kuvert, der zusätzlich noch
+          in ein zweites, äusseres Kuvert gesteckt wird: die Post (das
+          Internet) sieht nur die äussere Adresse (das VPN-Gateway) -
+          erst der Empfänger des äusseren Kuverts öffnet es und leitet
+          den inneren, unberührten Brief an sein eigentliches Ziel weiter.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Am Beispiel eines Client-to-Site-VPN (Homeoffice-Mitarbeiter greift
+      per IPSec auf einen internen Fileserver zu):
+    </p>
+
+    <div class="proto-anim-track2d" id="vpn-anim-track" style="height:150px;">
+      <div class="proto-anim-node2d" id="vpn-node-client" style="left:8%; top:50%;">
+        <div class="proto-anim-node2d-icon">💻</div>
+        <div>Mitarbeiter (Homeoffice)</div>
+      </div>
+      <div class="proto-anim-node2d" id="vpn-node-gateway" style="left:50%; top:50%;">
+        <div class="proto-anim-node2d-icon">🔐</div>
+        <div>VPN-Gateway (Firma)</div>
+      </div>
+      <div class="proto-anim-node2d" id="vpn-node-internal" style="left:90%; top:50%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>Fileserver (intern)</div>
+      </div>
+      <div id="vpn-packet" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+    <ol class="proto-anim-steps" id="vpn-anim-steps">
+      <li class="proto-anim-step" data-step="0"><span class="proto-anim-step-label">1. IKE Phase 1 →</span>Client baut einen sicheren Verhandlungskanal zum Gateway auf (Authentifizierung + Diffie-Hellman).</li>
+      <li class="proto-anim-step" data-step="1"><span class="proto-anim-step-label">2. ← IKE Phase 1</span>Gateway antwortet - der Verhandlungskanal (IKE SA) steht.</li>
+      <li class="proto-anim-step" data-step="2"><span class="proto-anim-step-label">3. IKE Phase 2</span>Über den sicheren Kanal werden die eigentlichen Datenverschlüsselungs-Schlüssel ausgehandelt (IPsec SA).</li>
+      <li class="proto-anim-step" data-step="3"><span class="proto-anim-step-label">4. Tunnel steht</span>Beide Sicherheitsassoziationen sind aktiv - ab jetzt kann verschlüsselter Datenverkehr fliessen.</li>
+      <li class="proto-anim-step" data-step="4"><span class="proto-anim-step-label">5. Datenpaket →</span>Client verschlüsselt das Original-Paket komplett und kapselt es in ein neues äusseres Paket, adressiert ans Gateway.</li>
+      <li class="proto-anim-step" data-step="5"><span class="proto-anim-step-label">6. → entkapselt</span>Gateway entschlüsselt/entkapselt und leitet das ursprüngliche Paket ans eigentliche interne Ziel weiter.</li>
+    </ol>
+    <div class="proto-anim-checks" id="vpn-anim-checks"></div>
+    <div class="proto-anim-detail" id="vpn-anim-detail"></div>
+    <p id="vpn-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="vpn-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="vpn-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="vpn-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
+    <p class="text-muted">
+      Entscheidend ist Schritt 5: von aussen (im Internet) ist nur die
+      äussere Adressierung Client ↔ Gateway sichtbar - die eigentliche
+      interne Zieladresse steckt komplett verschlüsselt im inneren Paket
+      und wird erst nach der Entkapselung am Gateway sichtbar.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
       Site-to-Site vs. Client-to-Site
       <details class="info-toggle">
         <summary>i</summary>
@@ -191,7 +249,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260909"></script>
+<script src="../js/progress.js?v=20260910"></script>
 <script src="../js/vpn-basics.js"></script>
 </body>
 </html>

@@ -400,6 +400,45 @@ function protoAnimMoveTo(el, node) {
   el.style.top = node.top;
 }
 
+/**
+ * Rendert den konkreten Inhalt des aktuell aktiven Pakets/Schritts
+ * (z.B. Absender/Ziel, Nachrichtentyp, Nutzdaten) als Feldliste, statt
+ * nur einen bewegten Punkt zu zeigen. fields: [{label, value}, ...].
+ */
+function protoAnimRenderDetail(containerEl, fields) {
+  if (!fields || fields.length === 0) {
+    containerEl.innerHTML = "";
+    return;
+  }
+  containerEl.innerHTML = fields
+    .map(
+      (f) => `
+      <div class="proto-anim-detail-row">
+        <span class="proto-anim-detail-label">${f.label}</span>
+        <span class="proto-anim-detail-value">${f.value}</span>
+      </div>`
+    )
+    .join("");
+}
+
+/**
+ * Rendert Prüf-Badges (z.B. SPF/DKIM/DMARC, Zertifikatsprüfung).
+ * checks: [{label, state: "pending"|"pass"|"fail"}, ...].
+ */
+function protoAnimRenderChecks(containerEl, checks) {
+  if (!checks || checks.length === 0) {
+    containerEl.innerHTML = "";
+    return;
+  }
+  containerEl.innerHTML = checks
+    .map((c) => {
+      const state = c.state || "pending";
+      const icon = state === "pass" ? "✅" : state === "fail" ? "❌" : "⏳";
+      return `<span class="proto-anim-check ${state}">${icon} ${c.label}</span>`;
+    })
+    .join("");
+}
+
 function loadProgress() {
   try {
     const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);

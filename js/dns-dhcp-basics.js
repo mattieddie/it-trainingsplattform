@@ -219,12 +219,22 @@ const DHCP_ANIM_STEPS = [
       { id: "dhcp-packet-1", from: "client", to: "server1", cls: "pkt-broadcast" },
       { id: "dhcp-packet-2", from: "client", to: "server2", cls: "pkt-broadcast" },
     ],
+    detail: [
+      { label: "Typ", value: "DHCPDISCOVER" },
+      { label: "Von → An", value: "0.0.0.0 → 255.255.255.255 (Broadcast)" },
+      { label: "Inhalt", value: "Client-MAC AA:BB:CC:11:22:33, noch keine IP - sucht DHCP-Server" },
+    ],
   },
   {
     text: "Beide erreichten Server antworten mit DHCPOFFER: je eine freie IP-Adresse samt Konfiguration.",
     packets: [
       { id: "dhcp-packet-1", from: "server1", to: "client", cls: "pkt-reply" },
       { id: "dhcp-packet-2", from: "server2", to: "client", cls: "pkt-reply" },
+    ],
+    detail: [
+      { label: "Typ", value: "DHCPOFFER" },
+      { label: "Server 1 bietet", value: "192.168.1.50, /24, Gateway .1, Lease 24h" },
+      { label: "Server 2 bietet", value: "192.168.1.80, /24, Gateway .1, Lease 24h" },
     ],
   },
   {
@@ -233,11 +243,21 @@ const DHCP_ANIM_STEPS = [
       { id: "dhcp-packet-1", from: "client", to: "server1", cls: "pkt-broadcast" },
       { id: "dhcp-packet-2", from: "client", to: "server2", cls: "pkt-broadcast" },
     ],
+    detail: [
+      { label: "Typ", value: "DHCPREQUEST" },
+      { label: "Von → An", value: "0.0.0.0 → 255.255.255.255 (Broadcast)" },
+      { label: "Inhalt", value: '"Ich nehme das Angebot von Server 1: 192.168.1.50"' },
+    ],
   },
   {
     text: "Server 1 bestätigt mit DHCPACK - die Adresse ist vergeben. Server 2 gibt sein reserviertes Angebot wieder frei.",
     packets: [{ id: "dhcp-packet-1", from: "server1", to: "client", cls: "pkt-final" }],
     inactiveNode: "dhcp-node-server2",
+    detail: [
+      { label: "Typ", value: "DHCPACK" },
+      { label: "Von → An", value: "Server 1 → Client" },
+      { label: "Inhalt", value: "IP 192.168.1.50/24, Gateway 192.168.1.1, DNS 192.168.1.1, Lease 24h" },
+    ],
   },
 ];
 
@@ -278,6 +298,7 @@ async function dhcpAnimPlayStep(index) {
   });
 
   status.textContent = step.text;
+  protoAnimRenderDetail(document.getElementById("dhcp-anim-detail"), step.detail);
   await protoAnimWait(1200);
 
   stepEls[index].classList.remove("active");
@@ -327,10 +348,13 @@ function dhcpAnimResetVisuals() {
   });
   document.querySelectorAll("#dhcp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
   document.querySelectorAll("#dhcp-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("dhcp-anim-detail"), null);
 }
 
 function dhcpAnimReset() {
   dhcpAnimResetVisuals();
+  dhcpAnimRunning = false;
+  dhcpAnimSetButtonsDisabled(false);
   document.getElementById("dhcp-anim-status").textContent =
     'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
 }
@@ -353,14 +377,86 @@ const DNS_NODES = {
 };
 
 const DNS_ANIM_STEPS = [
-  { from: "client", to: "resolver", cls: "pkt-query", text: 'Client fragt seinen Resolver: "Wie lautet die IP von shop.beispiel.ch?"' },
-  { from: "resolver", to: "root", cls: "pkt-query", text: "Nichts im Cache - Resolver fragt einen Root-Nameserver." },
-  { from: "root", to: "resolver", cls: "pkt-reply", text: 'Root-Server kennt die Domain nicht, verweist aber: "Frag den zuständigen .ch-TLD-Server."' },
-  { from: "resolver", to: "tld", cls: "pkt-query", text: "Resolver fragt den .ch-TLD-Server." },
-  { from: "tld", to: "resolver", cls: "pkt-reply", text: 'TLD-Server verweist weiter: "Frag den autoritativen Nameserver von beispiel.ch."' },
-  { from: "resolver", to: "auth", cls: "pkt-query", text: "Resolver fragt den autoritativen Nameserver direkt." },
-  { from: "auth", to: "resolver", cls: "pkt-final", text: "Autoritativer Server kennt die Antwort: die IP-Adresse von shop.beispiel.ch." },
-  { from: "resolver", to: "client", cls: "pkt-final", text: "Resolver cacht das Ergebnis (für die Dauer der TTL) und gibt die Antwort an den Client zurück." },
+  {
+    from: "client",
+    to: "resolver",
+    cls: "pkt-query",
+    text: 'Client fragt seinen Resolver: "Wie lautet die IP von shop.beispiel.ch?"',
+    detail: [
+      { label: "Typ", value: "DNS-Query" },
+      { label: "Frage", value: "shop.beispiel.ch, Typ A" },
+    ],
+  },
+  {
+    from: "resolver",
+    to: "root",
+    cls: "pkt-query",
+    text: "Nichts im Cache - Resolver fragt einen Root-Nameserver.",
+    detail: [
+      { label: "Typ", value: "DNS-Query" },
+      { label: "Frage", value: "shop.beispiel.ch, Typ A" },
+    ],
+  },
+  {
+    from: "root",
+    to: "resolver",
+    cls: "pkt-reply",
+    text: 'Root-Server kennt die Domain nicht, verweist aber: "Frag den zuständigen .ch-TLD-Server."',
+    detail: [
+      { label: "Typ", value: "Referral (NS-Record)" },
+      { label: "Antwort", value: "Zuständig: .ch-TLD-Server (keine direkte Antwort)" },
+    ],
+  },
+  {
+    from: "resolver",
+    to: "tld",
+    cls: "pkt-query",
+    text: "Resolver fragt den .ch-TLD-Server.",
+    detail: [
+      { label: "Typ", value: "DNS-Query" },
+      { label: "Frage", value: "shop.beispiel.ch, Typ A" },
+    ],
+  },
+  {
+    from: "tld",
+    to: "resolver",
+    cls: "pkt-reply",
+    text: 'TLD-Server verweist weiter: "Frag den autoritativen Nameserver von beispiel.ch."',
+    detail: [
+      { label: "Typ", value: "Referral (NS-Record)" },
+      { label: "Antwort", value: "Zuständig: ns1.beispiel.ch (autoritativer Server)" },
+    ],
+  },
+  {
+    from: "resolver",
+    to: "auth",
+    cls: "pkt-query",
+    text: "Resolver fragt den autoritativen Nameserver direkt.",
+    detail: [
+      { label: "Typ", value: "DNS-Query" },
+      { label: "Frage", value: "shop.beispiel.ch, Typ A" },
+    ],
+  },
+  {
+    from: "auth",
+    to: "resolver",
+    cls: "pkt-final",
+    text: "Autoritativer Server kennt die Antwort: die IP-Adresse von shop.beispiel.ch.",
+    detail: [
+      { label: "Typ", value: "DNS-Antwort (A-Record)" },
+      { label: "Antwort", value: "shop.beispiel.ch = 91.198.22.4, TTL 3600s" },
+    ],
+  },
+  {
+    from: "resolver",
+    to: "client",
+    cls: "pkt-final",
+    text: "Resolver cacht das Ergebnis (für die Dauer der TTL) und gibt die Antwort an den Client zurück.",
+    detail: [
+      { label: "Typ", value: "DNS-Antwort (A-Record)" },
+      { label: "Antwort", value: "shop.beispiel.ch = 91.198.22.4, TTL 3600s (jetzt im Resolver-Cache)" },
+    ],
+  },
 ];
 
 let dnsAnimStep = 0;
@@ -385,6 +481,7 @@ async function dnsAnimPlayStep(index) {
   protoAnimMoveTo(packet, DNS_NODES[step.to]);
 
   status.textContent = step.text;
+  protoAnimRenderDetail(document.getElementById("dns-anim-detail"), step.detail);
   await protoAnimWait(950);
 
   stepEls[index].classList.remove("active");
@@ -431,10 +528,13 @@ function dnsAnimResetVisuals() {
   packet.style.left = DNS_NODES.client.left;
   packet.style.top = DNS_NODES.client.top;
   document.querySelectorAll("#dns-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("dns-anim-detail"), null);
 }
 
 function dnsAnimReset() {
   dnsAnimResetVisuals();
+  dnsAnimRunning = false;
+  dnsAnimSetButtonsDisabled(false);
   document.getElementById("dns-anim-status").textContent =
     'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
 }

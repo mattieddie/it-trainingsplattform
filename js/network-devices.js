@@ -471,11 +471,21 @@ const ARP_ANIM_STEPS = [
       { id: "arp-packet-1", from: "client", to: "target", cls: "pkt-broadcast" },
       { id: "arp-packet-2", from: "client", to: "other", cls: "pkt-broadcast" },
     ],
+    detail: [
+      { label: "Typ", value: "ARP-Request" },
+      { label: "Von → An", value: "AA:BB:CC:11:22:33 → FF:FF:FF:FF:FF:FF (Broadcast)" },
+      { label: "Inhalt", value: '"Wer hat 192.168.1.20? Bitte antworte an AA:BB:CC:11:22:33"' },
+    ],
   },
   {
     text: "Nur PC B antwortet direkt (Unicast) mit seiner MAC-Adresse - PC C ignoriert die Anfrage, da sie ihn nicht betrifft.",
     packets: [{ id: "arp-packet-1", from: "target", to: "client", cls: "pkt-final" }],
     inactiveNode: "arp-node-other",
+    detail: [
+      { label: "Typ", value: "ARP-Reply" },
+      { label: "Von → An", value: "BB:CC:DD:44:55:66 → AA:BB:CC:11:22:33 (Unicast)" },
+      { label: "Inhalt", value: '"192.168.1.20 ist bei MAC BB:CC:DD:44:55:66"' },
+    ],
   },
 ];
 
@@ -516,6 +526,7 @@ async function arpAnimPlayStep(index) {
   });
 
   status.textContent = step.text;
+  protoAnimRenderDetail(document.getElementById("arp-anim-detail"), step.detail);
   await protoAnimWait(1200);
 
   stepEls[index].classList.remove("active");
@@ -565,10 +576,13 @@ function arpAnimResetVisuals() {
   });
   document.querySelectorAll("#arp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
   document.querySelectorAll("#arp-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("arp-anim-detail"), null);
 }
 
 function arpAnimReset() {
   arpAnimResetVisuals();
+  arpAnimRunning = false;
+  arpAnimSetButtonsDisabled(false);
   document.getElementById("arp-anim-status").textContent =
     'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
 }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>E-Mail-Sicherheit &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260909" />
+<link rel="stylesheet" href="../css/style.css?v=20260910" />
 </head>
 <body>
 
@@ -336,6 +336,62 @@
 
   <div class="card">
     <h3 class="mt-0">
+      Animation: eine Mail wird geöffnet und geprüft
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Jetzt alles zusammen: sieh dir an, wie der empfangende Server
+          den "Umschlag" öffnet, SPF, DKIM und DMARC der Reihe nach prüft
+          - und vergleiche, wie identisch aussehende Mails je nach
+          Ergebnis im Postfach landen oder in Quarantäne verschwinden.
+        </div>
+      </details>
+    </h3>
+    <div class="btn-row" id="mail-scenario-buttons" style="margin-bottom:6px;">
+      <button type="button" class="btn small" data-scenario="legit">✅ Legitime Mail</button>
+      <button type="button" class="btn small ghost" data-scenario="phishing">❌ Phishing-Versuch</button>
+    </div>
+
+    <div class="proto-anim-track2d" id="mail-anim-track" style="height:190px;">
+      <div class="proto-anim-node2d" id="mail-node-sender" style="left:6%; top:50%;">
+        <div class="proto-anim-node2d-icon">📤</div>
+        <div>Absender-Server</div>
+      </div>
+      <div class="proto-anim-node2d" id="mail-node-receiver" style="left:42%; top:50%;">
+        <div class="proto-anim-node2d-icon">📥</div>
+        <div>Empfangender Server</div>
+      </div>
+      <div class="proto-anim-node2d" id="mail-node-inbox" style="left:88%; top:20%;">
+        <div class="proto-anim-node2d-icon">📬</div>
+        <div>Postfach</div>
+      </div>
+      <div class="proto-anim-node2d" id="mail-node-quarantine" style="left:88%; top:80%;">
+        <div class="proto-anim-node2d-icon">🚫</div>
+        <div>Quarantäne</div>
+      </div>
+      <div id="mail-packet" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+
+    <div class="mail-anim-envelope-shape" id="mail-anim-envelope">
+      <div class="env-flap"></div>
+      <div class="env-letter"></div>
+      <div class="env-body"></div>
+    </div>
+    <p class="text-muted mail-anim-envelope-label" id="mail-anim-envelope-label">Umschlag geschlossen</p>
+
+    <ol class="proto-anim-steps" id="mail-anim-steps"></ol>
+    <div class="proto-anim-checks" id="mail-anim-checks"></div>
+    <div class="proto-anim-detail" id="mail-anim-detail"></div>
+    <p id="mail-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="mail-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="mail-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="mail-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
       🧩 Interaktiv: welche Prüfung schaut sich welchen Teil der Mail an?
       <details class="info-toggle">
         <summary>i</summary>
@@ -448,7 +504,7 @@ _dmarc.firma.ch.        TXT  "v=DMARC1; p=quarantine; aspf=r; adkim=r"</pre>
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260909"></script>
+<script src="../js/progress.js?v=20260910"></script>
 <script src="../js/email-security.js"></script>
 </body>
 </html>

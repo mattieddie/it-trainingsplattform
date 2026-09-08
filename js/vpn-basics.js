@@ -202,11 +202,173 @@ function checkQuiz() {
   }
 }
 
+/* ---------- VPN-Tunnelaufbau-Animation ---------- */
+
+const VPN_NODES = {
+  client: { left: "8%", top: "50%" },
+  gateway: { left: "50%", top: "50%" },
+  internal: { left: "90%", top: "50%" },
+};
+
+const VPN_ANIM_STEPS = [
+  {
+    text: "Client baut einen sicheren Verhandlungskanal zum Gateway auf (Authentifizierung + Diffie-Hellman-Parameter).",
+    from: "client",
+    to: "gateway",
+    cls: "pkt-query",
+    detail: [
+      { label: "Typ", value: "IKE Phase 1 (Anfrage)" },
+      { label: "Inhalt", value: "Zertifikat/Pre-Shared-Key + Diffie-Hellman-Parameter" },
+    ],
+  },
+  {
+    text: "Gateway antwortet - der Verhandlungskanal (IKE SA) steht.",
+    from: "gateway",
+    to: "client",
+    cls: "pkt-reply",
+    detail: [
+      { label: "Typ", value: "IKE Phase 1 (Antwort)" },
+      { label: "Inhalt", value: "Gemeinsamer Schlüssel für den Verhandlungskanal ausgehandelt" },
+    ],
+  },
+  {
+    text: "Über den sicheren Kanal werden die eigentlichen Datenverschlüsselungs-Schlüssel ausgehandelt (IPsec SA).",
+    from: "client",
+    to: "gateway",
+    cls: "pkt-query",
+    detail: [
+      { label: "Typ", value: "IKE Phase 2" },
+      { label: "Inhalt", value: "Verschlüsselungs-/Authentifizierungs-Algorithmen für die Nutzdaten (IPsec SA)" },
+    ],
+  },
+  {
+    text: "Beide Sicherheitsassoziationen sind aktiv - ab jetzt kann verschlüsselter Datenverkehr durch den Tunnel fliessen.",
+    checksOnly: true,
+    checks: [
+      { label: "IKE SA (Verhandlungskanal)", state: "pass" },
+      { label: "IPsec SA (Datenverschlüsselung)", state: "pass" },
+    ],
+  },
+  {
+    text: "Client verschlüsselt das Original-Paket komplett und kapselt es in ein neues äusseres Paket, adressiert ans Gateway.",
+    from: "client",
+    to: "gateway",
+    cls: "pkt-final",
+    detail: [
+      { label: "Äusseres Paket", value: "Client-öffentliche-IP → VPN-Gateway-öffentliche-IP" },
+      { label: "Inneres Paket (verschlüsselt)", value: "192.168.10.5 → 10.10.0.5 - von aussen nicht lesbar" },
+    ],
+  },
+  {
+    text: "Gateway entschlüsselt/entkapselt und leitet das ursprüngliche Paket ans eigentliche interne Ziel weiter.",
+    from: "gateway",
+    to: "internal",
+    cls: "pkt-final",
+    detail: [{ label: "Paket (entkapselt)", value: "192.168.10.5 → 10.10.0.5, Original-Paket wiederhergestellt" }],
+  },
+];
+
+let vpnAnimStep = 0;
+let vpnAnimRunning = false;
+
+function vpnAnimSetButtonsDisabled(disabled) {
+  document.getElementById("vpn-anim-play").disabled = disabled;
+  document.getElementById("vpn-anim-step").disabled = disabled;
+}
+
+async function vpnAnimPlayStep(index) {
+  const step = VPN_ANIM_STEPS[index];
+  const packet = document.getElementById("vpn-packet");
+  const status = document.getElementById("vpn-anim-status");
+  const stepEls = document.querySelectorAll("#vpn-anim-steps .proto-anim-step");
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  if (step.checksOnly) {
+    packet.classList.add("hidden-packet");
+    protoAnimRenderChecks(document.getElementById("vpn-anim-checks"), step.checks);
+    protoAnimRenderDetail(document.getElementById("vpn-anim-detail"), null);
+  } else {
+    packet.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final");
+    packet.classList.add(step.cls);
+    protoAnimJumpTo(packet, VPN_NODES[step.from]);
+    protoAnimMoveTo(packet, VPN_NODES[step.to]);
+    protoAnimRenderDetail(document.getElementById("vpn-anim-detail"), step.detail);
+  }
+
+  status.textContent = step.text;
+  await protoAnimWait(1200);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function vpnAnimPlayAll() {
+  if (vpnAnimRunning) return;
+  vpnAnimRunning = true;
+  vpnAnimSetButtonsDisabled(true);
+  vpnAnimResetVisuals();
+
+  for (let i = 0; i < VPN_ANIM_STEPS.length; i++) {
+    await vpnAnimPlayStep(i);
+  }
+  vpnAnimStep = VPN_ANIM_STEPS.length;
+
+  document.getElementById("vpn-anim-status").textContent =
+    'Das Datenpaket ist entkapselt beim internen Ziel angekommen. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  vpnAnimSetButtonsDisabled(false);
+  vpnAnimRunning = false;
+}
+
+async function vpnAnimNextStep() {
+  if (vpnAnimRunning || vpnAnimStep >= VPN_ANIM_STEPS.length) return;
+  vpnAnimRunning = true;
+  vpnAnimSetButtonsDisabled(true);
+
+  await vpnAnimPlayStep(vpnAnimStep);
+  vpnAnimStep++;
+
+  if (vpnAnimStep >= VPN_ANIM_STEPS.length) {
+    document.getElementById("vpn-anim-status").textContent =
+      'Das Datenpaket ist entkapselt beim internen Ziel angekommen. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  vpnAnimSetButtonsDisabled(false);
+  vpnAnimRunning = false;
+}
+
+function vpnAnimResetVisuals() {
+  vpnAnimStep = 0;
+  const packet = document.getElementById("vpn-packet");
+  packet.className = "proto-anim-packet2d hidden-packet";
+  packet.style.left = VPN_NODES.client.left;
+  packet.style.top = VPN_NODES.client.top;
+  document.querySelectorAll("#vpn-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  protoAnimRenderDetail(document.getElementById("vpn-anim-detail"), null);
+  protoAnimRenderChecks(document.getElementById("vpn-anim-checks"), null);
+}
+
+function vpnAnimReset() {
+  vpnAnimResetVisuals();
+  vpnAnimRunning = false;
+  vpnAnimSetButtonsDisabled(false);
+  document.getElementById("vpn-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireVpnAnimation() {
+  vpnAnimReset();
+  document.getElementById("vpn-anim-play").addEventListener("click", vpnAnimPlayAll);
+  document.getElementById("vpn-anim-step").addEventListener("click", vpnAnimNextStep);
+  document.getElementById("vpn-anim-reset").addEventListener("click", vpnAnimReset);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
   if (getModuleStatus(MODULE_ID) === "done") {
     document.getElementById("completion-banner").classList.remove("hidden");
   }
+
+  wireVpnAnimation();
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);

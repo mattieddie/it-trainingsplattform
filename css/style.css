@@ -1441,3 +1441,146 @@ hr.sep {
   border-color: #ffb648;
 }
 
+.proto-anim-packet2d.pkt-danger {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+/* ---------- Paket-Inhaltsanzeige (was steckt konkret im aktuellen Paket) ---------- */
+
+.proto-anim-detail {
+  margin: 4px 0 14px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  font-size: 0.82rem;
+}
+
+.proto-anim-detail:empty {
+  display: none;
+}
+
+.proto-anim-detail-row {
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.proto-anim-detail-row + .proto-anim-detail-row {
+  border-top: 1px dashed var(--border);
+}
+
+.proto-anim-detail-label {
+  flex-shrink: 0;
+  width: 100px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+}
+
+.proto-anim-detail-value {
+  font-family: var(--mono);
+  word-break: break-word;
+  color: var(--text);
+}
+
+/* ---------- Prüf-Badges (SPF/DKIM/DMARC, Zertifikatsprüfung, ...) ---------- */
+
+.proto-anim-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+  min-height: 30px;
+}
+
+.proto-anim-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+
+.proto-anim-check.pending {
+  opacity: 0.5;
+}
+
+.proto-anim-check.pass {
+  border-color: var(--success);
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.proto-anim-check.fail {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* ---------- Umschlag-Öffnen-Grafik (E-Mail-Sicherheit) ---------- */
+
+.mail-anim-envelope-shape {
+  position: relative;
+  width: 104px;
+  height: 68px;
+  margin: 6px auto 4px;
+  perspective: 300px;
+}
+
+.mail-anim-envelope-shape .env-body {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  z-index: 1;
+}
+
+.mail-anim-envelope-shape .env-letter {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  height: 42px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  transition: transform 0.5s ease-in-out;
+  transform: translateY(0);
+  z-index: 2;
+}
+
+.mail-anim-envelope-shape.open .env-letter {
+  transform: translateY(-16px);
+}
+
+.mail-anim-envelope-shape .env-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform 0.5s ease-in-out;
+  z-index: 3;
+}
+
+.mail-anim-envelope-shape.open .env-flap {
+  transform: rotateX(180deg);
+}
+
+.mail-anim-envelope-label {
+  text-align: center;
+  margin: 0 0 12px;
+}
+
