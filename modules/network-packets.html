@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Netzwerkpakete, TCP/UDP &amp; OSI-Modell &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260904" />
+<link rel="stylesheet" href="../css/style.css?v=20260908" />
 </head>
 <body>
 
@@ -252,31 +252,48 @@
       <tr><td>Typische Nutzung</td><td>HTTP/HTTPS, SSH, E-Mail, Dateitransfer</td><td>DNS, Video-Streaming, VoIP, Online-Gaming</td></tr>
     </table>
 
-    <h4>TCP-Drei-Wege-Handschlag (Handshake)</h4>
-    <svg viewBox="0 0 500 160" style="width:100%; max-width:500px; display:block; margin:10px auto;" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="60" width="100" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
-      <text x="60" y="85" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Client</text>
+    <h4>
+      TCP-Drei-Wege-Handschlag (Handshake)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie eine kurze Verabredung am Telefon: "Bist du da?" - "Ja, bist
+          du da?" - "Ja." Erst nach diesem dreifachen Austausch wissen
+          BEIDE Seiten sicher, dass die Verbindung in beide Richtungen
+          funktioniert.
+        </div>
+      </details>
+    </h4>
+    <div class="tcp-anim">
+      <div class="tcp-anim-nodes">
+        <div class="tcp-anim-node">
+          <div class="tcp-anim-icon">💻</div>
+          <div>Client</div>
+        </div>
+        <div class="tcp-anim-track">
+          <div class="tcp-anim-line"></div>
+          <div class="tcp-anim-packet" id="tcp-packet"></div>
+        </div>
+        <div class="tcp-anim-node">
+          <div class="tcp-anim-icon">🖥️</div>
+          <div>Server</div>
+        </div>
+      </div>
 
-      <rect x="390" y="60" width="100" height="40" rx="6" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
-      <text x="440" y="85" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Server</text>
+      <ol class="tcp-anim-steps">
+        <li class="tcp-anim-step" data-step="0"><span class="tcp-anim-step-label">1. SYN →</span>Client schlägt eine Verbindung vor und nennt seine Startsequenznummer.</li>
+        <li class="tcp-anim-step" data-step="1"><span class="tcp-anim-step-label">2. ← SYN-ACK</span>Server bestätigt den Erhalt und schlägt seinerseits eine Verbindung vor.</li>
+        <li class="tcp-anim-step" data-step="2"><span class="tcp-anim-step-label">3. ACK →</span>Client bestätigt den Erhalt - die Verbindung steht.</li>
+      </ol>
 
-      <line x1="115" y1="35" x2="385" y2="35" stroke="#4f8cff" stroke-width="2" marker-end="url(#arr)"/>
-      <text x="250" y="28" fill="#4f8cff" font-size="12" text-anchor="middle" font-family="Consolas, monospace">1. SYN</text>
+      <p id="tcp-anim-status" class="text-muted">Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.</p>
 
-      <line x1="385" y1="65" x2="115" y2="65" stroke="#29d3c1" stroke-width="2" marker-end="url(#arr)"/>
-      <text x="250" y="58" fill="#29d3c1" font-size="12" text-anchor="middle" font-family="Consolas, monospace">2. SYN-ACK</text>
-
-      <line x1="115" y1="130" x2="385" y2="130" stroke="#ffb648" stroke-width="2" marker-end="url(#arr)"/>
-      <text x="250" y="123" fill="#ffb648" font-size="12" text-anchor="middle" font-family="Consolas, monospace">3. ACK</text>
-
-      <text x="250" y="150" fill="#3ecf6c" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Verbindung steht - Datenübertragung beginnt</text>
-
-      <defs>
-        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#9aa5b8"/>
-        </marker>
-      </defs>
-    </svg>
+      <div class="btn-row">
+        <button type="button" id="tcp-anim-play" class="btn primary">▶ Abspielen</button>
+        <button type="button" id="tcp-anim-step" class="btn ghost">Nächster Schritt</button>
+        <button type="button" id="tcp-anim-reset" class="btn small ghost">Zurücksetzen</button>
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -405,7 +422,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260904"></script>
+<script src="../js/progress.js?v=20260908"></script>
 <script src="../js/network-packets.js"></script>
 </body>
 </html>

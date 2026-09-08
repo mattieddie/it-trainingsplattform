@@ -5,6 +5,114 @@
 
 const MODULE_ID = "networkpackets";
 
+/* ---------- TCP-Handshake-Animation ---------- */
+
+const TCP_HANDSHAKE_STEPS = [
+  {
+    key: "syn",
+    to: "server",
+    text: 'Client sendet SYN: "Ich möchte eine Verbindung aufbauen, meine Sequenznummer ist X."',
+  },
+  {
+    key: "syn-ack",
+    to: "client",
+    text: 'Server antwortet mit SYN-ACK: "Verstanden, hier ist meine Sequenznummer Y, und ich bestätige deine X+1."',
+  },
+  {
+    key: "ack",
+    to: "server",
+    text: 'Client bestätigt mit ACK: "Verstanden, Y+1." Die Verbindung steht - Datenübertragung kann beginnen.',
+  },
+];
+
+let tcpAnimStep = 0;
+let tcpAnimRunning = false;
+
+function tcpAnimWait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function tcpAnimSetButtonsDisabled(disabled) {
+  document.getElementById("tcp-anim-play").disabled = disabled;
+  document.getElementById("tcp-anim-step").disabled = disabled;
+}
+
+async function tcpAnimPlayStep(index) {
+  const step = TCP_HANDSHAKE_STEPS[index];
+  const packet = document.getElementById("tcp-packet");
+  const status = document.getElementById("tcp-anim-status");
+  const stepEls = document.querySelectorAll(".tcp-anim-step");
+
+  stepEls.forEach((el, i) => {
+    el.classList.toggle("active", i === index);
+  });
+
+  packet.classList.remove("syn", "syn-ack", "ack");
+  packet.classList.add(step.key);
+  void packet.offsetWidth; // Reflow erzwingen, damit die Positionsänderung danach sauber animiert
+  packet.classList.toggle("at-server", step.to === "server");
+
+  status.textContent = step.text;
+  await tcpAnimWait(1100);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function tcpAnimPlayAll() {
+  if (tcpAnimRunning) return;
+  tcpAnimRunning = true;
+  tcpAnimSetButtonsDisabled(true);
+  tcpAnimResetVisuals();
+
+  for (let i = 0; i < TCP_HANDSHAKE_STEPS.length; i++) {
+    await tcpAnimPlayStep(i);
+  }
+  tcpAnimStep = TCP_HANDSHAKE_STEPS.length;
+
+  document.getElementById("tcp-anim-status").textContent =
+    'Verbindung steht - Datenübertragung beginnt. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  tcpAnimSetButtonsDisabled(false);
+  tcpAnimRunning = false;
+}
+
+async function tcpAnimNextStep() {
+  if (tcpAnimRunning || tcpAnimStep >= TCP_HANDSHAKE_STEPS.length) return;
+  tcpAnimRunning = true;
+  tcpAnimSetButtonsDisabled(true);
+
+  await tcpAnimPlayStep(tcpAnimStep);
+  tcpAnimStep++;
+
+  if (tcpAnimStep >= TCP_HANDSHAKE_STEPS.length) {
+    document.getElementById("tcp-anim-status").textContent =
+      'Verbindung steht - Datenübertragung beginnt. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  tcpAnimSetButtonsDisabled(false);
+  tcpAnimRunning = false;
+}
+
+function tcpAnimResetVisuals() {
+  tcpAnimStep = 0;
+  const packet = document.getElementById("tcp-packet");
+  packet.className = "tcp-anim-packet";
+  document.querySelectorAll(".tcp-anim-step").forEach((el) => el.classList.remove("active", "done"));
+}
+
+function tcpAnimReset() {
+  tcpAnimResetVisuals();
+  document.getElementById("tcp-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireTcpHandshakeAnimation() {
+  const playBtn = document.getElementById("tcp-anim-play");
+  if (!playBtn) return;
+  playBtn.addEventListener("click", tcpAnimPlayAll);
+  document.getElementById("tcp-anim-step").addEventListener("click", tcpAnimNextStep);
+  document.getElementById("tcp-anim-reset").addEventListener("click", tcpAnimReset);
+}
+
 const QUIZ = [
   {
     difficulty: "easy",
@@ -256,4 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initMatchPuzzle(document.getElementById("port-match-container"), PORT_PAIRS, (matched, total) => {
     document.getElementById("port-match-progress").textContent = `${matched} / ${total} Paare gefunden`;
   });
+
+  wireTcpHandshakeAnimation();
 });
