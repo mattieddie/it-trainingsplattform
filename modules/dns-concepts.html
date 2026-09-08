@@ -21,6 +21,7 @@
         <a href="scripting.html">Skripting</a>
       <a href="containers.html">Virtualisierung &amp; Docker</a>
       <a href="databases.html">Datenbanken</a>
+      <a href="api-basics.html">API-Grundlagen</a>
       <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
       </div>
     </div>
@@ -153,6 +154,71 @@
       der beteiligten Resolver - von Minuten bis zu 24-48 Stunden dauern.
       Tipp: Vor einer geplanten Domain-Änderung die TTL vorab absenken.
     </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      DNS over TLS (DoT) &amp; DNS over HTTPS (DoH)
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Klassisches DNS ist wie eine Postkarte: jeder auf dem
+          Transportweg (Provider, öffentliches WLAN) kann mitlesen, welche
+          Namen du auflöst - und damit grob, welche Seiten du besuchst.
+          DoT/DoH stecken dieselbe Postkarte in einen verschlossenen
+          Umschlag.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Klassisches DNS (Port 53) überträgt Anfragen und Antworten im
+      <strong>Klartext</strong> - ohne jede Verschlüsselung. Jeder, der den
+      Datenverkehr auf dem Weg mitschneiden kann (Internetanbieter,
+      Betreiber eines öffentlichen WLANs, ein Angreifer im selben Netz),
+      sieht dadurch nicht nur, welche Domains angefragt werden, sondern
+      kann die Antwort theoretisch auch fälschen (DNS-Spoofing). DoT und
+      DoH schliessen genau diese Lücke, auf zwei unterschiedliche Arten:
+    </p>
+
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Verfahren</th><th>Port</th><th>Wie erkennbar?</th>
+      </tr>
+      <tr>
+        <td>Klassisches DNS</td>
+        <td class="mono">53 (UDP/TCP)</td>
+        <td>Unverschlüsselt - für jeden auf dem Weg vollständig einsehbar</td>
+      </tr>
+      <tr>
+        <td><strong>DoT</strong> (DNS over TLS)</td>
+        <td class="mono">853</td>
+        <td>Eigener, dedizierter Port - DNS-Verkehr bleibt als solcher erkennbar (und damit gezielt blockierbar), nur der Inhalt ist verschlüsselt</td>
+      </tr>
+      <tr>
+        <td><strong>DoH</strong> (DNS over HTTPS)</td>
+        <td class="mono">443 (wie normales HTTPS)</td>
+        <td>Sieht für einen Beobachter wie gewöhnlicher Webseiten-Aufruf aus - kaum vom übrigen HTTPS-Verkehr auf demselben Port zu unterscheiden</td>
+      </tr>
+    </table>
+
+    <p class="text-muted" style="margin-top:10px;">
+      Beide Verfahren verschlüsseln die DNS-Anfrage per TLS - derselbe
+      Mechanismus, der auch HTTPS absichert. Grosse öffentliche Resolver
+      wie Cloudflare (1.1.1.1) oder Google (8.8.8.8) unterstützen beide
+      Varianten, und moderne Browser (Firefox, Chrome) können DoH direkt
+      selbst nutzen, unabhängig vom im Betriebssystem eingestellten
+      DNS-Server.
+    </p>
+    <div class="alert warning" style="margin-top:10px;">
+      <strong>Kehrseite für Unternehmensnetzwerke</strong>
+      Nutzt eine Anwendung DoH direkt zu einem externen Resolver, umgeht
+      sie damit den intern konfigurierten (und ggf. gefilterten/überwachten)
+      DNS-Server komplett - IT-Security-Teams verlieren dadurch die
+      Sichtbarkeit auf DNS-Anfragen, die z.B. zur Erkennung von Malware
+      genutzt wird. Viele Unternehmen blockieren deshalb bekannte
+      DoH-Endpunkte gezielt oder verlangen, DoH nur gegen den eigenen,
+      internen Resolver zu verwenden.
+    </div>
   </div>
 
   <div class="card">

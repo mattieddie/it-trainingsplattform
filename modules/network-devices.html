@@ -21,6 +21,7 @@
         <a href="scripting.html">Skripting</a>
       <a href="containers.html">Virtualisierung &amp; Docker</a>
       <a href="databases.html">Datenbanken</a>
+      <a href="api-basics.html">API-Grundlagen</a>
       <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
       </div>
     </div>
@@ -150,6 +151,91 @@
       Hub = blinder Verteiler (schickt an alle) &middot;
       Switch = cleverer Verkehrslenker (merkt sich MAC-Adressen) &middot;
       Router = Entscheider zwischen Netzwerken (per IP-Adresse und Routing-Tabelle).
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      VLANs: Broadcast-Domänen logisch trennen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein VLAN ist wie eine unsichtbare Wand mitten durch einen
+          Grossraum: physisch sitzen alle im selben Raum (Switch), aber
+          logisch bilden sie getrennte Bereiche, die sich gegenseitig
+          nicht per Broadcast erreichen - ganz ohne zusätzliche Kabel.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ein <strong>VLAN</strong> (Virtual LAN) teilt einen einzelnen
+      physischen Switch in mehrere logisch getrennte Netzwerke auf - jedes
+      mit eigener Broadcast-Domäne, oft auch eigenem IP-Subnetz. Geräte im
+      selben VLAN können sich direkt erreichen, Geräte in unterschiedlichen
+      VLANs nicht - dafür braucht es einen Router (oder eine Layer-3-fähige
+      Komponente), genau wie zwischen zwei physisch getrennten Netzwerken.
+    </p>
+
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Port-Typ</th><th>Trägt Verkehr für</th><th>Typischer Einsatz</th>
+      </tr>
+      <tr>
+        <td><strong>Access-Port</strong></td>
+        <td>Genau EIN VLAN, unmarkiert (untagged)</td>
+        <td>Anschluss eines Endgeräts (PC, Drucker, Access Point) - das Gerät selbst weiss nichts von VLANs</td>
+      </tr>
+      <tr>
+        <td><strong>Trunk-Port</strong></td>
+        <td>MEHRERE VLANs gleichzeitig, per Tag unterschieden</td>
+        <td>Verbindung zwischen zwei Switches oder Switch↔Router, wo Verkehr mehrerer VLANs gebündelt durch ein einziges Kabel muss</td>
+      </tr>
+    </table>
+
+    <p style="margin-top:10px;">
+      Damit ein Trunk-Port weiss, zu welchem VLAN ein Frame gehört, wird
+      es beim Senden mit einem <strong>802.1Q-Tag</strong> versehen: 4
+      zusätzliche Bytes im Ethernet-Frame, die u.a. die VLAN-ID (1-4094)
+      enthalten. Der empfangende Switch liest das Tag, ordnet den Frame
+      dem richtigen VLAN zu und entfernt das Tag wieder, bevor er ihn an
+      einen Access-Port weiterreicht - das Endgerät selbst sieht davon nie
+      etwas.
+    </p>
+
+    <svg viewBox="0 0 680 260" style="width:100%; max-width:680px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="280" height="90" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="160" y="42" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Switch A</text>
+      <rect x="35" y="55" width="110" height="40" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="90" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Access-Port</text>
+      <text x="90" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VLAN 10 (Vertrieb)</text>
+      <rect x="155" y="55" width="110" height="40" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="210" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Access-Port</text>
+      <text x="210" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VLAN 20 (IT)</text>
+
+      <rect x="380" y="20" width="280" height="90" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="520" y="42" fill="#e6e9f0" font-size="13" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Switch B</text>
+      <rect x="395" y="55" width="110" height="40" rx="6" fill="#1b2b4d" stroke="#4f8cff" stroke-width="2"/>
+      <text x="450" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Access-Port</text>
+      <text x="450" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VLAN 10 (Vertrieb)</text>
+      <rect x="515" y="55" width="110" height="40" rx="6" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="570" y="72" fill="#e6e9f0" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Access-Port</text>
+      <text x="570" y="88" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">VLAN 20 (IT)</text>
+
+      <rect x="240" y="150" width="200" height="55" rx="8" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="340" y="174" fill="#e6e9f0" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">Trunk-Port ↔ Trunk-Port</text>
+      <text x="340" y="192" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">802.1Q-getaggt: VLAN 10 + VLAN 20</text>
+
+      <line x1="160" y1="110" x2="300" y2="160" stroke="#9aa5b8" stroke-width="2"/>
+      <line x1="520" y1="110" x2="380" y2="160" stroke="#9aa5b8" stroke-width="2"/>
+
+      <text x="340" y="240" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Ein einziges Kabel zwischen den Switches trägt beide VLANs gleichzeitig, sauber per Tag getrennt</text>
+    </svg>
+
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Kurz gesagt</strong>
+      Access-Port = für EIN Gerät in EINEM VLAN, ohne Tag &middot;
+      Trunk-Port = Sammelleitung für MEHRERE VLANs zwischen Switches, mit 802.1Q-Tag pro Frame &middot;
+      Kommunikation ZWISCHEN VLANs braucht wie zwischen echten Subnetzen einen Router.
     </div>
   </div>
 

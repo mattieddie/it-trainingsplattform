@@ -96,6 +96,38 @@ const QUIZ = [
     ],
     correctIndex: 0,
   },
+  {
+    difficulty: "medium",
+    question: "Was ist der Kernunterschied zwischen klassischem DNS und DNS over TLS (DoT)?",
+    options: [
+      "DoT überträgt dieselben DNS-Anfragen über eine TLS-verschlüsselte Verbindung auf Port 853, statt unverschlüsselt auf Port 53",
+      "DoT nutzt komplett andere Record-Typen als klassisches DNS",
+      "DoT funktioniert nur innerhalb des eigenen lokalen Netzwerks, nie über das Internet",
+    ],
+    correctIndex: 0,
+  },
+  {
+    difficulty: "medium",
+    question:
+      "Warum ist DNS over HTTPS (DoH) für Netzwerk-Beobachter schwerer zu erkennen als DNS over TLS (DoT)?",
+    options: [
+      "DoH läuft über denselben Port 443 wie gewöhnliches HTTPS-Surfen und lässt sich dadurch kaum vom übrigen Webverkehr unterscheiden - DoT nutzt dagegen den eigenen, klar erkennbaren Port 853",
+      "DoH verwendet gar keine Verschlüsselung, wodurch es sich vollständig tarnt",
+      "DoH und DoT sind technisch identisch, nur der Name unterscheidet sich",
+    ],
+    correctIndex: 0,
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Warum blockieren manche Unternehmensnetzwerke gezielt bekannte DoH-Endpunkte, statt DoH einfach zuzulassen?",
+    options: [
+      "Weil Anwendungen bei direktem DoH zu einem externen Resolver den intern konfigurierten (überwachten/gefilterten) DNS-Server umgehen können - das nimmt der IT-Security die Sichtbarkeit auf DNS-Anfragen, die z.B. zur Malware-Erkennung genutzt wird",
+      "Weil DoH grundsätzlich technisch unzuverlässiger ist als klassisches DNS",
+      "Weil DoH gesetzlich in den meisten Ländern verboten ist",
+    ],
+    correctIndex: 0,
+  },
 ];
 
 function loadDnsConfig() {

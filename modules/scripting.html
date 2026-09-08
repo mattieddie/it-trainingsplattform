@@ -21,6 +21,7 @@
         <a href="scripting.html" class="active">Skripting</a>
       <a href="containers.html">Virtualisierung &amp; Docker</a>
       <a href="databases.html">Datenbanken</a>
+      <a href="api-basics.html">API-Grundlagen</a>
       <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
       </div>
     </div>
@@ -108,6 +109,94 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">
+      Fehlerbehandlung (Error Handling) - und warum sie entscheidend ist
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein Skript ohne Fehlerbehandlung ist wie ein Rezept, bei dem
+          niemand merkt, wenn eine Zutat fehlt - man backt einfach weiter
+          und wundert sich hinterher, warum der Kuchen nicht schmeckt. Bei
+          einem unbeaufsichtigt laufenden Deployment-Skript kann das ein
+          halb fertig konfiguriertes System bedeuten, das niemand bemerkt.
+        </div>
+      </details>
+    </h3>
+    <p>
+      PowerShell kennt zwei grundlegend unterschiedliche Fehlertypen - und
+      genau diese Unterscheidung ist der häufigste Stolperstein bei der
+      Fehlerbehandlung:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Fehlertyp</th><th>Verhalten</th><th>Von try/catch abgefangen?</th>
+      </tr>
+      <tr><td><strong>Terminating</strong> (schwerwiegend)</td><td>Die aktuelle Befehlsfolge bricht sofort ab</td><td>Ja, automatisch</td></tr>
+      <tr><td><strong>Non-terminating</strong> (Standard bei den meisten Cmdlets)</td><td>Fehler wird angezeigt/protokolliert, das Skript läuft einfach mit der nächsten Zeile weiter</td><td>Nein - nicht, solange man nicht explizit <code class="mono">-ErrorAction Stop</code> erzwingt</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:10px;">
+      Genau das ist die Falle: ein Skript mit <code class="mono">try/catch</code>
+      WIRKT abgesichert - läuft der fehlgeschlagene Befehl aber mit einem
+      non-terminating Fehler weiter, greift der catch-Block nie, und das
+      Skript setzt sich fort, als wäre nichts passiert. Bei einem
+      automatisiert laufenden Deployment- oder Wartungsskript fällt das oft
+      erst auf, wenn der Schaden längst entstanden ist.
+    </p>
+
+    <svg viewBox="0 0 680 220" style="width:100%; max-width:680px; display:block; margin:10px 0;" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="200" height="50" rx="8" fill="#1b2333" stroke="#9aa5b8" stroke-width="2"/>
+      <text x="110" y="40" fill="#e6e9f0" font-size="13" text-anchor="middle" font-family="Consolas, monospace">Cmdlet schlägt fehl</text>
+
+      <text x="250" y="42" fill="#9aa5b8" font-size="16" text-anchor="middle">→</text>
+
+      <rect x="280" y="10" width="180" height="50" rx="8" fill="#241a33" stroke="#ffb648" stroke-width="2"/>
+      <text x="370" y="34" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Non-terminating</text>
+      <text x="370" y="50" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">(Standardverhalten)</text>
+
+      <text x="370" y="90" fill="#9aa5b8" font-size="16" text-anchor="middle">↓</text>
+
+      <rect x="280" y="100" width="180" height="55" rx="8" fill="#1b2333" stroke="#ff5c6c" stroke-width="2"/>
+      <text x="370" y="124" fill="#ff5c6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">catch greift NICHT</text>
+      <text x="370" y="142" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Skript läuft still weiter</text>
+
+      <rect x="500" y="10" width="170" height="50" rx="8" fill="#173330" stroke="#29d3c1" stroke-width="2"/>
+      <text x="585" y="34" fill="#e6e9f0" font-size="12" text-anchor="middle" font-family="Consolas, monospace">-ErrorAction Stop</text>
+      <text x="585" y="50" fill="#9aa5b8" font-size="10" text-anchor="middle" font-family="Consolas, monospace">erzwingt Terminating</text>
+
+      <text x="490" y="42" fill="#9aa5b8" font-size="16" text-anchor="middle">+</text>
+
+      <text x="585" y="90" fill="#9aa5b8" font-size="16" text-anchor="middle">↓</text>
+
+      <rect x="500" y="100" width="170" height="55" rx="8" fill="#1b2333" stroke="#3ecf6c" stroke-width="2"/>
+      <text x="585" y="124" fill="#3ecf6c" font-size="12" font-weight="700" text-anchor="middle" font-family="Consolas, monospace">catch greift</text>
+      <text x="585" y="142" fill="#9aa5b8" font-size="11" text-anchor="middle" font-family="Consolas, monospace">Fehler wird behandelt</text>
+
+      <text x="345" y="195" fill="#9aa5b8" font-size="12" text-anchor="middle" font-family="Consolas, monospace">Derselbe Fehler - unterschiedliches Ergebnis, je nach ErrorAction</text>
+    </svg>
+
+    <p class="text-muted" style="margin-top:0;">Grundstruktur der Fehlerbehandlung:</p>
+    <pre>try {
+    Get-Item "C:\pfad\existiert-nicht.txt" -ErrorAction Stop
+} catch {
+    Write-Host "Fehler: $($_.Exception.Message)"
+} finally {
+    Write-Host "Läuft immer - Aufräumarbeiten hier"
+}</pre>
+    <p class="text-muted">
+      <code class="mono">$_.Exception.Message</code> enthält im catch-Block
+      die eigentliche Fehlermeldung. Der <code class="mono">finally</code>-Block
+      läuft immer - egal ob ein Fehler auftrat oder nicht - und eignet sich
+      deshalb für Aufräumarbeiten (z.B. eine Datei/Verbindung wieder
+      schliessen). Wer die Fehlerbehandlung für ein ganzes Skript auf einen
+      Schlag verschärfen will, setzt am Anfang
+      <code class="mono">$ErrorActionPreference = "Stop"</code> - dann
+      werden auch sonst non-terminating Fehler standardmässig terminierend
+      (und damit von try/catch abfangbar), ohne jedes einzelne Cmdlet mit
+      <code class="mono">-ErrorAction Stop</code> versehen zu müssen.
+    </p>
+  </div>
+
+  <div class="card">
     <div class="flex" style="justify-content: space-between; align-items:center; flex-wrap:wrap; gap:8px;">
       <div class="flex gap-8 flex-wrap">
         <div class="field" style="margin:0; min-width:150px;">
@@ -128,7 +217,7 @@
           </select>
         </div>
       </div>
-      <span id="score-pill" class="score-pill">Gelöst: 0 / 12 Skripte</span>
+      <span id="score-pill" class="score-pill">Gelöst: 0 / 17 Skripte</span>
     </div>
 
     <hr class="sep" />

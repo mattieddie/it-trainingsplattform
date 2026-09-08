@@ -111,6 +111,16 @@ const MODULES = [
     prereqs: ["computerbasics"],
   },
   {
+    id: "apibasics",
+    track: "grundlagen",
+    title: "API-Grundlagen",
+    icon: "\u{1F517}",
+    description:
+      "Was eine API ist, REST-Prinzipien, HTTP-Methoden und Statuscodes - inkl. simulierter REST-API zum schrittweisen Abrufen, Anlegen, Ändern und Löschen von Daten.",
+    href: "modules/api-basics.html",
+    prereqs: ["databases"],
+  },
+  {
     id: "pctickets",
     track: "grundlagen",
     title: "PC-Troubleshooting",

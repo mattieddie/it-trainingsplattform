@@ -99,6 +99,55 @@ const QUIZ = [
     explanation:
       "Anders als bei Firewall-Regeln (erste passende Regel gewinnt) gilt beim Routing das Prinzip \"Longest Prefix Match\": von allen passenden Routen gewinnt die mit der spezifischsten (längsten) Präfixlänge - unabhängig von der Reihenfolge in der Tabelle.",
   },
+  {
+    difficulty: "easy",
+    question: "Was bewirkt ein VLAN auf einem physischen Switch?",
+    options: [
+      "Es teilt den Switch logisch in mehrere getrennte Broadcast-Domänen auf, ohne dass zusätzliche physische Hardware nötig ist",
+      "Es erhöht die maximale Übertragungsgeschwindigkeit aller angeschlossenen Ports",
+      "Es verschlüsselt automatisch den gesamten Datenverkehr auf dem Switch",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Ein VLAN (Virtual LAN) trennt einen einzelnen physischen Switch logisch in mehrere eigenständige Broadcast-Domänen - Geräte in unterschiedlichen VLANs erreichen sich nicht per Broadcast, obwohl sie am selben Switch hängen.",
+  },
+  {
+    difficulty: "medium",
+    question: "Was unterscheidet einen Access-Port von einem Trunk-Port?",
+    options: [
+      "Ein Access-Port gehört zu genau einem VLAN und überträgt unmarkierte Frames; ein Trunk-Port trägt mehrere VLANs gleichzeitig, per Tag unterschieden",
+      "Ein Trunk-Port ist nur ein anderer Name für einen Access-Port mit höherer Geschwindigkeit",
+      "Ein Access-Port wird ausschliesslich zwischen zwei Switches verwendet, ein Trunk-Port nur für Endgeräte",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Access-Ports verbinden Endgeräte (PC, Drucker) mit genau einem VLAN, ohne dass das Gerät selbst etwas von VLANs mitbekommt. Trunk-Ports verbinden meist Switches untereinander (oder mit einem Router) und bündeln den Verkehr mehrerer VLANs über eine einzige Leitung.",
+  },
+  {
+    difficulty: "medium",
+    question: "Wozu dient das 802.1Q-Tag in einem Ethernet-Frame?",
+    options: [
+      "Es markiert, zu welchem VLAN der Frame gehört, damit ein Trunk-Port mehrere VLANs über dieselbe Leitung sauber getrennt übertragen kann",
+      "Es enthält eine Prüfsumme zur Fehlerkorrektur bei beschädigten Frames",
+      "Es verschlüsselt den Inhalt des Frames für die Übertragung über den Trunk",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Das 802.1Q-Tag fügt dem Frame 4 zusätzliche Bytes mit u.a. der VLAN-ID hinzu. Nur so kann ein Trunk-Port, der Verkehr mehrerer VLANs gleichzeitig trägt, jeden Frame beim Empfang wieder dem richtigen VLAN zuordnen.",
+  },
+  {
+    difficulty: "hard",
+    question:
+      "Ein PC in VLAN 10 soll mit einem Server in VLAN 20 kommunizieren, beide hängen am selben Switch. Reicht dafür eine reine Layer-2-VLAN-Konfiguration am Switch aus?",
+    options: [
+      "Nein - VLANs sind eigene Broadcast-Domänen wie getrennte Netzwerke, dafür braucht es Routing (Router oder Layer-3-Switch) zwischen den VLANs, genau wie zwischen zwei physisch getrennten Subnetzen",
+      "Ja, solange beide Geräte an demselben physischen Switch angeschlossen sind, spielt das VLAN keine Rolle",
+      "Ja, ein Trunk-Port zwischen den beiden Access-Ports reicht dafür bereits aus",
+    ],
+    correctIndex: 0,
+    explanation:
+      "VLANs trennen Broadcast-Domänen genauso wirksam wie physisch getrennte Netzwerke - reines Switching (Layer 2) reicht für die Kommunikation zwischen unterschiedlichen VLANs nicht aus. Es braucht Inter-VLAN-Routing, z.B. über einen Router-on-a-Stick oder einen Layer-3-fähigen Switch.",
+  },
 ];
 
 function renderQuiz() {

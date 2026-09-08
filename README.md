@@ -14,7 +14,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 28 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 29 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -32,16 +32,17 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 **1. IT-Grundlagen** - das Handwerkszeug
 - **Computer- & Windows-Grundlagen** ([modules/computer-basics.html](modules/computer-basics.html)) - Startmodul: Computeraufbau (inkl. Hardware-Diagramm), Benutzer- vs. Systemebene, NTFS-Berechtigungen (inkl. nachgebautem Berechtigungsdialog), Registry (inkl. Root-Key/Schlüssel/Wert-Baumdiagramm), Dateitypen.
 - **CMD & PowerShell Terminal-Trainer** ([modules/terminal.html](modules/terminal.html)) - simuliertes Terminal, Befehle eintippen statt auswählen, gestaffelte Tipps.
-- **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen.
+- **Skripting-Grundlagen** ([modules/scripting.html](modules/scripting.html)) - Batch-/PowerShell-Skripte lesen und deren Ausgabe vorhersagen, inkl. klassischer Stolperfallen und eines eigenen Schwerpunkts zu PowerShell-Fehlerbehandlung (terminating vs. non-terminating Errors, try/catch/finally, -ErrorAction Stop, $ErrorActionPreference).
 - **Virtualisierung & Docker-Grundlagen** ([modules/containers.html](modules/containers.html)) - Typ-1- vs. Typ-2-Hypervisor, virtuelle Maschinen vs. Container, Docker-Kernbegriffe (Image/Container/Dockerfile/Registry), inkl. Reihenfolge-Puzzle "vom Code zum laufenden Container".
 - **Datenbanken** ([modules/databases.html](modules/databases.html)) - Datenbanktypen (relational/Key-Value/Document/Wide-Column/Graph), relationale Beziehungen (1:1/1:N/M:N), ER-Diagramme/Kardinalitäten, Verbindungen zu Datenbanken (Ports/Treiber), inkl. offen einsehbarer Testdatenbank mit eigener SQL-Sandbox (selbstgebauter, stark vereinfachter SELECT-Interpreter) und 9 Abfrage-Aufgaben.
+- **API-Grundlagen** ([modules/api-basics.html](modules/api-basics.html)) - Was eine API ist, REST-Prinzipien, HTTP-Methoden (CRUD), Statuscodes, Aufbau einer Anfrage (Pfad-/Query-Parameter, Body, Header) - inkl. simulierter REST-API (selbstgebauter Interpreter über eine "Aufgaben"-Ressource) mit live sichtbarem Backend-Zustand, Request-Sandbox und 9 schrittweisen Aufgaben (GET/POST/PUT/PATCH/DELETE, Statuscode-Verhalten inkl. 404/400).
 - **PC-Troubleshooting** ([modules/pc-troubleshooting.html](modules/pc-troubleshooting.html)) - 8 Helpdesk-Tickets rund um PC-/Windows-Grundlagen (Boot-Probleme, Spooler, Speicherplatz, Malware, defektes RAM, Firmware-Bugs, gebrochene Domain-Vertrauensstellung).
 
 **2. Netzwerk-Grundlagen** - wie Geräte sich finden
 - **Netzwerkpakete, TCP/UDP & OSI-Modell** ([modules/network-packets.html](modules/network-packets.html)) - Kapselung/Paketaufbau (inkl. detailliertem IP-Header-Bitfeld), TTL, TCP-Handshake, TCP-vs-UDP-Analogie-Grafik, OSI- vs. TCP/IP-Modell, inkl. OSI-Reihenfolge-Puzzle und Port-↔-Dienst-Zuordnungsspiel.
-- **Netzwerkgeräte & Routing** ([modules/network-devices.html](modules/network-devices.html)) - Hub/Switch/Router im Vergleich, plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).
+- **Netzwerkgeräte & Routing** ([modules/network-devices.html](modules/network-devices.html)) - Hub/Switch/Router im Vergleich, VLANs (Broadcast-Domänen-Trennung, Access- vs. Trunk-Port, 802.1Q-Tagging, Inter-VLAN-Routing), plus generierte Routing-Tabellen-Aufgaben (Longest Prefix Match).
 - **Subnetting-Trainer** ([modules/subnetting.html](modules/subnetting.html)) - generierte IP/CIDR-Aufgaben, drei Schwierigkeitsstufen, inkl. Bit-für-Bit-Aufschlüsselung einer Subnetzmaske.
-- **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, inkl. Domain-Konfigurator.
+- **DNS & Domain-Konzepte** ([modules/dns-concepts.html](modules/dns-concepts.html)) - A/CNAME/TTL/Propagation, DNS over TLS (DoT) &amp; DNS over HTTPS (DoH) im Vergleich (inkl. der Kehrseite für Unternehmens-Monitoring), inkl. Domain-Konfigurator.
 - **DNS-Auflösung & DHCP-Prozess** ([modules/dns-dhcp-basics.html](modules/dns-dhcp-basics.html)) - der DHCP-DORA-Prozess und die rekursive DNS-Auflösung Schritt für Schritt (Diagramme), plus Referenztabelle aller DNS-Record-Typen, inkl. DORA-Reihenfolge-Puzzle und Record-Typ-↔-Zweck-Zuordnungsspiel.
 - **DHCP/DNS-Troubleshooting** ([modules/dhcp-dns.html](modules/dhcp-dns.html)) - zehn Helpdesk-Tickets mit simulierten Tool-Ausgaben.
 - **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN (inkl. Vergleichsdiagramm), Split- vs. Full-Tunneling.
@@ -108,6 +109,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── certificates.js
 │   ├── containers.js
 │   ├── database.js
+│   ├── api-basics.js
 │   ├── pc-troubleshooting.js
 │   ├── identity-troubleshooting.js
 │   ├── packaging-troubleshooting.js
@@ -117,6 +119,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── computer-basics.html
 │   ├── containers.html
 │   ├── databases.html
+│   ├── api-basics.html
 │   ├── pc-troubleshooting.html
 │   ├── network-packets.html
 │   ├── network-devices.html
