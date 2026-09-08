@@ -257,6 +257,16 @@ const MODULES = [
     prereqs: ["scripting"],
   },
   {
+    id: "sccm",
+    track: "paketierung",
+    title: "Configuration Manager (SCCM)",
+    icon: "\u{1F5A5}\u{FE0F}",
+    description:
+      "On-Premises-Softwareverteilung im grossen Massstab: Collections (Geräte-/Benutzergruppierung), Applications mit Deployment Types & Erkennungsregeln, Deployments (Erforderlich vs. Verfügbar) und Windows-Updates über den Software Update Point (Automatic Deployment Rules, Ringe).",
+    href: "modules/sccm.html",
+    prereqs: ["packaging", "activedirectory"],
+  },
+  {
     id: "packagingtickets",
     track: "paketierung",
     title: "Paketierungs-Troubleshooting",

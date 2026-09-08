@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Active Directory &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260911" />
+<link rel="stylesheet" href="../css/style.css?v=20260913" />
 </head>
 <body>
 
@@ -50,6 +50,7 @@
       <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
       <div class="nav-dropdown-menu">
         <a href="packaging.html">Paketierung</a>
+        <a href="sccm.html">Configuration Manager (SCCM)</a>
         <a href="packaging-troubleshooting.html">Paketierungs-Troubleshooting</a>
       </div>
     </div>
@@ -114,69 +115,6 @@
   </div>
 
   <div class="card">
-    <h3 class="mt-0">
-      🖥️ Praxislabor Teil 2: SRV01 zum Domänencontroller befördern
-      <details class="info-toggle">
-        <summary>i</summary>
-        <div class="info-content">
-          Ein Domänencontroller ist einfach ein Server, auf dem zusätzlich
-          die Active-Directory-Domänendienste laufen - genau der DHCP-/DNS-
-          Server aus dem vorherigen Labor wird jetzt zum "Adressbuch +
-          Regelwerk" für die ganze (kleine) Testumgebung.
-        </div>
-      </details>
-    </h3>
-    <p>
-      Baut direkt auf dem Praxislabor im Modul
-      <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP-Prozess</a>
-      auf: denselben Server (SRV01) mit DHCP+DNS verwenden, nicht neu
-      aufsetzen - genau das ist der Punkt, DHCP/DNS und Active Directory
-      laufen in echten Firmennetzen fast immer auf demselben Server(-typ).
-    </p>
-
-    <h4>Schritt für Schritt</h4>
-    <ol>
-      <li>
-        Auf SRV01 die Rolle <strong>Active Directory-Domänendienste (AD DS)</strong>
-        installieren (Server-Manager → Rollen hinzufügen, oder per
-        PowerShell: <code class="mono">Install-WindowsFeature AD-Domain-Services -IncludeManagementTools</code>).
-        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/windows-server/identity/ad-ds/deploy/install-active-directory-domain-services--level-100-" target="_blank" rel="noopener">Microsoft Learn - AD DS installieren</a></span>
-      </li>
-      <li>
-        Server zum Domänencontroller <strong>heraufstufen</strong> (im Server-Manager
-        über das Benachrichtigungs-Flag, oder <code class="mono">Install-ADDSForest</code>):
-        neue Gesamtstruktur, als Stammdomänenname genau die DNS-Zone von
-        vorhin verwenden (<code class="mono">lab.local</code>) - dann passt die
-        vorhandene DNS-Zone direkt zur neuen Domäne. Ein DSRM-Wiederherstellungskennwort
-        setzen (merken!) und den abschliessenden Neustart abwarten.
-      </li>
-      <li>
-        Auf CL01 (dem Client aus Labor 1) der Domäne beitreten:
-        Systemsteuerung → System → "Domäne oder Arbeitsgruppe ändern" →
-        Domäne <code class="mono">lab.local</code> eingeben, mit dem
-        Domänen-Administrator-Konto bestätigen, neu starten.
-      </li>
-      <li>Auf CL01 mit dem Domänenkonto anmelden und per <code class="mono">whoami /fqdn</code> die volle Domänen-Identität prüfen.</li>
-      <li>Auf SRV01 in "Active Directory-Benutzer und -Computer" nachsehen: CL01 sollte jetzt im Container <code class="mono">Computers</code> auftauchen.</li>
-      <li>
-        Optional weiterführend: einen Testbenutzer sowie eine OU mit
-        eigener GPO anlegen und live nachvollziehen, was du im
-        LSDOU-Quiz weiter unten theoretisch durchgespielt hast.
-      </li>
-    </ol>
-    <div class="alert info" style="margin-top:10px;">
-      <strong>Wichtige Reihenfolge:</strong> DHCP/DNS MUSS vor der
-      Beförderung zum Domänencontroller funktionieren - AD DS braucht
-      zwingend einen funktionierenden DNS-Server, um sich selbst
-      einzutragen. Falls die Beförderung mit einem DNS-Fehler abbricht,
-      zurück zu Labor 1 und die DNS-Rolle/Zone prüfen.
-    </div>
-
-    <h4>Fortschritt</h4>
-    <div id="ad-lab-checklist"></div>
-  </div>
-
-  <div class="card">
     <h3 class="mt-0">AD-Objekte auf einen Blick</h3>
     <ul>
       <li><strong>Benutzer/Computer-Objekte</strong>: repräsentieren Personen bzw. Geräte in der Domäne, jeweils mit eigener eindeutiger SID.</li>
@@ -200,6 +138,62 @@
     </ul>
     <p class="text-muted">Wichtig: Vererbung wirkt nur top-down entlang der eigenen Astlinie - ein GPO an einer OU wirkt nie auf einen komplett anderen Zweig des Baums.</p>
     <img class="doc-image" src="../images/gpo.png" alt="Gruppenrichtlinienverwaltung mit OU-Baum: Domänen-GPOs (Default Domain Policy, NTP-Zeitserver), darunter Computers/Workstations-OUs mit spezifischen GPOs wie 'Win10-Store-Computer verbieten' (deaktiviert) und 'Win10-Store-Computer erlauben' auf einer tiefer liegenden OU 'mit Store'" style="max-width:420px;" />
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Konkretes Beispiel: Edge-Startseite mit zwei GPOs
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Zwei GPOs setzen dieselbe Richtlinie auf unterschiedliche Werte -
+          welcher Wert am Ende gilt, hängt NICHT nur davon ab, welches GPO
+          näher am Objekt liegt, sondern vor allem davon, ob eines der
+          beiden "Erzwungen" ist.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Beide GPOs setzen dieselbe Richtlinie
+      (<code class="mono">Configure the home page URL</code>,
+      Computerkonfiguration → Administrative Vorlagen → Microsoft Edge)
+      - jeweils auf einen anderen Wert:
+    </p>
+
+    <pre class="terminal-output">Domäne: lab.local
+ │
+ ├─ [GPO "Domain-Startseite"] 🔒 ERZWUNGEN
+ │     → Edge-Startseite: https://intranet.firma.local
+ │
+ └─ OU "Support"   (näher am Objekt - würde ohne Erzwungen gewinnen)
+      ├─ CL01 (Computerobjekt)
+      └─ [GPO "Support-Startseite"] (normal, NICHT erzwungen)
+            → Edge-Startseite: https://helpdesk.firma.local</pre>
+
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Szenario</th><th>Edge-Startseite auf CL01</th><th>Warum</th>
+      </tr>
+      <tr>
+        <td>Wie oben (Domain-GPO ist erzwungen)</td>
+        <td class="mono" style="color:var(--primary);">intranet.firma.local</td>
+        <td>Erzwungene GPOs setzen sich IMMER durch - unabhängig von der normalen LSDOU-Reihenfolge.</td>
+      </tr>
+      <tr>
+        <td>Gegenprobe: Domain-GPO NICHT erzwungen</td>
+        <td class="mono" style="color:var(--primary);">helpdesk.firma.local</td>
+        <td>Ohne Erzwungen gilt die normale LSDOU-Regel: die näher liegende OU ("Support") gewinnt.</td>
+      </tr>
+    </table>
+
+    <p class="text-muted" style="margin-top:10px;">
+      Diese Richtlinie gehört nicht zu den Windows-Bordmitteln - dafür
+      müssen zuerst die administrativen Vorlagen von Microsoft Edge
+      installiert werden (ergänzt u.a. einen eigenen "Microsoft Edge"-Knoten
+      im Gruppenrichtlinien-Editor). Im Praxislabor am Ende dieses Moduls
+      wird genau dieses Beispiel real nachgebaut und mit
+      <code class="mono">gpresult /r</code> auf CL01 überprüft.
+    </p>
   </div>
 
   <div class="card">
@@ -243,6 +237,102 @@
 
     <div id="ticket-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 2: SRV01 zum Domänencontroller befördern
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ein Domänencontroller ist einfach ein Server, auf dem zusätzlich
+          die Active-Directory-Domänendienste laufen - genau der DHCP-/DNS-
+          Server aus dem vorherigen Labor wird jetzt zum "Adressbuch +
+          Regelwerk" für die ganze (kleine) Testumgebung.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Baut direkt auf dem Praxislabor im Modul
+      <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP-Prozess</a>
+      auf: denselben Server (SRV01) mit DHCP+DNS weiterverwenden, nicht
+      neu aufsetzen - genau das ist der Punkt, DHCP/DNS und Active
+      Directory laufen in echten Firmennetzen fast immer auf demselben
+      Server(-typ).
+    </p>
+
+    <h4>A) Domänencontroller einrichten</h4>
+    <ol>
+      <li>
+        Auf SRV01 die Rolle <strong>Active Directory-Domänendienste (AD DS)</strong>
+        installieren (Server-Manager → Rollen hinzufügen, oder per
+        PowerShell: <code class="mono">Install-WindowsFeature AD-Domain-Services -IncludeManagementTools</code>).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/windows-server/identity/ad-ds/deploy/install-active-directory-domain-services--level-100-" target="_blank" rel="noopener">Microsoft Learn - AD DS installieren</a></span>
+      </li>
+      <li>
+        Server zum Domänencontroller <strong>heraufstufen</strong> (im Server-Manager
+        über das Benachrichtigungs-Flag, oder <code class="mono">Install-ADDSForest</code>):
+        neue Gesamtstruktur, als Stammdomänenname genau die DNS-Zone von
+        vorhin verwenden (<code class="mono">lab.local</code>) - dann passt die
+        vorhandene DNS-Zone direkt zur neuen Domäne. Ein DSRM-Wiederherstellungskennwort
+        setzen (merken!) und den abschliessenden Neustart abwarten.
+      </li>
+      <li>
+        Auf CL01 (dem Client aus Labor 1) der Domäne beitreten:
+        Systemsteuerung → System → "Domäne oder Arbeitsgruppe ändern" →
+        Domäne <code class="mono">lab.local</code> eingeben, mit dem
+        Domänen-Administrator-Konto bestätigen, neu starten.
+      </li>
+      <li>Auf CL01 mit dem Domänenkonto anmelden und per <code class="mono">whoami /fqdn</code> die volle Domänen-Identität prüfen.</li>
+      <li>Auf SRV01 in "Active Directory-Benutzer und -Computer" nachsehen: CL01 sollte jetzt im Container <code class="mono">Computers</code> auftauchen.</li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Wichtige Reihenfolge:</strong> DHCP/DNS MUSS vor der
+      Beförderung zum Domänencontroller funktionieren - AD DS braucht
+      zwingend einen funktionierenden DNS-Server, um sich selbst
+      einzutragen. Falls die Beförderung mit einem DNS-Fehler abbricht,
+      zurück zu Labor 1 und die DNS-Rolle/Zone prüfen.
+    </div>
+
+    <h4>B) Das Edge-Startseiten-Beispiel von oben real nachbauen</h4>
+    <p class="text-muted">
+      Jetzt wird das Beispiel aus dem Kapitel "Konkretes Beispiel:
+      Edge-Startseite mit zwei GPOs" oben real umgesetzt - inkl. echter
+      Verifikation, statt nur theoretisch vorherzusagen.
+    </p>
+    <ol>
+      <li>
+        Auf SRV01 die administrativen Vorlagen von Microsoft Edge
+        installieren (fügt den Knoten "Microsoft Edge" im
+        Gruppenrichtlinien-Editor hinzu).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/deployedge/configure-microsoft-edge" target="_blank" rel="noopener">Microsoft Learn - Microsoft Edge per GPO konfigurieren</a></span>
+      </li>
+      <li>In "Active Directory-Benutzer und -Computer" eine OU <code class="mono">Support</code> anlegen und das Computerobjekt CL01 hineinverschieben.</li>
+      <li>
+        GPO <code class="mono">Domain-Startseite</code> anlegen, an der Domäne <code class="mono">lab.local</code>
+        verknüpfen, Richtlinie <code class="mono">Configure the home page URL</code> = <code class="mono">https://intranet.firma.local</code>
+        setzen - danach über "Gruppenrichtlinienverknüpfungen" → Rechtsklick → <strong>Erzwungen</strong> aktivieren.
+      </li>
+      <li>
+        GPO <code class="mono">Support-Startseite</code> anlegen, an der OU <code class="mono">Support</code>
+        verknüpfen, dieselbe Richtlinie = <code class="mono">https://helpdesk.firma.local</code> setzen -
+        <strong>ohne</strong> Erzwungen.
+      </li>
+      <li>Auf CL01: <code class="mono">gpupdate /force</code>, danach Edge neu starten und die tatsächliche Startseite prüfen.</li>
+      <li>
+        Erwartetes Ergebnis: <code class="mono">intranet.firma.local</code> gewinnt (das erzwungene
+        Domain-GPO) - zur Kontrolle <code class="mono">gpresult /r</code> ausführen und im Abschnitt
+        "Angewendete Gruppenrichtlinienobjekte" nachsehen, welches GPO für diese Einstellung "gewonnen" hat.
+      </li>
+      <li>
+        Gegenprobe: bei <code class="mono">Domain-Startseite</code> "Erzwungen" wieder deaktivieren,
+        <code class="mono">gpupdate /force</code> auf CL01 wiederholen - jetzt sollte
+        <code class="mono">helpdesk.firma.local</code> gewinnen.
+      </li>
+    </ol>
+
+    <h4>Fortschritt</h4>
+    <div id="ad-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
@@ -250,7 +340,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260911"></script>
+<script src="../js/progress.js?v=20260913"></script>
 <script src="../js/active-directory.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Software-Paketierung &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260911" />
+<link rel="stylesheet" href="../css/style.css?v=20260913" />
 </head>
 <body>
 
@@ -50,6 +50,7 @@
       <button type="button" class="nav-dropdown-toggle active-group">Softwareverteilung & Paketierung</button>
       <div class="nav-dropdown-menu">
         <a href="packaging.html" class="active">Paketierung</a>
+        <a href="sccm.html">Configuration Manager (SCCM)</a>
         <a href="packaging-troubleshooting.html">Paketierungs-Troubleshooting</a>
       </div>
     </div>
@@ -367,6 +368,76 @@
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 4: eine MSI per GPO an CL01 verteilen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Genau die OU-Struktur aus dem Active-Directory-Praxislabor wird
+          wiederverwendet: statt einer Edge-Einstellung wird diesmal ein
+          ganzes Software-Paket über dieselbe GPO-Infrastruktur verteilt.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Baut auf den Laboren in
+      <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP-Prozess</a> und
+      <a href="active-directory.html">Active Directory</a> auf: SRV01 als
+      Domänencontroller, CL01 in der OU <code class="mono">Support</code>.
+      Als Testpaket eignet sich <strong>7-Zip</strong>, da es (anders als
+      die meisten Hersteller) offiziell direkt eine .msi anbietet - GPO-
+      Softwareinstallation funktioniert NUR mit .msi, keine .exe. Genau
+      das ist einer der Hauptgründe, wieso Repackaging (siehe oben) in der
+      Praxis so oft nötig ist.
+    </p>
+
+    <ol>
+      <li>
+        Die 64-Bit-.msi von 7-Zip herunterladen:
+        <a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener">7-zip.org/download.html</a>
+        (offizielle Quelle).
+      </li>
+      <li>
+        Auf SRV01 einen Ordner anlegen (z.B. <code class="mono">C:\Software</code>),
+        die MSI dort ablegen und als Netzwerkfreigabe freigeben
+        (z.B. <code class="mono">\\SRV01\Software</code>), Leserechte für
+        <code class="mono">Domänen-Computer</code> setzen.
+      </li>
+      <li>
+        Neue GPO <code class="mono">Software-7Zip</code> anlegen, an der OU
+        <code class="mono">Support</code> verknüpfen (dieselbe OU wie im
+        Edge-Startseiten-Beispiel).
+      </li>
+      <li>
+        In der GPO: Computerkonfiguration → Richtlinien → Softwareeinstellungen
+        → Softwareinstallation → Neu → Paket, den UNC-Pfad
+        <code class="mono">\\SRV01\Software\7z-x64.msi</code> auswählen,
+        Bereitstellungsmethode <strong>Zugewiesen</strong> (Assigned - installiert
+        automatisch beim nächsten Neustart, ohne Nutzerinteraktion).
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/group-policy/use-group-policy-to-install-software" target="_blank" rel="noopener">Microsoft Learn - Use Group Policy to remotely install software</a></span>
+      </li>
+      <li>Auf CL01: <code class="mono">gpupdate /force</code>, danach neu starten - zugewiesene Computer-Software installiert sich beim Hochfahren, nicht sofort bei gpupdate.</li>
+      <li>Nach dem Neustart verifizieren: 7-Zip im Startmenü vorhanden, oder in PowerShell <code class="mono">Get-Package -Name "7-Zip*"</code>.</li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Kommt nichts an?</strong> Häufigste Ursache: der
+      Computer-Account von CL01 hat keinen Lesezugriff auf die Freigabe
+      (Firewall/Freigabeberechtigungen prüfen), oder es wurde vergessen,
+      dass "Zugewiesene" Software erst beim NEUSTART installiert wird -
+      nicht bei einem reinen <code class="mono">gpupdate /force</code>.
+    </div>
+    <p class="text-muted" style="margin-top:10px;">
+      Weiter geht's im Modul <a href="sccm.html">Configuration Manager (SCCM)</a>:
+      dort wird genau dieselbe 7-Zip-.msi noch einmal an CL01 verteilt -
+      diesmal über eine Application mit Erkennungsregel statt über eine
+      einfache GPO-Softwareinstallation, zum direkten Vergleich beider Wege.
+    </p>
+
+    <h4>Fortschritt</h4>
+    <div id="packaging-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
@@ -374,7 +445,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260911"></script>
+<script src="../js/progress.js?v=20260913"></script>
 <script src="../js/packaging.js"></script>
 </body>
 </html>

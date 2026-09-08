@@ -371,6 +371,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   wireTlsAnimation();
 
+  initLabChecklist(document.getElementById("certs-lab-checklist"), "lab_certs_checklist", [
+    "AD CS-Rolle (Zertifizierungsstelle) auf SRV01 installiert, als Stammzertifizierungsstelle",
+    "Vorlage 'Workstation Authentication' dupliziert, Autoenrollment-Rechte für Domänencomputer erteilt, Vorlage ausgestellt",
+    "GPO 'Automatische Registrierung' aktiviert (Domäne oder OU Support)",
+    "Auf CL01: gpupdate /force ausgeführt",
+    "In certlm.msc auf CL01: eigenes Zertifikat vorhanden, Issuer = eigene CA auf SRV01",
+  ]);
+
   initMatchPuzzle(document.getElementById("term-match-container"), TERM_PAIRS, (matched, total) => {
     document.getElementById("term-match-progress").textContent = `${matched} / ${total} Paare gefunden`;
   });

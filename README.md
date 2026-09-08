@@ -14,7 +14,7 @@ Fortschritt wird nur lokal (`localStorage`) gespeichert.
 
 ## Module
 
-Die 29 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
+Die 30 Module sind in 7 **Baukästen** (Lernpfad-Blöcke) gruppiert, die
 aufeinander aufbauen - vom Fundament bis zum Betrieb. Die Reihenfolge ist
 in `js/progress.js` (`TRACKS`/`MODULES`) zentral gepflegt und bestimmt
 sowohl die Gruppierung auf der Startseite als auch die Navigationsleiste:
@@ -48,18 +48,19 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 - **VPN-Grundlagen** ([modules/vpn-basics.html](modules/vpn-basics.html)) - Site-to-Site vs. Client-to-Site, IPSec vs. SSL-VPN (inkl. Vergleichsdiagramm), Split- vs. Full-Tunneling, interaktive Tunnelaufbau-Animation (IKE Phase 1/2, Datenkapselung mit sichtbarem äusserem/innerem Paket).
 
 **3. Verzeichnisdienste & Identität** - On-Premises bis Cloud
-- **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus Troubleshooting-Tickets. Zusätzlich **Praxislabor Teil 2**: baut auf dem DHCP/DNS-Praxislabor auf - denselben Server per AD DS-Rolle zum Domänencontroller befördern, Client der Domäne beitreten lassen, inkl. eigener Checkliste.
+- **Active Directory** ([modules/active-directory.html](modules/active-directory.html)) - GPO-Vererbung (LSDOU) als Vorhersage-Quiz, plus konkretes Beispiel (Edge-Startseite über zwei GPOs, eines davon erzwungen - inkl. Ergebnistabelle "mit/ohne Erzwungen"), plus Troubleshooting-Tickets. Am Modulende **Praxislabor Teil 2**: baut auf dem DHCP/DNS-Praxislabor auf - denselben Server per AD DS-Rolle zum Domänencontroller befördern, Client beitreten lassen, danach das Edge-GPO-Beispiel real nachbauen und mit gpresult/gpupdate verifizieren, inkl. eigener Checkliste.
 - **Intune / Entra ID / Hybrid** ([modules/intune-entra.html](modules/intune-entra.html)) - Join-Typen, Conditional Access (Kontrast zum Firewall-Modul: kumulative statt erste-Regel-Logik), Gerätemanagement-Quiz, Tickets.
 - **Cloud-Grundlagen** ([modules/cloud-basics.html](modules/cloud-basics.html)) - Shared-Responsibility-Modell (On-Premises/IaaS/PaaS/SaaS), Azure-Ressourcenhierarchie, RBAC/Least Privilege, PIM &amp; PIM for Groups, M365-Lizenzierung.
 - **Identitäts-Troubleshooting** ([modules/identity-troubleshooting.html](modules/identity-troubleshooting.html)) - 8 Helpdesk-Tickets rund um Active Directory, Entra ID, Intune und Hybrid-Identität (Kontosperrung, GPO-Sicherheitsfilterung, Connect-Sync, Conditional Access, Lizenzdienste, Password-Hash-Sync-Delay, dynamische Gruppen, Compliance-Richtlinien).
 
 **4. Softwareverteilung & Paketierung** - Apps bereitstellen
-- **Software-Paketierung** ([modules/packaging.html](modules/packaging.html)) - MSI-Aufbau (Tabellen/Dateistreams), Transforms (MST), stille CMD-Installation, Repackaging-Workflow (RayPack: RCP/RPP).
+- **Software-Paketierung** ([modules/packaging.html](modules/packaging.html)) - MSI-Aufbau (Tabellen/Dateistreams), Transforms (MST), stille CMD-Installation, Repackaging-Workflow (RayPack: RCP/RPP). Am Modulende **Praxislabor Teil 4**: baut auf dem AD-Praxislabor auf - eine echte .msi (7-Zip) über dieselbe GPO-Infrastruktur an den Client verteilen.
+- **Configuration Manager (SCCM)** ([modules/sccm.html](modules/sccm.html)) - Site-Rollen (Site-Server/SQL/Management Point/Distribution Point/Software Update Point), Collections (direkt vs. abfragebasiert), Applications & Deployment Types (Erkennungsregeln, Requirements), Deployments (Erforderlich vs. Verfügbar - inkl. Vergleich zu GPO-Softwareinstallation), Windows-Updates über den Software Update Point (Automatic Deployment Rules, Ring-basiertes Ausrollen). Am Modulende **Praxislabor Teil 5**: dieselbe 7-Zip-.msi aus dem Paketierungs-Labor diesmal über eine Configuration-Manager-Application statt GPO verteilen - wahlweise auf SRV01 manuell (inkl. SQL Server) oder über Microsofts vorkonfiguriertes Evaluation Lab Kit.
 - **Paketierungs-Troubleshooting** ([modules/packaging-troubleshooting.html](modules/packaging-troubleshooting.html)) - 8 Helpdesk-Tickets rund um MSI/Silent-Install-Fehler, GPO-Softwareverteilung, Repackaging-Abhängigkeiten, Intune-Erkennungsregeln und fehlende UpgradeCodes.
 
 **5. IT-Security** - Angriffsflächen erkennen und absichern
 - **Verschlüsselung** ([modules/encryption.html](modules/encryption.html)) - symmetrisch/asymmetrisch/hybrid, Diffie-Hellman-Schlüsselaustausch, Hashing & Salt, inkl. zweier Live-Demos mit echtem SHA-256 (Web-Crypto-API im Browser).
-- **Zertifikate & PKI** ([modules/certificates.html](modules/certificates.html)) - Vertrauenskette (Root-CA/Intermediate-CA), Zertifikatsfelder, interaktive TLS-Handshake-Animation (inkl. animierter Zertifikatsprüfung: Vertrauenskette/Gültigkeit/Hostname/Widerruf), Ablauf & Widerruf (CRL/OCSP), automatisierte Zertifikatsverteilung per SCEP über Intune (inkl. NDES), Begriffs-Zuordnungsspiel.
+- **Zertifikate & PKI** ([modules/certificates.html](modules/certificates.html)) - Vertrauenskette (Root-CA/Intermediate-CA), Zertifikatsfelder, interaktive TLS-Handshake-Animation (inkl. animierter Zertifikatsprüfung: Vertrauenskette/Gültigkeit/Hostname/Widerruf), Ablauf & Widerruf (CRL/OCSP), automatisierte Zertifikatsverteilung per SCEP über Intune (inkl. NDES), Begriffs-Zuordnungsspiel. Am Modulende **Praxislabor Teil 3**: baut auf dem AD-Praxislabor auf - AD CS-Rolle (eigene Root-CA) einrichten, Autoenrollment per GPO aktivieren, ausgestelltes Zertifikat auf dem Client verifizieren.
 - **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html)) - Regeln umsortieren, selbst entwerfen, Multi-Firewall-Topologien (DMZ/VPN).
 - **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html)) - sandboxed, unsicher vs. parametrisiert, drei Herausforderungen.
 - **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Erklärung von `include:_spf.google.com`, interaktivem Schritt-für-Schritt-Vergleich ("welche Prüfung schaut welchen Mail-Teil an"), Alignment-Konzept und komplettem Beispiel-Ablauf mit vier Szenarien, plus interaktive Zustellungs-Animation (Umschlag öffnen, SPF/DKIM/DMARC der Reihe nach prüfen, zwei wählbare Szenarien: legitime Mail vs. Phishing-Versuch mit unterschiedlichem Ausgang - Postfach vs. Quarantäne).
@@ -100,6 +101,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── scripting.js
 │   ├── cloud-basics.js
 │   ├── packaging.js
+│   ├── sccm.js
 │   ├── network-devices.js
 │   ├── network-packets.js
 │   ├── vpn-basics.js
@@ -143,6 +145,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── scripting.html
 │   ├── cloud-basics.html
 │   ├── packaging.html
+│   ├── sccm.html
 │   ├── packaging-troubleshooting.html
 │   └── final-exam.html
 ├── images/                      Eingebundene Screenshots/Diagramme (siehe unten)

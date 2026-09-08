@@ -544,7 +544,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "CL01 ist der Domäne lab.local beigetreten",
     "Anmeldung auf CL01 mit Domänenkonto funktioniert (whoami /fqdn geprüft)",
     "CL01 erscheint in Active Directory-Benutzer und -Computer unter Computers",
-    "(Optional) Testbenutzer + OU mit eigener GPO angelegt",
+    "Microsoft Edge Administrative Vorlagen auf SRV01 installiert",
+    "OU Support angelegt, CL01 hineinverschoben",
+    "GPO Domain-Startseite (erzwungen) + GPO Support-Startseite (normal) angelegt und verknüpft",
+    "Auf CL01 verifiziert: intranet.firma.local gewinnt (erzwungen schlägt näher liegende OU)",
+    "Gegenprobe gemacht: ohne Erzwungen gewinnt helpdesk.firma.local",
   ]);
 
   renderQuiz();

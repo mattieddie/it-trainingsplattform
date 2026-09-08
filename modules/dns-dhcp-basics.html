@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DNS-Auflösung &amp; DHCP-Prozess &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260911" />
+<link rel="stylesheet" href="../css/style.css?v=20260913" />
 </head>
 <body>
 
@@ -50,6 +50,7 @@
       <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
       <div class="nav-dropdown-menu">
         <a href="packaging.html">Paketierung</a>
+        <a href="sccm.html">Configuration Manager (SCCM)</a>
         <a href="packaging-troubleshooting.html">Paketierungs-Troubleshooting</a>
       </div>
     </div>
@@ -245,6 +246,31 @@
   </div>
 
   <div class="card">
+    <h3 class="mt-0">🧩 Puzzle: DORA-Schritte in die richtige Reihenfolge bringen</h3>
+    <div id="dora-reorder-container"></div>
+    <div class="btn-row">
+      <button id="check-dora-order-btn" class="btn primary">Reihenfolge prüfen</button>
+      <button id="reset-dora-order-btn" class="btn small ghost" type="button">Neu mischen</button>
+    </div>
+    <div id="dora-order-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🧩 Zuordnen: DNS-Record-Typ ↔ Zweck</h3>
+    <div id="record-match-container"></div>
+    <p class="text-muted" id="record-match-progress">0 / 8 Paare gefunden</p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
     <h3 class="mt-0">
       🖥️ Praxislabor Teil 1: eigene DHCP/DNS-Testumgebung mit VMs aufbauen
       <details class="info-toggle">
@@ -266,7 +292,10 @@
       DNS-Eintrag auf. Dieser Server wird im Modul
       <a href="active-directory.html">Active Directory</a> im Praxislabor
       Teil 2 direkt weiterverwendet (Beförderung zum Domänencontroller) -
-      also nicht gleich wieder löschen.
+      also nicht gleich wieder löschen. Das Labor wächst über mehrere
+      Module hinweg auf derselben Umgebung weiter (siehe Praxislabor-Karte
+      jeweils am Ende der aufbauenden Module) - nicht bei jedem Modul neu
+      von vorne beginnen.
     </p>
 
     <h4>Voraussetzungen &amp; Downloads</h4>
@@ -336,31 +365,6 @@
     <h4>Fortschritt</h4>
     <div id="dhcp-lab-checklist"></div>
   </div>
-
-  <div class="card">
-    <h3 class="mt-0">🧩 Puzzle: DORA-Schritte in die richtige Reihenfolge bringen</h3>
-    <div id="dora-reorder-container"></div>
-    <div class="btn-row">
-      <button id="check-dora-order-btn" class="btn primary">Reihenfolge prüfen</button>
-      <button id="reset-dora-order-btn" class="btn small ghost" type="button">Neu mischen</button>
-    </div>
-    <div id="dora-order-feedback" class="feedback-box hidden"></div>
-  </div>
-
-  <div class="card">
-    <h3 class="mt-0">🧩 Zuordnen: DNS-Record-Typ ↔ Zweck</h3>
-    <div id="record-match-container"></div>
-    <p class="text-muted" id="record-match-progress">0 / 8 Paare gefunden</p>
-  </div>
-
-  <div class="card">
-    <h3 class="mt-0">🔎 Quiz</h3>
-    <div id="quiz-container"></div>
-    <div class="btn-row">
-      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
-    </div>
-    <div id="quiz-feedback" class="feedback-box hidden"></div>
-  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
@@ -368,7 +372,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260911"></script>
+<script src="../js/progress.js?v=20260913"></script>
 <script src="../js/dns-dhcp-basics.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Zertifikate &amp; PKI &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260911" />
+<link rel="stylesheet" href="../css/style.css?v=20260913" />
 </head>
 <body>
 
@@ -50,6 +50,7 @@
       <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
       <div class="nav-dropdown-menu">
         <a href="packaging.html">Paketierung</a>
+        <a href="sccm.html">Configuration Manager (SCCM)</a>
         <a href="packaging-troubleshooting.html">Paketierungs-Troubleshooting</a>
       </div>
     </div>
@@ -311,6 +312,73 @@
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxislabor Teil 3: eigene Zertifizierungsstelle einrichten
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          SRV01 ist bereits Domänencontroller mit DHCP+DNS - jetzt wird
+          er zusätzlich die eigene Root-CA aus dem Kapitel "Vertrauenskette"
+          oben, ganz konkret: CL01 bekommt automatisch ein Zertifikat von
+          genau diesem Server ausgestellt.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Baut auf den Laboren in
+      <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP-Prozess</a> und
+      <a href="active-directory.html">Active Directory</a> auf: SRV01 ist
+      bereits Domänencontroller der Domäne <code class="mono">lab.local</code>,
+      CL01 bereits Mitglied. Vereinfachung gegenüber echten Firmenumgebungen:
+      hier übernimmt EIN Server sowohl die Rolle der Root-CA als auch die
+      des Ausstellers - in der Praxis meist zweistufig (siehe "Vertrauenskette" oben).
+    </p>
+
+    <ol>
+      <li>
+        Auf SRV01 die Rolle <strong>Active Directory-Zertifikatdienste (AD CS)</strong>
+        installieren, Rollendienst <strong>Zertifizierungsstelle</strong>.
+        Setup-Typ: <strong>Unternehmenszertifizierungsstelle</strong> (da SRV01
+        bereits Domänencontroller ist), CA-Typ: <strong>Stammzertifizierungsstelle</strong>,
+        neues privates/öffentliches Schlüsselpaar, Gültigkeitsdauer z.B. 5 Jahre.
+        <span class="text-muted">Anleitung: <a href="https://learn.microsoft.com/de-de/windows-server/identity/ad-cs/" target="_blank" rel="noopener">Microsoft Learn - Active Directory-Zertifikatdienste</a></span>
+      </li>
+      <li>
+        In der Zertifizierungsstellen-Konsole unter "Zertifikatvorlagen" die
+        Vorlage <code class="mono">Workstation Authentication</code> duplizieren,
+        in den Eigenschaften der Kopie auf dem Reiter "Sicherheit" der Gruppe
+        <code class="mono">Domänencomputer</code> die Rechte "Registrieren"
+        und "Automatisch registrieren" erteilen, danach die neue Vorlage
+        über "Neu → Auszustellende Zertifikatvorlage" aktivieren.
+      </li>
+      <li>
+        In der bereits bestehenden GPO-Infrastruktur aus Labor 2: an der
+        Domäne (oder der OU <code class="mono">Support</code>) unter
+        Computerkonfiguration → Richtlinien → Windows-Einstellungen →
+        Sicherheitseinstellungen → Richtlinien für öffentliche Schlüssel →
+        "Zertifikatdienstclient - Automatische Registrierung" auf
+        <strong>Aktiviert</strong> setzen.
+      </li>
+      <li>Auf CL01: <code class="mono">gpupdate /force</code>, danach <code class="mono">certlm.msc</code> öffnen (Zertifikate - Lokaler Computer) → "Eigene Zertifikate" → "Zertifikate".</li>
+      <li>
+        Ausgestelltes Zertifikat öffnen und die Felder mit dem Kapitel
+        "Was steckt in einem Zertifikat?" oben vergleichen: Subject = CL01,
+        Issuer = die eigene CA auf SRV01, Gültigkeitszeitraum, Seriennummer.
+      </li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Kein Zertifikat angekommen?</strong> Meist liegt es an einer
+      fehlenden Gruppenrichtlinien-Aktualisierung (<code class="mono">gpupdate /force</code>
+      auf CL01 wiederholen) oder daran, dass die Vorlage in Schritt 2 noch
+      nicht "ausgestellt" wurde - beides mit <code class="mono">gpresult /r</code>
+      bzw. der Zertifizierungsstellen-Konsole auf SRV01 prüfbar.
+    </div>
+
+    <h4>Fortschritt</h4>
+    <div id="certs-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
@@ -318,7 +386,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260911"></script>
+<script src="../js/progress.js?v=20260913"></script>
 <script src="../js/certificates.js"></script>
 </body>
 </html>

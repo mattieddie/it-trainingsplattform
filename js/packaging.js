@@ -211,4 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  initLabChecklist(document.getElementById("packaging-lab-checklist"), "lab_packaging_checklist", [
+    "7-Zip .msi von 7-zip.org heruntergeladen",
+    "Freigabe auf SRV01 angelegt (z.B. \\\\SRV01\\Software), Leserechte für Domänen-Computer gesetzt",
+    "GPO 'Software-7Zip' angelegt, an OU Support verknüpft, Paket als 'Zugewiesen' hinzugefügt",
+    "CL01 neu gestartet",
+    "7-Zip auf CL01 installiert (Startmenü bzw. Get-Package geprüft)",
+  ]);
 });
