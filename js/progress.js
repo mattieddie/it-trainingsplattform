@@ -377,6 +377,29 @@ function shuffleArray(array) {
   return arr;
 }
 
+/**
+ * Generische Helfer für Mehrknoten-Protokoll-Animationen (DHCP, DNS, ...):
+ * ein "Paket"-Element wird per CSS-transition zwischen benannten Knoten-
+ * Positionen (left/top in %) hin- und herbewegt.
+ */
+function protoAnimWait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function protoAnimJumpTo(el, node) {
+  el.classList.add("no-transition");
+  el.style.left = node.left;
+  el.style.top = node.top;
+  void el.offsetWidth; // Reflow: "von"-Position wird ohne Animation übernommen
+  el.classList.remove("no-transition");
+  void el.offsetWidth; // Reflow: Transition ist wieder aktiv, bevor das Ziel gesetzt wird
+}
+
+function protoAnimMoveTo(el, node) {
+  el.style.left = node.left;
+  el.style.top = node.top;
+}
+
 function loadProgress() {
   try {
     const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);

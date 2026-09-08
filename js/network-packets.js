@@ -41,7 +41,7 @@ async function tcpAnimPlayStep(index) {
   const step = TCP_HANDSHAKE_STEPS[index];
   const packet = document.getElementById("tcp-packet");
   const status = document.getElementById("tcp-anim-status");
-  const stepEls = document.querySelectorAll(".tcp-anim-step");
+  const stepEls = document.querySelectorAll(".proto-anim-step");
 
   stepEls.forEach((el, i) => {
     el.classList.toggle("active", i === index);
@@ -96,7 +96,7 @@ function tcpAnimResetVisuals() {
   tcpAnimStep = 0;
   const packet = document.getElementById("tcp-packet");
   packet.className = "tcp-anim-packet";
-  document.querySelectorAll(".tcp-anim-step").forEach((el) => el.classList.remove("active", "done"));
+  document.querySelectorAll(".proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
 }
 
 function tcpAnimReset() {

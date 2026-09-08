@@ -456,8 +456,134 @@ function updateChecklist(state) {
     : "⬜ Geräte-Quiz vollständig richtig lösen";
 }
 
+/* ================= ARP-Auflösung-Animation ================= */
+
+const ARP_NODES = {
+  client: { left: "8%", top: "50%" },
+  target: { left: "88%", top: "18%" },
+  other: { left: "88%", top: "82%" },
+};
+
+const ARP_ANIM_STEPS = [
+  {
+    text: 'PC A sendet einen Broadcast: "Wer hat 192.168.1.20? Bitte melde deine MAC-Adresse!"',
+    packets: [
+      { id: "arp-packet-1", from: "client", to: "target", cls: "pkt-broadcast" },
+      { id: "arp-packet-2", from: "client", to: "other", cls: "pkt-broadcast" },
+    ],
+  },
+  {
+    text: "Nur PC B antwortet direkt (Unicast) mit seiner MAC-Adresse - PC C ignoriert die Anfrage, da sie ihn nicht betrifft.",
+    packets: [{ id: "arp-packet-1", from: "target", to: "client", cls: "pkt-final" }],
+    inactiveNode: "arp-node-other",
+  },
+];
+
+let arpAnimStep = 0;
+let arpAnimRunning = false;
+
+function arpAnimSetButtonsDisabled(disabled) {
+  document.getElementById("arp-anim-play").disabled = disabled;
+  document.getElementById("arp-anim-step").disabled = disabled;
+}
+
+async function arpAnimPlayStep(index) {
+  const step = ARP_ANIM_STEPS[index];
+  const status = document.getElementById("arp-anim-status");
+  const stepEls = document.querySelectorAll("#arp-anim-steps .proto-anim-step");
+  const allPacketIds = ["arp-packet-1", "arp-packet-2"];
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  document.querySelectorAll("#arp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
+  if (step.inactiveNode) {
+    document.getElementById(step.inactiveNode).classList.add("inactive");
+  }
+
+  const activePacketIds = step.packets.map((p) => p.id);
+  allPacketIds.forEach((id) => {
+    if (!activePacketIds.includes(id)) {
+      document.getElementById(id).classList.add("hidden-packet");
+    }
+  });
+
+  step.packets.forEach((p) => {
+    const el = document.getElementById(p.id);
+    el.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final", "pkt-broadcast");
+    el.classList.add(p.cls);
+    protoAnimJumpTo(el, ARP_NODES[p.from]);
+    protoAnimMoveTo(el, ARP_NODES[p.to]);
+  });
+
+  status.textContent = step.text;
+  await protoAnimWait(1200);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function arpAnimPlayAll() {
+  if (arpAnimRunning) return;
+  arpAnimRunning = true;
+  arpAnimSetButtonsDisabled(true);
+  arpAnimResetVisuals();
+
+  for (let i = 0; i < ARP_ANIM_STEPS.length; i++) {
+    await arpAnimPlayStep(i);
+  }
+  arpAnimStep = ARP_ANIM_STEPS.length;
+
+  document.getElementById("arp-anim-status").textContent =
+    'PC A kennt jetzt die MAC-Adresse von PC B und kann die Daten direkt adressieren. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  arpAnimSetButtonsDisabled(false);
+  arpAnimRunning = false;
+}
+
+async function arpAnimNextStep() {
+  if (arpAnimRunning || arpAnimStep >= ARP_ANIM_STEPS.length) return;
+  arpAnimRunning = true;
+  arpAnimSetButtonsDisabled(true);
+
+  await arpAnimPlayStep(arpAnimStep);
+  arpAnimStep++;
+
+  if (arpAnimStep >= ARP_ANIM_STEPS.length) {
+    document.getElementById("arp-anim-status").textContent =
+      'PC A kennt jetzt die MAC-Adresse von PC B und kann die Daten direkt adressieren. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  arpAnimSetButtonsDisabled(false);
+  arpAnimRunning = false;
+}
+
+function arpAnimResetVisuals() {
+  arpAnimStep = 0;
+  ["arp-packet-1", "arp-packet-2"].forEach((id) => {
+    const el = document.getElementById(id);
+    el.className = "proto-anim-packet2d hidden-packet";
+    el.style.left = ARP_NODES.client.left;
+    el.style.top = ARP_NODES.client.top;
+  });
+  document.querySelectorAll("#arp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
+  document.querySelectorAll("#arp-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+}
+
+function arpAnimReset() {
+  arpAnimResetVisuals();
+  document.getElementById("arp-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireArpAnimation() {
+  arpAnimReset();
+  document.getElementById("arp-anim-play").addEventListener("click", arpAnimPlayAll);
+  document.getElementById("arp-anim-step").addEventListener("click", arpAnimNextStep);
+  document.getElementById("arp-anim-reset").addEventListener("click", arpAnimReset);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   markModuleStarted(MODULE_ID);
+
+  wireArpAnimation();
 
   const progress = loadProgress();
   const stored = progress[MODULE_ID] || {};

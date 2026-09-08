@@ -204,6 +204,248 @@ function checkQuiz() {
   }
 }
 
+/* ---------- DHCP-DORA-Animation ---------- */
+
+const DHCP_NODES = {
+  client: { left: "8%", top: "50%" },
+  server1: { left: "88%", top: "18%" },
+  server2: { left: "88%", top: "82%" },
+};
+
+const DHCP_ANIM_STEPS = [
+  {
+    text: 'Client sendet DHCPDISCOVER als Broadcast: "Ist irgendwo ein DHCP-Server da?"',
+    packets: [
+      { id: "dhcp-packet-1", from: "client", to: "server1", cls: "pkt-broadcast" },
+      { id: "dhcp-packet-2", from: "client", to: "server2", cls: "pkt-broadcast" },
+    ],
+  },
+  {
+    text: "Beide erreichten Server antworten mit DHCPOFFER: je eine freie IP-Adresse samt Konfiguration.",
+    packets: [
+      { id: "dhcp-packet-1", from: "server1", to: "client", cls: "pkt-reply" },
+      { id: "dhcp-packet-2", from: "server2", to: "client", cls: "pkt-reply" },
+    ],
+  },
+  {
+    text: "Client wählt Server 1 und sendet DHCPREQUEST als Broadcast - so sehen auch nicht gewählte Server die Entscheidung.",
+    packets: [
+      { id: "dhcp-packet-1", from: "client", to: "server1", cls: "pkt-broadcast" },
+      { id: "dhcp-packet-2", from: "client", to: "server2", cls: "pkt-broadcast" },
+    ],
+  },
+  {
+    text: "Server 1 bestätigt mit DHCPACK - die Adresse ist vergeben. Server 2 gibt sein reserviertes Angebot wieder frei.",
+    packets: [{ id: "dhcp-packet-1", from: "server1", to: "client", cls: "pkt-final" }],
+    inactiveNode: "dhcp-node-server2",
+  },
+];
+
+let dhcpAnimStep = 0;
+let dhcpAnimRunning = false;
+
+function dhcpAnimSetButtonsDisabled(disabled) {
+  document.getElementById("dhcp-anim-play").disabled = disabled;
+  document.getElementById("dhcp-anim-step").disabled = disabled;
+}
+
+async function dhcpAnimPlayStep(index) {
+  const step = DHCP_ANIM_STEPS[index];
+  const status = document.getElementById("dhcp-anim-status");
+  const stepEls = document.querySelectorAll("#dhcp-anim-steps .proto-anim-step");
+  const allPacketIds = ["dhcp-packet-1", "dhcp-packet-2"];
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  document.querySelectorAll("#dhcp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
+  if (step.inactiveNode) {
+    document.getElementById(step.inactiveNode).classList.add("inactive");
+  }
+
+  const activePacketIds = step.packets.map((p) => p.id);
+  allPacketIds.forEach((id) => {
+    if (!activePacketIds.includes(id)) {
+      document.getElementById(id).classList.add("hidden-packet");
+    }
+  });
+
+  step.packets.forEach((p) => {
+    const el = document.getElementById(p.id);
+    el.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final", "pkt-broadcast");
+    el.classList.add(p.cls);
+    protoAnimJumpTo(el, DHCP_NODES[p.from]);
+    protoAnimMoveTo(el, DHCP_NODES[p.to]);
+  });
+
+  status.textContent = step.text;
+  await protoAnimWait(1200);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function dhcpAnimPlayAll() {
+  if (dhcpAnimRunning) return;
+  dhcpAnimRunning = true;
+  dhcpAnimSetButtonsDisabled(true);
+  dhcpAnimResetVisuals();
+
+  for (let i = 0; i < DHCP_ANIM_STEPS.length; i++) {
+    await dhcpAnimPlayStep(i);
+  }
+  dhcpAnimStep = DHCP_ANIM_STEPS.length;
+
+  document.getElementById("dhcp-anim-status").textContent =
+    'Client ist vollständig konfiguriert (IP, Subnetzmaske, Gateway, DNS). Klicke "Zurücksetzen", um es erneut zu sehen.';
+  dhcpAnimSetButtonsDisabled(false);
+  dhcpAnimRunning = false;
+}
+
+async function dhcpAnimNextStep() {
+  if (dhcpAnimRunning || dhcpAnimStep >= DHCP_ANIM_STEPS.length) return;
+  dhcpAnimRunning = true;
+  dhcpAnimSetButtonsDisabled(true);
+
+  await dhcpAnimPlayStep(dhcpAnimStep);
+  dhcpAnimStep++;
+
+  if (dhcpAnimStep >= DHCP_ANIM_STEPS.length) {
+    document.getElementById("dhcp-anim-status").textContent =
+      'Client ist vollständig konfiguriert (IP, Subnetzmaske, Gateway, DNS). Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  dhcpAnimSetButtonsDisabled(false);
+  dhcpAnimRunning = false;
+}
+
+function dhcpAnimResetVisuals() {
+  dhcpAnimStep = 0;
+  ["dhcp-packet-1", "dhcp-packet-2"].forEach((id) => {
+    const el = document.getElementById(id);
+    el.className = "proto-anim-packet2d hidden-packet";
+    el.style.left = DHCP_NODES.client.left;
+    el.style.top = DHCP_NODES.client.top;
+  });
+  document.querySelectorAll("#dhcp-anim-track .proto-anim-node2d").forEach((el) => el.classList.remove("inactive"));
+  document.querySelectorAll("#dhcp-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+}
+
+function dhcpAnimReset() {
+  dhcpAnimResetVisuals();
+  document.getElementById("dhcp-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireDhcpAnimation() {
+  dhcpAnimReset();
+  document.getElementById("dhcp-anim-play").addEventListener("click", dhcpAnimPlayAll);
+  document.getElementById("dhcp-anim-step").addEventListener("click", dhcpAnimNextStep);
+  document.getElementById("dhcp-anim-reset").addEventListener("click", dhcpAnimReset);
+}
+
+/* ---------- DNS-Rekursionsanimation ---------- */
+
+const DNS_NODES = {
+  client: { left: "6%", top: "50%" },
+  resolver: { left: "34%", top: "50%" },
+  root: { left: "90%", top: "12%" },
+  tld: { left: "90%", top: "50%" },
+  auth: { left: "90%", top: "88%" },
+};
+
+const DNS_ANIM_STEPS = [
+  { from: "client", to: "resolver", cls: "pkt-query", text: 'Client fragt seinen Resolver: "Wie lautet die IP von shop.beispiel.ch?"' },
+  { from: "resolver", to: "root", cls: "pkt-query", text: "Nichts im Cache - Resolver fragt einen Root-Nameserver." },
+  { from: "root", to: "resolver", cls: "pkt-reply", text: 'Root-Server kennt die Domain nicht, verweist aber: "Frag den zuständigen .ch-TLD-Server."' },
+  { from: "resolver", to: "tld", cls: "pkt-query", text: "Resolver fragt den .ch-TLD-Server." },
+  { from: "tld", to: "resolver", cls: "pkt-reply", text: 'TLD-Server verweist weiter: "Frag den autoritativen Nameserver von beispiel.ch."' },
+  { from: "resolver", to: "auth", cls: "pkt-query", text: "Resolver fragt den autoritativen Nameserver direkt." },
+  { from: "auth", to: "resolver", cls: "pkt-final", text: "Autoritativer Server kennt die Antwort: die IP-Adresse von shop.beispiel.ch." },
+  { from: "resolver", to: "client", cls: "pkt-final", text: "Resolver cacht das Ergebnis (für die Dauer der TTL) und gibt die Antwort an den Client zurück." },
+];
+
+let dnsAnimStep = 0;
+let dnsAnimRunning = false;
+
+function dnsAnimSetButtonsDisabled(disabled) {
+  document.getElementById("dns-anim-play").disabled = disabled;
+  document.getElementById("dns-anim-step").disabled = disabled;
+}
+
+async function dnsAnimPlayStep(index) {
+  const step = DNS_ANIM_STEPS[index];
+  const packet = document.getElementById("dns-packet");
+  const status = document.getElementById("dns-anim-status");
+  const stepEls = document.querySelectorAll("#dns-anim-steps .proto-anim-step");
+
+  stepEls.forEach((el, i) => el.classList.toggle("active", i === index));
+
+  packet.classList.remove("hidden-packet", "pkt-query", "pkt-reply", "pkt-final");
+  packet.classList.add(step.cls);
+  protoAnimJumpTo(packet, DNS_NODES[step.from]);
+  protoAnimMoveTo(packet, DNS_NODES[step.to]);
+
+  status.textContent = step.text;
+  await protoAnimWait(950);
+
+  stepEls[index].classList.remove("active");
+  stepEls[index].classList.add("done");
+}
+
+async function dnsAnimPlayAll() {
+  if (dnsAnimRunning) return;
+  dnsAnimRunning = true;
+  dnsAnimSetButtonsDisabled(true);
+  dnsAnimResetVisuals();
+
+  for (let i = 0; i < DNS_ANIM_STEPS.length; i++) {
+    await dnsAnimPlayStep(i);
+  }
+  dnsAnimStep = DNS_ANIM_STEPS.length;
+
+  document.getElementById("dns-anim-status").textContent =
+    'Client hat die IP-Adresse - der Resolver hat sie zusätzlich für spätere Anfragen zwischengespeichert. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  dnsAnimSetButtonsDisabled(false);
+  dnsAnimRunning = false;
+}
+
+async function dnsAnimNextStep() {
+  if (dnsAnimRunning || dnsAnimStep >= DNS_ANIM_STEPS.length) return;
+  dnsAnimRunning = true;
+  dnsAnimSetButtonsDisabled(true);
+
+  await dnsAnimPlayStep(dnsAnimStep);
+  dnsAnimStep++;
+
+  if (dnsAnimStep >= DNS_ANIM_STEPS.length) {
+    document.getElementById("dns-anim-status").textContent =
+      'Client hat die IP-Adresse - der Resolver hat sie zusätzlich für spätere Anfragen zwischengespeichert. Klicke "Zurücksetzen", um es erneut zu sehen.';
+  }
+  dnsAnimSetButtonsDisabled(false);
+  dnsAnimRunning = false;
+}
+
+function dnsAnimResetVisuals() {
+  dnsAnimStep = 0;
+  const packet = document.getElementById("dns-packet");
+  packet.className = "proto-anim-packet2d hidden-packet";
+  packet.style.left = DNS_NODES.client.left;
+  packet.style.top = DNS_NODES.client.top;
+  document.querySelectorAll("#dns-anim-steps .proto-anim-step").forEach((el) => el.classList.remove("active", "done"));
+}
+
+function dnsAnimReset() {
+  dnsAnimResetVisuals();
+  document.getElementById("dns-anim-status").textContent =
+    'Bereit - klicke "Abspielen" oder gehe Schritt für Schritt durch.';
+}
+
+function wireDnsAnimation() {
+  dnsAnimReset();
+  document.getElementById("dns-anim-play").addEventListener("click", dnsAnimPlayAll);
+  document.getElementById("dns-anim-step").addEventListener("click", dnsAnimNextStep);
+  document.getElementById("dns-anim-reset").addEventListener("click", dnsAnimReset);
+}
+
 const DORA_STEPS = [
   { id: "d", label: "Discover - Client sucht per Broadcast nach DHCP-Servern" },
   { id: "o", label: "Offer - Server bieten je eine IP-Adresse + Konfiguration an" },
@@ -230,6 +472,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  wireDhcpAnimation();
+  wireDnsAnimation();
 
   const doraPuzzle = initReorderPuzzle(document.getElementById("dora-reorder-container"), DORA_STEPS);
   document.getElementById("check-dora-order-btn").addEventListener("click", () => {

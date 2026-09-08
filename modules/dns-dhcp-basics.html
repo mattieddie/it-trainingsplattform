@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DNS-Auflösung &amp; DHCP-Prozess &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260908" />
+<link rel="stylesheet" href="../css/style.css?v=20260909" />
 </head>
 <body>
 
@@ -117,7 +117,34 @@
       gezielt ansprechen - deshalb läuft der Adressbezug per DHCP über
       Broadcasts, nach dem klassischen <strong>DORA</strong>-Schema:
     </p>
-    <img class="doc-image" src="../images/dhcp.png" alt="DHCP-Sequenzdiagramm: Client fragt Server1/Server2 nach DHCP-Server, Server bieten IP-Adresse und Konfiguration an, Client sammelt Angebote und wählt eines, fordert Konfiguration vom gewählten Server an, dieser bestätigt, Client ist konfiguriert, später Leasing-Erneuerung anfordern/bestätigen, am Ende IP-Adresse freigeben" style="max-width:420px;" />
+    <div class="proto-anim-track2d" id="dhcp-anim-track">
+      <div class="proto-anim-node2d" id="dhcp-node-client" style="left:8%; top:50%;">
+        <div class="proto-anim-node2d-icon">💻</div>
+        <div>Client</div>
+      </div>
+      <div class="proto-anim-node2d" id="dhcp-node-server1" style="left:88%; top:18%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>DHCP-Server 1</div>
+      </div>
+      <div class="proto-anim-node2d" id="dhcp-node-server2" style="left:88%; top:82%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>DHCP-Server 2</div>
+      </div>
+      <div id="dhcp-packet-1" class="proto-anim-packet2d hidden-packet"></div>
+      <div id="dhcp-packet-2" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+    <ol class="proto-anim-steps" id="dhcp-anim-steps">
+      <li class="proto-anim-step" data-step="0"><span class="proto-anim-step-label">1. DISCOVER</span>Client sucht per Broadcast nach verfügbaren DHCP-Servern.</li>
+      <li class="proto-anim-step" data-step="1"><span class="proto-anim-step-label">2. OFFER</span>Jeder erreichte Server bietet eine freie IP-Adresse samt Konfiguration an.</li>
+      <li class="proto-anim-step" data-step="2"><span class="proto-anim-step-label">3. REQUEST</span>Client entscheidet sich für ein Angebot und fordert es per Broadcast an - so sehen auch die anderen Server die Entscheidung.</li>
+      <li class="proto-anim-step" data-step="3"><span class="proto-anim-step-label">4. ACK</span>Der gewählte Server bestätigt - die Adresse ist vergeben, der andere Server gibt sein Angebot wieder frei.</li>
+    </ol>
+    <p id="dhcp-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="dhcp-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="dhcp-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="dhcp-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
     <p class="text-muted">
       Praktische Konsequenz: läuft <code class="mono">ipconfig /release</code>
       gefolgt von <code class="mono">ipconfig /renew</code> - das ist der
@@ -146,7 +173,45 @@
       läuft stattdessen als Kette von Verweisen ("Referrals") durch die
       DNS-Hierarchie:
     </p>
-    <img class="doc-image" src="../images/how-dns-works.webp" alt="Diagramm: Ein Computer fragt seinen lokalen DNS-Server nach download.beta.example.com, dieser fragt der Reihe nach den Root-Server, den .com-TLD-Nameserver und den autoritativen Nameserver von beispiel.com, bevor die Antwort an den Computer zurückgeht" style="max-width:520px;" />
+    <div class="proto-anim-track2d" id="dns-anim-track" style="height:230px;">
+      <div class="proto-anim-node2d" id="dns-node-client" style="left:6%; top:50%;">
+        <div class="proto-anim-node2d-icon">💻</div>
+        <div>Client</div>
+      </div>
+      <div class="proto-anim-node2d" id="dns-node-resolver" style="left:34%; top:50%;">
+        <div class="proto-anim-node2d-icon">📇</div>
+        <div>Rekursiver Resolver</div>
+      </div>
+      <div class="proto-anim-node2d" id="dns-node-root" style="left:90%; top:12%;">
+        <div class="proto-anim-node2d-icon">🌐</div>
+        <div>Root-Server</div>
+      </div>
+      <div class="proto-anim-node2d" id="dns-node-tld" style="left:90%; top:50%;">
+        <div class="proto-anim-node2d-icon">🏷️</div>
+        <div>.ch TLD-Server</div>
+      </div>
+      <div class="proto-anim-node2d" id="dns-node-auth" style="left:90%; top:88%;">
+        <div class="proto-anim-node2d-icon">🏢</div>
+        <div>Autoritativer NS (beispiel.ch)</div>
+      </div>
+      <div id="dns-packet" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+    <ol class="proto-anim-steps" id="dns-anim-steps">
+      <li class="proto-anim-step" data-step="0"><span class="proto-anim-step-label">1.</span>Client fragt seinen Resolver: "Wie lautet die IP von shop.beispiel.ch?"</li>
+      <li class="proto-anim-step" data-step="1"><span class="proto-anim-step-label">2.</span>Nichts im Cache - Resolver fragt einen Root-Nameserver.</li>
+      <li class="proto-anim-step" data-step="2"><span class="proto-anim-step-label">3.</span>Root-Server kennt die Domain nicht, verweist aber auf den zuständigen .ch-TLD-Server.</li>
+      <li class="proto-anim-step" data-step="3"><span class="proto-anim-step-label">4.</span>Resolver fragt den .ch-TLD-Server.</li>
+      <li class="proto-anim-step" data-step="4"><span class="proto-anim-step-label">5.</span>TLD-Server verweist weiter auf den autoritativen Nameserver von beispiel.ch.</li>
+      <li class="proto-anim-step" data-step="5"><span class="proto-anim-step-label">6.</span>Resolver fragt den autoritativen Nameserver direkt.</li>
+      <li class="proto-anim-step" data-step="6"><span class="proto-anim-step-label">7.</span>Autoritativer Server kennt die Antwort: die IP-Adresse von shop.beispiel.ch.</li>
+      <li class="proto-anim-step" data-step="7"><span class="proto-anim-step-label">8.</span>Resolver cacht das Ergebnis (für die Dauer der TTL) und gibt die Antwort an den Client zurück.</li>
+    </ol>
+    <p id="dns-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="dns-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="dns-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="dns-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
     <p class="text-muted">
       Der (lokale/rekursive) Resolver merkt sich das Ergebnis danach für
       die Dauer der TTL im Cache - erst wenn diese abläuft, wird die
@@ -208,7 +273,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260908"></script>
+<script src="../js/progress.js?v=20260909"></script>
 <script src="../js/dns-dhcp-basics.js"></script>
 </body>
 </html>

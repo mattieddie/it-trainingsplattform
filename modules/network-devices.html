@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Netzwerkgeräte &amp; Routing &ndash; IT-Trainer</title>
 <link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
-<link rel="stylesheet" href="../css/style.css?v=20260908" />
+<link rel="stylesheet" href="../css/style.css?v=20260909" />
 </head>
 <body>
 
@@ -152,6 +152,60 @@
       Switch = cleverer Verkehrslenker (merkt sich MAC-Adressen) &middot;
       Router = Entscheider zwischen Netzwerken (per IP-Adresse und Routing-Tabelle).
     </div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      ARP: Wie ein Gerät die MAC-Adresse zu einer IP findet
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Wie ein Zuruf in einen vollen Raum: "Wer von euch ist Herr
+          Meier?" - alle hören die Frage, aber nur Herr Meier meldet sich
+          zurück und sagt, wo er sitzt. Alle anderen ignorieren den Zuruf
+          einfach, weil er sie nicht betrifft.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Damit ein Switch überhaupt "MAC-Adressen lernen" kann (siehe oben),
+      muss ein sendendes Gerät zuerst wissen, welche MAC-Adresse zu einer
+      IP-Adresse im selben Subnetz gehört - genau das klärt das
+      <strong>Address Resolution Protocol (ARP)</strong>:
+    </p>
+
+    <div class="proto-anim-track2d" id="arp-anim-track">
+      <div class="proto-anim-node2d" id="arp-node-client" style="left:8%; top:50%;">
+        <div class="proto-anim-node2d-icon">💻</div>
+        <div>PC A (fragt)</div>
+      </div>
+      <div class="proto-anim-node2d" id="arp-node-target" style="left:88%; top:18%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>PC B (192.168.1.20)</div>
+      </div>
+      <div class="proto-anim-node2d" id="arp-node-other" style="left:88%; top:82%;">
+        <div class="proto-anim-node2d-icon">🖥️</div>
+        <div>PC C (192.168.1.30)</div>
+      </div>
+      <div id="arp-packet-1" class="proto-anim-packet2d hidden-packet"></div>
+      <div id="arp-packet-2" class="proto-anim-packet2d hidden-packet"></div>
+    </div>
+    <ol class="proto-anim-steps" id="arp-anim-steps">
+      <li class="proto-anim-step" data-step="0"><span class="proto-anim-step-label">1. ARP-Request</span>PC A sendet einen Broadcast: "Wer hat 192.168.1.20? Bitte melde deine MAC-Adresse!"</li>
+      <li class="proto-anim-step" data-step="1"><span class="proto-anim-step-label">2. ARP-Reply</span>Nur PC B antwortet direkt (Unicast) mit seiner MAC-Adresse - PC C ignoriert die Anfrage, da sie ihn nicht betrifft.</li>
+    </ol>
+    <p id="arp-anim-status" class="text-muted">Bereit - klicke &quot;Abspielen&quot; oder gehe Schritt für Schritt durch.</p>
+    <div class="btn-row">
+      <button type="button" id="arp-anim-play" class="btn primary">▶ Abspielen</button>
+      <button type="button" id="arp-anim-step" class="btn ghost">Nächster Schritt</button>
+      <button type="button" id="arp-anim-reset" class="btn small ghost">Zurücksetzen</button>
+    </div>
+    <p class="text-muted">
+      PC A speichert das Ergebnis danach kurzzeitig in seinem
+      <strong>ARP-Cache</strong> (Windows: <code class="mono">arp -a</code>)
+      - erst wenn dieser Eintrag abläuft, wird bei Bedarf erneut per
+      Broadcast gefragt.
+    </p>
   </div>
 
   <div class="card">
@@ -305,7 +359,7 @@
   Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
 </footer>
 
-<script src="../js/progress.js?v=20260908"></script>
+<script src="../js/progress.js?v=20260909"></script>
 <script src="../js/network-devices.js"></script>
 </body>
 </html>
