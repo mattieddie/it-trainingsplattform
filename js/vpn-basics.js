@@ -372,4 +372,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  initLabChecklist(document.getElementById("vpn-lab-checklist"), "lab_vpn_checklist", [
+    "WireGuard auf SRV01 und CL01 installiert",
+    "Leerer Tunnel auf SRV01 angelegt (Address 10.13.13.1/24, ListenPort 51820)",
+    "Leerer Tunnel auf CL01 angelegt (Address 10.13.13.2/24)",
+    "Peer-Abschnitt auf SRV01 ergänzt (PublicKey von CL01, AllowedIPs 10.13.13.2/32)",
+    "Peer-Abschnitt auf CL01 ergänzt (PublicKey von SRV01, Endpoint 192.168.100.10:51820)",
+    "Firewall-Regel auf SRV01 für UDP 51820 erstellt",
+    "Beide Tunnel aktiviert, Handshake + Übertragung in der App sichtbar",
+    "ping 10.13.13.1 von CL01 aus erfolgreich",
+    "Mit Wireshark verglichen: Tunnel-Verkehr verschlüsselt, LAN-Verkehr im Klartext",
+  ]);
 });

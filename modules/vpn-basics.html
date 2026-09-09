@@ -243,6 +243,113 @@
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxisaufgabe: WireGuard-Tunnel zwischen SRV01 und CL01 aufbauen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          WireGuard ist ein modernes, sehr schlankes VPN-Protokoll: statt der
+          zwei komplexen IKE-Phasen aus der Animation oben tauschen beide
+          Seiten einfach ein Paar aus öffentlichem/privatem Schlüssel aus -
+          das war's schon an "Verhandlung". Trotzdem läuft technisch dasselbe
+          Prinzip: ein verschlüsselter Tunnel mit eigenen, internen
+          Tunnel-IP-Adressen.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Dieses Labor nutzt dieselben zwei VMs wie im Praxislabor
+      <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a> (Teil 1):
+      <strong>SRV01</strong> und <strong>CL01</strong>, weiterhin im selben
+      internen/privaten Netz - es müssen keine neuen VMs angelegt werden.
+      Ziel: ein echter, funktionierender WireGuard-Tunnel zwischen beiden,
+      inklusive eigener Tunnel-IP-Adressen, und der Beweis mit Wireshark,
+      dass der Tunnel-Datenverkehr auf dem Netzwerk tatsächlich verschlüsselt
+      und nicht im Klartext lesbar ist. Rechne mit ca. 30-45 Minuten.
+    </p>
+
+    <h4>Voraussetzungen &amp; Downloads</h4>
+    <ul class="lab-downloads">
+      <li>
+        <span class="lab-download-tag">WireGuard</span>
+        <a href="https://www.wireguard.com/install/" target="_blank" rel="noopener">WireGuard für Windows</a>
+        (kostenlos) - auf SRV01 <strong>und</strong> CL01 installieren.
+      </li>
+      <li>
+        <span class="lab-download-tag">Optional</span>
+        <a href="https://www.wireshark.org/download.html" target="_blank" rel="noopener">Wireshark</a>
+        (kostenlos) - für den Verschlüsselungs-Beweis in Schritt 9-10, auf
+        CL01 installieren.
+      </li>
+    </ul>
+
+    <h4>Schritt für Schritt</h4>
+    <ol>
+      <li>WireGuard auf SRV01 <strong>und</strong> CL01 installieren.</li>
+      <li>
+        Auf SRV01: WireGuard-Oberfläche öffnen → "Leeren Tunnel hinzufügen"
+        (erzeugt automatisch ein neues Schlüsselpaar). Im Editor als
+        <code class="mono">[Interface]</code> die Adresse
+        <code class="mono">Address = 10.13.13.1/24</code> und
+        <code class="mono">ListenPort = 51820</code> setzen, Tunnel z.B.
+        <code class="mono">wg-srv01</code> nennen. Den angezeigten
+        <strong>öffentlichen Schlüssel</strong> von SRV01 notieren.
+      </li>
+      <li>
+        Auf CL01 genauso einen leeren Tunnel <code class="mono">wg-cl01</code>
+        anlegen mit <code class="mono">Address = 10.13.13.2/24</code> (kein
+        <code class="mono">ListenPort</code> nötig - CL01 baut die Verbindung
+        aktiv auf). Auch hier den öffentlichen Schlüssel notieren.
+      </li>
+      <li>
+        Auf SRV01 im Editor einen <code class="mono">[Peer]</code>-Abschnitt
+        ergänzen: <code class="mono">PublicKey</code> = der öffentliche
+        Schlüssel von CL01, <code class="mono">AllowedIPs = 10.13.13.2/32</code>.
+      </li>
+      <li>
+        Auf CL01 im Editor einen <code class="mono">[Peer]</code>-Abschnitt
+        ergänzen: <code class="mono">PublicKey</code> = der öffentliche
+        Schlüssel von SRV01, <code class="mono">Endpoint = 192.168.100.10:51820</code>
+        (die LAN-IP von SRV01 aus dem DHCP/DNS-Labor),
+        <code class="mono">AllowedIPs = 10.13.13.1/32</code>,
+        <code class="mono">PersistentKeepalive = 25</code>.
+      </li>
+      <li>Auf SRV01 in der Windows-Firewall eine Inbound-Regel erstellen, die UDP-Port 51820 erlaubt.</li>
+      <li>Beide Tunnel über den "Aktivieren"-Knopf in der WireGuard-App starten - zuerst auf SRV01, danach auf CL01.</li>
+      <li>
+        Verifizieren in der WireGuard-App: bei beiden Tunneln erscheint unter
+        "Letzter Handshake" ein aktueller Zeitstempel und "Übertragung" zeigt
+        eine steigende Byte-Anzahl - das ist der Beweis, dass der
+        Schlüsselaustausch geklappt hat.
+      </li>
+      <li>Von CL01 aus: <code class="mono">ping 10.13.13.1</code> ausführen - die Tunnel-IP von SRV01 muss über den Tunnel erreichbar sein.</li>
+      <li>
+        Optional (mit Wireshark): auf CL01 eine Aufnahme starten, während du
+        <code class="mono">ping 10.13.13.1</code> erneut ausführst. Filter
+        <code class="mono">udp.port == 51820</code> zeigt nur verschlüsselte,
+        unlesbare WireGuard-Pakete - der eigentliche ICMP-Ping darin ist NICHT
+        im Klartext sichtbar.
+      </li>
+      <li>
+        Zum Vergleich: <code class="mono">ping 192.168.100.10</code> (die
+        normale LAN-IP, ausserhalb des Tunnels) bei laufender Wireshark-Aufnahme
+        ausführen - hier ist der ICMP-Inhalt im Klartext lesbar. Genau dieser
+        Unterschied ist es, was ein VPN tatsächlich leistet.
+      </li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Wenn's nicht klappt:</strong> die häufigsten Ursachen sind eine
+      vertauschte Tunnel-IP (SRV01 und CL01 brauchen unterschiedliche
+      Adressen im selben <code class="mono">10.13.13.0/24</code>-Netz), ein
+      falsch kopierter öffentlicher Schlüssel, oder die Windows-Firewall auf
+      SRV01, die den eingehenden UDP-Port 51820 noch blockiert.
+    </div>
+
+    <h4>Fortschritt</h4>
+    <div id="vpn-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
