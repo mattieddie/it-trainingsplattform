@@ -346,11 +346,12 @@ volumes:
         <a href="https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/Install-Hyper-V?tabs=powershell&amp;pivots=windows" target="_blank" rel="noopener">Hyper-V</a>.
       </li>
       <li>
-        <span class="lab-download-tag">Server-ISO</span>
-        <a href="https://ubuntu.com/download/server" target="_blank" rel="noopener">Ubuntu Server (aktuelle LTS-Version)</a>
-        - kostenlos, wird der Docker-Host. Docker läuft auch unter Windows
-        Server, aber Docker Engine unter Linux ist der Standardweg und
-        braucht keine zusätzliche Lizenz.
+        <span class="lab-download-tag">Linux-ISO</span>
+        <a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener">Ubuntu Desktop (aktuelle LTS-Version)</a>
+        - kostenlos, wird der Docker-Host. Bewusst die Desktop- statt der
+        Server-Variante: mit grafischer Oberfläche kannst du dich in der VM
+        ganz normal per Mauszeiger bewegen, ein Terminal-Fenster öffnen und
+        bei Bedarf direkt lokal im Browser auf Immich zugreifen.
       </li>
       <li>
         <span class="lab-download-tag">Client-ISO</span>
@@ -371,15 +372,15 @@ volumes:
 
     <h4>Schritt für Schritt</h4>
     <ol>
-      <li>Zwei VMs anlegen: <strong>DOCKER01</strong> (Ubuntu Server - wird der Docker-Host für Immich) und <strong>CLIENT01</strong> (z.B. Windows 11 - dient nur zum Testen des Zugriffs per Browser).</li>
+      <li>Zwei VMs anlegen: <strong>DOCKER01</strong> (Ubuntu Desktop mit grafischer Oberfläche - wird der Docker-Host für Immich) und <strong>CLIENT01</strong> (z.B. Windows 11 - dient nur zum Testen des Zugriffs per Browser).</li>
       <li>
         Beide VMs an dasselbe <strong>interne/private Netzwerk</strong> hängen
         (VirtualBox: "Internes Netzwerk", Hyper-V: "Privater virtueller Switch") -
         <strong>nicht</strong> NAT, sonst sehen sich die beiden VMs gegenseitig nicht.
       </li>
-      <li>Ubuntu Server auf DOCKER01 installieren (OpenSSH-Server bei der Installation gleich mitauswählen, damit du bequem per SSH weiterarbeiten kannst).</li>
-      <li>Auf DOCKER01 Docker Engine gemäss der offiziellen Anleitung installieren (nicht den veralteten <code class="mono">docker.io</code>-Paketnamen aus den Ubuntu-Standardquellen verwenden - dieser bringt oft eine zu alte Compose-Version mit).</li>
-      <li>IP-Adresse von DOCKER01 ermitteln und notieren: <code class="mono">ip a</code> (z.B. <code class="mono">192.168.100.10</code>) - wird später vom Client aus gebraucht.</li>
+      <li>Ubuntu Desktop auf DOCKER01 installieren (nicht Ubuntu Server - so hast du eine grafische Oberfläche mit Terminal-Fenster und Browser gleich zur Hand, statt rein über die Kommandozeile zu arbeiten).</li>
+      <li>Auf DOCKER01 in einem Terminal-Fenster Docker Engine gemäss der offiziellen Anleitung installieren (nicht den veralteten <code class="mono">docker.io</code>-Paketnamen aus den Ubuntu-Standardquellen verwenden - dieser bringt oft eine zu alte Compose-Version mit).</li>
+      <li>IP-Adresse von DOCKER01 ermitteln und notieren: <code class="mono">ip a</code> im Terminal-Fenster (z.B. <code class="mono">192.168.100.10</code>) - wird später vom Client aus gebraucht.</li>
       <li>
         Immich per Docker Compose einrichten: ein Verzeichnis anlegen, darin
         <code class="mono">docker-compose.yml</code> und <code class="mono">.env</code>
