@@ -230,4 +230,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuiz();
   document.getElementById("check-quiz-btn").addEventListener("click", checkQuiz);
+
+  initLabChecklist(document.getElementById("containers-lab-checklist"), "lab_containers_checklist", [
+    "DOCKER01 (Ubuntu Server) und CLIENT01 als separate VMs angelegt, beide im selben internen/privaten Netzwerk",
+    "Docker Engine auf DOCKER01 installiert",
+    "IP-Adresse von DOCKER01 ermittelt",
+    "Immich per Docker Compose eingerichtet (.env angepasst, docker compose up -d)",
+    "docker compose ps: alle Container laufen/healthy",
+    "Port 2283 in der Firewall freigegeben (falls nötig)",
+    "Lokal auf DOCKER01 getestet: Admin-Account angelegt, angemeldet",
+    "Ein paar Testfotos hochgeladen",
+    "Von CLIENT01 aus über die IP von DOCKER01 auf die Galerie zugegriffen und angemeldet",
+    "Verifiziert: Testfotos sind auf CLIENT01 über das Netzwerk sichtbar",
+  ]);
 });

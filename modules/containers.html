@@ -312,6 +312,99 @@ volumes:
     </div>
     <div id="quiz-feedback" class="feedback-box hidden"></div>
   </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🖥️ Praxisaufgabe: eigenen Immich-Fotoserver mit Docker aufsetzen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Die Karte oben zeigt das <code>docker-compose.yml</code> von Immich
+          nur zum Lesen - hier baust du genau das wirklich auf: ein eigener
+          Docker-Host, darauf Immich per Docker Compose, ein paar Testfotos
+          hochgeladen, und der Zugriff von einem zweiten, komplett separaten
+          Client-Rechner im selben virtuellen Netz getestet.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Ziel: ein Server betreibt Immich in Docker, ein zweiter (virtueller)
+      Client im gleichen Netz greift ausschliesslich über den Browser auf
+      die Galerie zu - so wie später bei einem echten Homelab- oder
+      Abteilungsserver auch. Anders als bei den Domänen-Laboren in anderen
+      Modulen ist diese Umgebung eigenständig - du brauchst dafür keine der
+      dort aufgebauten VMs. Rechne mit ca. 45-60 Minuten.
+    </p>
+
+    <h4>Voraussetzungen &amp; Downloads</h4>
+    <ul class="lab-downloads">
+      <li>
+        <span class="lab-download-tag">Virtualisierung</span>
+        <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">Oracle VirtualBox</a>
+        (kostenlos) - oder alternativ das in Windows Pro/Enterprise/Education
+        eingebaute
+        <a href="https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/Install-Hyper-V?tabs=powershell&amp;pivots=windows" target="_blank" rel="noopener">Hyper-V</a>.
+      </li>
+      <li>
+        <span class="lab-download-tag">Server-ISO</span>
+        <a href="https://ubuntu.com/download/server" target="_blank" rel="noopener">Ubuntu Server (aktuelle LTS-Version)</a>
+        - kostenlos, wird der Docker-Host. Docker läuft auch unter Windows
+        Server, aber Docker Engine unter Linux ist der Standardweg und
+        braucht keine zusätzliche Lizenz.
+      </li>
+      <li>
+        <span class="lab-download-tag">Client-ISO</span>
+        <a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-11-enterprise" target="_blank" rel="noopener">Windows 11 Enterprise Evaluation</a>
+        (Microsoft Evaluation Center, 90 Tage kostenlos) - jede andere VM mit
+        einem Browser (auch ein zweites Ubuntu mit Desktop-Oberfläche) tut es
+        genauso, Hauptsache es ist eine <strong>separate</strong> VM.
+      </li>
+      <li>
+        <span class="lab-download-tag">Docker</span>
+        <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener">Docker Engine - Installationsanleitung für Ubuntu</a>
+      </li>
+      <li>
+        <span class="lab-download-tag">Immich</span>
+        <a href="https://docs.immich.app/install/docker-compose" target="_blank" rel="noopener">Immich - offizielle Docker-Compose-Anleitung</a>
+      </li>
+    </ul>
+
+    <h4>Schritt für Schritt</h4>
+    <ol>
+      <li>Zwei VMs anlegen: <strong>DOCKER01</strong> (Ubuntu Server - wird der Docker-Host für Immich) und <strong>CLIENT01</strong> (z.B. Windows 11 - dient nur zum Testen des Zugriffs per Browser).</li>
+      <li>
+        Beide VMs an dasselbe <strong>interne/private Netzwerk</strong> hängen
+        (VirtualBox: "Internes Netzwerk", Hyper-V: "Privater virtueller Switch") -
+        <strong>nicht</strong> NAT, sonst sehen sich die beiden VMs gegenseitig nicht.
+      </li>
+      <li>Ubuntu Server auf DOCKER01 installieren (OpenSSH-Server bei der Installation gleich mitauswählen, damit du bequem per SSH weiterarbeiten kannst).</li>
+      <li>Auf DOCKER01 Docker Engine gemäss der offiziellen Anleitung installieren (nicht den veralteten <code class="mono">docker.io</code>-Paketnamen aus den Ubuntu-Standardquellen verwenden - dieser bringt oft eine zu alte Compose-Version mit).</li>
+      <li>IP-Adresse von DOCKER01 ermitteln und notieren: <code class="mono">ip a</code> (z.B. <code class="mono">192.168.100.10</code>) - wird später vom Client aus gebraucht.</li>
+      <li>
+        Immich per Docker Compose einrichten: ein Verzeichnis anlegen, darin
+        <code class="mono">docker-compose.yml</code> und <code class="mono">.env</code>
+        gemäss der offiziellen Anleitung herunterladen, in der <code class="mono">.env</code>
+        mindestens <code class="mono">UPLOAD_LOCATION</code> und <code class="mono">DB_PASSWORD</code>
+        anpassen, danach <code class="mono">docker compose up -d</code> ausführen.
+      </li>
+      <li>Mit <code class="mono">docker compose ps</code> prüfen, dass alle Container (Server, Machine-Learning, Redis, Datenbank) im Status "running"/"healthy" sind.</li>
+      <li>Falls eine Firewall aktiv ist, Port 2283 für eingehende Verbindungen freigeben: <code class="mono">sudo ufw allow 2283/tcp</code>.</li>
+      <li>Lokal auf DOCKER01 testen: Browser öffnen, <code class="mono">http://localhost:2283</code> aufrufen, einen Admin-Account anlegen und anmelden.</li>
+      <li>Ein paar Testfotos hochladen (eigene Bilder per Drag &amp; Drop in die Web-Oberfläche) - mindestens 3-5 Fotos, damit die Galerie danach etwas zu zeigen hat.</li>
+      <li>Auf CLIENT01: Browser öffnen und <code class="mono">http://&lt;IP-von-DOCKER01&gt;:2283</code> aufrufen (z.B. <code class="mono">http://192.168.100.10:2283</code>), mit demselben Account anmelden.</li>
+      <li>Verifizieren: die zuvor hochgeladenen Testfotos erscheinen in der Galerie auf CLIENT01 genau gleich wie auf DOCKER01 - der Zugriff läuft über das Netzwerk, nicht nur lokal auf dem Server selbst.</li>
+    </ol>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Wenn's nicht klappt:</strong> die häufigsten Ursachen sind das
+      falsche Netzwerk (NAT statt intern/privat gewählt, dann sehen sich die
+      VMs nicht), eine aktive Firewall auf DOCKER01, die Port 2283 blockiert,
+      oder ein Container, der laut <code class="mono">docker compose ps</code>
+      nicht läuft (Logs dazu: <code class="mono">docker compose logs immich-server</code>).
+    </div>
+
+    <h4>Fortschritt</h4>
+    <div id="containers-lab-checklist"></div>
+  </div>
   <div id="next-module-nav" class="next-module-nav"></div>
 </main>
 
