@@ -299,6 +299,16 @@ const MODULES = [
     prereqs: ["encryption"],
   },
   {
+    id: "vulnerabilities",
+    track: "security",
+    title: "Schwachstellen & CVE",
+    icon: "\u{1F41B}",
+    description:
+      "Was eine Schwachstelle ist, wie der CVE-Katalog sie eindeutig identifiziert und wie die CVSS-Skala ihren Schweregrad bewertet - inkl. Praxisaufgabe: echte historische Schwachstellen selbst recherchieren.",
+    href: "modules/vulnerabilities.html",
+    prereqs: ["certificates"],
+  },
+  {
     id: "firewall",
     track: "security",
     title: "Firewall-Regel-Puzzle",

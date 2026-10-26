@@ -61,6 +61,7 @@ passend einen "Baut auf: ..."-Hinweis. Die Abhängigkeiten sind als
 **5. IT-Security** - Angriffsflächen erkennen und absichern
 - **Verschlüsselung** ([modules/encryption.html](modules/encryption.html)) - symmetrisch/asymmetrisch/hybrid, Diffie-Hellman-Schlüsselaustausch, Hashing & Salt, inkl. zweier Live-Demos mit echtem SHA-256 (Web-Crypto-API im Browser).
 - **Zertifikate & PKI** ([modules/certificates.html](modules/certificates.html)) - Vertrauenskette (Root-CA/Intermediate-CA), Zertifikatsfelder, interaktive TLS-Handshake-Animation (inkl. animierter Zertifikatsprüfung: Vertrauenskette/Gültigkeit/Hostname/Widerruf), Ablauf & Widerruf (CRL/OCSP), automatisierte Zertifikatsverteilung per SCEP über Intune (inkl. NDES), Begriffs-Zuordnungsspiel. Am Modulende **Praxislabor Teil 3**: baut auf dem AD-Praxislabor auf - AD CS-Rolle (eigene Root-CA) einrichten, Autoenrollment per GPO aktivieren, ausgestelltes Zertifikat auf dem Client verifizieren.
+- **Schwachstellen & CVE** ([modules/vulnerabilities.html](modules/vulnerabilities.html)) - Was eine Schwachstelle (Vulnerability) von Exploit, Patch, Zero-Day und N-Day unterscheidet, der CVE-Katalog (CVE-ID-Format, MITRE/CNAs, NVD, CWE) und die CVSS-Skala (Base Score 0.0-10.0, Severity-Stufen, Vector-String AV/AC/PR/UI/S/C/I/A), inkl. Reihenfolge-Puzzle zum Schwachstellen-Lebenszyklus. Praxisaufgabe: sechs echte, historische Schwachstellen (u.a. Heartbleed, Shellshock, EternalBlue, Log4Shell, PrintNightmare, ProxyLogon) anhand offizieller Quellen (NVD/CVE.org) selbst recherchieren, mit Modellantworten zum Selbst-Check.
 - **Firewall-Regel-Puzzle** ([modules/firewall.html](modules/firewall.html)) - Regeln umsortieren, selbst entwerfen, Multi-Firewall-Topologien (DMZ/VPN).
 - **SQL-Injection-Simulation** ([modules/sqli.html](modules/sqli.html)) - sandboxed, unsicher vs. parametrisiert, drei Herausforderungen.
 - **E-Mail-Sicherheit** ([modules/email-security.html](modules/email-security.html)) - SPF/DKIM/DMARC inkl. mehrerer Ablaufdiagramme, Erklärung von `include:_spf.google.com`, interaktivem Schritt-für-Schritt-Vergleich ("welche Prüfung schaut welchen Mail-Teil an"), Alignment-Konzept und komplettem Beispiel-Ablauf mit vier Szenarien, plus interaktive Zustellungs-Animation (Umschlag öffnen, SPF/DKIM/DMARC der Reihe nach prüfen, zwei wählbare Szenarien: legitime Mail vs. Phishing-Versuch mit unterschiedlichem Ausgang - Postfach vs. Quarantäne).
@@ -109,6 +110,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── final-exam.js
 │   ├── dns-dhcp-basics.js
 │   ├── certificates.js
+│   ├── vulnerabilities.js
 │   ├── containers.js
 │   ├── database.js
 │   ├── api-basics.js
@@ -131,6 +133,7 @@ Transform-Anwendung, RayPack-Workflow) zur Veranschaulichung.
 │   ├── dhcp-dns.html
 │   ├── encryption.html
 │   ├── certificates.html
+│   ├── vulnerabilities.html
 │   ├── firewall.html
 │   ├── sqli.html
 │   ├── dns-concepts.html

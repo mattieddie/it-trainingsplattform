@@ -508,6 +508,12 @@ footer.site-footer {
 .badge.difficulty-hard { background: var(--danger-bg); color: var(--danger); }
 .badge.difficulty-expert { background: rgba(180, 130, 255, 0.15); color: #b482ff; }
 
+.badge.sev-none { background: rgba(154, 165, 184, 0.15); color: var(--text-muted); }
+.badge.sev-low { background: var(--success-bg); color: var(--success); }
+.badge.sev-medium { background: var(--warning-bg); color: var(--warning); }
+.badge.sev-high { background: var(--danger-bg); color: var(--danger); }
+.badge.sev-critical { background: rgba(255, 45, 85, 0.22); color: #ff2d55; }
+
 /* ---------- Progress bar ---------- */
 
 .progress-overview {

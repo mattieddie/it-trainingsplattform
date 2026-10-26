@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Schwachstellen &amp; CVE &ndash; IT-Trainer</title>
+<link rel="icon" type="image/png" href="../images/abraxas-icon.png" />
+<link rel="stylesheet" href="../css/style.css?v=20261026" />
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand"><img class="brand-logo" src="../images/abraxas-icon.png" alt="Abraxas Informatik AG" /> IT-Trainingsplattform</div>
+  <nav class="main-nav">
+    <a href="../index.html">Übersicht</a>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">IT-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="computer-basics.html">Computer-Grundlagen</a>
+        <a href="terminal.html">CMD/PowerShell</a>
+        <a href="scripting.html">Skripting</a>
+        <a href="containers.html">Virtualisierung &amp; Docker</a>
+        <a href="databases.html">Datenbanken</a>
+        <a href="api-basics.html">API-Grundlagen</a>
+        <a href="pc-troubleshooting.html">PC-Troubleshooting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Netzwerk-Grundlagen</button>
+      <div class="nav-dropdown-menu">
+        <a href="network-packets.html">Pakete &amp; OSI</a>
+        <a href="network-devices.html">Netzwerkgeräte</a>
+        <a href="subnetting.html">Subnetting</a>
+        <a href="dns-concepts.html">DNS-Konzepte</a>
+        <a href="dns-dhcp-basics.html">DNS-Auflösung &amp; DHCP</a>
+        <a href="dhcp-dns.html">DHCP/DNS</a>
+        <a href="vpn-basics.html">VPN-Grundlagen</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Verzeichnisdienste & Identität</button>
+      <div class="nav-dropdown-menu">
+        <a href="active-directory.html">Active Directory</a>
+        <a href="intune-entra.html">Intune/Entra ID</a>
+        <a href="cloud-basics.html">Cloud-Grundlagen</a>
+        <a href="identity-troubleshooting.html">Identitäts-Troubleshooting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Softwareverteilung & Paketierung</button>
+      <div class="nav-dropdown-menu">
+        <a href="packaging.html">Paketierung</a>
+        <a href="sccm.html">Configuration Manager (SCCM)</a>
+        <a href="packaging-troubleshooting.html">Paketierungs-Troubleshooting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle active-group">IT-Security</button>
+      <div class="nav-dropdown-menu">
+        <a href="encryption.html">Verschlüsselung</a>
+        <a href="certificates.html">Zertifikate &amp; PKI</a>
+        <a href="vulnerabilities.html" class="active">Schwachstellen &amp; CVE</a>
+        <a href="firewall.html">Firewall</a>
+        <a href="sqli.html">SQL-Injection</a>
+        <a href="email-security.html">E-Mail-Sicherheit</a>
+        <a href="security-troubleshooting.html">Security-Troubleshooting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Betrieb & Notfallvorsorge</button>
+      <div class="nav-dropdown-menu">
+        <a href="backup.html">Backup &amp; Recovery</a>
+        <a href="backup-troubleshooting.html">Backup-Troubleshooting</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button type="button" class="nav-dropdown-toggle">Abschlussprüfung</button>
+      <div class="nav-dropdown-menu">
+        <a href="final-exam.html">Abschlussprüfung</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <h1 class="page-title">
+    🐛 Schwachstellen &amp; CVE
+    <details class="info-toggle">
+      <summary>i</summary>
+      <div class="info-content">
+        Eine Schwachstelle (Vulnerability) ist ein Fehler in Software,
+        Hardware oder Konfiguration, den ein Angreifer ausnutzen könnte.
+        CVE ist einfach ein weltweit einheitliches "Aktenzeichen" dafür,
+        damit alle - Hersteller, Forscher, Admins, Sicherheits-Tools -
+        über dieselbe Schwachstelle sprechen, ohne sie jedes Mal neu
+        beschreiben zu müssen.
+      </div>
+    </details>
+  </h1>
+  <p class="page-subtitle">
+    Was eine Schwachstelle ist, wie der CVE-Katalog öffentlich bekannte
+    Schwachstellen eindeutig identifiziert, und wie die CVSS-Skala ihren
+    Schweregrad in eine vergleichbare Zahl von 0.0 bis 10.0 übersetzt -
+    inkl. Praxisaufgabe: selbst recherchierte, echte historische
+    Schwachstellen.
+  </p>
+
+  <div id="completion-banner" class="alert success hidden">
+    <strong>Modul abgeschlossen!</strong> Quiz vollständig richtig gelöst.
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Was ist eine Schwachstelle (Vulnerability)?
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Stell es dir wie eine unverschlossene Hintertür an einem Haus
+          vor: Die Tür selbst (die Schwachstelle) ist erstmal nur ein
+          Konstruktionsfehler. Ob jemand tatsächlich durch sie einsteigt
+          (der Exploit) und was er drinnen anstellt (die Auswirkung), ist
+          eine zweite, davon unabhängige Frage.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Eine <strong>Schwachstelle</strong> ist ein Fehler oder eine
+      Schwäche in Software, Hardware, einem Protokoll oder einer
+      Konfiguration, die - absichtlich ausgenutzt - einem Angreifer
+      Fähigkeiten verschafft, die er eigentlich nicht haben sollte: z.B.
+      Code auf einem fremden System ausführen, auf Daten zugreifen,
+      Rechte ausweiten oder einen Dienst zum Absturz bringen.
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Begriff</th><th>Bedeutung</th>
+      </tr>
+      <tr><td><strong>Schwachstelle (Vulnerability)</strong></td><td>der Fehler selbst - existiert, auch wenn ihn noch niemand ausnutzt</td></tr>
+      <tr><td><strong>Exploit</strong></td><td>konkreter Code/Technik, der die Schwachstelle tatsächlich ausnutzt</td></tr>
+      <tr><td><strong>Patch</strong></td><td>die Korrektur des Herstellers, die die Schwachstelle schliesst</td></tr>
+      <tr><td><strong>Zero-Day</strong></td><td>eine Schwachstelle, die bereits ausgenutzt wird, BEVOR ein Patch existiert (bzw. dem Hersteller "null Tage" Vorlaufzeit blieben)</td></tr>
+      <tr><td><strong>N-Day</strong></td><td>eine Schwachstelle, für die längst ein Patch existiert - aber viele Systeme ihn noch nicht installiert haben (häufigster realer Angriffsweg!)</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:10px;">
+      In der Praxis werden weit mehr Systeme über ungepatchte N-Days
+      kompromittiert als über echte Zero-Days - genau deshalb ist
+      konsequentes Patch-Management (siehe Module
+      <a href="sccm.html">Configuration Manager</a> und
+      <a href="intune-entra.html">Intune</a>) eine der wichtigsten
+      Security-Massnahmen überhaupt.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      CVE: ein weltweit einheitliches Aktenzeichen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Ohne CVE würde jeder Hersteller, jedes Antiviren-Tool und jeder
+          Sicherheitsforscher dieselbe Schwachstelle anders benennen -
+          ein Chaos beim Abgleich, ob zwei Meldungen eigentlich dasselbe
+          Problem beschreiben. CVE löst genau das: EINE eindeutige
+          Nummer pro Schwachstelle, von allen genutzt.
+        </div>
+      </details>
+    </h3>
+    <p>
+      <strong>CVE</strong> steht für <strong>Common Vulnerabilities and
+      Exposures</strong> - ein kostenloser, öffentlicher Katalog
+      bekannter Software- und Hardware-Schwachstellen. Jeder Eintrag
+      bekommt eine eindeutige <strong>CVE-ID</strong> im Format
+      <code class="mono">CVE-&lt;Jahr&gt;-&lt;laufende Nummer&gt;</code>,
+      z.B. <code class="mono">CVE-2021-44228</code> (Log4Shell) - das
+      Jahr ist dabei das Jahr der <em>Zuweisung</em> der ID, nicht
+      zwingend das Jahr der öffentlichen Bekanntmachung.
+    </p>
+    <p>
+      Verwaltet wird CVE von der <strong>MITRE Corporation</strong>
+      (finanziert u.a. von der US-Behörde CISA). Die eigentlichen IDs
+      vergeben aber grösstenteils sogenannte <strong>CNAs (CVE
+      Numbering Authorities)</strong> - das sind autorisierte
+      Hersteller, Security-Firmen und Organisationen (z.B. Microsoft,
+      Red Hat, Google), die für ihre eigenen Produkte selbst neue
+      CVE-IDs vergeben dürfen, statt jedes Mal MITRE direkt fragen zu
+      müssen.
+    </p>
+    <div class="alert info" style="margin-top:10px;">
+      <strong>Wichtig:</strong> Eine CVE-ID sagt für sich allein noch
+      NICHTS über den Schweregrad aus - sie ist nur die eindeutige
+      Referenznummer. Wie gefährlich eine Schwachstelle ist, beschreibt
+      die CVSS-Skala weiter unten.
+    </div>
+    <p class="text-muted" style="margin-top:10px;">
+      Die <strong>NVD (National Vulnerability Database)</strong> des
+      US-amerikanischen NIST übernimmt jeden CVE-Eintrag und reichert
+      ihn zusätzlich an: mit dem CVSS-Score, einer
+      <strong>CWE</strong>-Klassifizierung (Common Weakness Enumeration
+      - die allgemeine Fehler-<em>Art</em>, z.B. "CWE-79: Cross-Site
+      Scripting", während die CVE-ID die konkrete <em>Einzelinstanz</em>
+      in einem bestimmten Produkt ist) sowie einer Liste betroffener
+      Produkte/Versionen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Die CVSS-Skala: Schweregrad vergleichbar machen
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          CVSS ist wie eine Risiko-Ampel mit Zahlenwert statt nur
+          Farbe: statt "gefährlich" oder "nicht so gefährlich" zu sagen,
+          liefert CVSS eine Zahl zwischen 0.0 und 10.0, die sich aus
+          klar definierten Einzelkriterien zusammensetzt - dadurch
+          lassen sich zwei völlig unterschiedliche Schwachstellen
+          trotzdem objektiv vergleichen.
+        </div>
+      </details>
+    </h3>
+    <p>
+      <strong>CVSS (Common Vulnerability Scoring System)</strong> ist
+      ein offener Industriestandard, der die technischen Eigenschaften
+      einer Schwachstelle in einen <strong>Base Score von 0.0 bis
+      10.0</strong> übersetzt. Dieser Score ordnet sich einer von fünf
+      Schweregrad-Stufen zu:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Score-Bereich</th><th>Severity</th>
+      </tr>
+      <tr><td>0.0</td><td><span class="badge sev-none">None</span></td></tr>
+      <tr><td>0.1 &ndash; 3.9</td><td><span class="badge sev-low">Low</span></td></tr>
+      <tr><td>4.0 &ndash; 6.9</td><td><span class="badge sev-medium">Medium</span></td></tr>
+      <tr><td>7.0 &ndash; 8.9</td><td><span class="badge sev-high">High</span></td></tr>
+      <tr><td>9.0 &ndash; 10.0</td><td><span class="badge sev-critical">Critical</span></td></tr>
+    </table>
+
+    <p style="margin-top:14px;">
+      Der Base Score setzt sich (in CVSS v3.x) aus mehreren
+      Einzelmetriken zusammen - zusammengefasst in einem kompakten
+      <strong>Vector String</strong> wie
+      <code class="mono">CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H</code>:
+    </p>
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="text-align:left; color: var(--text-muted); font-size:0.85rem;">
+        <th style="padding:4px 0;">Kürzel</th><th>Metrik</th><th>Typische Werte</th>
+      </tr>
+      <tr><td class="mono">AV</td><td>Attack Vector &ndash; von wo aus angreifbar?</td><td>Network / Adjacent / Local / Physical</td></tr>
+      <tr><td class="mono">AC</td><td>Attack Complexity &ndash; wie schwer ist der Angriff?</td><td>Low / High</td></tr>
+      <tr><td class="mono">PR</td><td>Privileges Required &ndash; welche Rechte braucht der Angreifer vorher?</td><td>None / Low / High</td></tr>
+      <tr><td class="mono">UI</td><td>User Interaction &ndash; muss ein Opfer etwas tun (z.B. klicken)?</td><td>None / Required</td></tr>
+      <tr><td class="mono">S</td><td>Scope &ndash; wirkt der Angriff über die verwundbare Komponente hinaus?</td><td>Unchanged / Changed</td></tr>
+      <tr><td class="mono">C / I / A</td><td>Impact auf Confidentiality / Integrity / Availability</td><td>None / Low / High</td></tr>
+    </table>
+    <p class="text-muted" style="margin-top:10px;">
+      Beispiel oben (<code class="mono">AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H</code>,
+      Score <strong>10.0</strong>): aus dem Netz erreichbar, technisch
+      einfach, keine Rechte und keine Nutzerinteraktion nötig, wirkt
+      über die Komponente hinaus, volle Auswirkung auf alle drei
+      Schutzziele - das ist praktisch der denkbar schlimmste Fall (so
+      bewertet z.B. Log4Shell, siehe Praxisaufgabe unten).
+    </p>
+    <div class="alert warning" style="margin-top:10px;">
+      <strong>CVSS misst technischen Schweregrad - nicht reales
+      Risiko.</strong> Ein Score von 9.8 für eine Schwachstelle in
+      einer Komponente, die bei dir gar nicht installiert oder nur
+      intern ohne Netzzugriff erreichbar ist, ist in der Praxis oft
+      weniger dringend als ein Score von 7.0 in einer Komponente, die
+      direkt aus dem Internet erreichbar und bereits aktiv ausgenutzt
+      wird (siehe z.B. die <strong>CISA KEV-Liste</strong> - "Known
+      Exploited Vulnerabilities"). Priorisierung beim Patchen braucht
+      deshalb immer BEIDES: den CVSS-Score UND den eigenen Kontext.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      Vom Fund zur Behebung: der typische Lebenszyklus
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          "Responsible Disclosure" bedeutet: der Finder informiert zuerst
+          vertraulich den Hersteller und gibt ihm Zeit für einen Patch,
+          bevor Details veröffentlicht werden - im Gegensatz zu "Full
+          Disclosure" (sofort alles öffentlich) oder Verkauf an
+          Kriminelle.
+        </div>
+      </details>
+    </h3>
+    <p>Bringe die Schritte in die richtige Reihenfolge:</p>
+    <div id="lifecycle-puzzle"></div>
+    <div class="btn-row">
+      <button id="lifecycle-check-btn" class="btn primary">Prüfen</button>
+    </div>
+    <div id="lifecycle-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">🔎 Quiz</h3>
+    <div id="quiz-container"></div>
+    <div class="btn-row">
+      <button id="check-quiz-btn" class="btn primary">Quiz auswerten</button>
+    </div>
+    <div id="quiz-feedback" class="feedback-box hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 class="mt-0">
+      🧭 Praxisaufgabe: Echte, historische Schwachstellen recherchieren
+      <details class="info-toggle">
+        <summary>i</summary>
+        <div class="info-content">
+          Diese Aufgabe findet bewusst AUSSERHALB der Plattform statt:
+          du suchst selbst in offiziellen, öffentlichen Quellen nach den
+          Fakten zu je einer echten, bekannten Schwachstelle. Es gibt
+          keine automatische Auswertung - nutze die "Modellantwort"
+          danach, um deine eigene Recherche selbst zu überprüfen.
+        </div>
+      </details>
+    </h3>
+    <p>
+      Wähle (mindestens) drei der folgenden sechs echten, in der
+      Vergangenheit grosse Wellen schlagenden Schwachstellen aus und
+      recherchiere sie anhand der offiziellen CVE-Einträge. Nutze dafür
+      z.B. die verlinkten Quellen - <strong>nvd.nist.gov</strong>
+      (NIST National Vulnerability Database) und
+      <strong>cve.org</strong> (das offizielle CVE-Programm) sind die
+      verlässlichsten Anlaufstellen, Herstellerhinweise und
+      Wikipedia-Artikel liefern zusätzlichen Hintergrund.
+    </p>
+    <p class="text-muted">
+      Beantworte zu jedem gewählten Fall die vier Leitfragen in eigenen
+      Worten (wird nur lokal im Browser gespeichert) und vergleiche
+      danach mit der Modellantwort. Achte darauf, dass CVSS-Werte auf
+      NVD sich über die Zeit auch mal leicht ändern/aktualisieren
+      können - die Modellantworten hier sind ein Richtwert zum
+      Selbst-Check, kein offiziell fixierter Wert.
+    </p>
+    <div id="cve-research-container"></div>
+
+    <h4 style="margin-top:20px;">Fortschritt</h4>
+    <div id="cve-research-checklist"></div>
+  </div>
+
+  <div id="next-module-nav" class="next-module-nav"></div>
+</main>
+
+<footer class="site-footer">
+  Lernprojekt &middot; statisch &middot; clientseitig &middot; kein Tracking
+</footer>
+
+<script src="../js/progress.js?v=20261026"></script>
+<script src="../js/vulnerabilities.js"></script>
+</body>
+</html>
